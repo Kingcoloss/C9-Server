@@ -1,0 +1,18 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <RootNamespace>EighthThrone.Demo</RootNamespace>
+    <!-- ให้รันบน .NET 9 หรือ 10 ได้ด้วย ถ้าเครื่องไม่มี .NET 8 runtime -->
+    <RollForward>LatestMajor</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Eighth.Sim/Eighth.Sim.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- ทดสอบแบบไม่มีหน้าจอ: สั่ง dotnet run ที่โปรเจกต์นี้ -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Eighth.Sim/Eighth.Sim.csproj" />
+  </ItemGroup>
+
+</Project>

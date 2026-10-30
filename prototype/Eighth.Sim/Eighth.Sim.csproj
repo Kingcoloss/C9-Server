@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- ตรรกะเกมที่ใช้ร่วมกันทั้ง client (Godot) และ server ห้ามอ้างถึง Godot -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Eighth.Sim</RootNamespace>
+    <LangVersion>12</LangVersion>
+  </PropertyGroup>
+
+</Project>
