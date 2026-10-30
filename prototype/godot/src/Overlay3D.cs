@@ -34,7 +34,8 @@ public partial class Overlay3D : Control
             var v = e.V;
             if (v.Phase == EPhase.Dead) continue;
             bool boss = v.Kind == EKind.Boss;
-            if (!Project(cam, Art.V3(e.Pos, boss ? 5.4f : 1.55f), out var head)) continue;
+            if (!Project(cam, Art.V3(e.Pos, boss ? 5.0f : 1.55f), out var head)) continue;
+            if (boss) head.Y = Mathf.Max(head.Y, 100); // อย่าให้ชื่อท่าทับหลอดเลือดบอสด้านบน
 
             if (!boss)
             {

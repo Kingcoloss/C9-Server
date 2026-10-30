@@ -325,7 +325,9 @@ public partial class BossModel : Node3D
 {
     const int Arms = 8;
     const int Segs = 5;
-    const float SegLen = 0.62f;
+    const float SegLen = 0.6f;
+    const float MantleY = 2.9f;
+    const float FrontGap = 0.75f; // เว้นหนวดด้านหน้า (±43°) ให้เห็นผู้เล่นที่ยืนสู้อยู่
 
     readonly Node3D _mantle;
     readonly Node3D[] _armRoot = new Node3D[Arms];
@@ -346,11 +348,12 @@ public partial class BossModel : Node3D
         var gold = Art.Mat(new Color("d8b04c"), 0.3f, 0.9f, new Color("f5c542"), 0.5f);
         _eyes = Art.Mat(new Color("ffe680"), 0.2f, 0, new Color("ffd84d"), 4f);
 
-        _mantle = Art.Joint(this, new Vector3(0, 2.5f, 0));
-        Art.Part(_mantle, Art.Sphere(1f), _skin, Vector3.Zero, scale: new Vector3(1.3f, 1.55f, 1.3f));
-        Art.Part(_mantle, Art.Torus(0.9f, 1.35f), under, new Vector3(0, -1.0f, 0), scale: new Vector3(1, 0.6f, 1));
-        Art.Part(_mantle, Art.Sphere(0.17f), _eyes, new Vector3(-0.42f, -0.2f, -1.15f), shadow: false);
-        Art.Part(_mantle, Art.Sphere(0.17f), _eyes, new Vector3(0.42f, -0.2f, -1.15f), shadow: false);
+        // ตัวยกสูงและแคบกว่าวงชนเล็กน้อย ผู้เล่นที่ยืนประชิดจึงไม่จมเข้าไปในตัวบอส
+        _mantle = Art.Joint(this, new Vector3(0, MantleY, 0));
+        Art.Part(_mantle, Art.Sphere(1f), _skin, Vector3.Zero, scale: new Vector3(1.15f, 1.5f, 1.15f));
+        Art.Part(_mantle, Art.Torus(0.8f, 1.2f), under, new Vector3(0, -1.0f, 0), scale: new Vector3(1, 0.6f, 1));
+        Art.Part(_mantle, Art.Sphere(0.17f), _eyes, new Vector3(-0.4f, -0.2f, -1.02f), shadow: false);
+        Art.Part(_mantle, Art.Sphere(0.17f), _eyes, new Vector3(0.4f, -0.2f, -1.02f), shadow: false);
         Art.Part(_mantle, Art.Torus(0.55f, 0.7f), gold, new Vector3(0, 1.42f, 0), scale: new Vector3(1, 0.5f, 1));
         for (int i = 0; i < 5; i++)
         {
@@ -361,8 +364,8 @@ public partial class BossModel : Node3D
 
         for (int i = 0; i < Arms; i++)
         {
-            float a = i * Mathf.Tau / Arms;
-            var root = Art.Joint(this, new Vector3(0, 1.45f, 0));
+            float a = ArmAngle(i);
+            var root = Art.Joint(this, new Vector3(0, 1.85f, 0));
             root.Rotation = new Vector3(0, a, 0);
             _armRoot[i] = root;
             var j = new Node3D[Segs];
@@ -376,9 +379,11 @@ public partial class BossModel : Node3D
             }
             _joints[i] = j;
         }
-        _stars = new Stars { Position = new Vector3(0, 5.0f, 0), Visible = false, Scale = Vector3.One * 2 };
+        _stars = new Stars { Position = new Vector3(0, 5.3f, 0), Visible = false, Scale = Vector3.One * 2 };
         AddChild(_stars);
     }
+
+    static float ArmAngle(int i) => FrontGap + i * (Mathf.Tau - 2 * FrontGap) / (Arms - 1);
 
     public void Sync(in EnemyRender e, double t, float dt)
     {
@@ -389,7 +394,8 @@ public partial class BossModel : Node3D
 
         float raise = 0, sweep = 0, glow = 0;
         var mantleRot = Vector3.Zero;
-        float mantleY = 2.5f + Mathf.Sin((float)t * 1.6f) * 0.08f;
+        float mantleBack = 0;
+        float mantleY = MantleY + Mathf.Sin((float)t * 1.6f) * 0.08f;
         float eyes = 4;
         _stars.Visible = false;
 
@@ -413,8 +419,9 @@ public partial class BossModel : Node3D
         }
         else if (v.Phase == EPhase.Staggered)
         {
-            mantleRot.X = 0.35f;
-            mantleY -= 0.6f;
+            // มึนแบบโยกซ้ายขวา ไม่ทรุดลงทับผู้เล่นที่เข้ามาปิดฉาก
+            mantleRot = new Vector3(-0.15f, 0, Mathf.Sin((float)t * 3f) * 0.22f);
+            mantleY -= 0.25f;
             eyes = 0.5f;
             _stars.Visible = true;
             _stars.Spin(t);
@@ -423,8 +430,10 @@ public partial class BossModel : Node3D
         {
             if (_deadAt < 0) _deadAt = t;
             float d = Mathf.Clamp((float)(t - _deadAt) / 2.5f, 0, 1);
-            mantleY -= 2.6f * d;
-            mantleRot.X = 0.6f * d;
+            // ล้มหงายไปด้านหลัง ห่างจากผู้เล่น
+            mantleY -= 2.2f * d;
+            mantleBack = 1.3f * d;
+            mantleRot.X = 0.7f * d;
             eyes = 4 * (1 - d);
         }
 
@@ -432,7 +441,7 @@ public partial class BossModel : Node3D
         _sweep = Mathf.Lerp(_sweep, sweep, Art.Smooth(sweep < 0 ? 25 : 8, dt));
         _glow = Mathf.Lerp(_glow, glow, Art.Smooth(10, dt));
 
-        _mantle.Position = new Vector3(0, mantleY, 0);
+        _mantle.Position = new Vector3(0, mantleY, mantleBack);
         _mantle.Rotation = mantleRot;
         _eyes.EmissionEnergyMultiplier = eyes;
         bool hurt = t - _hurtAt < 0.1;
@@ -442,7 +451,7 @@ public partial class BossModel : Node3D
 
         for (int i = 0; i < Arms; i++)
         {
-            float a = i * Mathf.Tau / Arms;
+            float a = ArmAngle(i);
             float front = Mathf.Max(0, Mathf.Cos(a));      // หนวดที่อยู่ด้านหน้า (แกน -Z)
             float right = Mathf.Max(0, Mathf.Sin(a));
             _armRoot[i].Rotation = new Vector3(0, a + _sweep * 0.9f * right, 0);

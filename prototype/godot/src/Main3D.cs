@@ -489,7 +489,7 @@ public partial class Main3D : Node3D, IGameHost
                 boss = e.V.Kind == EKind.Boss;
             }
             _yaw = Mathf.LerpAngle(_yaw, Art.Yaw(aim), Art.Smooth(1.6f, dt));
-            _pitch = Mathf.Lerp(_pitch, boss ? -0.5f : -0.42f, Art.Smooth(2, dt));
+            _pitch = Mathf.Lerp(_pitch, boss ? -0.6f : -0.42f, Art.Smooth(2, dt));
             _dist = Mathf.Lerp(_dist, boss ? 9.5f : 7.5f, Art.Smooth(2, dt));
         }
         _camTarget = _camTarget.Lerp(me, Art.Smooth(12, dt));
