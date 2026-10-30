@@ -447,7 +447,7 @@ public partial class BossModel : Node3D
         bool hurt = t - _hurtAt < 0.1;
         _skin.EmissionEnabled = _glow > 0.02f || hurt;
         _skin.Emission = hurt ? new Color("ffd9f0") : new Color("7a2fd6");
-        _skin.EmissionEnergyMultiplier = hurt ? 0.3f : _glow * 0.9f;
+        _skin.EmissionEnergyMultiplier = hurt ? 0.18f : _glow * 0.9f;
 
         for (int i = 0; i < Arms; i++)
         {

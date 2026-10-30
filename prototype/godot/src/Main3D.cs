@@ -353,10 +353,22 @@ public partial class Main3D : Node3D, IGameHost
     void Float(string text, Vector3 at, Color col, int size, double life) =>
         Floaters.Add(new Floater3D { Text = text, Pos = at, Color = col, Size = size, Born = T, Life = life });
 
+    // ศัตรูบนจอแสดงย้อนหลัง ส่วนตัวเราแสดงล่วงหน้า เดินชนกันแล้วตัวเราจะจมเข้าไปในศัตรูบนจอ
+    // จึงดันโมเดลศัตรูออกเฉพาะภาพ ตำแหน่งที่ใช้ตัดสินยังเป็นของ server เหมือนเดิม (ดูได้ด้วยปุ่ม G)
+    public System.Numerics.Vector2 VisualPos(in EnemyRender e)
+    {
+        if (e.V.Phase == EPhase.Dead) return e.Pos;
+        var me = Session.Client.PlayerRenderPos(Session.Now);
+        var d = e.Pos - me;
+        float min = e.V.Radius + Cfg.PlayerRadius + 0.1f;
+        float len = d.Length();
+        return len >= min || len < 0.0001f ? e.Pos : me + d / len * min;
+    }
+
     Vector3 EnemyPoint(int id, System.Numerics.Vector2 fallback)
     {
         foreach (var e in Session.Client.Enemies(Session.Now))
-            if (e.V.Id == id) return Art.V3(e.Pos, e.V.Kind == EKind.Boss ? 2.6f : 1.0f);
+            if (e.V.Id == id) return Art.V3(VisualPos(e), e.V.Kind == EKind.Boss ? 2.6f : 1.0f);
         return Art.V3(fallback, 1.0f);
     }
 
@@ -385,8 +397,10 @@ public partial class Main3D : Node3D, IGameHost
                 _actors.AddChild(node);
                 _enemies[e.V.Id] = node;
             }
-            if (node is WolfModel w) w.Sync(e, T, dt);
-            else if (node is BossModel b) b.Sync(e, T, dt);
+            var shown = e;
+            shown.Pos = VisualPos(e);
+            if (node is WolfModel w) w.Sync(shown, T, dt);
+            else if (node is BossModel b) b.Sync(shown, T, dt);
             Telegraph3D(e);
         }
 
