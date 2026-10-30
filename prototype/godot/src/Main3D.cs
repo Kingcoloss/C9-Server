@@ -357,7 +357,6 @@ public partial class Main3D : Node3D, IGameHost
     // จึงดันโมเดลศัตรูออกเฉพาะภาพ ตำแหน่งที่ใช้ตัดสินยังเป็นของ server เหมือนเดิม (ดูได้ด้วยปุ่ม G)
     public System.Numerics.Vector2 VisualPos(in EnemyRender e)
     {
-        if (e.V.Phase == EPhase.Dead) return e.Pos;
         var me = Session.Client.PlayerRenderPos(Session.Now);
         var d = e.Pos - me;
         float min = e.V.Radius + Cfg.PlayerRadius + 0.1f;
