@@ -224,7 +224,6 @@ public partial class ArenaView : Node2D
         {
             float pulse = 0.5f + 0.5f * Mathf.Sin((float)Main.T * 14);
             DrawArc(pos, r + 14 + pulse * 3, 0, Mathf.Tau, 40, Palette.Gold, 3, true);
-            CenterText(Main.Bold, "สวนกลับ!", pos + new Vector2(0, r + 34), 18, Palette.Gold);
         }
     }
 

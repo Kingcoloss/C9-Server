@@ -107,6 +107,7 @@ public struct UiEvent
     public bool Mismatch;
     public bool Compensated;
     public int WaitTicks;     // server รอ input ที่ตรงกับภาพกี่ tick
+    public int EarlyTicks;    // server ตัดสินก่อนที่ภาพบนจอผู้เล่นจะถึงจังหวะท่าลงกี่ tick
     public string Text;
 }
 
@@ -165,6 +166,8 @@ public sealed class GameClient : IFinishQuery
         public bool Compensated;
         public int WaitTicks;
         public int SeenAt;
+        public int LocalTick;
+        public int JudgedAt;
     }
 
     public GameClient(Snapshot welcome, double now = 0)
@@ -318,6 +321,7 @@ public sealed class GameClient : IFinishQuery
         {
             if (rec.LocalDone || rec.Attack == AttackId.None || view < rec.AttackTick) continue;
             rec.LocalDone = true;
+            rec.LocalTick = ClientTick;
             rec.Local = Judging.Judge(Predicted, ClientTick, rec.Shape, Attacks.Get(rec.Attack));
             if (rec.Local == Judgment.None) continue;
             LocalJudged++;
@@ -355,6 +359,7 @@ public sealed class GameClient : IFinishQuery
             Kind = UiKind.Verdict, Pos = Predicted.Pos, EnemyId = key.enemy,
             Local = rec.Local, Server = rec.Server, Mismatch = mismatch,
             Compensated = rec.Compensated, WaitTicks = rec.WaitTicks,
+            EarlyTicks = Math.Max(0, rec.LocalTick - rec.JudgedAt),
         });
         _judg.Remove(key);
     }
@@ -396,6 +401,7 @@ public sealed class GameClient : IFinishQuery
                 rec.Server = ev.Judgment;
                 rec.Compensated = ev.Compensated;
                 rec.WaitTicks = ev.Tick - ev.AttackTick;
+                rec.JudgedAt = ev.JudgedAt;
                 LastWaitTicks = rec.WaitTicks;
                 ServerJudged++;
                 if (ev.Amount > 0)

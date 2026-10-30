@@ -12,7 +12,7 @@ public partial class Hud : Control
     {
         var s = Main.Session;
         var c = s.Client;
-        var size = Size;
+        var size = GetViewportRect().Size;
 
         DrawPlayerPanel(c);
         DrawBoss(c, size);
@@ -41,6 +41,8 @@ public partial class Hud : Control
             if (i < st.Flow) DrawCircle(p, 6, new Color("ffb347"), true, -1, true);
         }
         Text(Main.Font, $"+{st.Flow * Cfg.FlowDamagePerStack * 100:0}% ดาเมจ", at + new Vector2(200, 88), 14, Palette.Muted);
+        if (c.ClientTick <= st.CounterUntil)
+            Text(Main.Bold, "สวนกลับ! ตีครั้งถัดไปแรงขึ้น 1.5 เท่า", at + new Vector2(0, 162), 16, Palette.Gold);
 
         Skill(at + new Vector2(0, 100), "Q", "หมัดสามดาว", (float)st.Cd1 / Cfg.Skill1Cooldown);
         Skill(at + new Vector2(160, 100), "E", "ดาวตกกระแทก", (float)st.Cd2 / Cfg.Skill2Cooldown);
@@ -112,7 +114,7 @@ public partial class Hud : Control
             "Space = หลบ · Shift ค้าง = กัน · Q / E = สกิล · F = ปิดฉากศัตรูที่เสียหลัก",
             "หลบหรือยกการ์ดตอนวงเตือนเต็มพอดี = พริ้ว (ได้จังหวะสวนกลับ)",
             "ทอง = หลบ/รับพริ้วได้ · แดง = กันไม่ได้ ต้องหลบ · ม่วง = กันได้ แต่รับพริ้วไม่ได้",
-            "1-4 เปลี่ยน ping · C เปิด/ปิดการชดเชย · G ดูตำแหน่งจริงบน server · R เริ่มใหม่ · H ซ่อน",
+            "1-4 เปลี่ยน ping · C เปิด/ปิดการชดเชย · G ดูตำแหน่งจริงบน server · B ให้บอทเล่นแทน · R เริ่มใหม่ · H ซ่อน",
         };
         float h = rows.Length * 22 + 16;
         var at = new Vector2(20, size.Y - h - 14);
@@ -126,7 +128,7 @@ public partial class Hud : Control
         if (Main.T > Main.BannerUntil || Main.Banner.Length == 0) return;
         const int fs = 34;
         float w = Main.Bold.GetStringSize(Main.Banner, HorizontalAlignment.Left, -1, fs).X;
-        var p = new Vector2((size.X - w) / 2, size.Y * 0.3f);
+        var p = new Vector2((size.X - w) / 2, size.Y * 0.68f);
         DrawRect(new Rect2(p - new Vector2(24, 44), new Vector2(w + 48, 64)), Palette.Panel);
         DrawString(Main.Bold, p, Main.Banner, HorizontalAlignment.Left, -1, fs, Palette.Text);
     }

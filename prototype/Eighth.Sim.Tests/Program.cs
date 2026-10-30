@@ -19,7 +19,7 @@ foreach (int ping in new[] { 0, 80, 150, 250 })
 foreach (int ping in new[] { 80, 150, 250 })
 {
     var r = Trials.Defend(ping, comp: false, guard: false);
-    Check($"ping {ping,3} ชดเชยปิด (server ต้องไม่ให้หลบพริ้ว)", r.Server != Judgment.PerfectDodge, r.ToString());
+    Check($"ping {ping,3} ชดเชยปิด (server ต้องไม่ให้หลบพริ้ว และตัดสินก่อนภาพ)", r.Server != Judgment.PerfectDodge && r.EarlyTicks > 0, r.ToString());
 }
 
 Console.WriteLine("== รับพริ้ว: ยกการ์ด 2 tick ก่อนท่าลง ==");
@@ -51,13 +51,34 @@ foreach (int ping in new[] { 0, 80, 150, 250 })
     Console.WriteLine($"INFO  ping 150 ชดเชยปิด  {f}");
 }
 
+Console.WriteLine("== บอทโหมดสาธิต (FightBot ที่ใช้กับ --autoplay) ==");
+{
+    var s = new LocalSession(150, true, seed: 9);
+    var bot = new FightBot();
+    int perfect = 0;
+    string end = "หมดเวลา";
+    for (int f = 0; f < 60 * 300 && end == "หมดเวลา"; f++)
+    {
+        bot.Step(s.Client, s.Now, f);
+        s.Advance(1.0 / 60);
+        while (s.Client.TryDequeue(out var ui))
+        {
+            if (ui.Kind == UiKind.Verdict && ui.Server is Judgment.PerfectDodge or Judgment.PerfectGuard) perfect++;
+            if (ui.Kind == UiKind.Banner && ui.Text.StartsWith("ชนะ")) end = "ชนะ";
+            if (ui.Kind == UiKind.Banner && ui.Text.StartsWith("พ่ายแพ้")) end = "แพ้";
+        }
+    }
+    Check("ping 150 บอทสาธิตเล่นจบด่าน และทำพริ้วได้", end != "หมดเวลา" && perfect > 0,
+        $"[{end} {s.Now:0}s, พริ้ว {perfect} ครั้ง, ไม่ตรง {s.Client.Mismatches}/{s.Client.ServerJudged}]");
+}
+
 Console.WriteLine(failed == 0 ? "ผ่านทั้งหมด" : $"ไม่ผ่าน {failed} ข้อ");
 return failed == 0 ? 0 : 1;
 
-record DefendResult(Judgment Local, Judgment Server, bool Mismatch, int WaitTicks)
+record DefendResult(Judgment Local, Judgment Server, bool Mismatch, int WaitTicks, int EarlyTicks)
 {
     public override string ToString() =>
-        $"[เครื่องผู้เล่น: {Judging.Th(Local)} / server: {Judging.Th(Server)} / server รอ {WaitTicks} tick]";
+        $"[เครื่องผู้เล่น: {Judging.Th(Local)} / server: {Judging.Th(Server)} / server รอ {WaitTicks} tick / ตัดสินก่อนภาพ {EarlyTicks} tick]";
 }
 
 record FightResult(bool Finished, string Outcome, double Seconds, int Judged, int Mismatches, int Corrections,
@@ -106,9 +127,9 @@ static class Trials
             s.Advance(Frame);
             while (c.TryDequeue(out var ui))
                 if (ui.Kind == UiKind.Verdict)
-                    return new DefendResult(ui.Local, ui.Server, ui.Mismatch, ui.WaitTicks);
+                    return new DefendResult(ui.Local, ui.Server, ui.Mismatch, ui.WaitTicks, ui.EarlyTicks);
         }
-        return new DefendResult(Judgment.None, Judgment.None, true, -1);
+        return new DefendResult(Judgment.None, Judgment.None, true, -1, -1);
     }
 
     // กดปุ่มสุ่มแบบกำหนด seed แล้วสรุปสถานะโลกเป็นข้อความ

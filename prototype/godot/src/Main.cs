@@ -24,6 +24,9 @@ public partial class Main : Node2D
     Camera2D _cam = null!;
     ArenaView _arena = null!;
     Hud _hud = null!;
+    Autopilot? _auto;
+    FightBot? _bot;
+    int _botFrame;
     int _ping = 80;
     bool _comp = true;
 
@@ -45,7 +48,14 @@ public partial class Main : Node2D
         AddChild(layer);
         _hud = new Hud { Main = this, MouseFilter = Control.MouseFilterEnum.Ignore };
         layer.AddChild(_hud);
-        _hud.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _hud.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+
+        var args = OS.GetCmdlineUserArgs();
+        if (args.Contains("--autoplay"))
+        {
+            var shots = args.FirstOrDefault(a => a.StartsWith("--shots="))?["--shots=".Length..];
+            _auto = new Autopilot(this, shots);
+        }
 
         Restart();
     }
@@ -97,12 +107,12 @@ public partial class Main : Node2D
             case Key.Key2: SetPing(1); break;
             case Key.Key3: SetPing(2); break;
             case Key.Key4: SetPing(3); break;
-            case Key.C:
-                _comp = !_comp;
-                Session.LagCompensation = _comp;
-                ShowBanner(_comp ? "เปิดการชดเชยความหน่วง" : "ปิดการชดเชยความหน่วง: server ตัดสินตามเวลาของตัวเอง", 2.5);
-                break;
+            case Key.C: SetComp(!_comp); break;
             case Key.G: ShowServer = !ShowServer; break;
+            case Key.B:
+                _bot = _bot == null ? new FightBot() : null;
+                ShowBanner(_bot != null ? "บอทเล่นแทน: เปิด (กด B อีกครั้งเพื่อเล่นเอง)" : "บอทเล่นแทน: ปิด", 2);
+                break;
             case Key.H: ShowHelp = !ShowHelp; break;
             case Key.R: Restart(); break;
             case Key.Escape: GetTree().Quit(); break;
@@ -111,11 +121,18 @@ public partial class Main : Node2D
         GetViewport().SetInputAsHandled();
     }
 
-    void SetPing(int i)
+    public void SetPing(int i)
     {
         _ping = Pings[i];
         Session.PingMs = _ping;
         ShowBanner($"Ping {_ping} ms", 1.5);
+    }
+
+    public void SetComp(bool on)
+    {
+        _comp = on;
+        Session.LagCompensation = on;
+        ShowBanner(on ? "ชดเชยความหน่วง: เปิด" : "ชดเชยความหน่วง: ปิด", 1.5);
     }
 
     static bool Down(Key a, Key b) => Input.IsPhysicalKeyPressed(a) || Input.IsPhysicalKeyPressed(b);
@@ -126,6 +143,21 @@ public partial class Main : Node2D
     {
         T += delta;
         var c = Session.Client;
+        if (_auto != null) _auto.Step();
+        else if (_bot != null) _bot.Step(c, Session.Now, ++_botFrame);
+        else ReadHeld(c);
+
+        Session.Advance(delta);
+        Drain();
+        Fx.Update(T);
+
+        _cam.Position = ToPx(c.PlayerRenderPos(Session.Now));
+        _arena.QueueRedraw();
+        _hud.QueueRedraw();
+    }
+
+    void ReadHeld(GameClient c)
+    {
         float mx = (Down(Key.D, Key.Right) ? 1 : 0) - (Down(Key.A, Key.Left) ? 1 : 0);
         float my = (Down(Key.S, Key.Down) ? 1 : 0) - (Down(Key.W, Key.Up) ? 1 : 0);
         var me = ToPx(c.PlayerRenderPos(Session.Now));
@@ -137,14 +169,6 @@ public partial class Main : Node2D
             Aim = aim.LengthSquared() > 1f ? aim.Angle() : c.Held.Aim,
             Guard = Down(Key.Shift, Key.L),
         };
-
-        Session.Advance(delta);
-        Drain();
-        Fx.Update(T);
-
-        _cam.Position = ToPx(c.PlayerRenderPos(Session.Now));
-        _arena.QueueRedraw();
-        _hud.QueueRedraw();
     }
 
     void Drain()
@@ -152,6 +176,7 @@ public partial class Main : Node2D
         var c = Session.Client;
         while (c.TryDequeue(out var ui))
         {
+            _auto?.OnUi(ui);
             var at = ToPx(ui.Pos);
             switch (ui.Kind)
             {
@@ -190,6 +215,7 @@ public partial class Main : Node2D
     {
         if (ui.Server == Judgment.Miss && !ui.Mismatch) return;
         string wait = ui.Compensated ? $"server รอ {ui.WaitTicks} tick" : "server ไม่รอ";
+        if (ui.EarlyTicks > 0) wait = $"server ตัดสินก่อนภาพของเรา {ui.EarlyTicks * 1000 / Cfg.TickRate} ms";
         string text;
         Color color;
         if (ui.Mismatch)
@@ -200,8 +226,10 @@ public partial class Main : Node2D
         }
         else
         {
-            text = $"{Judging.Th(ui.Server)}  ตรงกับ server  ({wait})";
+            text = $"{Judging.Th(ui.Server)}  เครื่อง = server  ({wait})";
             color = Palette.Judgment(ui.Server);
+            if (ui.EarlyTicks > 2 && !Judging.Avoided(ui.Server))
+                Fx.Text("server ตัดสินไปก่อนที่เราเห็นท่าลง", at + new Vector2(0, 30), Palette.Hurt, 18, T, 1.6);
         }
         Feed.Add(new FeedLine(text, color, T));
         if (Feed.Count > 6) Feed.RemoveAt(0);

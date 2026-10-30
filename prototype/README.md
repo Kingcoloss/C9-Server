@@ -58,6 +58,7 @@ dotnet run --project Eighth.Sim.Tests
 | 1 / 2 / 3 / 4 | ping 0 / 80 / 150 / 250 ms |
 | C | เปิดหรือปิดการชดเชยความหน่วง |
 | G | แสดงตำแหน่งจริงบน server (วงสีชมพู) |
+| B | ให้บอทเล่นแทน (กดอีกครั้งเพื่อเล่นเอง) |
 | R | เริ่มด่านใหม่ |
 | H | ซ่อนหรือแสดงคำแนะนำ |
 | Esc | ออก |
@@ -86,6 +87,16 @@ dotnet run --project Eighth.Sim.Tests
    - หนวดกวาด (วงแดงรูปพัด): กันไม่ได้ ต้องหลบ
    - เมื่อทำให้บอสเสียหลัก ให้เข้าไปใกล้แล้วกด F
 
+## โหมดสาธิตที่บันทึกภาพเอง
+
+บอทจะเล่นที่ ping 150 แล้วเปิดและปิดการชดเชยตามลำดับ บันทึกภาพหน้าจอ 7 ฉากลงในโฟลเดอร์ที่กำหนด แล้วปิดเกมเองเมื่อจบด่าน
+
+```bash
+/Applications/Godot_mono.app/Contents/MacOS/Godot --path prototype/godot -- --autoplay --shots=$HOME/Desktop/eighth-shots
+```
+
+ถ้าเพิ่ม `--write-movie demo.avi` ไว้ก่อน `--` Godot จะบันทึกวิดีโอด้วย
+
 ## โครงสร้างโฟลเดอร์
 
 ```
@@ -95,7 +106,8 @@ prototype/
 │   ├── PlayerSim.cs   การเคลื่อนที่และท่าของผู้เล่น (deterministic สำหรับทำนายผลและย้อนสถานะ)
 │   ├── Judging.cs     กติกาตัดสินท่าหลบหรือกัน ใช้ฟังก์ชันเดียวกันทั้งสองฝั่ง
 │   ├── World.cs       โลกฝั่ง server: AI ศัตรู ประวัติย้อนหลัง และการชดเชยความหน่วง
-│   └── Net.cs         ท่อหน่วงเวลา, GameServer, GameClient (ทำนาย/แก้ตำแหน่ง/interpolate), LocalSession
+│   ├── Net.cs         ท่อหน่วงเวลา, GameServer, GameClient (ทำนาย/แก้ตำแหน่ง/interpolate), LocalSession
+│   └── Bot.cs         บอทที่กดปุ่มตามภาพบน client (ใช้กับปุ่ม B และโหมดสาธิต)
 ├── Eighth.Sim.Tests/  บอททดสอบแบบไม่มีหน้าจอ
 └── godot/             โปรเจกต์ Godot 4.7 (.NET) ที่สร้างฉากทั้งหมดด้วยโค้ดใน src/
 ```
