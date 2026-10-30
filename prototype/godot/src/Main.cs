@@ -5,21 +5,32 @@ using NVec = System.Numerics.Vector2;
 namespace EighthThrone.Demo;
 
 // ฉากหลัก: สร้างทุกอย่างด้วยโค้ด รับปุ่ม เดินเวลาให้ server/client จำลอง แล้วสั่งวาด
-public partial class Main : Node2D
+public partial class Main : Node2D, IGameHost
 {
     public const float Ppm = 42f;   // พิกเซลต่อเมตร
-    public static readonly int[] Pings = { 0, 80, 150, 250 };
 
-    public LocalSession Session = null!;
-    public Font Font = null!;
-    public Font Bold = null!;
+    public LocalSession Session { get; private set; } = null!;
+    public Font Font { get; private set; } = null!;
+    public Font Bold { get; private set; } = null!;
     public readonly Fx Fx = new();
-    public readonly List<FeedLine> Feed = new();
-    public bool ShowServer;
-    public bool ShowHelp = true;
-    public string Banner = "";
-    public double BannerUntil;
-    public double T;                // เวลาจริงตั้งแต่เปิดเกม ใช้ทำแอนิเมชัน
+    public List<FeedLine> Feed { get; } = new();
+    public bool ShowServer { get; set; }
+    public bool ShowHelp { get; private set; } = true;
+    public bool ShowNet => true;
+    public string Banner { get; private set; } = "";
+    public double BannerUntil { get; private set; }
+    public float BannerY => 0.68f;
+    public double T { get; private set; }   // เวลาจริงตั้งแต่เปิดเกม ใช้ทำแอนิเมชัน
+    public int HelpHighlightRow => 3;
+
+    public string[] HelpRows { get; } =
+    {
+        "มุมมองตรวจ netcode (F2 กลับไปฉาก 3D) · WASD เดิน · เมาส์เล็ง · คลิกซ้าย/J ตีเบา · คลิกขวา/K ตีหนัก",
+        "Space = หลบ · Shift ค้าง = กัน · Q / E = สกิล · F = ปิดฉากศัตรูที่เสียหลัก",
+        "หลบหรือยกการ์ดตอนวงเตือนเต็มพอดี = พริ้ว (ได้จังหวะสวนกลับ)",
+        "ทอง = หลบ/รับพริ้วได้ · แดง = กันไม่ได้ ต้องหลบ · ม่วง = กันได้ แต่รับพริ้วไม่ได้",
+        "1-4 เปลี่ยน ping · C เปิด/ปิดการชดเชย · G ดูตำแหน่งจริงบน server · B ให้บอทเล่นแทน · R เริ่มใหม่ · H ซ่อน",
+    };
 
     Camera2D _cam = null!;
     ArenaView _arena = null!;
@@ -34,8 +45,8 @@ public partial class Main : Node2D
     {
         DisplayServer.WindowSetTitle("บัลลังก์ที่แปด · demo การต่อสู้");
         RenderingServer.SetDefaultClearColor(new Color("0b0f16"));
-        Font = LoadFont("NotoSans-Regular", "NotoSansThai-Regular");
-        Bold = LoadFont("NotoSans-Bold", "NotoSansThai-Bold");
+        Font = Shared.LoadFont("NotoSans-Regular", "NotoSansThai-Regular");
+        Bold = Shared.LoadFont("NotoSans-Bold", "NotoSansThai-Bold");
         ThemeDB.FallbackFont = Font;
 
         _arena = new ArenaView { Main = this };
@@ -46,7 +57,7 @@ public partial class Main : Node2D
 
         var layer = new CanvasLayer();
         AddChild(layer);
-        _hud = new Hud { Main = this, MouseFilter = Control.MouseFilterEnum.Ignore };
+        _hud = new Hud { Host = this, MouseFilter = Control.MouseFilterEnum.Ignore };
         layer.AddChild(_hud);
         _hud.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
@@ -58,15 +69,6 @@ public partial class Main : Node2D
         }
 
         Restart();
-    }
-
-    static Font LoadFont(string latin, string thai)
-    {
-        var main = GD.Load<FontFile>($"res://fonts/{latin}.ttf");
-        var th = GD.Load<FontFile>($"res://fonts/{thai}.ttf");
-        if (main == null) return ThemeDB.FallbackFont;
-        if (th != null) main.Fallbacks = new Godot.Collections.Array<Font> { th };
-        return main;
     }
 
     void Restart()
@@ -115,6 +117,7 @@ public partial class Main : Node2D
                 break;
             case Key.H: ShowHelp = !ShowHelp; break;
             case Key.R: Restart(); break;
+            case Key.F2: GetTree().ChangeSceneToFile("res://main3d.tscn"); break;
             case Key.Escape: GetTree().Quit(); break;
             default: return;
         }
@@ -123,7 +126,7 @@ public partial class Main : Node2D
 
     public void SetPing(int i)
     {
-        _ping = Pings[i];
+        _ping = Shared.Pings[i];
         Session.PingMs = _ping;
         ShowBanner($"Ping {_ping} ms", 1.5);
     }
@@ -213,29 +216,10 @@ public partial class Main : Node2D
 
     void AddVerdict(in UiEvent ui, Vector2 at)
     {
-        if (ui.Server == Judgment.Miss && !ui.Mismatch) return;
-        string wait = ui.Compensated ? $"server รอ {ui.WaitTicks} tick" : "server ไม่รอ";
-        if (ui.EarlyTicks > 0) wait = $"server ตัดสินก่อนภาพของเรา {ui.EarlyTicks * 1000 / Cfg.TickRate} ms";
-        string text;
-        Color color;
-        if (ui.Mismatch)
-        {
-            text = $"เครื่องทาย {Judging.Th(ui.Local)} » server ตัดสิน {Judging.Th(ui.Server)}  ({wait})";
-            color = Palette.Hurt;
-            Fx.Text($"server: {Judging.Th(ui.Server)}", at + new Vector2(0, -16), Palette.Hurt, 22, T, 1.4);
-        }
-        else
-        {
-            text = $"{Judging.Th(ui.Server)}  เครื่อง = server  ({wait})";
-            color = Palette.Judgment(ui.Server);
-            if (ui.EarlyTicks > 2 && !Judging.Avoided(ui.Server))
-                Fx.Text("server ตัดสินไปก่อนที่เราเห็นท่าลง", at + new Vector2(0, 30), Palette.Hurt, 18, T, 1.6);
-        }
-        Feed.Add(new FeedLine(text, color, T));
-        if (Feed.Count > 6) Feed.RemoveAt(0);
+        if (!Shared.DescribeVerdict(ui, out var line, out var floatText, T)) return;
+        Shared.Push(Feed, line);
+        if (floatText != null) Fx.Text(floatText, at + new Vector2(0, 30), Palette.Hurt, 18, T, 1.6);
     }
 
     public static Vector2 ToPx(NVec v) => new(v.X * Ppm, v.Y * Ppm);
 }
-
-public readonly record struct FeedLine(string Text, Color Color, double At);

@@ -439,6 +439,9 @@ public sealed class GameClient : IFinishQuery
 
     // ---- ข้อมูลสำหรับวาดภาพ ----
 
+    // ความคืบหน้าระหว่าง tick ของตัวเรา (0..1) ใช้ทำแอนิเมชันให้ลื่นกว่า 30 Hz
+    public float TickAlpha(double now) => (float)Math.Clamp((now - _lastTickAt) * Cfg.TickRate, 0, 1);
+
     public Vector2 PlayerRenderPos(double now)
     {
         float a = (float)Math.Clamp((now - _lastTickAt) * Cfg.TickRate, 0, 1);

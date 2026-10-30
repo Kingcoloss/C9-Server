@@ -7,7 +7,7 @@ namespace EighthThrone.Demo;
 // เปิดด้วย: godot --path . -- --autoplay --shots=/โฟลเดอร์/ที่เก็บภาพ
 public sealed class Autopilot
 {
-    readonly Main _m;
+    readonly IGameHost _m;
     readonly FightBot _bot = new();
     readonly string? _dir;
     readonly List<Pending> _pending = new();
@@ -24,7 +24,7 @@ public sealed class Autopilot
         public Action? After;
     }
 
-    public Autopilot(Main m, string? shotDir)
+    public Autopilot(IGameHost m, string? shotDir)
     {
         _m = m;
         _dir = shotDir;
@@ -57,6 +57,7 @@ public sealed class Autopilot
 
         foreach (var e in s.Client.Enemies(s.Now))
         {
+            if (_m.T < _m.BannerUntil) break;
             if (e.V.Kind != EKind.Boss || e.V.Phase != EPhase.Windup || e.V.Attack == AttackId.None) continue;
             if (Telegraph.Progress(e) < 0.7f) continue;
             var tele = Attacks.Get(e.V.Attack).Tele;
