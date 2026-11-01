@@ -65,6 +65,7 @@ public partial class Main3D : Node3D, IGameHost
     float _yaw;
     float _pitch = -0.32f;
     float _dist = 6.2f;
+    float _camDist = 6.2f;
     Vector3 _camTarget;
     float _shake;
     double _slowUntil = -1;
@@ -599,6 +600,28 @@ public partial class Main3D : Node3D, IGameHost
         g.Visible = true;
     }
 
+    // ถ้ามีเสาหรือเตาไฟอยู่ระหว่างกล้องกับตัวละคร ให้ดึงกล้องเข้ามาหน้าสิ่งนั้น
+    float CameraDistance(Vector3 back)
+    {
+        float want = _dist;
+        var o = new Vector2(_camTarget.X, _camTarget.Z);
+        var d = new Vector2(back.X, back.Z);
+        foreach (var (c, r, h) in Arena3D.Obstacles)
+        {
+            // จุดที่เส้นจากตัวละครไปกล้องชนวงกลมรอบสิ่งกีดขวาง (ระนาบพื้น)
+            var f = o - c;
+            float a = d.Dot(d), b = 2 * f.Dot(d), cc = f.Dot(f) - r * r;
+            float disc = b * b - 4 * a * cc;
+            if (a < 1e-5f || disc < 0) continue;
+            float t = (-b - Mathf.Sqrt(disc)) / (2 * a);
+            if (t <= 0 || t >= want) continue;
+            if (_camTarget.Y + back.Y * t > h) continue; // เส้นผ่านเหนือยอด
+            want = Mathf.Max(2.2f, t - 0.35f);
+        }
+        _camDist = want < _camDist ? want : Mathf.Lerp(_camDist, want, 0.08f);
+        return _camDist;
+    }
+
     void UpdateCamera(float dt)
     {
         var c = Session.Client;
@@ -626,7 +649,7 @@ public partial class Main3D : Node3D, IGameHost
         }
         _camTarget = _camTarget.Lerp(me, Art.Smooth(12, dt));
         var rot = Basis.FromEuler(new Vector3(_pitch, _yaw, 0));
-        var pos = _camTarget + rot * new Vector3(0, 0, _dist);
+        var pos = _camTarget + rot * new Vector3(0, 0, CameraDistance(rot * Vector3.Back));
         if (pos.Y < 0.4f) pos.Y = 0.4f;
         _shake = Mathf.Max(0, _shake - dt * 0.9f);
         var jitter = new Vector3(GD.Randf() - 0.5f, GD.Randf() - 0.5f, GD.Randf() - 0.5f) * _shake;

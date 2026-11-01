@@ -70,8 +70,12 @@ public static class Art
 // สนามประลองกลางซากวิหาร มีบัลลังก์ว่างตั้งอยู่ด้านเหนือ
 public static class Arena3D
 {
+    // เสาและเตาไฟ (จุดกลาง รัศมี ความสูง) ใช้ดึงกล้องเข้ามาไม่ให้มีของบังตัวละคร
+    public static readonly List<(Vector2 Center, float Radius, float Height)> Obstacles = new();
+
     public static List<Node3D> Build(Node3D root)
     {
+        Obstacles.Clear();
         var floating = new List<Node3D>();
         float r = Eighth.Sim.Cfg.ArenaRadius;
         var stone = Tex.Stone(new Color("5a5d68"), 0.55f);
@@ -104,6 +108,7 @@ public static class Arena3D
             bool broken = rng.Randf() < 0.35f;
             if (broken) h *= 0.45f;
             Art.Part(root, Art.Cyl(0.55f, 0.7f, h, 12), stone, p + new Vector3(0, h / 2 - 0.6f, 0));
+            Obstacles.Add((new Vector2(p.X, p.Z), 0.75f, h + 1.5f));
             Art.Part(root, Art.Box(1.7f, 0.35f, 1.7f), darkStone, p + new Vector3(0, -0.45f, 0));
             if (broken)
             {
@@ -145,6 +150,7 @@ public static class Arena3D
         for (int i = 0; i < 4; i++)
         {
             float a = Mathf.Pi / 4 + i * Mathf.Pi / 2;
+            Obstacles.Add((new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * (r - 0.9f), 0.75f, 2.2f));
             root.AddChild(new Brazier
             {
                 Position = new Vector3(Mathf.Cos(a) * (r - 0.9f), 0, Mathf.Sin(a) * (r - 0.9f)),
