@@ -8,17 +8,21 @@ public partial class PlayerModel : Node3D
 {
     readonly Node3D _body;
     readonly Node3D _sword;
-    readonly Node3D _legL, _legR;
+    readonly Node3D _legL, _legR, _kneeL, _kneeR;
+    readonly Node3D _arm, _cape;
     readonly MeshInstance3D _shield;
     readonly MeshInstance3D _aura;
     readonly StandardMaterial3D _armor;
     readonly StandardMaterial3D _shieldMat;
     readonly StandardMaterial3D _blade;
     float _yaw;
-    float _walk;
-    Vector3 _last;
+    float _walk;     // เฟสของจังหวะก้าว เดินตามระยะทางจริง เท้าจึงไม่ไถลบนพื้น
+    float _speed;
+    float _lean, _bank;
     int _lastHp = -1;
     double _hurtAt = -10;
+
+    public bool Stepped { get; private set; } // เท้าแตะพื้นในเฟรมนี้ (ใช้เล่นเสียงเท้า)
 
     const float Hip = 0.9f;
 
@@ -28,6 +32,9 @@ public partial class PlayerModel : Node3D
         var dark = Art.Mat(new Color("1d2430"), 0.7f, 0.3f);
         var skin = Art.Mat(new Color("e0b48f"), 0.8f);
         var cape = Art.Mat(new Color("5a1622"), 0.9f);
+        Tex.Detail(_armor, 3f, 0.5f);
+        Tex.Detail(dark, 4f, 0.8f);
+        Tex.Detail(cape, 5f, 1f);
         _blade = Art.Mat(new Color("dfe9f2"), 0.2f, 0.9f, new Color("8fd8ff"), 0.4f);
 
         _body = Art.Joint(this, new Vector3(0, Hip, 0));
@@ -35,18 +42,27 @@ public partial class PlayerModel : Node3D
         Art.Part(_body, Art.Box(0.6f, 0.12f, 0.3f), dark, new Vector3(0, 0.62f, 0));
         Art.Part(_body, Art.Sphere(0.19f), skin, new Vector3(0, 0.92f, 0));
         Art.Part(_body, Art.Sphere(0.215f), dark, new Vector3(0, 0.99f, 0.04f), scale: new Vector3(1, 0.8f, 1));
-        Art.Part(_body, Art.Prism(0.5f, 1.0f, 0.04f), cape, new Vector3(0, 0.1f, 0.27f), new Vector3(172, 0, 0));
-        Art.Part(_body, Art.Capsule(0.08f, 0.62f), _armor, new Vector3(-0.38f, 0.32f, -0.05f), new Vector3(10, 0, -12));
+        _cape = Art.Joint(_body, new Vector3(0, 0.6f, 0.26f));
+        Art.Part(_cape, Art.Prism(0.5f, 1.0f, 0.04f), cape, new Vector3(0, -0.5f, 0.02f), new Vector3(180, 0, 0));
+        _arm = Art.Joint(_body, new Vector3(-0.38f, 0.6f, -0.02f));
+        Art.Part(_arm, Art.Capsule(0.08f, 0.62f), _armor, new Vector3(0, -0.28f, 0), new Vector3(0, 0, -8));
 
         _sword = Art.Joint(_body, new Vector3(0.36f, 0.45f, -0.1f));
         Art.Part(_sword, Art.Capsule(0.08f, 0.5f), _armor, new Vector3(0, 0, -0.18f), new Vector3(90, 0, 0));
         Art.Part(_sword, Art.Box(0.24f, 0.05f, 0.06f), dark, new Vector3(0, 0, -0.42f));
         Art.Part(_sword, Art.Box(0.07f, 0.03f, 1.05f), _blade, new Vector3(0, 0, -0.98f));
 
+        // ขาสองท่อน (ต้นขา หน้าแข้ง) งอเข่าได้ตอนก้าว
         _legL = Art.Joint(this, new Vector3(-0.14f, Hip - 0.05f, 0));
         _legR = Art.Joint(this, new Vector3(0.14f, Hip - 0.05f, 0));
-        foreach (var leg in new[] { _legL, _legR })
-            Art.Part(leg, Art.Capsule(0.11f, 0.85f), dark, new Vector3(0, -0.42f, 0));
+        _kneeL = Art.Joint(_legL, new Vector3(0, -0.42f, 0));
+        _kneeR = Art.Joint(_legR, new Vector3(0, -0.42f, 0));
+        foreach (var (leg, knee) in new[] { (_legL, _kneeL), (_legR, _kneeR) })
+        {
+            Art.Part(leg, Art.Capsule(0.12f, 0.48f), dark, new Vector3(0, -0.2f, 0));
+            Art.Part(knee, Art.Capsule(0.1f, 0.46f), dark, new Vector3(0, -0.2f, 0));
+            Art.Part(knee, Art.Box(0.15f, 0.08f, 0.28f), _armor, new Vector3(0, -0.42f, -0.06f));
+        }
 
         _shieldMat = Art.Clear(new Color(0.48f, 0.77f, 1f, 0.35f));
         _shield = Art.Part(_body, Art.Cyl(0.62f, 0.62f, 0.03f, 32), _shieldMat, new Vector3(0, 0.25f, -0.62f),
@@ -61,16 +77,34 @@ public partial class PlayerModel : Node3D
         _yaw = Mathf.LerpAngle(_yaw, Art.Yaw(st.Facing), Art.Smooth(22, dt));
         Rotation = new Vector3(0, _yaw, 0);
 
-        float speed = dt > 0 ? (pos - _last).Length() / dt : 0;
-        _last = pos;
-        bool moving = st.Action == PAction.Idle && speed > 0.6f;
-        _walk = moving ? _walk + dt * 11f : Mathf.Lerp(_walk, Mathf.Round(_walk / Mathf.Pi) * Mathf.Pi, Art.Smooth(10, dt));
-        float swing = Mathf.Sin(_walk) * 0.75f;
-        _legL.Rotation = new Vector3(swing, 0, 0);
-        _legR.Rotation = new Vector3(-swing, 0, 0);
+        // ---- ท่าเดินวิ่ง: ใช้ความเร็วจาก Sim (มีเร่งและชะลอแล้ว) ----
+        float yawRate = dt > 0 ? Mathf.Wrap(Art.Yaw(st.Facing) - _yaw, -Mathf.Pi, Mathf.Pi) * 22f : 0;
+        float prevSpeed = _speed;
+        _speed = Mathf.Lerp(_speed, st.Action == PAction.Idle ? st.Vel.Length() : 0, Art.Smooth(14, dt));
+        float accel = dt > 0 ? (_speed - prevSpeed) / dt : 0;
+        float run = Mathf.Clamp(_speed / Cfg.PlayerSpeed, 0, 1);
 
-        var body = new Vector3(0, Hip + (moving ? Mathf.Abs(Mathf.Sin(_walk)) * 0.06f : 0), 0);
-        var bodyRot = Vector3.Zero;
+        const float stride = 1.9f; // ระยะทางต่อหนึ่งรอบก้าว (ซ้าย+ขวา)
+        int stepBefore = Mathf.FloorToInt(_walk / Mathf.Pi);
+        if (run > 0.05f) _walk += _speed * dt * Mathf.Tau / stride;
+        else _walk = Mathf.Lerp(_walk, Mathf.Round(_walk / Mathf.Pi) * Mathf.Pi, Art.Smooth(8, dt));
+        Stepped = run > 0.25f && Mathf.FloorToInt(_walk / Mathf.Pi) != stepBefore;
+
+        float sL = Mathf.Sin(_walk), cL = Mathf.Cos(_walk);
+        float amp = 0.15f + 0.6f * run;
+        float thighL = sL * amp * run, thighR = -sL * amp * run;
+        float kneeL = (Mathf.Max(0, cL) * 1.3f + 0.12f) * run;
+        float kneeR = (Mathf.Max(0, -cL) * 1.3f + 0.12f) * run;
+
+        // เอนตัวไปข้างหน้าตามความเร็วและแรงออกตัว เอียงเข้าโค้งตอนเลี้ยว
+        _lean = Mathf.Lerp(_lean, 0.2f * run + Mathf.Clamp(accel * 0.006f, -0.12f, 0.15f), Art.Smooth(10, dt));
+        _bank = Mathf.Lerp(_bank, Mathf.Clamp(yawRate * run * 0.05f, -0.28f, 0.28f), Art.Smooth(8, dt));
+
+        var body = new Vector3(0, Hip + Mathf.Abs(sL) * 0.07f * run - 0.03f * run, 0);
+        if (run < 0.05f) body.Y += Mathf.Sin((float)t * 2.1f) * 0.012f; // หายใจตอนยืน
+        var bodyRot = new Vector3(-_lean, sL * 0.14f * run, _bank);
+        var armRot = new Vector3(-sL * 0.7f * run - 0.1f * run, 0, 0);
+        float capeLift = 0.15f + 0.55f * run + Mathf.Sin((float)t * 7f) * 0.06f * run;
         var swordRot = new Vector3(-0.85f, 0.35f, 0);
         var swordPos = new Vector3(0.36f, 0.45f, -0.1f);
         bool guard = false;
@@ -149,10 +183,31 @@ public partial class PlayerModel : Node3D
                 break;
         }
 
+        // ท่ายืนตอนออกท่าโจมตี และขาพับตอนกลิ้งหลบ
+        if (PlayerSim.IsAttack(st.Action) || st.Action == PAction.GuardBreak || guard)
+        {
+            thighL = 0.35f; thighR = -0.3f; kneeL = 0.25f; kneeR = 0.35f;
+            armRot = new Vector3(0.3f, 0, 0);
+        }
+        else if (st.Action == PAction.Dodge)
+        {
+            thighL = thighR = 1.1f; kneeL = kneeR = 1.6f;
+        }
+        else if (st.Action == PAction.Dead)
+        {
+            thighL = thighR = kneeL = kneeR = 0;
+        }
+
         _body.Position = body;
         _body.Rotation = bodyRot;
         _sword.Position = swordPos;
         _sword.Rotation = swordRot;
+        _arm.Rotation = armRot;
+        _cape.Rotation = new Vector3(-capeLift, 0, 0);
+        _legL.Rotation = new Vector3(thighL, 0, 0);
+        _legR.Rotation = new Vector3(thighR, 0, 0);
+        _kneeL.Rotation = new Vector3(-kneeL, 0, 0);
+        _kneeR.Rotation = new Vector3(-kneeR, 0, 0);
 
         _shield.Visible = guard;
         if (guard)
@@ -222,6 +277,8 @@ public partial class WolfModel : Node3D
     {
         _fur = Art.Mat(new Color("4b413b"), 0.95f);
         var belly = Art.Mat(new Color("2f2925"), 0.95f);
+        Tex.Detail(_fur, 6f, 1.2f);
+        Tex.Detail(belly, 6f, 1.2f);
         var bone = Art.Mat(new Color("d9cfb8"), 0.6f);
         _eyes = Art.Mat(new Color("ffcf4d"), 0.3f, 0, new Color("ffcf4d"), 1.5f);
 
@@ -345,6 +402,10 @@ public partial class BossModel : Node3D
     {
         _skin = Art.Mat(new Color("4a2a78"), 0.5f, 0.1f);
         var under = Art.Mat(new Color("7d4fb0"), 0.6f);
+        Tex.Detail(_skin, 2f, 0.7f);
+        Tex.Detail(under, 3f, 0.7f);
+        _skin.Rim = 0.4f;
+        _skin.RimEnabled = true;
         var gold = Art.Mat(new Color("d8b04c"), 0.3f, 0.9f, new Color("f5c542"), 0.5f);
         _eyes = Art.Mat(new Color("ffe680"), 0.2f, 0, new Color("ffd84d"), 4f);
 

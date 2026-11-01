@@ -74,13 +74,13 @@ public static class Arena3D
     {
         var floating = new List<Node3D>();
         float r = Eighth.Sim.Cfg.ArenaRadius;
-        var stone = Art.Mat(new Color("3b3f4a"), 0.92f);
-        var darkStone = Art.Mat(new Color("23262e"), 0.95f);
+        var stone = Tex.Stone(new Color("5a5d68"), 0.55f);
+        var darkStone = Tex.Stone(new Color("34363e"), 0.7f);
         var gold = Art.Mat(new Color("c9a24a"), 0.35f, 0.8f, new Color("f5c542"), 0.6f);
-        var rune = Art.Mat(new Color("1b1f2a"), 0.6f, 0f, new Color("4fb8e8"), 0.55f);
+        var rune = Art.Mat(new Color("1b1f2a"), 0.6f, 0f, new Color("4fb8e8"), 0.4f);
 
-        Art.Part(root, new PlaneMesh { Size = new Vector2(160, 160) }, Art.Mat(new Color("161a22"), 1f), new Vector3(0, -0.62f, 0));
-        Art.Part(root, Art.Cyl(r, r + 0.8f, 0.6f, 96), Art.Mat(new Color("34373f"), 0.9f), new Vector3(0, -0.3f, 0));
+        Art.Part(root, new PlaneMesh { Size = new Vector2(160, 160) }, Tex.Stone(new Color("23252b"), 0.12f), new Vector3(0, -0.62f, 0));
+        Art.Part(root, Art.Cyl(r, r + 0.8f, 0.6f, 96), Tex.Stone(new Color("555862"), 0.22f, tiles: true), new Vector3(0, -0.3f, 0));
         Art.Part(root, Art.Torus(r - 0.25f, r + 0.35f), darkStone, new Vector3(0, 0.02f, 0), scale: new Vector3(1, 0.5f, 1));
 
         // วงอักขระบนพื้น
@@ -140,6 +140,18 @@ public static class Arena3D
         Art.Part(throne, Art.Torus(0.55f, 0.7f), gold, new Vector3(0, seatY + 4.2f, 0.72f), new Vector3(90, 0, 0), shadow: false);
         var glow = new OmniLight3D { Position = new Vector3(0, seatY + 4.2f, -0.5f), LightColor = new Color("f5c542"), LightEnergy = 2.2f, OmniRange = 9f };
         throne.AddChild(glow);
+
+        // เตาไฟสี่มุม (เว้นด้านบัลลังก์) และฝุ่นละอองในอากาศ
+        for (int i = 0; i < 4; i++)
+        {
+            float a = Mathf.Pi / 4 + i * Mathf.Pi / 2;
+            root.AddChild(new Brazier
+            {
+                Position = new Vector3(Mathf.Cos(a) * (r - 0.9f), 0, Mathf.Sin(a) * (r - 0.9f)),
+                CastShadow = i % 2 == 0,
+            });
+        }
+        root.AddChild(Vfx.Dust(r));
         return floating;
     }
 }

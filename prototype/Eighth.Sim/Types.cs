@@ -31,6 +31,7 @@ public enum PAction : byte { Idle, Light, Heavy, Skill1, Skill2, Finisher, Dodge
 public struct PlayerState
 {
     public Vector2 Pos;
+    public Vector2 Vel;       // ความเร็วตอนเดิน (เร่งและชะลอ ไม่เปลี่ยนทันที)
     public float Facing;
     public int Hp;
     public float Stamina;

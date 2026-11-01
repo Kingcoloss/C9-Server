@@ -16,6 +16,7 @@ public sealed class Autopilot
     int _stage;
     int _stageFrame;
     int _quitAt = -1;
+    public readonly HashSet<int> SnapFrames = new(); // --snap=60,120 ถ่ายภาพตามเลขเฟรม (ใช้ตรวจหน้าตาฉาก)
 
     sealed class Pending
     {
@@ -35,6 +36,7 @@ public sealed class Autopilot
     public void Step()
     {
         _frame++;
+        if (SnapFrames.Contains(_frame)) Shot($"snap-{_frame:0000}", 0);
         Capture();
         var s = _m.Session;
         _bot.Step(s.Client, s.Now, _frame);

@@ -13,6 +13,10 @@ public static class Cfg
     public const int PlayerMaxHp = 1000;
     public const float PlayerRadius = 0.45f;
     public const float PlayerSpeed = 6f;
+    public const float MoveAccel = 60f;          // ออกตัวถึงความเร็วเต็มใน 0.1 วิ
+    public const float MoveDecel = 55f;          // ปล่อยปุ่มแล้วไถลไปอีกราว 0.3 ม.
+    public const float TurnRate = 13f;           // เรเดียนต่อวินาที หันหลังกลับใช้ราว 0.25 วิ
+    public const float DodgeExitSpeed = 0.5f;    // หลบจบแล้วยังมีแรงส่งเหลือครึ่งหนึ่งของความเร็ววิ่ง
     public const float GuardMoveFactor = 0.4f;
     public const float StaminaMax = 100f;
     public const float DodgeCost = 30f;

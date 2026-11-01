@@ -8,6 +8,19 @@ public static class Geo
 
     public static float Angle(Vector2 v) => MathF.Atan2(v.Y, v.X);
 
+    public static float RotateTowards(float from, float to, float maxStep)
+    {
+        float d = Wrap(to - from);
+        return MathF.Abs(d) <= maxStep ? to : Wrap(from + MathF.Sign(d) * maxStep);
+    }
+
+    public static Vector2 Approach(Vector2 v, Vector2 target, float maxDelta)
+    {
+        var d = target - v;
+        float len = d.Length();
+        return len <= maxDelta || len < 1e-6f ? target : v + d / len * maxDelta;
+    }
+
     public static float Wrap(float a)
     {
         while (a > MathF.PI) a -= MathF.Tau;
@@ -101,6 +114,7 @@ public static class PlayerSim
     static void ToIdle(ref PlayerState s, int tick)
     {
         if (s.Action == PAction.Light) s.ComboResetTick = tick + Cfg.ComboResetTicks;
+        s.Vel = s.Action == PAction.Dodge ? s.DodgeDir * (Cfg.PlayerSpeed * Cfg.DodgeExitSpeed) : Vector2.Zero;
         s.Action = PAction.Idle;
         s.ActionTick = 0;
     }
@@ -187,9 +201,11 @@ public static class PlayerSim
                 if (c.Guard && !s.Guarding) s.GuardStartTick = tick;
                 s.Guarding = c.Guard;
                 float speed = Cfg.PlayerSpeed * (s.Guarding ? Cfg.GuardMoveFactor : 1f);
-                s.Pos += m * speed * Cfg.Dt;
+                bool moving = m.LengthSquared() > 0.01f;
+                s.Vel = Geo.Approach(s.Vel, m * speed, (moving ? Cfg.MoveAccel : Cfg.MoveDecel) * Cfg.Dt);
+                s.Pos += s.Vel * Cfg.Dt;
                 if (s.Guarding) s.Facing = c.Aim;
-                else if (m.LengthSquared() > 0.01f) s.Facing = Geo.Angle(m);
+                else if (moving) s.Facing = Geo.RotateTowards(s.Facing, Geo.Angle(m), Cfg.TurnRate * Cfg.Dt);
                 return;
             }
             case PAction.Dodge:

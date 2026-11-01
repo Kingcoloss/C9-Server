@@ -53,6 +53,9 @@ public partial class Main3D : Node3D, IGameHost
     Overlay3D _overlay = null!;
     Hud _hud = null!;
     Node3D _actors = null!;
+    SoundFx _sfx = null!;
+    int _lastSerial = -1;
+    readonly Dictionary<int, EPhase> _enemyPhase = new();
     Autopilot? _auto;
     FightBot? _bot;
     int _botFrame;
@@ -68,6 +71,16 @@ public partial class Main3D : Node3D, IGameHost
 
     public override void _Ready()
     {
+        var args = OS.GetCmdlineUserArgs();
+        var dump = args.FirstOrDefault(a => a.StartsWith("--dump-sfx="))?["--dump-sfx=".Length..];
+        if (dump != null)
+        {
+            SfxBank.Dump(dump);
+            SetProcess(false);
+            SetProcessUnhandledInput(false);
+            GetTree().Quit();
+            return;
+        }
         DisplayServer.WindowSetTitle("บัลลังก์ที่แปด · demo การต่อสู้ 3D");
         Font = Shared.LoadFont("NotoSans-Regular", "NotoSansThai-Regular");
         Bold = Shared.LoadFont("NotoSans-Bold", "NotoSansThai-Bold");
@@ -92,13 +105,18 @@ public partial class Main3D : Node3D, IGameHost
         layer.AddChild(_hud);
         _hud.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-        var args = OS.GetCmdlineUserArgs();
         if (args.Contains("--autoplay"))
         {
             var shots = args.FirstOrDefault(a => a.StartsWith("--shots="))?["--shots=".Length..];
             _auto = new Autopilot(this, shots);
+            var snaps = args.FirstOrDefault(a => a.StartsWith("--snap="))?["--snap=".Length..];
+            if (snaps != null)
+                foreach (var f in snaps.Split(','))
+                    if (int.TryParse(f, out int n)) _auto.SnapFrames.Add(n);
             ShowHelp = false;
         }
+        _sfx = new SoundFx();
+        AddChild(_sfx);
         Restart();
     }
 
@@ -112,26 +130,45 @@ public partial class Main3D : Node3D, IGameHost
             GroundHorizonColor = new Color("3a3048"),
             SunAngleMax = 20,
         };
+        // ค่าเหล่านี้ (SSAO, SSIL, หมอกแบบมีปริมาตร) ใช้ได้กับ renderer Forward+ ซึ่งบน Mac ใช้ Metal
         var env = new Godot.Environment
         {
             BackgroundMode = Godot.Environment.BGMode.Sky,
             Sky = new Sky { SkyMaterial = sky },
             AmbientLightSource = Godot.Environment.AmbientSource.Sky,
-            AmbientLightEnergy = 0.45f,
-            TonemapMode = Godot.Environment.ToneMapper.Filmic,
+            AmbientLightEnergy = 0.35f,
+            TonemapMode = Godot.Environment.ToneMapper.Aces,
+            TonemapExposure = 1.05f,
+            TonemapWhite = 6f,
             GlowEnabled = true,
-            GlowIntensity = 0.7f,
-            GlowBloom = 0.08f,
+            GlowIntensity = 0.6f,
+            GlowBloom = 0.05f,
+            GlowHdrThreshold = 1.1f,
+            SsaoEnabled = true,
+            SsaoRadius = 1.4f,
+            SsaoIntensity = 2.2f,
+            SsilEnabled = true,
+            SsilIntensity = 0.7f,
             FogEnabled = true,
             FogLightColor = new Color("2c2a40"),
-            FogDensity = 0.012f,
+            FogDensity = 0.006f,
+            VolumetricFogEnabled = true,
+            VolumetricFogDensity = 0.013f,
+            VolumetricFogAlbedo = new Color(0.8f, 0.78f, 0.85f),
+            VolumetricFogAnisotropy = 0.45f,
+            VolumetricFogLength = 70f,
+            AdjustmentEnabled = true,
+            AdjustmentContrast = 1.08f,
+            AdjustmentSaturation = 1.08f,
         };
         AddChild(new WorldEnvironment { Environment = env });
         var sun = new DirectionalLight3D
         {
             LightColor = new Color("ffe2b8"),
-            LightEnergy = 1.35f,
+            LightEnergy = 1.5f,
             ShadowEnabled = true,
+            ShadowBlur = 1.5f,
+            LightVolumetricFogEnergy = 1.4f,
             DirectionalShadowMaxDistance = 45,
             RotationDegrees = new Vector3(-52, 28, 0),
         };
@@ -150,6 +187,8 @@ public partial class Main3D : Node3D, IGameHost
         Session = new LocalSession(_ping, _comp, seed: GD.Randi() | 1u);
         foreach (var n in _enemies.Values) n.QueueFree();
         _enemies.Clear();
+        _enemyPhase.Clear();
+        _lastSerial = -1;
         foreach (var g in _ghosts.Values) g.QueueFree();
         _ghosts.Clear();
         _player?.QueueFree();
@@ -268,21 +307,23 @@ public partial class Main3D : Node3D, IGameHost
         var right = new Vector2(Mathf.Cos(_yaw), -Mathf.Sin(_yaw));
         var move = fwd * w + right * d;
         float camAngle = Mathf.Atan2(fwd.Y, fwd.X);
+        // ไม่มีเป้าใกล้: ถ้ากำลังวิ่งให้ฟันไปทางที่วิ่ง ถ้ายืนอยู่ให้ฟันไปทางที่กล้องมอง
+        float freeAim = move.LengthSquared() > 0.01f ? Mathf.Atan2(move.Y, move.X) : camAngle;
         c.Held = new HeldInput
         {
             MoveX = move.X,
             MoveY = move.Y,
-            Aim = SoftAim(c, camAngle),
+            Aim = SoftAim(c, camAngle, freeAim),
             Guard = Down(Key.Shift) || Down(Key.L),
         };
     }
 
     // ล็อกเป้าแบบอ่อน: ถ้ามีศัตรูใกล้และอยู่ในมุมกล้อง ให้หันไปหาตอนออกท่า
-    float SoftAim(GameClient c, float camAngle)
+    float SoftAim(GameClient c, float camAngle, float freeAim)
     {
         var me = c.PlayerRenderPos(Session.Now);
         SoftTarget = -1;
-        float best = float.MaxValue, aim = camAngle;
+        float best = float.MaxValue, aim = freeAim;
         foreach (var e in c.Enemies(Session.Now))
         {
             if (e.V.Phase == EPhase.Dead) continue;
@@ -318,7 +359,11 @@ public partial class Main3D : Node3D, IGameHost
                     {
                         PerfectAt = T;
                         _slowUntil = T + 0.35;
+                        _sfx.Play("perfect", me + Vector3.Up, 2f, 1f, 0.02f);
                     }
+                    else if (ui.Local == Judgment.Guard) _sfx.Play("clank", me + Vector3.Up);
+                    else if (ui.Local == Judgment.GuardBreak) _sfx.Play("clank", me + Vector3.Up, 2f, 0.7f);
+                    else if (ui.Local == Judgment.Hit) _sfx.Play("hurt", me + Vector3.Up);
                     break;
                 case UiKind.Verdict:
                     if (!Shared.DescribeVerdict(ui, out var line, out var floatText, T)) break;
@@ -326,9 +371,16 @@ public partial class Main3D : Node3D, IGameHost
                     if (floatText != null) Float(floatText, me + Vector3.Up * 1.0f, Palette.Hurt, 18, 1.6);
                     break;
                 case UiKind.LocalHit:
-                    Flash(EnemyPoint(ui.EnemyId, ui.Pos));
+                {
+                    var at = EnemyPoint(ui.EnemyId, ui.Pos);
+                    Flash(at);
                     _shake = Mathf.Max(_shake, 0.06f);
+                    bool heavy = c.Predicted.Action is PAction.Heavy or PAction.Finisher or PAction.Skill2;
+                    Vfx.Sparks(this, at, heavy ? new Color(1f, 0.75f, 0.35f) : new Color(0.75f, 0.9f, 1f), heavy ? 40 : 24, heavy ? 8f : 6f);
+                    _sfx.Play(heavy ? "hit_heavy" : "hit", at, heavy ? 1f : -2f);
+                    if (c.Predicted.Action == PAction.Finisher) _sfx.Play("perfect", at, -4f, 0.6f, 0.02f);
                     break;
+                }
                 case UiKind.EnemyDamage:
                     Float(ui.Amount.ToString(), EnemyPoint(ui.EnemyId, ui.Pos) + new Vector3(GD.Randf() * 0.6f - 0.3f, 0.6f, 0),
                         Palette.Damage, 24, 0.8);
@@ -339,13 +391,77 @@ public partial class Main3D : Node3D, IGameHost
                     break;
                 case UiKind.Stagger:
                     Float("เสียหลัก! กด F", EnemyPoint(ui.EnemyId, ui.Pos) + Vector3.Up * 1.2f, Palette.Gold, 26, 1.4);
+                    _sfx.Play("stagger", EnemyPoint(ui.EnemyId, ui.Pos) + Vector3.Up);
                     break;
                 case UiKind.Kill:
-                    Float("ล้ม", EnemyPoint(ui.EnemyId, ui.Pos) + Vector3.Up * 0.8f, Palette.Muted, 22, 1.0);
+                {
+                    var at = EnemyPoint(ui.EnemyId, ui.Pos);
+                    Float("ล้ม", at + Vector3.Up * 0.8f, Palette.Muted, 22, 1.0);
+                    bool boss = _enemies.TryGetValue(ui.EnemyId, out var n) && n is BossModel;
+                    _sfx.Play(boss ? "boss_death" : "kill", at, boss ? 4f : 0f);
                     break;
+                }
                 case UiKind.Banner:
                     ShowBanner(ui.Text, ui.Text.Contains("กด R") ? double.MaxValue : 3);
+                    _sfx.Play("banner", Camera.GlobalPosition, -6f, 1f, 0);
                     break;
+            }
+        }
+    }
+
+    // ---- เสียงที่ผูกกับท่าทาง ----
+
+    void PlayerSounds(in PlayerState st, Vector3 at)
+    {
+        if (_player.Stepped) _sfx.Play("step", at, -10f, 1f, 0.12f);
+        if (st.ActionSerial == _lastSerial) return;
+        bool first = _lastSerial < 0;
+        _lastSerial = st.ActionSerial;
+        if (first) return;
+        var up = at + Vector3.Up;
+        switch (st.Action)
+        {
+            case PAction.Light: _sfx.Play("swing_light", up, -3f, 1f + st.Combo * 0.05f); break;
+            case PAction.Heavy: _sfx.Play("swing_heavy", up); break;
+            case PAction.Finisher: _sfx.Play("swing_heavy", up, 2f, 0.8f); break;
+            case PAction.Skill1: _sfx.Play("dash", up); break;
+            case PAction.Skill2: _sfx.Play("swing_spin", up); break;
+            case PAction.Dodge:
+                _sfx.Play("dodge", up, -2f);
+                Vfx.Puff(this, at, 0.8f);
+                break;
+        }
+    }
+
+    // เสียงเตือนตอนศัตรูเริ่มง้างท่า (สีของท่าบอสมีเสียงต่างกัน หลับตาก็พอรู้ว่าต้องกันหรือหลบ)
+    void EnemySounds(in EnemyRender e, Vector3 at)
+    {
+        var v = e.V;
+        if (_enemyPhase.TryGetValue(v.Id, out var last) && last == v.Phase) return;
+        _enemyPhase[v.Id] = v.Phase;
+        if (v.Attack == AttackId.None) return;
+        bool boss = v.Kind == EKind.Boss;
+        if (v.Phase == EPhase.Windup)
+        {
+            if (!boss) { _sfx.Play("growl", at, -4f, 1f, 0.15f); return; }
+            switch (Attacks.Get(v.Attack).Tele)
+            {
+                case Tele.Red: _sfx.Play("tele_red", at, 2f, 1f, 0); break;
+                case Tele.Purple: _sfx.Play("tele_purple", at, 0f, 1f, 0); break;
+                default: _sfx.Play("tele_gold", at, 0f, 1f, 0); break;
+            }
+        }
+        else if (v.Phase == EPhase.Active)
+        {
+            if (!boss) _sfx.Play("swing_light", at, -4f, 0.7f);
+            else if (v.Attack == AttackId.BossInkPool) _sfx.Play("ink", at, 2f);
+            else if (v.Attack == AttackId.BossSweep) _sfx.Play("swing_heavy", at, 4f, 0.55f);
+            else if (v.Attack == AttackId.BossSlam)
+            {
+                _sfx.Play("slam", at, 4f);
+                var def = Attacks.Get(v.Attack);
+                Vfx.Puff(this, at + new Vector3(Mathf.Cos(e.Facing), 0, Mathf.Sin(e.Facing)) * (def.Offset + 0.5f), 2.2f);
+                _shake = Mathf.Max(_shake, 0.25f);
             }
         }
     }
@@ -374,7 +490,7 @@ public partial class Main3D : Node3D, IGameHost
     void Flash(Vector3 at)
     {
         var mat = Art.Clear(new Color(1f, 0.95f, 0.8f, 0.9f));
-        var mesh = Art.Part(this, Art.Sphere(0.5f), mat, at, shadow: false);
+        var mesh = Art.Part(this, Art.Sphere(0.3f), mat, at, shadow: false);
         _flashes.Add((mesh, mat, T));
     }
 
@@ -385,7 +501,9 @@ public partial class Main3D : Node3D, IGameHost
         double now = s.Now;
         float alpha = c.TickAlpha(now);
 
-        _player.Sync(c.Predicted, Art.V3(c.PlayerRenderPos(now)), c.ClientTick, alpha, T, dt);
+        var mePos = Art.V3(c.PlayerRenderPos(now));
+        _player.Sync(c.Predicted, mePos, c.ClientTick, alpha, T, dt);
+        PlayerSounds(c.Predicted, mePos);
 
         _ground.Begin();
         foreach (var e in c.Enemies(now))
@@ -401,6 +519,7 @@ public partial class Main3D : Node3D, IGameHost
             if (node is WolfModel w) w.Sync(shown, T, dt);
             else if (node is BossModel b) b.Sync(shown, T, dt);
             Telegraph3D(e);
+            EnemySounds(e, Art.V3(shown.Pos, 1f));
         }
 
         // แนวฟันของผู้เล่นตอนท่าอยู่ในจังหวะโดน
