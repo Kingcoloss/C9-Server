@@ -34,7 +34,7 @@ public partial class Main3D : Node3D, IGameHost
         "คลิกซ้าย/J = ตีเบา (ต่อได้ 4 จังหวะ) · คลิกขวา/K = ตีหนัก · Space = หลบ · Shift ค้าง = กัน",
         "Q หมัดสามดาว · E ดาวตกกระแทก · F ปิดฉากศัตรูที่เสียหลัก · หลบ/กันตอนวงเตือนเต็มพอดี = พริ้ว",
         "ทอง = หลบ/รับพริ้วได้ · แดง = กันไม่ได้ ต้องหลบ · ม่วง = กันได้ แต่รับพริ้วไม่ได้",
-        "1-4 ping · C ชดเชยความหน่วง · N แผงเครือข่าย · G ตำแหน่งบน server · B บอทเล่นแทน · F2 มุมมอง 2D · R เริ่มใหม่ · H ซ่อน",
+        "1-4 ping · C ชดเชยความหน่วง · N แผงเครือข่าย · G ตำแหน่งบน server · B บอทเล่นแทน · F2 มุมมอง 2D · F3 สลับตัวละคร · R เริ่มใหม่ · H ซ่อน",
     };
 
     public Camera3D Camera { get; private set; } = null!;
@@ -48,7 +48,8 @@ public partial class Main3D : Node3D, IGameHost
     readonly Dictionary<int, MeshInstance3D> _ghosts = new();
     readonly List<(MeshInstance3D mesh, StandardMaterial3D mat, double born)> _flashes = new();
     List<Node3D> _crystals = new();
-    PlayerModel _player = null!;
+    PlayerVisual _player = null!;
+    bool _useAvatar = true;
     GroundFx _ground = null!;
     Overlay3D _overlay = null!;
     Hud _hud = null!;
@@ -65,6 +66,7 @@ public partial class Main3D : Node3D, IGameHost
     float _yaw;
     float _pitch = -0.32f;
     float _dist = 6.2f;
+    float _camScale = 1f; // --cam-scale=0.5 ใช้ถ่ายภาพใกล้ตัวละคร
     float _camDist = 6.2f;
     Vector3 _camTarget;
     float _shake;
@@ -74,9 +76,19 @@ public partial class Main3D : Node3D, IGameHost
     {
         var args = OS.GetCmdlineUserArgs();
         var dump = args.FirstOrDefault(a => a.StartsWith("--dump-sfx="))?["--dump-sfx=".Length..];
-        if (dump != null)
+        var probe = args.Where(a => a.StartsWith("--rig-probe=")).Select(a => a["--rig-probe=".Length..]).ToList();
+        var rtest = args.Where(a => a.StartsWith("--rig-test=")).Select(a => a["--rig-test=".Length..]).ToList();
+        var stest = args.Where(a => a.StartsWith("--spring-test=")).Select(a => a["--spring-test=".Length..]).ToList();
+        if (dump != null || probe.Count > 0 || rtest.Count > 0 || stest.Count > 0)
         {
-            SfxBank.Dump(dump);
+            try
+            {
+                if (dump != null) SfxBank.Dump(dump);
+                foreach (var f in probe) RigLoad.Probe(f);
+                foreach (var f in rtest) RigTest.Run(f);
+                foreach (var f in stest) SpringTest.Run(f);
+            }
+            catch (Exception e) { GD.PrintErr(e.ToString()); }
             SetProcess(false);
             SetProcessUnhandledInput(false);
             GetTree().Quit();
@@ -106,6 +118,12 @@ public partial class Main3D : Node3D, IGameHost
         layer.AddChild(_hud);
         _hud.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
+        var charDir = args.FirstOrDefault(a => a.StartsWith("--char-dir="))?["--char-dir=".Length..];
+        if (charDir != null) CharacterSet.Dir = charDir;
+        _useAvatar = !args.Contains("--no-avatar");
+        var camScale = args.FirstOrDefault(a => a.StartsWith("--cam-scale="))?["--cam-scale=".Length..];
+        if (camScale != null && float.TryParse(camScale, System.Globalization.CultureInfo.InvariantCulture, out var cs)) _camScale = cs;
+
         if (args.Contains("--autoplay"))
         {
             var shots = args.FirstOrDefault(a => a.StartsWith("--shots="))?["--shots=".Length..];
@@ -119,6 +137,14 @@ public partial class Main3D : Node3D, IGameHost
         _sfx = new SoundFx();
         AddChild(_sfx);
         Restart();
+    }
+
+    // ใช้โมเดลจริงจาก characters/ ถ้ามี ไม่มีก็ใช้ตัวละครรูปทรงพื้นฐาน (F3 สลับได้)
+    void MakePlayer()
+    {
+        _player?.QueueFree();
+        _player = _useAvatar && CharacterSet.Get() is { } cs ? new AvatarModel(cs) : new PlayerModel();
+        _actors.AddChild(_player);
     }
 
     void BuildEnvironment()
@@ -192,9 +218,7 @@ public partial class Main3D : Node3D, IGameHost
         _lastSerial = -1;
         foreach (var g in _ghosts.Values) g.QueueFree();
         _ghosts.Clear();
-        _player?.QueueFree();
-        _player = new PlayerModel();
-        _actors.AddChild(_player);
+        MakePlayer();
         Floaters.Clear();
         Feed.Clear();
         _yaw = Art.Yaw(Session.Client.Predicted.Facing);
@@ -265,6 +289,12 @@ public partial class Main3D : Node3D, IGameHost
                 ShowBanner(_bot != null ? "บอทเล่นแทน: เปิด (กด B อีกครั้งเพื่อเล่นเอง)" : "บอทเล่นแทน: ปิด", 2);
                 break;
             case Key.R: Restart(); break;
+            case Key.F3:
+                _useAvatar = !_useAvatar;
+                MakePlayer();
+                ShowBanner(_player is AvatarModel ? "ตัวละคร: โมเดลจาก characters/" :
+                    CharacterSet.Get() == null ? "ยังไม่มีโมเดลในโฟลเดอร์ characters/" : "ตัวละคร: รูปทรงพื้นฐาน", 2);
+                break;
             case Key.F2:
                 Input.MouseMode = Input.MouseModeEnum.Visible;
                 GetTree().ChangeSceneToFile("res://main.tscn");
@@ -644,8 +674,8 @@ public partial class Main3D : Node3D, IGameHost
                 boss = e.V.Kind == EKind.Boss;
             }
             _yaw = Mathf.LerpAngle(_yaw, Art.Yaw(aim), Art.Smooth(1.6f, dt));
-            _pitch = Mathf.Lerp(_pitch, boss ? -0.6f : -0.42f, Art.Smooth(2, dt));
-            _dist = Mathf.Lerp(_dist, boss ? 9.5f : 7.5f, Art.Smooth(2, dt));
+            _pitch = Mathf.Lerp(_pitch, (boss ? -0.6f : -0.42f) * Mathf.Sqrt(_camScale), Art.Smooth(2, dt));
+            _dist = Mathf.Lerp(_dist, (boss ? 9.5f : 7.5f) * _camScale, Art.Smooth(2, dt));
         }
         _camTarget = _camTarget.Lerp(me, Art.Smooth(12, dt));
         var rot = Basis.FromEuler(new Vector3(_pitch, _yaw, 0));

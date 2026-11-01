@@ -4,7 +4,7 @@ using Godot;
 namespace EighthThrone.Demo;
 
 // ตัวละครผู้เล่น: ทำท่าตามสถานะใน Sim (ไม่มีโมเดลจริง ใช้รูปทรงพื้นฐานต่อกัน)
-public partial class PlayerModel : Node3D
+public partial class PlayerModel : PlayerVisual
 {
     readonly Node3D _body;
     readonly Node3D _sword;
@@ -21,8 +21,6 @@ public partial class PlayerModel : Node3D
     float _lean, _bank;
     int _lastHp = -1;
     double _hurtAt = -10;
-
-    public bool Stepped { get; private set; } // เท้าแตะพื้นในเฟรมนี้ (ใช้เล่นเสียงเท้า)
 
     const float Hip = 0.9f;
 
@@ -71,7 +69,7 @@ public partial class PlayerModel : Node3D
             new Vector3(0, 0.04f, 0), scale: new Vector3(1, 0.2f, 1), shadow: false);
     }
 
-    public void Sync(in PlayerState st, Vector3 pos, int tick, float alpha, double t, float dt)
+    public override void Sync(in PlayerState st, Vector3 pos, int tick, float alpha, double t, float dt)
     {
         Position = pos;
         _yaw = Mathf.LerpAngle(_yaw, Art.Yaw(st.Facing), Art.Smooth(22, dt));

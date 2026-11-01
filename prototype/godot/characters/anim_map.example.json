@@ -1,0 +1,22 @@
+{
+  "model": "player.vrm",
+  "height": 1.65,
+  "clips": {
+    "idle": "sword and shield idle.fbx",
+    "walk": "sword and shield walk.fbx",
+    "run": "sword and shield run.fbx",
+    "guard": "sword and shield block idle.fbx",
+    "light1": { "file": "sword and shield slash.fbx", "hit": 0.45 },
+    "light2": { "file": "sword and shield slash (2).fbx" },
+    "light3": { "file": "sword and shield slash (3).fbx" },
+    "light4": { "file": "sword and shield slash (4).fbx" },
+    "heavy": { "file": "sword and shield attack.fbx", "start": 0.1, "end": 1.4 },
+    "finisher": "sword and shield jump attack.fbx",
+    "skill1": "sword and shield kick.fbx",
+    "skill2": "sword and shield attack (2).fbx",
+    "dodge": { "file": "stand to roll.fbx", "end": 1.0 },
+    "hit": "sword and shield impact.fbx",
+    "guardbreak": "sword and shield block impact.fbx",
+    "death": "sword and shield death.fbx"
+  }
+}
