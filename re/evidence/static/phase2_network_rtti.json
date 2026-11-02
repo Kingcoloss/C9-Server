@@ -1,0 +1,90 @@
+[
+  {
+    "class": "IC9NetworkHandler",
+    "type_descriptor_va": "012f4b08",
+    "vtables": [
+      {
+        "locator_va": "0123d914",
+        "vtable_va": "01125d6c",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd5c92"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd5c92"
+          },
+          {
+            "slot": 2,
+            "function_va": "00a47740"
+          },
+          {
+            "slot": 3,
+            "function_va": "00a47790"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "C9NetworkCommon",
+    "type_descriptor_va": "012f4c28",
+    "vtables": [
+      {
+        "locator_va": "0123d974",
+        "vtable_va": "0112616c",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a484f0"
+          },
+          {
+            "slot": 1,
+            "function_va": "00a47cb0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "C9NetworkLogin",
+    "type_descriptor_va": "012f4d4c",
+    "vtables": [
+      {
+        "locator_va": "0123db3c",
+        "vtable_va": "0112dc54",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a64110"
+          },
+          {
+            "slot": 1,
+            "function_va": "00a621f0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "C9NetworkManager",
+    "type_descriptor_va": "012f4d6c",
+    "vtables": [
+      {
+        "locator_va": "0123db88",
+        "vtable_va": "0112e050",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a6b180"
+          }
+        ]
+      }
+    ]
+  }
+]

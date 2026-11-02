@@ -1,0 +1,150 @@
+{
+  "recorded_at_utc": "2026-11-02T15:40:32.065081+00:00",
+  "original_game_executed": false,
+  "original_client_compatibility": "unverified",
+  "scope": "Runtime port parity; authentication/rotation beyond initial epoch remain pending",
+  "processes": [],
+  "dotnet_validation": {
+    "passed": 24,
+    "total": 24,
+    "skipped": 10,
+    "assertions": 2739,
+    "mode": "offline",
+    "status": "passed"
+  },
+  "cross_language_stdio": {
+    "python_client_to_dotnet_session": "passed",
+    "reply_types": [
+      "0x0004",
+      "0x2ee2",
+      "0x2ee6"
+    ],
+    "server_entries": 1,
+    "events": [
+      {
+        "event": "connected",
+        "session": 1
+      },
+      {
+        "event": "sent",
+        "session": 1,
+        "type": 4,
+        "wire_length": 14
+      },
+      {
+        "event": "received",
+        "session": 1,
+        "type": 12001,
+        "payload_length": 2162,
+        "flag": 1,
+        "sequence": 0,
+        "state": "connected"
+      },
+      {
+        "event": "sent",
+        "session": 1,
+        "type": 12002,
+        "wire_length": 36
+      },
+      {
+        "event": "state",
+        "session": 1,
+        "state": "login_fixture_sent"
+      },
+      {
+        "event": "received",
+        "session": 1,
+        "type": 12005,
+        "payload_length": 0,
+        "flag": 1,
+        "sequence": 1,
+        "state": "login_fixture_sent"
+      },
+      {
+        "event": "sent",
+        "session": 1,
+        "type": 12006,
+        "wire_length": 68
+      },
+      {
+        "event": "state",
+        "session": 1,
+        "state": "server_list_sent"
+      },
+      {
+        "event": "peer_closed",
+        "session": 1
+      },
+      {
+        "event": "disconnected",
+        "session": 1
+      }
+    ],
+    "process_exit_code": 0
+  },
+  "tcp_validation": {
+    "status": "not_verified",
+    "reason": "Socket tests are omitted in explicit --offline mode",
+    "network_tests_skipped": 10
+  },
+  "python_suites": [
+    {
+      "directory": "tests",
+      "passed": 10,
+      "exit_code": 0
+    },
+    {
+      "directory": "re/scripts",
+      "passed": 8,
+      "exit_code": 0
+    },
+    {
+      "directory": "re/scripts",
+      "passed": 6,
+      "exit_code": 0
+    }
+  ],
+  "reference_fixture_sha256": "2a326228300757d7a2ff23e9051afbb927c6e288185f6bc4924daef131b83946",
+  "runtime_python_dependency": false,
+  "build": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0,
+    "sdk": "10.0.302",
+    "tested_os": "macOS ARM64"
+  },
+  "tcp_environment_observation": {
+    "error": "SocketException (13): Permission denied",
+    "operation": "loopback ConnectAsync",
+    "original_game_executed": false,
+    "tcp_tests_passed": false
+  },
+  "client_location": {
+    "old_directory_present": false,
+    "new_absolute_path": "not available in accessible project metadata",
+    "new_location_hash_verified": false,
+    "runtime_requires_client_files": false
+  },
+  "utm_decision": {
+    "long_term_development": "UTM",
+    "crossover_trial": "User reported game launch failure; cause unverified"
+  },
+  "runtime_sources_sha256": {
+    "src/C9.Protocol/PacketTwister.cs": "cdb8783704e7d11bcd53ac59c516a8459809eb67a4b245bed222a1b25a41d765",
+    "src/C9.Protocol/InitialCipherDirection.cs": "09c37f80a4f5623bf3abfbd150c9763a910fe707a89d1792978da866f5561451",
+    "src/C9.Protocol/ConnectionCodec.cs": "4986500400b81048f3b460c3a26eb98a466044d217b6b3b3b0bf5ea660b79d84",
+    "src/C9.Protocol/Checksum.cs": "aef1807de09d7b50ad6fc4b4cf1085f35cc50e40e9e5bd0d030a1071f91f0ae8",
+    "src/C9.Protocol/ServerList.cs": "077e7e989aced90a770d2d6ddb96ebe77f7cc0950b580d24beeddea191493ef9",
+    "src/C9.Protocol/ProtocolException.cs": "bd77c82b2c5a6b3b550876fb9c4cb6c6faab24d066fade16ab0085c2eeb040f0",
+    "src/C9.Protocol/LegacyRipemd160.cs": "b21d79376501bdbaecfaba3fb4c95d52cb334656e748e5cf1ab346e10bf810c5",
+    "src/C9.Protocol/Packet.cs": "464697b56624fd0f28cb2ef0cbfddcc0585c0abbfd035fbfe484166a142f68d1",
+    "src/C9.Protocol/Rc6Cipher.cs": "90202ab25b170d5d89d570322b300be9b632dc152c7cd5e54b11ad5249c9926e",
+    "src/C9.Server/LengthPrefixedPipe.cs": "7a4cc74dcd916c5be2a5282eb107ddb056f1904633024c5e2f6dda6a4e168400",
+    "src/C9.Server/ServerHostedService.cs": "86799afb4bf4b3b6bf94ba9cfbfb0958712a085afda63b8e06347ad468d80d0e",
+    "src/C9.Server/ServerEvents.cs": "df322899e3069b6a095a715908e199a145e74f4456f31b81abaebc4b5ac130df",
+    "src/C9.Server/TcpGameServer.cs": "71a265d355846b1f955d09d85b48408bd15891a97fa6c96177047fdb5858e07a",
+    "src/C9.Server/SessionProcessor.cs": "3a3f2c249e3087076371df0e3951e636c0061539c20d4737dc36d021190b1683",
+    "src/C9.Server/ServerOptions.cs": "220073416fdbcfca7bd3984b6fef296e97859c40962737f757a082b18f80fa3e",
+    "src/C9.Server/Program.cs": "34f62497cef69c3335dd7a923b2768ad27923c433c1b5aa000b22582d36312cf"
+  }
+}

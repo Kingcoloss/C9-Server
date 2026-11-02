@@ -1,0 +1,7170 @@
+[
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000004d",
+    "va": "",
+    "encoding": "ascii",
+    "value": "!This program cannot be run in DOS mode."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000001e8",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".text"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000020f",
+    "va": "",
+    "encoding": "ascii",
+    "value": "`.rdata"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00000237",
+    "va": "",
+    "encoding": "ascii",
+    "value": "@.data"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00000260",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".rsrc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00000287",
+    "va": "",
+    "encoding": "ascii",
+    "value": "@.reloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000013ef",
+    "va": "0x10001fef",
+    "encoding": "ascii",
+    "value": "T$8Rj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000013f6",
+    "va": "0x10001ff6",
+    "encoding": "ascii",
+    "value": "D$,PQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000155b",
+    "va": "0x1000215b",
+    "encoding": "ascii",
+    "value": "T$$RQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000156f",
+    "va": "0x1000216f",
+    "encoding": "ascii",
+    "value": "D$$Pj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00001576",
+    "va": "0x10002176",
+    "encoding": "ascii",
+    "value": "L$ QV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00001b18",
+    "va": "0x10002718",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00001f2d",
+    "va": "0x10002b2d",
+    "encoding": "ascii",
+    "value": "L$$RPQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000207f",
+    "va": "0x10002c7f",
+    "encoding": "ascii",
+    "value": "uCj#3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00002122",
+    "va": "0x10002d22",
+    "encoding": "ascii",
+    "value": "uAj%hH"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00002730",
+    "va": "0x10003330",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00002980",
+    "va": "0x10003580",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00002c20",
+    "va": "0x10003820",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00003006",
+    "va": "0x10003c06",
+    "encoding": "ascii",
+    "value": "T$4R@P"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000306b",
+    "va": "0x10003c6b",
+    "encoding": "ascii",
+    "value": "D$(PQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00003094",
+    "va": "0x10003c94",
+    "encoding": "ascii",
+    "value": "L$(QV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00003412",
+    "va": "0x10004012",
+    "encoding": "ascii",
+    "value": "L$ ;H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000347a",
+    "va": "0x1000407a",
+    "encoding": "ascii",
+    "value": "T$ ;P"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000035ae",
+    "va": "0x100041ae",
+    "encoding": "ascii",
+    "value": "T$,RV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000035f6",
+    "va": "0x100041f6",
+    "encoding": "ascii",
+    "value": "T$(RW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00003b1d",
+    "va": "0x1000471d",
+    "encoding": "ascii",
+    "value": "PSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00003b84",
+    "va": "0x10004784",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000499f",
+    "va": "0x1000559f",
+    "encoding": "ascii",
+    "value": "uCj#3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00004a42",
+    "va": "0x10005642",
+    "encoding": "ascii",
+    "value": "uAj%hH"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00004dae",
+    "va": "0x100059ae",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000534a",
+    "va": "0x10005f4a",
+    "encoding": "ascii",
+    "value": "D$,j "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005550",
+    "va": "0x10006150",
+    "encoding": "ascii",
+    "value": "\\$(8]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000558d",
+    "va": "0x1000618d",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000055b9",
+    "va": "0x100061b9",
+    "encoding": "ascii",
+    "value": "D$$SUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000564f",
+    "va": "0x1000624f",
+    "encoding": "ascii",
+    "value": "t$D8\\$"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000567e",
+    "va": "0x1000627e",
+    "encoding": "ascii",
+    "value": "L$$Qj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000577d",
+    "va": "0x1000637d",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000593d",
+    "va": "0x1000653d",
+    "encoding": "ascii",
+    "value": "|$49|$8u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005a15",
+    "va": "0x10006615",
+    "encoding": "ascii",
+    "value": "L$<PQW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005a45",
+    "va": "0x10006645",
+    "encoding": "ascii",
+    "value": "F0RSP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005c64",
+    "va": "0x10006864",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005d7d",
+    "va": "0x1000697d",
+    "encoding": "ascii",
+    "value": "PQSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00005e30",
+    "va": "0x10006a30",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000622d",
+    "va": "0x10006e2d",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000638d",
+    "va": "0x10006f8d",
+    "encoding": "ascii",
+    "value": "PQSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006467",
+    "va": "0x10007067",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000064f7",
+    "va": "0x100070f7",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006534",
+    "va": "0x10007134",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006571",
+    "va": "0x10007171",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000657b",
+    "va": "0x1000717b",
+    "encoding": "ascii",
+    "value": "O,+O("
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006590",
+    "va": "0x10007190",
+    "encoding": "ascii",
+    "value": "o(;o,v"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000065a2",
+    "va": "0x100071a2",
+    "encoding": "ascii",
+    "value": "o,9o(v"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006661",
+    "va": "0x10007261",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000066c1",
+    "va": "0x100072c1",
+    "encoding": "ascii",
+    "value": "w(;w,v"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000066d3",
+    "va": "0x100072d3",
+    "encoding": "ascii",
+    "value": "w,9w(v"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000677f",
+    "va": "0x1000737f",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006800",
+    "va": "0x10007400",
+    "encoding": "ascii",
+    "value": "{(;{,v"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000685b",
+    "va": "0x1000745b",
+    "encoding": "ascii",
+    "value": "T$ ;V"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000068b7",
+    "va": "0x100074b7",
+    "encoding": "ascii",
+    "value": "G0f;E"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000068cf",
+    "va": "0x100074cf",
+    "encoding": "ascii",
+    "value": "L$ ;H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006bae",
+    "va": "0x100077ae",
+    "encoding": "ascii",
+    "value": "F0f;E"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00006bc6",
+    "va": "0x100077c6",
+    "encoding": "ascii",
+    "value": "L$$;H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000750d",
+    "va": "0x1000810d",
+    "encoding": "ascii",
+    "value": "L$$RPQV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00007586",
+    "va": "0x10008186",
+    "encoding": "ascii",
+    "value": "D$$9G"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000076fd",
+    "va": "0x100082fd",
+    "encoding": "ascii",
+    "value": "L$$RPQV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00007dac",
+    "va": "0x100089ac",
+    "encoding": "ascii",
+    "value": "PQRWS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00007fd7",
+    "va": "0x10008bd7",
+    "encoding": "ascii",
+    "value": "VW;\\$ t^"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00008037",
+    "va": "0x10008c37",
+    "encoding": "ascii",
+    "value": ";\\$ u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000080cb",
+    "va": "0x10008ccb",
+    "encoding": "ascii",
+    "value": "VW;\\$"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000081ab",
+    "va": "0x10008dab",
+    "encoding": "ascii",
+    "value": "VW9\\$"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000872f",
+    "va": "0x1000932f",
+    "encoding": "ascii",
+    "value": "D$ SVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000904d",
+    "va": "0x10009c4d",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000091ad",
+    "va": "0x10009dad",
+    "encoding": "ascii",
+    "value": "PQSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000927e",
+    "va": "0x10009e7e",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000092cf",
+    "va": "0x10009ecf",
+    "encoding": "ascii",
+    "value": "D$(SVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00009383",
+    "va": "0x10009f83",
+    "encoding": "ascii",
+    "value": "L$ QP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000094ef",
+    "va": "0x1000a0ef",
+    "encoding": "ascii",
+    "value": "D$(SVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000095aa",
+    "va": "0x1000a1aa",
+    "encoding": "ascii",
+    "value": "L$ QP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000099e3",
+    "va": "0x1000a5e3",
+    "encoding": "ascii",
+    "value": "V@RQV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00009e4d",
+    "va": "0x1000aa4d",
+    "encoding": "ascii",
+    "value": "D$4PQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00009ec9",
+    "va": "0x1000aac9",
+    "encoding": "ascii",
+    "value": "D$,SVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a096",
+    "va": "0x1000ac96",
+    "encoding": "ascii",
+    "value": "D$0RPQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a119",
+    "va": "0x1000ad19",
+    "encoding": "ascii",
+    "value": "D$,SVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a230",
+    "va": "0x1000ae30",
+    "encoding": "ascii",
+    "value": "QSUV3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a2c8",
+    "va": "0x1000aec8",
+    "encoding": "ascii",
+    "value": "O _^]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a370",
+    "va": "0x1000af70",
+    "encoding": "ascii",
+    "value": "4SUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a527",
+    "va": "0x1000b127",
+    "encoding": "ascii",
+    "value": "L$`QPR"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000a5a5",
+    "va": "0x1000b1a5",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000aabc",
+    "va": "0x1000b6bc",
+    "encoding": "ascii",
+    "value": "D$,WRP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000acf7",
+    "va": "0x1000b8f7",
+    "encoding": "ascii",
+    "value": "L$@QS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ad0f",
+    "va": "0x1000b90f",
+    "encoding": "ascii",
+    "value": "\\$@8\\$"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ae4b",
+    "va": "0x1000ba4b",
+    "encoding": "ascii",
+    "value": "D$,Pj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000af8a",
+    "va": "0x1000bb8a",
+    "encoding": "ascii",
+    "value": "D$,PS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000b429",
+    "va": "0x1000c029",
+    "encoding": "ascii",
+    "value": "\\$$8_Aub"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000b610",
+    "va": "0x1000c210",
+    "encoding": "ascii",
+    "value": "0SUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000b82d",
+    "va": "0x1000c42d",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ba0e",
+    "va": "0x1000c60e",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000bb76",
+    "va": "0x1000c776",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000be8a",
+    "va": "0x1000ca8a",
+    "encoding": "ascii",
+    "value": ";t$,t"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000bf03",
+    "va": "0x1000cb03",
+    "encoding": "ascii",
+    "value": "D$,Pj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000bff0",
+    "va": "0x1000cbf0",
+    "encoding": "ascii",
+    "value": "PQSVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c1dc",
+    "va": "0x1000cddc",
+    "encoding": "ascii",
+    "value": "D$4Pj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c1e3",
+    "va": "0x1000cde3",
+    "encoding": "ascii",
+    "value": "T$(RS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c238",
+    "va": "0x1000ce38",
+    "encoding": "ascii",
+    "value": "T$(RS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c290",
+    "va": "0x1000ce90",
+    "encoding": "ascii",
+    "value": "DSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c467",
+    "va": "0x1000d067",
+    "encoding": "ascii",
+    "value": "8X4tg"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c576",
+    "va": "0x1000d176",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c7ac",
+    "va": "0x1000d3ac",
+    "encoding": "ascii",
+    "value": "D$ 9|$,u?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c7f8",
+    "va": "0x1000d3f8",
+    "encoding": "ascii",
+    "value": ";D$(t"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c808",
+    "va": "0x1000d408",
+    "encoding": "ascii",
+    "value": "D$ ;L$,"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000c875",
+    "va": "0x1000d475",
+    "encoding": "ascii",
+    "value": "D$$SW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ccb0",
+    "va": "0x1000d8b0",
+    "encoding": "ascii",
+    "value": "DSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000cd28",
+    "va": "0x1000d928",
+    "encoding": "ascii",
+    "value": "SRPVP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000cd54",
+    "va": "0x1000d954",
+    "encoding": "ascii",
+    "value": "8\\$pt"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ce38",
+    "va": "0x1000da38",
+    "encoding": "ascii",
+    "value": "?8_4u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ceb4",
+    "va": "0x1000dab4",
+    "encoding": "ascii",
+    "value": ">8_5u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000cf18",
+    "va": "0x1000db18",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d040",
+    "va": "0x1000dc40",
+    "encoding": "ascii",
+    "value": "DSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d137",
+    "va": "0x1000dd37",
+    "encoding": "ascii",
+    "value": "D$h9C"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d20a",
+    "va": "0x1000de0a",
+    "encoding": "ascii",
+    "value": "8X t_"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d2b8",
+    "va": "0x1000deb8",
+    "encoding": "ascii",
+    "value": "L$hQj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d2ec",
+    "va": "0x1000deec",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d350",
+    "va": "0x1000df50",
+    "encoding": "ascii",
+    "value": "DSUVW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d3c5",
+    "va": "0x1000dfc5",
+    "encoding": "ascii",
+    "value": "t$tPWP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d3f4",
+    "va": "0x1000dff4",
+    "encoding": "ascii",
+    "value": "8\\$pt"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d4d8",
+    "va": "0x1000e0d8",
+    "encoding": "ascii",
+    "value": "?8_ u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d554",
+    "va": "0x1000e154",
+    "encoding": "ascii",
+    "value": ">8_!u"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d5b8",
+    "va": "0x1000e1b8",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d97c",
+    "va": "0x1000e57c",
+    "encoding": "ascii",
+    "value": "D$ 9|$,u?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d9c8",
+    "va": "0x1000e5c8",
+    "encoding": "ascii",
+    "value": ";D$(t"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000d9d8",
+    "va": "0x1000e5d8",
+    "encoding": "ascii",
+    "value": "D$ ;L$,"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000da45",
+    "va": "0x1000e645",
+    "encoding": "ascii",
+    "value": "D$$SW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000df30",
+    "va": "0x1000eb30",
+    "encoding": "ascii",
+    "value": "8^5u@U"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000df74",
+    "va": "0x1000eb74",
+    "encoding": "ascii",
+    "value": "]_^[Y"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000e444",
+    "va": "0x1000f044",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000e63b",
+    "va": "0x1000f23b",
+    "encoding": "ascii",
+    "value": "0WWWWW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000e7d9",
+    "va": "0x1000f3d9",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000e809",
+    "va": "0x1000f409",
+    "encoding": "ascii",
+    "value": "0WWWWW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000eaf2",
+    "va": "0x1000f6f2",
+    "encoding": "ascii",
+    "value": "u19=`7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ec0e",
+    "va": "0x1000f80e",
+    "encoding": "ascii",
+    "value": "u WPS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ec37",
+    "va": "0x1000f837",
+    "encoding": "ascii",
+    "value": "u&WVS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000ee35",
+    "va": "0x1000fa35",
+    "encoding": "ascii",
+    "value": "QQSVWd"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f506",
+    "va": "0x10010106",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f54a",
+    "va": "0x1001014a",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f58d",
+    "va": "0x1001018d",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f5b1",
+    "va": "0x100101b1",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f5d6",
+    "va": "0x100101d6",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000107db",
+    "va": "0x100113db",
+    "encoding": "ascii",
+    "value": "Y__^["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00010a82",
+    "va": "0x10011682",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00010c2c",
+    "va": "0x1001182c",
+    "encoding": "ascii",
+    "value": "uBhC!"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00010e33",
+    "va": "0x10011a33",
+    "encoding": "ascii",
+    "value": "j@j ^V"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00010ec2",
+    "va": "0x10011ac2",
+    "encoding": "ascii",
+    "value": "[j@j "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00011117",
+    "va": "0x10011d17",
+    "encoding": "ascii",
+    "value": ">=Yt1j"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001112a",
+    "va": "0x10011d2a",
+    "encoding": "ascii",
+    "value": "tNVSP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001113d",
+    "va": "0x10011d3d",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000112b7",
+    "va": "0x10011eb7",
+    "encoding": "ascii",
+    "value": "< tK<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00011471",
+    "va": "0x10012071",
+    "encoding": "ascii",
+    "value": "@PWSS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000121e1",
+    "va": "0x10012de1",
+    "encoding": "ascii",
+    "value": "s[S;7|G;w"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012630",
+    "va": "0x10013230",
+    "encoding": "ascii",
+    "value": "tR99u2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012686",
+    "va": "0x10013286",
+    "encoding": "ascii",
+    "value": "@_^[]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000127c2",
+    "va": "0x100133c2",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012a78",
+    "va": "0x10013678",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012b01",
+    "va": "0x10013701",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012bb2",
+    "va": "0x100137b2",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012be0",
+    "va": "0x100137e0",
+    "encoding": "ascii",
+    "value": "to=H+"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00012d0e",
+    "va": "0x1001390e",
+    "encoding": "ascii",
+    "value": "Y_^[]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00013425",
+    "va": "0x10014025",
+    "encoding": "ascii",
+    "value": "0A@@Ju"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00013523",
+    "va": "0x10014123",
+    "encoding": "ascii",
+    "value": "Fh=(%"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001368b",
+    "va": "0x1001428b",
+    "encoding": "ascii",
+    "value": "URPQQh"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001472c",
+    "va": "0x1001532c",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000147c5",
+    "va": "0x100153c5",
+    "encoding": "ascii",
+    "value": "uL9= A"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001488d",
+    "va": "0x1001548d",
+    "encoding": "ascii",
+    "value": "wIVSP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014b57",
+    "va": "0x10015757",
+    "encoding": "ascii",
+    "value": "SVWUj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014bf8",
+    "va": "0x100157f8",
+    "encoding": "ascii",
+    "value": ";t$,v-"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014c7d",
+    "va": "0x1001587d",
+    "encoding": "ascii",
+    "value": "UQPXY]Y["
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014edf",
+    "va": "0x10015adf",
+    "encoding": "ascii",
+    "value": "v$;5l+"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014f06",
+    "va": "0x10015b06",
+    "encoding": "ascii",
+    "value": "PPPPPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00014fd3",
+    "va": "0x10015bd3",
+    "encoding": "ascii",
+    "value": "9] SS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00015156",
+    "va": "0x10015d56",
+    "encoding": "ascii",
+    "value": "PPPPPPPP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000151af",
+    "va": "0x10015daf",
+    "encoding": "ascii",
+    "value": "u8SS3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00015247",
+    "va": "0x10015e47",
+    "encoding": "ascii",
+    "value": "9]$SS"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001538e",
+    "va": "0x10015f8e",
+    "encoding": "ascii",
+    "value": "t\"SS9]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001592a",
+    "va": "0x1001652a",
+    "encoding": "ascii",
+    "value": "WWWWV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001594d",
+    "va": "0x1001654d",
+    "encoding": "ascii",
+    "value": "t+WWVPV"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000159f7",
+    "va": "0x100165f7",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017a6c",
+    "va": "0x1001926c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017aac",
+    "va": "0x100192ac",
+    "encoding": "ascii",
+    "value": "string too long"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017abc",
+    "va": "0x100192bc",
+    "encoding": "ascii",
+    "value": "invalid string position"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017ae8",
+    "va": "0x100192e8",
+    "encoding": "ascii",
+    "value": "Unknown exception"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b28",
+    "va": "0x10019328",
+    "encoding": "ascii",
+    "value": "runtime error "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b3c",
+    "va": "0x1001933c",
+    "encoding": "ascii",
+    "value": "TLOSS error"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b4c",
+    "va": "0x1001934c",
+    "encoding": "ascii",
+    "value": "SING error"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b5c",
+    "va": "0x1001935c",
+    "encoding": "ascii",
+    "value": "DOMAIN error"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b70",
+    "va": "0x10019370",
+    "encoding": "ascii",
+    "value": "R6034"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017b77",
+    "va": "0x10019377",
+    "encoding": "ascii",
+    "value": "An application has made an attempt to load the C runtime library incorrectly."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017bc5",
+    "va": "0x100193c5",
+    "encoding": "ascii",
+    "value": "Please contact the application's support team for more information."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017c10",
+    "va": "0x10019410",
+    "encoding": "ascii",
+    "value": "R6033"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017c17",
+    "va": "0x10019417",
+    "encoding": "ascii",
+    "value": "- Attempt to use MSIL code from this assembly during native code initialization"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017c67",
+    "va": "0x10019467",
+    "encoding": "ascii",
+    "value": "This indicates a bug in your application. It is most likely the result of calling an MSIL-compiled (/clr) function from a native constructor or from DllMain."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017d08",
+    "va": "0x10019508",
+    "encoding": "ascii",
+    "value": "R6032"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017d0f",
+    "va": "0x1001950f",
+    "encoding": "ascii",
+    "value": "- not enough space for locale information"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017d40",
+    "va": "0x10019540",
+    "encoding": "ascii",
+    "value": "R6031"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017d47",
+    "va": "0x10019547",
+    "encoding": "ascii",
+    "value": "- Attempt to initialize the CRT more than once."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017d77",
+    "va": "0x10019577",
+    "encoding": "ascii",
+    "value": "This indicates a bug in your application."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017da4",
+    "va": "0x100195a4",
+    "encoding": "ascii",
+    "value": "R6030"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017dab",
+    "va": "0x100195ab",
+    "encoding": "ascii",
+    "value": "- CRT not initialized"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017dc4",
+    "va": "0x100195c4",
+    "encoding": "ascii",
+    "value": "R6028"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017dcb",
+    "va": "0x100195cb",
+    "encoding": "ascii",
+    "value": "- unable to initialize heap"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017dec",
+    "va": "0x100195ec",
+    "encoding": "ascii",
+    "value": "R6027"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017df3",
+    "va": "0x100195f3",
+    "encoding": "ascii",
+    "value": "- not enough space for lowio initialization"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e24",
+    "va": "0x10019624",
+    "encoding": "ascii",
+    "value": "R6026"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e2b",
+    "va": "0x1001962b",
+    "encoding": "ascii",
+    "value": "- not enough space for stdio initialization"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e5c",
+    "va": "0x1001965c",
+    "encoding": "ascii",
+    "value": "R6025"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e63",
+    "va": "0x10019663",
+    "encoding": "ascii",
+    "value": "- pure virtual function call"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e84",
+    "va": "0x10019684",
+    "encoding": "ascii",
+    "value": "R6024"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017e8b",
+    "va": "0x1001968b",
+    "encoding": "ascii",
+    "value": "- not enough space for _onexit/atexit table"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017ebc",
+    "va": "0x100196bc",
+    "encoding": "ascii",
+    "value": "R6019"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017ec3",
+    "va": "0x100196c3",
+    "encoding": "ascii",
+    "value": "- unable to open console device"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017ee8",
+    "va": "0x100196e8",
+    "encoding": "ascii",
+    "value": "R6018"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017eef",
+    "va": "0x100196ef",
+    "encoding": "ascii",
+    "value": "- unexpected heap error"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017f0c",
+    "va": "0x1001970c",
+    "encoding": "ascii",
+    "value": "R6017"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017f13",
+    "va": "0x10019713",
+    "encoding": "ascii",
+    "value": "- unexpected multithread lock error"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017f3c",
+    "va": "0x1001973c",
+    "encoding": "ascii",
+    "value": "R6016"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017f43",
+    "va": "0x10019743",
+    "encoding": "ascii",
+    "value": "- not enough space for thread data"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017f6a",
+    "va": "0x1001976a",
+    "encoding": "ascii",
+    "value": "This application has requested the Runtime to terminate it in an unusual way."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00017fb8",
+    "va": "0x100197b8",
+    "encoding": "ascii",
+    "value": "Please contact the application's support team for more information."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018000",
+    "va": "0x10019800",
+    "encoding": "ascii",
+    "value": "R6009"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018007",
+    "va": "0x10019807",
+    "encoding": "ascii",
+    "value": "- not enough space for environment"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001802c",
+    "va": "0x1001982c",
+    "encoding": "ascii",
+    "value": "R6008"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018033",
+    "va": "0x10019833",
+    "encoding": "ascii",
+    "value": "- not enough space for arguments"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018058",
+    "va": "0x10019858",
+    "encoding": "ascii",
+    "value": "R6002"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001805f",
+    "va": "0x1001985f",
+    "encoding": "ascii",
+    "value": "- floating point support not loaded"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018088",
+    "va": "0x10019888",
+    "encoding": "ascii",
+    "value": "Microsoft Visual C++ Runtime Library"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000180b8",
+    "va": "0x100198b8",
+    "encoding": "ascii",
+    "value": "<program name unknown>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000180d0",
+    "va": "0x100198d0",
+    "encoding": "ascii",
+    "value": "Runtime Error!"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000180e0",
+    "va": "0x100198e0",
+    "encoding": "ascii",
+    "value": "Program: "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000180ec",
+    "va": "0x100198ec",
+    "encoding": "ascii",
+    "value": "EncodePointer"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018118",
+    "va": "0x10019918",
+    "encoding": "ascii",
+    "value": "DecodePointer"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018128",
+    "va": "0x10019928",
+    "encoding": "ascii",
+    "value": "FlsFree"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018130",
+    "va": "0x10019930",
+    "encoding": "ascii",
+    "value": "FlsSetValue"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001813c",
+    "va": "0x1001993c",
+    "encoding": "ascii",
+    "value": "FlsGetValue"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018148",
+    "va": "0x10019948",
+    "encoding": "ascii",
+    "value": "FlsAlloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018154",
+    "va": "0x10019954",
+    "encoding": "ascii",
+    "value": "CorExitProcess"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018208",
+    "va": "0x10019a08",
+    "encoding": "ascii",
+    "value": "bad exception"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018218",
+    "va": "0x10019a18",
+    "encoding": "ascii",
+    "value": "GetProcessWindowStation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018230",
+    "va": "0x10019a30",
+    "encoding": "ascii",
+    "value": "GetUserObjectInformationA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001824c",
+    "va": "0x10019a4c",
+    "encoding": "ascii",
+    "value": "GetLastActivePopup"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018260",
+    "va": "0x10019a60",
+    "encoding": "ascii",
+    "value": "GetActiveWindow"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018270",
+    "va": "0x10019a70",
+    "encoding": "ascii",
+    "value": "MessageBoxA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001827c",
+    "va": "0x10019a7c",
+    "encoding": "ascii",
+    "value": "USER32.DLL"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000182a7",
+    "va": "0x10019aa7",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001830c",
+    "va": "0x10019b0c",
+    "encoding": "ascii",
+    "value": " Complete Object Locator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018328",
+    "va": "0x10019b28",
+    "encoding": "ascii",
+    "value": " Class Hierarchy Descriptor'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018348",
+    "va": "0x10019b48",
+    "encoding": "ascii",
+    "value": " Base Class Array'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001835c",
+    "va": "0x10019b5c",
+    "encoding": "ascii",
+    "value": " Base Class Descriptor at ("
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018378",
+    "va": "0x10019b78",
+    "encoding": "ascii",
+    "value": " Type Descriptor'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001838c",
+    "va": "0x10019b8c",
+    "encoding": "ascii",
+    "value": "`local static thread guard'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000183a8",
+    "va": "0x10019ba8",
+    "encoding": "ascii",
+    "value": "`managed vector copy constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000183d4",
+    "va": "0x10019bd4",
+    "encoding": "ascii",
+    "value": "`vector vbase copy constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018400",
+    "va": "0x10019c00",
+    "encoding": "ascii",
+    "value": "`vector copy constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018424",
+    "va": "0x10019c24",
+    "encoding": "ascii",
+    "value": "`dynamic atexit destructor for '"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018448",
+    "va": "0x10019c48",
+    "encoding": "ascii",
+    "value": "`dynamic initializer for '"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018464",
+    "va": "0x10019c64",
+    "encoding": "ascii",
+    "value": "`eh vector vbase copy constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018490",
+    "va": "0x10019c90",
+    "encoding": "ascii",
+    "value": "`eh vector copy constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000184b8",
+    "va": "0x10019cb8",
+    "encoding": "ascii",
+    "value": "`managed vector destructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000184e0",
+    "va": "0x10019ce0",
+    "encoding": "ascii",
+    "value": "`managed vector constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018508",
+    "va": "0x10019d08",
+    "encoding": "ascii",
+    "value": "`placement delete[] closure'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018528",
+    "va": "0x10019d28",
+    "encoding": "ascii",
+    "value": "`placement delete closure'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018544",
+    "va": "0x10019d44",
+    "encoding": "ascii",
+    "value": "`omni callsig'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018554",
+    "va": "0x10019d54",
+    "encoding": "ascii",
+    "value": " delete[]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018560",
+    "va": "0x10019d60",
+    "encoding": "ascii",
+    "value": " new[]"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018568",
+    "va": "0x10019d68",
+    "encoding": "ascii",
+    "value": "`local vftable constructor closure'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001858c",
+    "va": "0x10019d8c",
+    "encoding": "ascii",
+    "value": "`local vftable'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001859c",
+    "va": "0x10019d9c",
+    "encoding": "ascii",
+    "value": "`RTTI"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000185a8",
+    "va": "0x10019da8",
+    "encoding": "ascii",
+    "value": "`udt returning'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000185b8",
+    "va": "0x10019db8",
+    "encoding": "ascii",
+    "value": "`copy constructor closure'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000185d4",
+    "va": "0x10019dd4",
+    "encoding": "ascii",
+    "value": "`eh vector vbase constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000185fc",
+    "va": "0x10019dfc",
+    "encoding": "ascii",
+    "value": "`eh vector destructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001861c",
+    "va": "0x10019e1c",
+    "encoding": "ascii",
+    "value": "`eh vector constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018640",
+    "va": "0x10019e40",
+    "encoding": "ascii",
+    "value": "`virtual displacement map'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001865c",
+    "va": "0x10019e5c",
+    "encoding": "ascii",
+    "value": "`vector vbase constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018680",
+    "va": "0x10019e80",
+    "encoding": "ascii",
+    "value": "`vector destructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000186a0",
+    "va": "0x10019ea0",
+    "encoding": "ascii",
+    "value": "`vector constructor iterator'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000186c0",
+    "va": "0x10019ec0",
+    "encoding": "ascii",
+    "value": "`scalar deleting destructor'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000186e0",
+    "va": "0x10019ee0",
+    "encoding": "ascii",
+    "value": "`default constructor closure'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018700",
+    "va": "0x10019f00",
+    "encoding": "ascii",
+    "value": "`vector deleting destructor'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018720",
+    "va": "0x10019f20",
+    "encoding": "ascii",
+    "value": "`vbase destructor'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018734",
+    "va": "0x10019f34",
+    "encoding": "ascii",
+    "value": "`string'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018740",
+    "va": "0x10019f40",
+    "encoding": "ascii",
+    "value": "`local static guard'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018758",
+    "va": "0x10019f58",
+    "encoding": "ascii",
+    "value": "`typeof'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018764",
+    "va": "0x10019f64",
+    "encoding": "ascii",
+    "value": "`vcall'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001876c",
+    "va": "0x10019f6c",
+    "encoding": "ascii",
+    "value": "`vbtable'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018778",
+    "va": "0x10019f78",
+    "encoding": "ascii",
+    "value": "`vftable'"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018800",
+    "va": "0x1001a000",
+    "encoding": "ascii",
+    "value": "operator"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018824",
+    "va": "0x1001a024",
+    "encoding": "ascii",
+    "value": " delete"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018834",
+    "va": "0x1001a034",
+    "encoding": "ascii",
+    "value": "__unaligned"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018840",
+    "va": "0x1001a040",
+    "encoding": "ascii",
+    "value": "__restrict"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001884c",
+    "va": "0x1001a04c",
+    "encoding": "ascii",
+    "value": "__ptr64"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018854",
+    "va": "0x1001a054",
+    "encoding": "ascii",
+    "value": "__clrcall"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018860",
+    "va": "0x1001a060",
+    "encoding": "ascii",
+    "value": "__fastcall"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001886c",
+    "va": "0x1001a06c",
+    "encoding": "ascii",
+    "value": "__thiscall"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018878",
+    "va": "0x1001a078",
+    "encoding": "ascii",
+    "value": "__stdcall"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018884",
+    "va": "0x1001a084",
+    "encoding": "ascii",
+    "value": "__pascal"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018890",
+    "va": "0x1001a090",
+    "encoding": "ascii",
+    "value": "__cdecl"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018898",
+    "va": "0x1001a098",
+    "encoding": "ascii",
+    "value": "__based("
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018fd0",
+    "va": "0x1001a7d0",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019150",
+    "va": "0x1001a950",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019230",
+    "va": "0x1001aa30",
+    "encoding": "ascii",
+    "value": "HH:mm:ss"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001923c",
+    "va": "0x1001aa3c",
+    "encoding": "ascii",
+    "value": "dddd, MMMM dd, yyyy"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019250",
+    "va": "0x1001aa50",
+    "encoding": "ascii",
+    "value": "MM/dd/yy"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019264",
+    "va": "0x1001aa64",
+    "encoding": "ascii",
+    "value": "December"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019270",
+    "va": "0x1001aa70",
+    "encoding": "ascii",
+    "value": "November"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001927c",
+    "va": "0x1001aa7c",
+    "encoding": "ascii",
+    "value": "October"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019284",
+    "va": "0x1001aa84",
+    "encoding": "ascii",
+    "value": "September"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019290",
+    "va": "0x1001aa90",
+    "encoding": "ascii",
+    "value": "August"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000192a8",
+    "va": "0x1001aaa8",
+    "encoding": "ascii",
+    "value": "April"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000192b0",
+    "va": "0x1001aab0",
+    "encoding": "ascii",
+    "value": "March"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000192b8",
+    "va": "0x1001aab8",
+    "encoding": "ascii",
+    "value": "February"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000192c4",
+    "va": "0x1001aac4",
+    "encoding": "ascii",
+    "value": "January"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000192fc",
+    "va": "0x1001aafc",
+    "encoding": "ascii",
+    "value": "Saturday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019308",
+    "va": "0x1001ab08",
+    "encoding": "ascii",
+    "value": "Friday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019310",
+    "va": "0x1001ab10",
+    "encoding": "ascii",
+    "value": "Thursday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001931c",
+    "va": "0x1001ab1c",
+    "encoding": "ascii",
+    "value": "Wednesday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019328",
+    "va": "0x1001ab28",
+    "encoding": "ascii",
+    "value": "Tuesday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019330",
+    "va": "0x1001ab30",
+    "encoding": "ascii",
+    "value": "Monday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019338",
+    "va": "0x1001ab38",
+    "encoding": "ascii",
+    "value": "Sunday"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019360",
+    "va": "0x1001ab60",
+    "encoding": "ascii",
+    "value": "SunMonTueWedThuFriSat"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019378",
+    "va": "0x1001ab78",
+    "encoding": "ascii",
+    "value": "JanFebMarAprMayJunJulAugSepOctNovDec"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193a0",
+    "va": "0x1001aba0",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193b0",
+    "va": "0x1001abb0",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193c0",
+    "va": "0x1001abc0",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193d0",
+    "va": "0x1001abd0",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193dc",
+    "va": "0x1001abdc",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193e8",
+    "va": "0x1001abe8",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000193f4",
+    "va": "0x1001abf4",
+    "encoding": "ascii",
+    "value": "__Internal_TCP_Link_OpenEx_Context__"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019420",
+    "va": "0x1001ac20",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019430",
+    "va": "0x1001ac30",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019444",
+    "va": "0x1001ac44",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019458",
+    "va": "0x1001ac58",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019464",
+    "va": "0x1001ac64",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019474",
+    "va": "0x1001ac74",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019484",
+    "va": "0x1001ac84",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019494",
+    "va": "0x1001ac94",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194a4",
+    "va": "0x1001aca4",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194b4",
+    "va": "0x1001acb4",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194c0",
+    "va": "0x1001acc0",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194cc",
+    "va": "0x1001accc",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194d8",
+    "va": "0x1001acd8",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194e8",
+    "va": "0x1001ace8",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000194f8",
+    "va": "0x1001acf8",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019508",
+    "va": "0x1001ad08",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019514",
+    "va": "0x1001ad14",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019520",
+    "va": "0x1001ad20",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001952c",
+    "va": "0x1001ad2c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001953c",
+    "va": "0x1001ad3c",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001954c",
+    "va": "0x1001ad4c",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001955c",
+    "va": "0x1001ad5c",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019568",
+    "va": "0x1001ad68",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019574",
+    "va": "0x1001ad74",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019580",
+    "va": "0x1001ad80",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019590",
+    "va": "0x1001ad90",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195a0",
+    "va": "0x1001ada0",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195b0",
+    "va": "0x1001adb0",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195bc",
+    "va": "0x1001adbc",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195c8",
+    "va": "0x1001adc8",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195d4",
+    "va": "0x1001add4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195e4",
+    "va": "0x1001ade4",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000195f4",
+    "va": "0x1001adf4",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019604",
+    "va": "0x1001ae04",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019610",
+    "va": "0x1001ae10",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001961c",
+    "va": "0x1001ae1c",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019628",
+    "va": "0x1001ae28",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019638",
+    "va": "0x1001ae38",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019648",
+    "va": "0x1001ae48",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019658",
+    "va": "0x1001ae58",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019664",
+    "va": "0x1001ae64",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019670",
+    "va": "0x1001ae70",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001967c",
+    "va": "0x1001ae7c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001968c",
+    "va": "0x1001ae8c",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001969c",
+    "va": "0x1001ae9c",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196ac",
+    "va": "0x1001aeac",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196b8",
+    "va": "0x1001aeb8",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196c4",
+    "va": "0x1001aec4",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196d0",
+    "va": "0x1001aed0",
+    "encoding": "ascii",
+    "value": "AcceptorTask"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196e0",
+    "va": "0x1001aee0",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000196f0",
+    "va": "0x1001aef0",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019700",
+    "va": "0x1001af00",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019710",
+    "va": "0x1001af10",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001971c",
+    "va": "0x1001af1c",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019728",
+    "va": "0x1001af28",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019734",
+    "va": "0x1001af34",
+    "encoding": "ascii",
+    "value": "0.0.0.0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001973c",
+    "va": "0x1001af3c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001974c",
+    "va": "0x1001af4c",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019760",
+    "va": "0x1001af60",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019774",
+    "va": "0x1001af74",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019784",
+    "va": "0x1001af84",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019790",
+    "va": "0x1001af90",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001979c",
+    "va": "0x1001af9c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197ac",
+    "va": "0x1001afac",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197bc",
+    "va": "0x1001afbc",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197cc",
+    "va": "0x1001afcc",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197d8",
+    "va": "0x1001afd8",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197e4",
+    "va": "0x1001afe4",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000197f0",
+    "va": "0x1001aff0",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019800",
+    "va": "0x1001b000",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019810",
+    "va": "0x1001b010",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019820",
+    "va": "0x1001b020",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001982c",
+    "va": "0x1001b02c",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019838",
+    "va": "0x1001b038",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019844",
+    "va": "0x1001b044",
+    "encoding": "ascii",
+    "value": "0.0.0.0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001984c",
+    "va": "0x1001b04c",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001985c",
+    "va": "0x1001b05c",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001986c",
+    "va": "0x1001b06c",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019878",
+    "va": "0x1001b078",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019884",
+    "va": "0x1001b084",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019890",
+    "va": "0x1001b090",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198a0",
+    "va": "0x1001b0a0",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198b0",
+    "va": "0x1001b0b0",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198c0",
+    "va": "0x1001b0c0",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198cc",
+    "va": "0x1001b0cc",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198d8",
+    "va": "0x1001b0d8",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198e4",
+    "va": "0x1001b0e4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000198f4",
+    "va": "0x1001b0f4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019904",
+    "va": "0x1001b104",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019914",
+    "va": "0x1001b114",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019924",
+    "va": "0x1001b124",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019930",
+    "va": "0x1001b130",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001993c",
+    "va": "0x1001b13c",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019948",
+    "va": "0x1001b148",
+    "encoding": "ascii",
+    "value": "127.0.0.1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019954",
+    "va": "0x1001b154",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019964",
+    "va": "0x1001b164",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019974",
+    "va": "0x1001b174",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019984",
+    "va": "0x1001b184",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019994",
+    "va": "0x1001b194",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199a4",
+    "va": "0x1001b1a4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199b4",
+    "va": "0x1001b1b4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199c4",
+    "va": "0x1001b1c4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199d4",
+    "va": "0x1001b1d4",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199e4",
+    "va": "0x1001b1e4",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000199f4",
+    "va": "0x1001b1f4",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a00",
+    "va": "0x1001b200",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a0c",
+    "va": "0x1001b20c",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a18",
+    "va": "0x1001b218",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a28",
+    "va": "0x1001b228",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a38",
+    "va": "0x1001b238",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a48",
+    "va": "0x1001b248",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a58",
+    "va": "0x1001b258",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a68",
+    "va": "0x1001b268",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a74",
+    "va": "0x1001b274",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a80",
+    "va": "0x1001b280",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a8c",
+    "va": "0x1001b28c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019a9c",
+    "va": "0x1001b29c",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019aac",
+    "va": "0x1001b2ac",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019abc",
+    "va": "0x1001b2bc",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019acc",
+    "va": "0x1001b2cc",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019adc",
+    "va": "0x1001b2dc",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019ae8",
+    "va": "0x1001b2e8",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019af4",
+    "va": "0x1001b2f4",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b00",
+    "va": "0x1001b300",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b10",
+    "va": "0x1001b310",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b20",
+    "va": "0x1001b320",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b30",
+    "va": "0x1001b330",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b40",
+    "va": "0x1001b340",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b50",
+    "va": "0x1001b350",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b60",
+    "va": "0x1001b360",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b70",
+    "va": "0x1001b370",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b80",
+    "va": "0x1001b380",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019b90",
+    "va": "0x1001b390",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019ba0",
+    "va": "0x1001b3a0",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019bac",
+    "va": "0x1001b3ac",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019bb8",
+    "va": "0x1001b3b8",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019bc4",
+    "va": "0x1001b3c4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019bd4",
+    "va": "0x1001b3d4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019be4",
+    "va": "0x1001b3e4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019bf4",
+    "va": "0x1001b3f4",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c04",
+    "va": "0x1001b404",
+    "encoding": "ascii",
+    "value": "SendBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c14",
+    "va": "0x1001b414",
+    "encoding": "ascii",
+    "value": "RecvBufferSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c24",
+    "va": "0x1001b424",
+    "encoding": "ascii",
+    "value": "Broadcast"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c30",
+    "va": "0x1001b430",
+    "encoding": "ascii",
+    "value": "KeepAlive"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c3c",
+    "va": "0x1001b43c",
+    "encoding": "ascii",
+    "value": "TcpNoDelay"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c48",
+    "va": "0x1001b448",
+    "encoding": "ascii",
+    "value": "bad allocation"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019c58",
+    "va": "0x1001b458",
+    "encoding": "ascii",
+    "value": "0.0.0.0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019d24",
+    "va": "0x1001b524",
+    "encoding": "ascii",
+    "value": "[ScopedLock::Lock()] Invalid state."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019d48",
+    "va": "0x1001b548",
+    "encoding": "ascii",
+    "value": "[ScopedLock::Unlock()] Invalid state."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00019d70",
+    "va": "0x1001b570",
+    "encoding": "ascii",
+    "value": "vector<T> too long"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001a02c",
+    "va": "0x1001b82c",
+    "encoding": "ascii",
+    "value": "invalid map/set<T> iterator"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001a048",
+    "va": "0x1001b848",
+    "encoding": "ascii",
+    "value": "map/set<T> too long"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001a05c",
+    "va": "0x1001b85c",
+    "encoding": "ascii",
+    "value": "deque<T> too long"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001a140",
+    "va": "0x1001b940",
+    "encoding": "ascii",
+    "value": "s:\\project\\C9\\dev\\C9_Code\\External\\springcat\\proj\\BaseCat\\Network\\bin\\x86\\BaseCat.Network.pdb"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d65a",
+    "va": "0x1001ee5a",
+    "encoding": "ascii",
+    "value": "WSASendTo"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d666",
+    "va": "0x1001ee66",
+    "encoding": "ascii",
+    "value": "WSARecvFrom"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d674",
+    "va": "0x1001ee74",
+    "encoding": "ascii",
+    "value": "WSASend"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d67e",
+    "va": "0x1001ee7e",
+    "encoding": "ascii",
+    "value": "WSARecv"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d688",
+    "va": "0x1001ee88",
+    "encoding": "ascii",
+    "value": "WSASocketW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d694",
+    "va": "0x1001ee94",
+    "encoding": "ascii",
+    "value": "WS2_32.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d6a2",
+    "va": "0x1001eea2",
+    "encoding": "ascii",
+    "value": "DisableThreadLibraryCalls"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d6bc",
+    "va": "0x1001eebc",
+    "encoding": "ascii",
+    "value": "KERNEL32.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d6cc",
+    "va": "0x1001eecc",
+    "encoding": "ascii",
+    "value": "?SetLastError@Diagnostics@System@BaseCat@@YGXI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d700",
+    "va": "0x1001ef00",
+    "encoding": "ascii",
+    "value": "?Free@MPHeap@System@BaseCat@@YGXPAU_Handle@123@PAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d738",
+    "va": "0x1001ef38",
+    "encoding": "ascii",
+    "value": "?QueueWorkItem@ThreadPool@Threading@System@BaseCat@@YG_NPAU_Handle@1234@ABQ6GXIIPAX@ZII1@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d796",
+    "va": "0x1001ef96",
+    "encoding": "ascii",
+    "value": "?BindCompletionCallback@ThreadPool@Threading@System@BaseCat@@YG_NPAU_Handle@1234@PAXABQ6GXII1@Z@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d7fa",
+    "va": "0x1001effa",
+    "encoding": "ascii",
+    "value": "?Alloc@MPHeap@System@BaseCat@@YGPAXPAU_Handle@123@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d832",
+    "va": "0x1001f032",
+    "encoding": "ascii",
+    "value": "?Unlock@CriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d86e",
+    "va": "0x1001f06e",
+    "encoding": "ascii",
+    "value": "?Lock@CriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d8a8",
+    "va": "0x1001f0a8",
+    "encoding": "ascii",
+    "value": "??1CriticalSection@Threading@System@BaseCat@@QAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d8de",
+    "va": "0x1001f0de",
+    "encoding": "ascii",
+    "value": "??0CriticalSection@Threading@System@BaseCat@@QAE@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d916",
+    "va": "0x1001f116",
+    "encoding": "ascii",
+    "value": "?Wait@AutoResetEvent@Threading@System@BaseCat@@QAE_NXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d950",
+    "va": "0x1001f150",
+    "encoding": "ascii",
+    "value": "?Reset@AutoResetEvent@Threading@System@BaseCat@@QAE_NXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d98a",
+    "va": "0x1001f18a",
+    "encoding": "ascii",
+    "value": "?Set@AutoResetEvent@Threading@System@BaseCat@@QAE_NXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d9c2",
+    "va": "0x1001f1c2",
+    "encoding": "ascii",
+    "value": "??1AutoResetEvent@Threading@System@BaseCat@@QAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001d9f8",
+    "va": "0x1001f1f8",
+    "encoding": "ascii",
+    "value": "??0AutoResetEvent@Threading@System@BaseCat@@QAE@_N@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001da30",
+    "va": "0x1001f230",
+    "encoding": "ascii",
+    "value": "?GetSize@SmartHeap@System@BaseCat@@YGIQAU_Block@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001da6a",
+    "va": "0x1001f26a",
+    "encoding": "ascii",
+    "value": "?Realloc@SmartHeap@System@BaseCat@@YGPAU_Block@123@PAU4123@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001daac",
+    "va": "0x1001f2ac",
+    "encoding": "ascii",
+    "value": "?Free@SmartHeap@System@BaseCat@@YGXPAU_Block@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dae2",
+    "va": "0x1001f2e2",
+    "encoding": "ascii",
+    "value": "?Clear@Stream@System@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001db18",
+    "va": "0x1001f318",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Stream@System@BaseCat@@YGPAU_Handle@123@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001db54",
+    "va": "0x1001f354",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Stream@System@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001db92",
+    "va": "0x1001f392",
+    "encoding": "ascii",
+    "value": "?Write@Stream@System@BaseCat@@YGIPAU_Handle@123@PBXI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dbcc",
+    "va": "0x1001f3cc",
+    "encoding": "ascii",
+    "value": "?GetLastError@Diagnostics@System@BaseCat@@YGIXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dbfe",
+    "va": "0x1001f3fe",
+    "encoding": "ascii",
+    "value": "?Increment@Interlocked@Threading@System@BaseCat@@YGHPCH@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dc3a",
+    "va": "0x1001f43a",
+    "encoding": "ascii",
+    "value": "?Decrement@Interlocked@Threading@System@BaseCat@@YGHPCH@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dc76",
+    "va": "0x1001f476",
+    "encoding": "ascii",
+    "value": "?Alloc@SmartHeap@System@BaseCat@@YGPAU_Block@123@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dcae",
+    "va": "0x1001f4ae",
+    "encoding": "ascii",
+    "value": "?Copy@SmartHeap@System@BaseCat@@YGPAU_Block@123@QAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dcec",
+    "va": "0x1001f4ec",
+    "encoding": "ascii",
+    "value": "?WriteUnlock@RWCriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dd2e",
+    "va": "0x1001f52e",
+    "encoding": "ascii",
+    "value": "?WriteLock@RWCriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dd6e",
+    "va": "0x1001f56e",
+    "encoding": "ascii",
+    "value": "?ReadUnlock@RWCriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ddb0",
+    "va": "0x1001f5b0",
+    "encoding": "ascii",
+    "value": "?ReadLock@RWCriticalSection@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ddf0",
+    "va": "0x1001f5f0",
+    "encoding": "ascii",
+    "value": "??1RWCriticalSection@Threading@System@BaseCat@@QAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001de28",
+    "va": "0x1001f628",
+    "encoding": "ascii",
+    "value": "??0RWCriticalSection@Threading@System@BaseCat@@QAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001de60",
+    "va": "0x1001f660",
+    "encoding": "ascii",
+    "value": "?Increment@Interlocked@Threading@System@BaseCat@@YGIPCI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001de9c",
+    "va": "0x1001f69c",
+    "encoding": "ascii",
+    "value": "?Decrement@Interlocked@Threading@System@BaseCat@@YGIPCI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ded8",
+    "va": "0x1001f6d8",
+    "encoding": "ascii",
+    "value": "?SetThreadName@Thread@Threading@System@BaseCat@@IAEXPBD@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001df14",
+    "va": "0x1001f714",
+    "encoding": "ascii",
+    "value": "?Stop@Thread@Threading@System@BaseCat@@QAEXXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001df44",
+    "va": "0x1001f744",
+    "encoding": "ascii",
+    "value": "?Start@Thread@Threading@System@BaseCat@@QAE_NXZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001df76",
+    "va": "0x1001f776",
+    "encoding": "ascii",
+    "value": "??1Thread@Threading@System@BaseCat@@UAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dfa4",
+    "va": "0x1001f7a4",
+    "encoding": "ascii",
+    "value": "??0Thread@Threading@System@BaseCat@@QAE@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dfd0",
+    "va": "0x1001f7d0",
+    "encoding": "ascii",
+    "value": "BaseCat.System.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dfe6",
+    "va": "0x1001f7e6",
+    "encoding": "ascii",
+    "value": "InterlockedIncrement"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001dffe",
+    "va": "0x1001f7fe",
+    "encoding": "ascii",
+    "value": "InterlockedDecrement"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e016",
+    "va": "0x1001f816",
+    "encoding": "ascii",
+    "value": "Sleep"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e01e",
+    "va": "0x1001f81e",
+    "encoding": "ascii",
+    "value": "InitializeCriticalSection"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e03a",
+    "va": "0x1001f83a",
+    "encoding": "ascii",
+    "value": "DeleteCriticalSection"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e052",
+    "va": "0x1001f852",
+    "encoding": "ascii",
+    "value": "EnterCriticalSection"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e06a",
+    "va": "0x1001f86a",
+    "encoding": "ascii",
+    "value": "LeaveCriticalSection"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e082",
+    "va": "0x1001f882",
+    "encoding": "ascii",
+    "value": "TerminateProcess"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e096",
+    "va": "0x1001f896",
+    "encoding": "ascii",
+    "value": "GetCurrentProcess"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e0aa",
+    "va": "0x1001f8aa",
+    "encoding": "ascii",
+    "value": "UnhandledExceptionFilter"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e0c6",
+    "va": "0x1001f8c6",
+    "encoding": "ascii",
+    "value": "SetUnhandledExceptionFilter"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e0e4",
+    "va": "0x1001f8e4",
+    "encoding": "ascii",
+    "value": "IsDebuggerPresent"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e0f8",
+    "va": "0x1001f8f8",
+    "encoding": "ascii",
+    "value": "GetCurrentThreadId"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e10e",
+    "va": "0x1001f90e",
+    "encoding": "ascii",
+    "value": "GetCommandLineA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e120",
+    "va": "0x1001f920",
+    "encoding": "ascii",
+    "value": "RaiseException"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e132",
+    "va": "0x1001f932",
+    "encoding": "ascii",
+    "value": "RtlUnwind"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e13e",
+    "va": "0x1001f93e",
+    "encoding": "ascii",
+    "value": "WriteFile"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e14a",
+    "va": "0x1001f94a",
+    "encoding": "ascii",
+    "value": "GetStdHandle"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e15a",
+    "va": "0x1001f95a",
+    "encoding": "ascii",
+    "value": "GetModuleFileNameA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e170",
+    "va": "0x1001f970",
+    "encoding": "ascii",
+    "value": "GetModuleHandleW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e184",
+    "va": "0x1001f984",
+    "encoding": "ascii",
+    "value": "GetProcAddress"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e196",
+    "va": "0x1001f996",
+    "encoding": "ascii",
+    "value": "TlsGetValue"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1a4",
+    "va": "0x1001f9a4",
+    "encoding": "ascii",
+    "value": "TlsAlloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1b0",
+    "va": "0x1001f9b0",
+    "encoding": "ascii",
+    "value": "TlsSetValue"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1be",
+    "va": "0x1001f9be",
+    "encoding": "ascii",
+    "value": "TlsFree"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1c8",
+    "va": "0x1001f9c8",
+    "encoding": "ascii",
+    "value": "SetLastError"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1d8",
+    "va": "0x1001f9d8",
+    "encoding": "ascii",
+    "value": "GetLastError"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1e8",
+    "va": "0x1001f9e8",
+    "encoding": "ascii",
+    "value": "HeapAlloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e1f4",
+    "va": "0x1001f9f4",
+    "encoding": "ascii",
+    "value": "HeapFree"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e200",
+    "va": "0x1001fa00",
+    "encoding": "ascii",
+    "value": "HeapSize"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e20c",
+    "va": "0x1001fa0c",
+    "encoding": "ascii",
+    "value": "ExitProcess"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e21a",
+    "va": "0x1001fa1a",
+    "encoding": "ascii",
+    "value": "SetHandleCount"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e22c",
+    "va": "0x1001fa2c",
+    "encoding": "ascii",
+    "value": "GetFileType"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e23a",
+    "va": "0x1001fa3a",
+    "encoding": "ascii",
+    "value": "GetStartupInfoA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e24c",
+    "va": "0x1001fa4c",
+    "encoding": "ascii",
+    "value": "FreeEnvironmentStringsA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e266",
+    "va": "0x1001fa66",
+    "encoding": "ascii",
+    "value": "GetEnvironmentStrings"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e27e",
+    "va": "0x1001fa7e",
+    "encoding": "ascii",
+    "value": "FreeEnvironmentStringsW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e298",
+    "va": "0x1001fa98",
+    "encoding": "ascii",
+    "value": "WideCharToMultiByte"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e2ae",
+    "va": "0x1001faae",
+    "encoding": "ascii",
+    "value": "GetEnvironmentStringsW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e2c8",
+    "va": "0x1001fac8",
+    "encoding": "ascii",
+    "value": "HeapCreate"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e2d6",
+    "va": "0x1001fad6",
+    "encoding": "ascii",
+    "value": "HeapDestroy"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e2e4",
+    "va": "0x1001fae4",
+    "encoding": "ascii",
+    "value": "VirtualFree"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e2f2",
+    "va": "0x1001faf2",
+    "encoding": "ascii",
+    "value": "QueryPerformanceCounter"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e30c",
+    "va": "0x1001fb0c",
+    "encoding": "ascii",
+    "value": "GetTickCount"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e31c",
+    "va": "0x1001fb1c",
+    "encoding": "ascii",
+    "value": "GetCurrentProcessId"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e332",
+    "va": "0x1001fb32",
+    "encoding": "ascii",
+    "value": "GetSystemTimeAsFileTime"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e34c",
+    "va": "0x1001fb4c",
+    "encoding": "ascii",
+    "value": "LoadLibraryA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e35c",
+    "va": "0x1001fb5c",
+    "encoding": "ascii",
+    "value": "GetCPInfo"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e368",
+    "va": "0x1001fb68",
+    "encoding": "ascii",
+    "value": "GetACP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e372",
+    "va": "0x1001fb72",
+    "encoding": "ascii",
+    "value": "GetOEMCP"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e37e",
+    "va": "0x1001fb7e",
+    "encoding": "ascii",
+    "value": "IsValidCodePage"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e390",
+    "va": "0x1001fb90",
+    "encoding": "ascii",
+    "value": "GetLocaleInfoA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e3a2",
+    "va": "0x1001fba2",
+    "encoding": "ascii",
+    "value": "VirtualAlloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e3b2",
+    "va": "0x1001fbb2",
+    "encoding": "ascii",
+    "value": "HeapReAlloc"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e3c0",
+    "va": "0x1001fbc0",
+    "encoding": "ascii",
+    "value": "InitializeCriticalSectionAndSpinCount"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e3e8",
+    "va": "0x1001fbe8",
+    "encoding": "ascii",
+    "value": "GetStringTypeA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e3fa",
+    "va": "0x1001fbfa",
+    "encoding": "ascii",
+    "value": "MultiByteToWideChar"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e410",
+    "va": "0x1001fc10",
+    "encoding": "ascii",
+    "value": "GetStringTypeW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e422",
+    "va": "0x1001fc22",
+    "encoding": "ascii",
+    "value": "LCMapStringA"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e432",
+    "va": "0x1001fc32",
+    "encoding": "ascii",
+    "value": "LCMapStringW"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e79c",
+    "va": "0x1001ff9c",
+    "encoding": "ascii",
+    "value": "BaseCat.Network.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e7b0",
+    "va": "0x1001ffb0",
+    "encoding": "ascii",
+    "value": "?Add@FilterChain@Network@BaseCat@@YG_NPAU_Handle@123@PBDPAU4Filter@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e7f9",
+    "va": "0x1001fff9",
+    "encoding": "ascii",
+    "value": "?AddAttribute@Link@Network@BaseCat@@YG_NPAU_Handle@123@PBDPAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e839",
+    "va": "0x10020039",
+    "encoding": "ascii",
+    "value": "?AddAttribute@Link@Network@BaseCat@@YG_NPAU_Handle@123@PBDPAXABQ6GX02@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e884",
+    "va": "0x10020084",
+    "encoding": "ascii",
+    "value": "?AddBinding@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@PBDG_N@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e8c6",
+    "va": "0x100200c6",
+    "encoding": "ascii",
+    "value": "?AddRef@Link@Network@BaseCat@@YGHPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e8f9",
+    "va": "0x100200f9",
+    "encoding": "ascii",
+    "value": "?ClearBindings@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e938",
+    "va": "0x10020138",
+    "encoding": "ascii",
+    "value": "?Close@Link@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e96b",
+    "va": "0x1002016b",
+    "encoding": "ascii",
+    "value": "?Connect@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDG@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e9a9",
+    "va": "0x100201a9",
+    "encoding": "ascii",
+    "value": "?Connect@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDGH@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e9e8",
+    "va": "0x100201e8",
+    "encoding": "ascii",
+    "value": "?Connect@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDGHPAU4Interrupter@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ea3a",
+    "va": "0x1002023a",
+    "encoding": "ascii",
+    "value": "?ConnectEx@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDGHPAU4Interrupter@23@PAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ea91",
+    "va": "0x10020291",
+    "encoding": "ascii",
+    "value": "?ConnectEx@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDGHPAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ead5",
+    "va": "0x100202d5",
+    "encoding": "ascii",
+    "value": "?ConnectEx@Connector@Network@BaseCat@@YG_NPAU_Handle@123@PBDGPAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001eb18",
+    "va": "0x10020318",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Acceptor@Network@BaseCat@@YGPAU_Handle@123@PAU4ThreadPool@Threading@System@3@PAU4FilterChain@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001eb89",
+    "va": "0x10020389",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Connector@Network@BaseCat@@YGPAU_Handle@123@PAU4ThreadPool@Threading@System@3@PAU4FilterChain@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ebfb",
+    "va": "0x100203fb",
+    "encoding": "ascii",
+    "value": "?CreateHandle@DatagramLink@Network@BaseCat@@YGPAU_Handle@123@PAU4ThreadPool@Threading@System@3@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ec5d",
+    "va": "0x1002045d",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Endpoint@Network@BaseCat@@YGPAU_Handle@123@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001eca1",
+    "va": "0x100204a1",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Endpoint@Network@BaseCat@@YGPAU_Handle@123@PBDGW4Type@Version@IP@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ecf6",
+    "va": "0x100204f6",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Filter@Network@BaseCat@@YGPAU_Handle@123@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ed30",
+    "va": "0x10020530",
+    "encoding": "ascii",
+    "value": "?CreateHandle@FilterChain@Network@BaseCat@@YGPAU_Handle@123@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ed6f",
+    "va": "0x1002056f",
+    "encoding": "ascii",
+    "value": "?CreateHandle@Interrupter@Network@BaseCat@@YGPAU_Handle@123@XZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001edae",
+    "va": "0x100205ae",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Acceptor@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001edec",
+    "va": "0x100205ec",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Connector@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ee2b",
+    "va": "0x1002062b",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@DatagramLink@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ee6d",
+    "va": "0x1002066d",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Endpoint@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001eeab",
+    "va": "0x100206ab",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Filter@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001eee7",
+    "va": "0x100206e7",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@FilterChain@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ef28",
+    "va": "0x10020728",
+    "encoding": "ascii",
+    "value": "?DestroyHandle@Interrupter@Network@BaseCat@@YGXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ef69",
+    "va": "0x10020769",
+    "encoding": "ascii",
+    "value": "?DoOnLinkClosed@Filter@Network@BaseCat@@YG_NPAU_Handle@123@PAU4Link@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001efb3",
+    "va": "0x100207b3",
+    "encoding": "ascii",
+    "value": "?DoOnLinkOpened@Filter@Network@BaseCat@@YG_NPAU_Handle@123@PAU4Link@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001effd",
+    "va": "0x100207fd",
+    "encoding": "ascii",
+    "value": "?DoOnReceived@Filter@Network@BaseCat@@YG_NPAU_Handle@123@PAU4Link@23@PAU_Block@SmartHeap@System@3@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f063",
+    "va": "0x10020863",
+    "encoding": "ascii",
+    "value": "?DoOnSend@Filter@Network@BaseCat@@YG_NPAU_Handle@123@PAU4Link@23@PAU_Block@SmartHeap@System@3@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f0c5",
+    "va": "0x100208c5",
+    "encoding": "ascii",
+    "value": "?Find@FilterChain@Network@BaseCat@@YGPAU_Handle@Filter@23@PAU4123@PBD@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f10d",
+    "va": "0x1002090d",
+    "encoding": "ascii",
+    "value": "?FindAttribute@Link@Network@BaseCat@@YG_NPAU_Handle@123@PBDPAPAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f150",
+    "va": "0x10020950",
+    "encoding": "ascii",
+    "value": "?GetConfig@DatagramLink@Network@BaseCat@@YGPAU_Handle@LinkConfig@23@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f19f",
+    "va": "0x1002099f",
+    "encoding": "ascii",
+    "value": "?GetConfig@Link@Network@BaseCat@@YGPAU_Handle@LinkConfig@23@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f1e6",
+    "va": "0x100209e6",
+    "encoding": "ascii",
+    "value": "?GetData@Link@Network@BaseCat@@YGPAXPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f21c",
+    "va": "0x10020a1c",
+    "encoding": "ascii",
+    "value": "?GetIPAddress@Endpoint@Network@BaseCat@@YG_NPAU_Handle@123@PADI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f25e",
+    "va": "0x10020a5e",
+    "encoding": "ascii",
+    "value": "?GetLocalEndpoint@Link@Network@BaseCat@@YGPAU_Handle@Endpoint@23@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f2aa",
+    "va": "0x10020aaa",
+    "encoding": "ascii",
+    "value": "?GetNext@Filter@Network@BaseCat@@YGPAU_Handle@123@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f2e7",
+    "va": "0x10020ae7",
+    "encoding": "ascii",
+    "value": "?GetPort@Endpoint@Network@BaseCat@@YG_NPAU_Handle@123@PAG@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f323",
+    "va": "0x10020b23",
+    "encoding": "ascii",
+    "value": "?GetPrev@Filter@Network@BaseCat@@YGPAU_Handle@123@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f360",
+    "va": "0x10020b60",
+    "encoding": "ascii",
+    "value": "?GetRemoteEndpoint@Link@Network@BaseCat@@YGPAU_Handle@Endpoint@23@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f3ad",
+    "va": "0x10020bad",
+    "encoding": "ascii",
+    "value": "?GetValue@LinkConfig@Network@BaseCat@@YG_NPAU_Handle@123@PBDPAH@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f3ef",
+    "va": "0x10020bef",
+    "encoding": "ascii",
+    "value": "?GetValue@LinkConfig@Network@BaseCat@@YG_NPAU_Handle@123@PBDPA_N@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f432",
+    "va": "0x10020c32",
+    "encoding": "ascii",
+    "value": "?GetVersion@Endpoint@Network@BaseCat@@YG_NPAU_Handle@123@PAW4Type@Version@IP@23@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f485",
+    "va": "0x10020c85",
+    "encoding": "ascii",
+    "value": "?LockReadStream@Link@Network@BaseCat@@YGPAU_Handle@Stream@System@3@PAU4123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f4d3",
+    "va": "0x10020cd3",
+    "encoding": "ascii",
+    "value": "?Recv@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f50e",
+    "va": "0x10020d0e",
+    "encoding": "ascii",
+    "value": "?Recv@Link@Network@BaseCat@@YG_NPAU_Handle@123@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f541",
+    "va": "0x10020d41",
+    "encoding": "ascii",
+    "value": "?Release@Link@Network@BaseCat@@YGHPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f575",
+    "va": "0x10020d75",
+    "encoding": "ascii",
+    "value": "?Remove@FilterChain@Network@BaseCat@@YG_NPAU_Handle@123@PBD@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f5b3",
+    "va": "0x10020db3",
+    "encoding": "ascii",
+    "value": "?RemoveAttribute@Link@Network@BaseCat@@YG_NPAU_Handle@123@PBD@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f5f3",
+    "va": "0x10020df3",
+    "encoding": "ascii",
+    "value": "?RemoveBinding@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@PBDG@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f636",
+    "va": "0x10020e36",
+    "encoding": "ascii",
+    "value": "?Reset@Interrupter@Network@BaseCat@@YG_NPAU_Handle@123@PA_N@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f674",
+    "va": "0x10020e74",
+    "encoding": "ascii",
+    "value": "?Send@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@QAU4Endpoint@23@PBXI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f6c2",
+    "va": "0x10020ec2",
+    "encoding": "ascii",
+    "value": "?Send@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@QAU4Endpoint@23@QAU_Block@SmartHeap@System@3@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f729",
+    "va": "0x10020f29",
+    "encoding": "ascii",
+    "value": "?Send@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@QAU4Endpoint@23@QAU_Block@SmartHeap@System@3@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f791",
+    "va": "0x10020f91",
+    "encoding": "ascii",
+    "value": "?Send@Link@Network@BaseCat@@YG_NPAU_Handle@123@PBXI@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f7c7",
+    "va": "0x10020fc7",
+    "encoding": "ascii",
+    "value": "?Send@Link@Network@BaseCat@@YG_NPAU_Handle@123@QAU_Block@SmartHeap@System@3@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f816",
+    "va": "0x10021016",
+    "encoding": "ascii",
+    "value": "?Send@Link@Network@BaseCat@@YG_NPAU_Handle@123@QAU_Block@SmartHeap@System@3@I@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f866",
+    "va": "0x10021066",
+    "encoding": "ascii",
+    "value": "?Set@Interrupter@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f89e",
+    "va": "0x1002109e",
+    "encoding": "ascii",
+    "value": "?SetData@Link@Network@BaseCat@@YG_NPAU_Handle@123@PAX@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f8d6",
+    "va": "0x100210d6",
+    "encoding": "ascii",
+    "value": "?SetData@Link@Network@BaseCat@@YG_NPAU_Handle@123@PAXABQ6GX01@Z1@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f919",
+    "va": "0x10021119",
+    "encoding": "ascii",
+    "value": "?SetOnAccepted@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f971",
+    "va": "0x10021171",
+    "encoding": "ascii",
+    "value": "?SetOnClosed@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001f9c7",
+    "va": "0x100211c7",
+    "encoding": "ascii",
+    "value": "?SetOnConnected@Connector@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fa21",
+    "va": "0x10021221",
+    "encoding": "ascii",
+    "value": "?SetOnConnectedEx@Connector@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX2@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fa7e",
+    "va": "0x1002127e",
+    "encoding": "ascii",
+    "value": "?SetOnDisconnected@Connector@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fadb",
+    "va": "0x100212db",
+    "encoding": "ascii",
+    "value": "?SetOnLinkClosed@Filter@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fb33",
+    "va": "0x10021333",
+    "encoding": "ascii",
+    "value": "?SetOnLinkOpened@Filter@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fb8b",
+    "va": "0x1002138b",
+    "encoding": "ascii",
+    "value": "?SetOnReceived@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fbe3",
+    "va": "0x100213e3",
+    "encoding": "ascii",
+    "value": "?SetOnReceived@Connector@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAX@Z2@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fc3c",
+    "va": "0x1002143c",
+    "encoding": "ascii",
+    "value": "?SetOnReceived@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0QAU4Endpoint@23@PAU_Block@SmartHeap@System@3@IPAX@Z3@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fcba",
+    "va": "0x100214ba",
+    "encoding": "ascii",
+    "value": "?SetOnReceived@Filter@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAU_Block@SmartHeap@System@3@IPAX@Z3@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fd2e",
+    "va": "0x1002152e",
+    "encoding": "ascii",
+    "value": "?SetOnSend@Filter@Network@BaseCat@@YG_NPAU_Handle@123@ABQ6GX0PAU4Link@23@PAU_Block@SmartHeap@System@3@IPAX@Z3@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fd9e",
+    "va": "0x1002159e",
+    "encoding": "ascii",
+    "value": "?SetValue@LinkConfig@Network@BaseCat@@YG_NPAU_Handle@123@PBDH@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fdde",
+    "va": "0x100215de",
+    "encoding": "ascii",
+    "value": "?SetValue@LinkConfig@Network@BaseCat@@YG_NPAU_Handle@123@PBD_N@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fe1f",
+    "va": "0x1002161f",
+    "encoding": "ascii",
+    "value": "?Start@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fe56",
+    "va": "0x10021656",
+    "encoding": "ascii",
+    "value": "?Start@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@G@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fe92",
+    "va": "0x10021692",
+    "encoding": "ascii",
+    "value": "?Stop@Acceptor@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001fec8",
+    "va": "0x100216c8",
+    "encoding": "ascii",
+    "value": "?Stop@DatagramLink@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001ff02",
+    "va": "0x10021702",
+    "encoding": "ascii",
+    "value": "?UnlockReadStream@Link@Network@BaseCat@@YG_NPAU_Handle@123@@Z"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020018",
+    "va": "0x10022018",
+    "encoding": "ascii",
+    "value": ".?AVtype_info@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002040c",
+    "va": "0x1002240c",
+    "encoding": "ascii",
+    "value": ".?AVbad_exception@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000205a6",
+    "va": "0x100225a6",
+    "encoding": "ascii",
+    "value": "                          "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020686",
+    "va": "0x10022686",
+    "encoding": "ascii",
+    "value": "abcdefghijklmnopqrstuvwxyz"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000206a6",
+    "va": "0x100226a6",
+    "encoding": "ascii",
+    "value": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000207aa",
+    "va": "0x100227aa",
+    "encoding": "ascii",
+    "value": "                          "
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020891",
+    "va": "0x10022891",
+    "encoding": "ascii",
+    "value": "abcdefghijklmnopqrstuvwxyz"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000208b1",
+    "va": "0x100228b1",
+    "encoding": "ascii",
+    "value": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020cb8",
+    "va": "0x10022cb8",
+    "encoding": "ascii",
+    "value": ".?AVEndpoint@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020ce8",
+    "va": "0x10022ce8",
+    "encoding": "ascii",
+    "value": ".?AV?$SmallObject@VIEndpoint@Impl@Network@BaseCat@@@TL@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020d38",
+    "va": "0x10022d38",
+    "encoding": "ascii",
+    "value": ".?AVIEndpoint@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020f20",
+    "va": "0x10022f20",
+    "encoding": "ascii",
+    "value": ".?AVexception@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020f3c",
+    "va": "0x10022f3c",
+    "encoding": "ascii",
+    "value": ".?AVIAsyncIOTask@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020f6c",
+    "va": "0x10022f6c",
+    "encoding": "ascii",
+    "value": ".?AVAsyncIOTask_IOCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020fa0",
+    "va": "0x10022fa0",
+    "encoding": "ascii",
+    "value": ".?AU_OVERLAPPED@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020fbc",
+    "va": "0x10022fbc",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResult@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00020fec",
+    "va": "0x10022fec",
+    "encoding": "ascii",
+    "value": ".?AVbad_alloc@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021008",
+    "va": "0x10023008",
+    "encoding": "ascii",
+    "value": ".?AVIAcceptor@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021038",
+    "va": "0x10023038",
+    "encoding": "ascii",
+    "value": ".?AVlogic_error@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021058",
+    "va": "0x10023058",
+    "encoding": "ascii",
+    "value": ".?AVlength_error@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021078",
+    "va": "0x10023078",
+    "encoding": "ascii",
+    "value": ".?AVIConnector@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000210a8",
+    "va": "0x100230a8",
+    "encoding": "ascii",
+    "value": ".?AV?$SmallObject@VILink@DatagramLink@Impl@Network@BaseCat@@@TL@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021104",
+    "va": "0x10023104",
+    "encoding": "ascii",
+    "value": ".?AVILink@DatagramLink@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021140",
+    "va": "0x10023140",
+    "encoding": "ascii",
+    "value": ".?AV?$SmallObject@VIFilterChain@Impl@Network@BaseCat@@@TL@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021194",
+    "va": "0x10023194",
+    "encoding": "ascii",
+    "value": ".?AVIFilterChain@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000211c8",
+    "va": "0x100231c8",
+    "encoding": "ascii",
+    "value": ".?AV?$SmallObject@VIFilter@Impl@Network@BaseCat@@@TL@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021218",
+    "va": "0x10023218",
+    "encoding": "ascii",
+    "value": ".?AVIFilter@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021248",
+    "va": "0x10023248",
+    "encoding": "ascii",
+    "value": ".?AV?$SmallObject@VIInterrupter@Impl@Network@BaseCat@@@TL@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002129c",
+    "va": "0x1002329c",
+    "encoding": "ascii",
+    "value": ".?AVIInterrupter@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000212cc",
+    "va": "0x100232cc",
+    "encoding": "ascii",
+    "value": ".?AVILinkConfig@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000212fc",
+    "va": "0x100232fc",
+    "encoding": "ascii",
+    "value": ".?AVILink@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021328",
+    "va": "0x10023328",
+    "encoding": "ascii",
+    "value": ".?AVFilterChain@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021358",
+    "va": "0x10023358",
+    "encoding": "ascii",
+    "value": ".?AVFilter@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021384",
+    "va": "0x10023384",
+    "encoding": "ascii",
+    "value": ".?AVInterrupter@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000213b8",
+    "va": "0x100233b8",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultRecv@DatagramLink@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000213f8",
+    "va": "0x100233f8",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultSend@DatagramLink@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021438",
+    "va": "0x10023438",
+    "encoding": "ascii",
+    "value": ".?AVLink@DatagramLink@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021470",
+    "va": "0x10023470",
+    "encoding": "ascii",
+    "value": ".?AVAcceptor@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000214a0",
+    "va": "0x100234a0",
+    "encoding": "ascii",
+    "value": ".?AVThread@Threading@System@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000214d0",
+    "va": "0x100234d0",
+    "encoding": "ascii",
+    "value": ".?AVAcceptorTask@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021504",
+    "va": "0x10023504",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultConnectEx@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021540",
+    "va": "0x10023540",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultConnect@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002157c",
+    "va": "0x1002357c",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultDisconnect@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000215bc",
+    "va": "0x100235bc",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultRecv@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000215f4",
+    "va": "0x100235f4",
+    "encoding": "ascii",
+    "value": ".?AVAsyncResultSend@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002162c",
+    "va": "0x1002362c",
+    "encoding": "ascii",
+    "value": ".?AVConnector@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021660",
+    "va": "0x10023660",
+    "encoding": "ascii",
+    "value": ".?AVLinkConfig@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021694",
+    "va": "0x10023694",
+    "encoding": "ascii",
+    "value": ".?AVLink@TCP@Impl@Network@BaseCat@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000216c0",
+    "va": "0x100236c0",
+    "encoding": "ascii",
+    "value": ".?AVout_of_range@std@@"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021c74",
+    "va": "0x10025474",
+    "encoding": "ascii",
+    "value": "<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021cbf",
+    "va": "0x100254bf",
+    "encoding": "ascii",
+    "value": "  <trustInfo xmlns=\"urn:schemas-microsoft-com:asm.v3\">"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021cf7",
+    "va": "0x100254f7",
+    "encoding": "ascii",
+    "value": "    <security>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021d07",
+    "va": "0x10025507",
+    "encoding": "ascii",
+    "value": "      <requestedPrivileges>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021d24",
+    "va": "0x10025524",
+    "encoding": "ascii",
+    "value": "        <requestedExecutionLevel level=\"asInvoker\" uiAccess=\"false\"></requestedExecutionLevel>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021d84",
+    "va": "0x10025584",
+    "encoding": "ascii",
+    "value": "      </requestedPrivileges>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021da2",
+    "va": "0x100255a2",
+    "encoding": "ascii",
+    "value": "    </security>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021db3",
+    "va": "0x100255b3",
+    "encoding": "ascii",
+    "value": "  </trustInfo>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021dc3",
+    "va": "0x100255c3",
+    "encoding": "ascii",
+    "value": "</assembly>PAPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDING"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e0b",
+    "va": "0x1002600b",
+    "encoding": "ascii",
+    "value": "0#000O0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e21",
+    "va": "0x10026021",
+    "encoding": "ascii",
+    "value": "1!181C1d1{1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e3b",
+    "va": "0x1002603b",
+    "encoding": "ascii",
+    "value": "2<3l3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e43",
+    "va": "0x10026043",
+    "encoding": "ascii",
+    "value": "3,4l4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e4d",
+    "va": "0x1002604d",
+    "encoding": "ascii",
+    "value": "5L5|5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e57",
+    "va": "0x10026057",
+    "encoding": "ascii",
+    "value": "6)6N6l6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e67",
+    "va": "0x10026067",
+    "encoding": "ascii",
+    "value": "7<7\\7|7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e73",
+    "va": "0x10026073",
+    "encoding": "ascii",
+    "value": "7,8\\8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e89",
+    "va": "0x10026089",
+    "encoding": "ascii",
+    "value": ":<:l:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021e9d",
+    "va": "0x1002609d",
+    "encoding": "ascii",
+    "value": "<L<|<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021ea7",
+    "va": "0x100260a7",
+    "encoding": "ascii",
+    "value": "=C=U="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021eb5",
+    "va": "0x100260b5",
+    "encoding": "ascii",
+    "value": "=*>M>a>{>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021ec7",
+    "va": "0x100260c7",
+    "encoding": "ascii",
+    "value": "?)?9?^?y?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021ee3",
+    "va": "0x100260e3",
+    "encoding": "ascii",
+    "value": "0.0K0_0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021ef5",
+    "va": "0x100260f5",
+    "encoding": "ascii",
+    "value": "0!1:1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f0b",
+    "va": "0x1002610b",
+    "encoding": "ascii",
+    "value": "2\"252j2u2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f1f",
+    "va": "0x1002611f",
+    "encoding": "ascii",
+    "value": "3\"363H3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f3d",
+    "va": "0x1002613d",
+    "encoding": "ascii",
+    "value": "4 5c5q5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f4d",
+    "va": "0x1002614d",
+    "encoding": "ascii",
+    "value": "6c6s6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f57",
+    "va": "0x10026157",
+    "encoding": "ascii",
+    "value": "697J7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f65",
+    "va": "0x10026165",
+    "encoding": "ascii",
+    "value": "9Y<i<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f73",
+    "va": "0x10026173",
+    "encoding": "ascii",
+    "value": "='=W=m=i?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f8b",
+    "va": "0x1002618b",
+    "encoding": "ascii",
+    "value": "0;1F1j1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f93",
+    "va": "0x10026193",
+    "encoding": "ascii",
+    "value": "2o2|2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021f9d",
+    "va": "0x1002619d",
+    "encoding": "ascii",
+    "value": "3&363[3t3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021fb3",
+    "va": "0x100261b3",
+    "encoding": "ascii",
+    "value": "4$4B4V4h4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021fc7",
+    "va": "0x100261c7",
+    "encoding": "ascii",
+    "value": "5@5N5[5v5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021fdb",
+    "va": "0x100261db",
+    "encoding": "ascii",
+    "value": "5&686U6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021ff1",
+    "va": "0x100261f1",
+    "encoding": "ascii",
+    "value": "7I7e7j7s7x7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022005",
+    "va": "0x10026205",
+    "encoding": "ascii",
+    "value": "8&8I8{8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022019",
+    "va": "0x10026219",
+    "encoding": "ascii",
+    "value": "9+9B9V9h9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022047",
+    "va": "0x10026247",
+    "encoding": "ascii",
+    "value": "=Y>q>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022053",
+    "va": "0x10026253",
+    "encoding": "ascii",
+    "value": "?!?:?l?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022071",
+    "va": "0x10026271",
+    "encoding": "ascii",
+    "value": "464d5{5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022079",
+    "va": "0x10026279",
+    "encoding": "ascii",
+    "value": "7#7C7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022089",
+    "va": "0x10026289",
+    "encoding": "ascii",
+    "value": "8u94:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022095",
+    "va": "0x10026295",
+    "encoding": "ascii",
+    "value": "<U<b<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220b9",
+    "va": "0x100262b9",
+    "encoding": "ascii",
+    "value": "1*252T2t2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220c9",
+    "va": "0x100262c9",
+    "encoding": "ascii",
+    "value": "333E3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220d3",
+    "va": "0x100262d3",
+    "encoding": "ascii",
+    "value": "3?4c4u4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220dd",
+    "va": "0x100262dd",
+    "encoding": "ascii",
+    "value": "5'5A5W5y5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220ed",
+    "va": "0x100262ed",
+    "encoding": "ascii",
+    "value": "6)6G6w6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000220fb",
+    "va": "0x100262fb",
+    "encoding": "ascii",
+    "value": "7-7A7d7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002210b",
+    "va": "0x1002630b",
+    "encoding": "ascii",
+    "value": "8/8I8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022117",
+    "va": "0x10026317",
+    "encoding": "ascii",
+    "value": "8<9a9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022127",
+    "va": "0x10026327",
+    "encoding": "ascii",
+    "value": ":7:G:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022135",
+    "va": "0x10026335",
+    "encoding": "ascii",
+    "value": ";\";:;C;y;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022145",
+    "va": "0x10026345",
+    "encoding": "ascii",
+    "value": "<\"<;<b<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022155",
+    "va": "0x10026355",
+    "encoding": "ascii",
+    "value": "=3=D=l="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022165",
+    "va": "0x10026365",
+    "encoding": "ascii",
+    "value": ">X>s>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022175",
+    "va": "0x10026375",
+    "encoding": "ascii",
+    "value": "?#?4?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002218d",
+    "va": "0x1002638d",
+    "encoding": "ascii",
+    "value": "0c0t0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221a1",
+    "va": "0x100263a1",
+    "encoding": "ascii",
+    "value": "2;2J2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221bd",
+    "va": "0x100263bd",
+    "encoding": "ascii",
+    "value": "3\"4O4s4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221d1",
+    "va": "0x100263d1",
+    "encoding": "ascii",
+    "value": "5%5J5t5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221e5",
+    "va": "0x100263e5",
+    "encoding": "ascii",
+    "value": "647]7k7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221ed",
+    "va": "0x100263ed",
+    "encoding": "ascii",
+    "value": "7+8:8s8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000221fb",
+    "va": "0x100263fb",
+    "encoding": "ascii",
+    "value": "9X9s9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022219",
+    "va": "0x10026419",
+    "encoding": "ascii",
+    "value": "<-=B="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022223",
+    "va": "0x10026423",
+    "encoding": "ascii",
+    "value": ">#>3>T>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022255",
+    "va": "0x10026455",
+    "encoding": "ascii",
+    "value": "272y2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002225d",
+    "va": "0x1002645d",
+    "encoding": "ascii",
+    "value": "3%3U3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022271",
+    "va": "0x10026471",
+    "encoding": "ascii",
+    "value": "5(646@6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002227f",
+    "va": "0x1002647f",
+    "encoding": "ascii",
+    "value": "8S8d8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022289",
+    "va": "0x10026489",
+    "encoding": "ascii",
+    "value": "9$969H9f9N:j:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002229b",
+    "va": "0x1002649b",
+    "encoding": "ascii",
+    "value": ":8;V;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000222a9",
+    "va": "0x100264a9",
+    "encoding": "ascii",
+    "value": "<S=b="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000222c3",
+    "va": "0x100264c3",
+    "encoding": "ascii",
+    "value": "0S2`2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000222d1",
+    "va": "0x100264d1",
+    "encoding": "ascii",
+    "value": "4)5V5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000222e1",
+    "va": "0x100264e1",
+    "encoding": "ascii",
+    "value": "7#8O:Y:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000222ed",
+    "va": "0x100264ed",
+    "encoding": "ascii",
+    "value": ":6;H;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022309",
+    "va": "0x10026509",
+    "encoding": "ascii",
+    "value": ">&?8?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022327",
+    "va": "0x10026527",
+    "encoding": "ascii",
+    "value": "141B1Y1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002233b",
+    "va": "0x1002653b",
+    "encoding": "ascii",
+    "value": "2>2m2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022349",
+    "va": "0x10026549",
+    "encoding": "ascii",
+    "value": "3(363H3P3n3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022365",
+    "va": "0x10026565",
+    "encoding": "ascii",
+    "value": "5(5S5b5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002236f",
+    "va": "0x1002656f",
+    "encoding": "ascii",
+    "value": "6:6P6h6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002238b",
+    "va": "0x1002658b",
+    "encoding": "ascii",
+    "value": "858x8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022399",
+    "va": "0x10026599",
+    "encoding": "ascii",
+    "value": "9#9K9a9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000223a7",
+    "va": "0x100265a7",
+    "encoding": "ascii",
+    "value": ":3:A:Z:}:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000223b5",
+    "va": "0x100265b5",
+    "encoding": "ascii",
+    "value": ";!;=;f;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000223c5",
+    "va": "0x100265c5",
+    "encoding": "ascii",
+    "value": "<C<S<t<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000223cd",
+    "va": "0x100265cd",
+    "encoding": "ascii",
+    "value": "=2=@=K=Y="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000223e7",
+    "va": "0x100265e7",
+    "encoding": "ascii",
+    "value": ">/?@?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022407",
+    "va": "0x10026607",
+    "encoding": "ascii",
+    "value": "0$1V1g1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002241b",
+    "va": "0x1002661b",
+    "encoding": "ascii",
+    "value": "343T3f3x3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022439",
+    "va": "0x10026639",
+    "encoding": "ascii",
+    "value": "5L6j6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022453",
+    "va": "0x10026653",
+    "encoding": "ascii",
+    "value": "8*999j9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022465",
+    "va": "0x10026665",
+    "encoding": "ascii",
+    "value": ":':T:c:q:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022477",
+    "va": "0x10026677",
+    "encoding": "ascii",
+    "value": ":.;I;w;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022489",
+    "va": "0x10026689",
+    "encoding": "ascii",
+    "value": "<[<w<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022499",
+    "va": "0x10026699",
+    "encoding": "ascii",
+    "value": "= =E=~="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000224af",
+    "va": "0x100266af",
+    "encoding": "ascii",
+    "value": "?O?c?v?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000224cf",
+    "va": "0x100266cf",
+    "encoding": "ascii",
+    "value": "0/1T1k1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000224db",
+    "va": "0x100266db",
+    "encoding": "ascii",
+    "value": "2\"2Z2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000224eb",
+    "va": "0x100266eb",
+    "encoding": "ascii",
+    "value": "3'313J3f3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000224fd",
+    "va": "0x100266fd",
+    "encoding": "ascii",
+    "value": "3 4)404N4v4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022513",
+    "va": "0x10026713",
+    "encoding": "ascii",
+    "value": "5*5L5T5y5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022521",
+    "va": "0x10026721",
+    "encoding": "ascii",
+    "value": "5&68617@7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022531",
+    "va": "0x10026731",
+    "encoding": "ascii",
+    "value": "8+8I8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022551",
+    "va": "0x10026751",
+    "encoding": "ascii",
+    "value": "<G<V<h<p<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022567",
+    "va": "0x10026767",
+    "encoding": "ascii",
+    "value": "=K>a>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022575",
+    "va": "0x10026775",
+    "encoding": "ascii",
+    "value": ">W?c?s?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002259b",
+    "va": "0x1002679b",
+    "encoding": "ascii",
+    "value": "2R2x2C4V4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000225b1",
+    "va": "0x100267b1",
+    "encoding": "ascii",
+    "value": "5#666[6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000225c1",
+    "va": "0x100267c1",
+    "encoding": "ascii",
+    "value": "7/8r8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022603",
+    "va": "0x10026803",
+    "encoding": "ascii",
+    "value": "2 2Q2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002260f",
+    "va": "0x1002680f",
+    "encoding": "ascii",
+    "value": "535@5b5E6s6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022629",
+    "va": "0x10026829",
+    "encoding": "ascii",
+    "value": "727G7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022639",
+    "va": "0x10026839",
+    "encoding": "ascii",
+    "value": "<3<F<j<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022647",
+    "va": "0x10026847",
+    "encoding": "ascii",
+    "value": "?C?V?{?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002265f",
+    "va": "0x1002685f",
+    "encoding": "ascii",
+    "value": "2 2Q2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022677",
+    "va": "0x10026877",
+    "encoding": "ascii",
+    "value": "8(8A8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022685",
+    "va": "0x10026885",
+    "encoding": "ascii",
+    "value": "99:H:\\:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002269f",
+    "va": "0x1002689f",
+    "encoding": "ascii",
+    "value": ">*>/>8>S>]>z>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000226c1",
+    "va": "0x100268c1",
+    "encoding": "ascii",
+    "value": "?0?M?c?s?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000226f5",
+    "va": "0x100268f5",
+    "encoding": "ascii",
+    "value": "2g3q3~3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022705",
+    "va": "0x10026905",
+    "encoding": "ascii",
+    "value": "405;5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022721",
+    "va": "0x10026921",
+    "encoding": "ascii",
+    "value": "7J7P7k7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002272d",
+    "va": "0x1002692d",
+    "encoding": "ascii",
+    "value": "7\"8O8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002274b",
+    "va": "0x1002694b",
+    "encoding": "ascii",
+    "value": "=(>R>X>^>d>j>p>w>~>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022783",
+    "va": "0x10026983",
+    "encoding": "ascii",
+    "value": "?#?)???F?X?c?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002279c",
+    "va": "0x1002699c",
+    "encoding": "ascii",
+    "value": "J0W0l0~0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000227ad",
+    "va": "0x100269ad",
+    "encoding": "ascii",
+    "value": "1\"1)121r1w1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000227c1",
+    "va": "0x100269c1",
+    "encoding": "ascii",
+    "value": "2&2J2p2v2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000227df",
+    "va": "0x100269df",
+    "encoding": "ascii",
+    "value": "3$383?3W3c3i3u3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002280b",
+    "va": "0x10026a0b",
+    "encoding": "ascii",
+    "value": "4A4V4|4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002281b",
+    "va": "0x10026a1b",
+    "encoding": "ascii",
+    "value": "5&5L5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022825",
+    "va": "0x10026a25",
+    "encoding": "ascii",
+    "value": "5+636"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022845",
+    "va": "0x10026a45",
+    "encoding": "ascii",
+    "value": "7 7'7-747:7B7I7N7V7_7k7p7u7{7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022883",
+    "va": "0x10026a83",
+    "encoding": "ascii",
+    "value": "888>8Z8|8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002289b",
+    "va": "0x10026a9b",
+    "encoding": "ascii",
+    "value": "9B:H:h:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000228a9",
+    "va": "0x10026aa9",
+    "encoding": "ascii",
+    "value": ";Z;`;q;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000228bb",
+    "va": "0x10026abb",
+    "encoding": "ascii",
+    "value": "< <$<M<s<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000228f1",
+    "va": "0x10026af1",
+    "encoding": "ascii",
+    "value": "=->4>8><>@>D>H>L>P>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022927",
+    "va": "0x10026b27",
+    "encoding": "ascii",
+    "value": "0 0$0M0s0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002295d",
+    "va": "0x10026b5d",
+    "encoding": "ascii",
+    "value": "1-24282<2@2D2H2L2P2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002297b",
+    "va": "0x10026b7b",
+    "encoding": "ascii",
+    "value": "2D3O3z3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002299f",
+    "va": "0x10026b9f",
+    "encoding": "ascii",
+    "value": "50696E6^6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000229b1",
+    "va": "0x10026bb1",
+    "encoding": "ascii",
+    "value": "7B7]7c7l7s7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000229c7",
+    "va": "0x10026bc7",
+    "encoding": "ascii",
+    "value": "8/898@8K8T8j8u8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000229e3",
+    "va": "0x10026be3",
+    "encoding": "ascii",
+    "value": "9?9D9O9T9r9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000229f3",
+    "va": "0x10026bf3",
+    "encoding": "ascii",
+    "value": ":(:I:O:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000229ff",
+    "va": "0x10026bff",
+    "encoding": "ascii",
+    "value": ": ;*;R;k;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a0d",
+    "va": "0x10026c0d",
+    "encoding": "ascii",
+    "value": ";@<F<j<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a1f",
+    "va": "0x10026c1f",
+    "encoding": "ascii",
+    "value": "=V=a=k=|="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a29",
+    "va": "0x10026c29",
+    "encoding": "ascii",
+    "value": "=:?K?S?Y?^?d?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a4b",
+    "va": "0x10026c4b",
+    "encoding": "ascii",
+    "value": "0'0.0e0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a59",
+    "va": "0x10026c59",
+    "encoding": "ascii",
+    "value": "1!1&1G1L1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022a9b",
+    "va": "0x10026c9b",
+    "encoding": "ascii",
+    "value": "4+424<4f4t4z4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022acb",
+    "va": "0x10026ccb",
+    "encoding": "ascii",
+    "value": ":Q<i?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022ae7",
+    "va": "0x10026ce7",
+    "encoding": "ascii",
+    "value": "333A3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022afb",
+    "va": "0x10026cfb",
+    "encoding": "ascii",
+    "value": "3^4g4m4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b07",
+    "va": "0x10026d07",
+    "encoding": "ascii",
+    "value": "5(5-5E5K5Z5`5o5u5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b3d",
+    "va": "0x10026d3d",
+    "encoding": "ascii",
+    "value": ":f:}:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b4d",
+    "va": "0x10026d4d",
+    "encoding": "ascii",
+    "value": "=*=d=q={="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b63",
+    "va": "0x10026d63",
+    "encoding": "ascii",
+    "value": ">W>b>l>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b73",
+    "va": "0x10026d73",
+    "encoding": "ascii",
+    "value": ">2?E?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022b8b",
+    "va": "0x10026d8b",
+    "encoding": "ascii",
+    "value": "1&191K1f1n1v1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022ba9",
+    "va": "0x10026da9",
+    "encoding": "ascii",
+    "value": "2>2O2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022bb9",
+    "va": "0x10026db9",
+    "encoding": "ascii",
+    "value": "6,626L6Q6`6i6v6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022be7",
+    "va": "0x10026de7",
+    "encoding": "ascii",
+    "value": "71787>7L7S7X7a7n7t7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c0f",
+    "va": "0x10026e0f",
+    "encoding": "ascii",
+    "value": "<n>y>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c23",
+    "va": "0x10026e23",
+    "encoding": "ascii",
+    "value": "0H2M2_2}2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c31",
+    "va": "0x10026e31",
+    "encoding": "ascii",
+    "value": "3\\3q3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c45",
+    "va": "0x10026e45",
+    "encoding": "ascii",
+    "value": "4K5Q5u5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c53",
+    "va": "0x10026e53",
+    "encoding": "ascii",
+    "value": "5%6>6`6o6x6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c67",
+    "va": "0x10026e67",
+    "encoding": "ascii",
+    "value": "7I8c8l81:C:U:w:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022c81",
+    "va": "0x10026e81",
+    "encoding": "ascii",
+    "value": ":N;X;p;w;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022cc1",
+    "va": "0x10026ec1",
+    "encoding": "ascii",
+    "value": "3&434"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022cd7",
+    "va": "0x10026ed7",
+    "encoding": "ascii",
+    "value": "92:R:z:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022ce3",
+    "va": "0x10026ee3",
+    "encoding": "ascii",
+    "value": ";7;W;z;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022cef",
+    "va": "0x10026eef",
+    "encoding": "ascii",
+    "value": ";*<Z<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022cfb",
+    "va": "0x10026efb",
+    "encoding": "ascii",
+    "value": "=7=W=w="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d07",
+    "va": "0x10026f07",
+    "encoding": "ascii",
+    "value": "=*>R>r>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d13",
+    "va": "0x10026f13",
+    "encoding": "ascii",
+    "value": ">-?Z?u?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d33",
+    "va": "0x10026f33",
+    "encoding": "ascii",
+    "value": "0*1b1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d3d",
+    "va": "0x10026f3d",
+    "encoding": "ascii",
+    "value": "1\"2J2z2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d49",
+    "va": "0x10026f49",
+    "encoding": "ascii",
+    "value": "3:3j3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d63",
+    "va": "0x10026f63",
+    "encoding": "ascii",
+    "value": "5*5b5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d75",
+    "va": "0x10026f75",
+    "encoding": "ascii",
+    "value": "757a7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d7f",
+    "va": "0x10026f7f",
+    "encoding": "ascii",
+    "value": "7*8o8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d8b",
+    "va": "0x10026f8b",
+    "encoding": "ascii",
+    "value": "9G9|9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d95",
+    "va": "0x10026f95",
+    "encoding": "ascii",
+    "value": ":a:m:|:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022d9d",
+    "va": "0x10026f9d",
+    "encoding": "ascii",
+    "value": ":!;-;<;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022daf",
+    "va": "0x10026faf",
+    "encoding": "ascii",
+    "value": "=8=f="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022db9",
+    "va": "0x10026fb9",
+    "encoding": "ascii",
+    "value": ">=>m>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022dd1",
+    "va": "0x10026fd1",
+    "encoding": "ascii",
+    "value": "0!0+0F0Q0[0e0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022df9",
+    "va": "0x10026ff9",
+    "encoding": "ascii",
+    "value": "1\"1*101:1@1J1P1Z1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022e27",
+    "va": "0x10027027",
+    "encoding": "ascii",
+    "value": "2 2*202;2E2S2[2a2k2q2{2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022e65",
+    "va": "0x10027065",
+    "encoding": "ascii",
+    "value": "2$2(2,2|2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022e8d",
+    "va": "0x1002708d",
+    "encoding": "ascii",
+    "value": "2 3$3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022edf",
+    "va": "0x100270df",
+    "encoding": "ascii",
+    "value": "1 1$1(1,1014181<1@1D1H1L1P1T1X1\\1`1d1h1l1p1t1x1|1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022f5f",
+    "va": "0x1002715f",
+    "encoding": "ascii",
+    "value": "2 2$2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022f65",
+    "va": "0x10027165",
+    "encoding": "ascii",
+    "value": "<@<T<p<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022f6d",
+    "va": "0x1002716d",
+    "encoding": "ascii",
+    "value": "<\\?p?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00022f7c",
+    "va": "0x1002717c",
+    "encoding": "ascii",
+    "value": "h4l4p4t4x4|4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023027",
+    "va": "0x10027227",
+    "encoding": "ascii",
+    "value": "6 6$6(6,6064686<6@6D6H6L6P6T6X6`6d6h6l6p6t6x6|6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000230a5",
+    "va": "0x100272a5",
+    "encoding": "ascii",
+    "value": "7 7$7(7,7074787<7@7D7H7L7P7T7X7\\7`7d7h7l7p7t7x7|7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023125",
+    "va": "0x10027325",
+    "encoding": "ascii",
+    "value": "8 8$8(8p8t8x8|8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002317b",
+    "va": "0x1002737b",
+    "encoding": "ascii",
+    "value": ": :$:,:D:T:X:h:l:p:t:|:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000231ab",
+    "va": "0x100273ab",
+    "encoding": "ascii",
+    "value": ";0;@;D;T;X;`;x;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000231d5",
+    "va": "0x100273d5",
+    "encoding": "ascii",
+    "value": "< <$<,<D<T<X<h<l<p<x<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023201",
+    "va": "0x10027401",
+    "encoding": "ascii",
+    "value": "=(=8=<=L=P=T=X=`=x="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002322f",
+    "va": "0x1002742f",
+    "encoding": "ascii",
+    "value": "> >0>4>8>@>X>h>l>t>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002325b",
+    "va": "0x1002745b",
+    "encoding": "ascii",
+    "value": "?(?,?D?T?X?h?l?p?x?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002328f",
+    "va": "0x1002748f",
+    "encoding": "ascii",
+    "value": "0,0<0@0H0`0d0|0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000232b7",
+    "va": "0x100274b7",
+    "encoding": "ascii",
+    "value": "1 1014181<1D1\\1l1p1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000232e9",
+    "va": "0x100274e9",
+    "encoding": "ascii",
+    "value": "2 2$2(2,242L2\\2`2p2t2x2|2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002331f",
+    "va": "0x1002751f",
+    "encoding": "ascii",
+    "value": "3 383H3L3\\3`3d3l3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002334d",
+    "va": "0x1002754d",
+    "encoding": "ascii",
+    "value": "4,4044484@4X4h4l4|4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002337f",
+    "va": "0x1002757f",
+    "encoding": "ascii",
+    "value": "5 5$5(505H5X5\\5l5p5t5|5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000233b1",
+    "va": "0x100275b1",
+    "encoding": "ascii",
+    "value": "6,6<6@6P6T6X6\\6d6|6T8`8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000233d5",
+    "va": "0x100275d5",
+    "encoding": "ascii",
+    "value": "9$9@9L9h9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000233eb",
+    "va": "0x100275eb",
+    "encoding": "ascii",
+    "value": ":(:D:H:h:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023405",
+    "va": "0x10027605",
+    "encoding": "ascii",
+    "value": ":(;0;4;L;P;l;p;x;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023425",
+    "va": "0x10027625",
+    "encoding": "ascii",
+    "value": "<(<D<H<d<h<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023445",
+    "va": "0x10027645",
+    "encoding": "ascii",
+    "value": "= =$=,=4=<=P=X=\\=d=l=t="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023479",
+    "va": "0x10027679",
+    "encoding": "ascii",
+    "value": ">$>,>D>P>p>x>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023493",
+    "va": "0x10027693",
+    "encoding": "ascii",
+    "value": "?(?0?<?\\?d?p?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000234b5",
+    "va": "0x100276b5",
+    "encoding": "ascii",
+    "value": "0$0<0P0\\0d0|0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000234d3",
+    "va": "0x100276d3",
+    "encoding": "ascii",
+    "value": "1<1H1h1t1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000234e7",
+    "va": "0x100276e7",
+    "encoding": "ascii",
+    "value": "102D2P2X2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000234ff",
+    "va": "0x100276ff",
+    "encoding": "ascii",
+    "value": "3(343<3\\3t3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023519",
+    "va": "0x10027719",
+    "encoding": "ascii",
+    "value": "4,4@4L4T4t4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023537",
+    "va": "0x10027737",
+    "encoding": "ascii",
+    "value": "5$5,5l5|5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002354f",
+    "va": "0x1002774f",
+    "encoding": "ascii",
+    "value": "6(646T6`6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023569",
+    "va": "0x10027769",
+    "encoding": "ascii",
+    "value": "6$7<7P7\\7d7|7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023583",
+    "va": "0x10027783",
+    "encoding": "ascii",
+    "value": "8$888L8X8`8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000235a1",
+    "va": "0x100277a1",
+    "encoding": "ascii",
+    "value": "9(909H9T9t9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000235b9",
+    "va": "0x100277b9",
+    "encoding": "ascii",
+    "value": ": :4:@:H:p:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000235d3",
+    "va": "0x100277d3",
+    "encoding": "ascii",
+    "value": ";$;4;D;X;l;x;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000235ef",
+    "va": "0x100277ef",
+    "encoding": "ascii",
+    "value": "<,<D<X<d<l<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002360d",
+    "va": "0x1002780d",
+    "encoding": "ascii",
+    "value": "=0=<=D=\\=h="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023629",
+    "va": "0x10027829",
+    "encoding": "ascii",
+    "value": ">,>8>@>X>x>"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002364d",
+    "va": "0x1002784d",
+    "encoding": "ascii",
+    "value": "?$?0?h?|?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023671",
+    "va": "0x10027871",
+    "encoding": "ascii",
+    "value": "0<0D0P0p0x0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002368d",
+    "va": "0x1002788d",
+    "encoding": "ascii",
+    "value": "141H1T1\\1t1|1"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000236af",
+    "va": "0x100278af",
+    "encoding": "ascii",
+    "value": "20282@2L2l2x2"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000236cb",
+    "va": "0x100278cb",
+    "encoding": "ascii",
+    "value": "3,343@3`3l3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000236e7",
+    "va": "0x100278e7",
+    "encoding": "ascii",
+    "value": "404<4D4l4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023701",
+    "va": "0x10027901",
+    "encoding": "ascii",
+    "value": "5$5,585X5`5h5t5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023729",
+    "va": "0x10027929",
+    "encoding": "ascii",
+    "value": "6 6,646L6T6\\6d6l6t6|6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023751",
+    "va": "0x10027951",
+    "encoding": "ascii",
+    "value": "7(70787@7H7T7t7|7"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002377b",
+    "va": "0x1002797b",
+    "encoding": "ascii",
+    "value": "8$8,888\\8d8l8t8|8"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000237a1",
+    "va": "0x100279a1",
+    "encoding": "ascii",
+    "value": "9,9@9L9T9t9"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000237c1",
+    "va": "0x100279c1",
+    "encoding": "ascii",
+    "value": ": :(:0:<:\\:d:l:t:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000237e3",
+    "va": "0x100279e3",
+    "encoding": "ascii",
+    "value": "; ;,;4;L;T;\\;d;p;"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023813",
+    "va": "0x10027a13",
+    "encoding": "ascii",
+    "value": "0(0,0D0L0T0\\0d0l0t0|0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023865",
+    "va": "0x10027a65",
+    "encoding": "ascii",
+    "value": "5 5$5P9H:L:P:T:X:\\:`:d:h:l:"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000238cf",
+    "va": "0x10027acf",
+    "encoding": "ascii",
+    "value": "; ;$;(;,;0;@;H;L;P;T;X;\\;`;d;h;l;x; <$<"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000238f9",
+    "va": "0x10027af9",
+    "encoding": "ascii",
+    "value": "<0=`=d=h=l=p=t=x=|="
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023957",
+    "va": "0x10027b57",
+    "encoding": "ascii",
+    "value": "?4?d?"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002396d",
+    "va": "0x10027b6d",
+    "encoding": "ascii",
+    "value": "000P0p0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023987",
+    "va": "0x10027b87",
+    "encoding": "ascii",
+    "value": "2 3P3|3"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00023991",
+    "va": "0x10027b91",
+    "encoding": "ascii",
+    "value": "304h4"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002399b",
+    "va": "0x10027b9b",
+    "encoding": "ascii",
+    "value": "485t5"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000239a3",
+    "va": "0x10027ba3",
+    "encoding": "ascii",
+    "value": "5$6X6"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0000f034",
+    "va": "0x1000fc34",
+    "encoding": "utf16le",
+    "value": "jjjjj"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000180fc",
+    "va": "0x100198fc",
+    "encoding": "utf16le",
+    "value": "KERNEL32.DLL"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018164",
+    "va": "0x10019964",
+    "encoding": "utf16le",
+    "value": "mscoree.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018b28",
+    "va": "0x1001a328",
+    "encoding": "utf16le",
+    "value": "         (((((                  H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018d2a",
+    "va": "0x1001a52a",
+    "encoding": "utf16le",
+    "value": "         h((((                  H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00018e28",
+    "va": "0x1001a628",
+    "encoding": "utf16le",
+    "value": "                                 H"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0001e738",
+    "va": "0x1001ff38",
+    "encoding": "utf16le",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000218a6",
+    "va": "0x100250a6",
+    "encoding": "utf16le",
+    "value": "VS_VERSION_INFO"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021902",
+    "va": "0x10025102",
+    "encoding": "utf16le",
+    "value": "StringFileInfo"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021926",
+    "va": "0x10025126",
+    "encoding": "utf16le",
+    "value": "041204b0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002193e",
+    "va": "0x1002513e",
+    "encoding": "utf16le",
+    "value": "CompanyName"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021958",
+    "va": "0x10025158",
+    "encoding": "utf16le",
+    "value": "SpringCat.net"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002197a",
+    "va": "0x1002517a",
+    "encoding": "utf16le",
+    "value": "FileDescription"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x0002199c",
+    "va": "0x1002519c",
+    "encoding": "utf16le",
+    "value": "BaseCat.Network: Network Abstraction Layer"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x000219fa",
+    "va": "0x100251fa",
+    "encoding": "utf16le",
+    "value": "FileVersion"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021a14",
+    "va": "0x10025214",
+    "encoding": "utf16le",
+    "value": "1, 8, 3, 0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021a32",
+    "va": "0x10025232",
+    "encoding": "utf16le",
+    "value": "InternalName"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021a4c",
+    "va": "0x1002524c",
+    "encoding": "utf16le",
+    "value": "BaseCat.Network.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021a7a",
+    "va": "0x1002527a",
+    "encoding": "utf16le",
+    "value": "LegalCopyright"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021a98",
+    "va": "0x10025298",
+    "encoding": "utf16le",
+    "value": "Copyright (C) 2007, 2008 SpringCat.net. All rights reserved."
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021b1a",
+    "va": "0x1002531a",
+    "encoding": "utf16le",
+    "value": "OriginalFilename"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021b3c",
+    "va": "0x1002533c",
+    "encoding": "utf16le",
+    "value": "BaseCat.Network.dll"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021b6a",
+    "va": "0x1002536a",
+    "encoding": "utf16le",
+    "value": "ProductName"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021b84",
+    "va": "0x10025384",
+    "encoding": "utf16le",
+    "value": "BaseCat: the cross-platform system programming library"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021bfa",
+    "va": "0x100253fa",
+    "encoding": "utf16le",
+    "value": "ProductVersion"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021c18",
+    "va": "0x10025418",
+    "encoding": "utf16le",
+    "value": "1, 8, 3, 0"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021c36",
+    "va": "0x10025436",
+    "encoding": "utf16le",
+    "value": "VarFileInfo"
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "offset": "0x00021c56",
+    "va": "0x10025456",
+    "encoding": "utf16le",
+    "value": "Translation"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "data": {
+    "Info": {
+      "Architecture": "I386",
+      "Endianness": "LE",
+      "Extension": "dll",
+      "File name": "/Users/kanganapong.s/Documents/ChatGPT/C9 Server/52C9GL/BaseCat.Network.dll",
+      "File type": "PE32",
+      "MIME": "application/x-msdos-program",
+      "Mode": "32-bit",
+      "Operation system": "Windows(2000)",
+      "Size": "150016",
+      "String": "PE32",
+      "Type": "DLL"
+    }
+  }
+}

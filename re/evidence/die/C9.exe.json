@@ -1,0 +1,17 @@
+{
+  "data": {
+    "Info": {
+      "Architecture": "I386",
+      "Endianness": "LE",
+      "Extension": "exe",
+      "File name": "/Users/kanganapong.s/Documents/ChatGPT/C9 Server/52C9GL/C9.exe",
+      "File type": "PE32",
+      "MIME": "application/x-msdos-program",
+      "Mode": "32-bit",
+      "Operation system": "Windows(2000)",
+      "Size": "15844864",
+      "String": "PE32",
+      "Type": "GUI"
+    }
+  }
+}

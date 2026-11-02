@@ -1,0 +1,12 @@
+Program: C9.exe
+Executable SHA256: b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25
+Language: x86:LE:32:default
+Image base: 00400000
+Functions: 95927
+Block: Headers 00400000-004003ff
+Block: .text 00401000-00f98fff
+Block: .rdata 00f99000-012e7fff
+Block: .data 012e8000-01925fff
+Block: .tls 01926000-01926fff
+Block: .rsrc 01927000-01937fff
+Block: tdb ffdff000-ffdfffff

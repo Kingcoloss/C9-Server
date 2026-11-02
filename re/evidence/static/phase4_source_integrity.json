@@ -1,0 +1,197 @@
+{
+  "recorded_at_utc": "2026-11-02T08:32:38.241155+00:00",
+  "scope": "Selected top-level binaries, settings, version files, and launch scripts; assets excluded",
+  "checked": 38,
+  "files": [
+    {
+      "file": "BaseCat.Network.dll",
+      "sha256": "005e5824a2be1e15c7401624d13646f2a2003613c7e4f424cf212c1ef29b43b1",
+      "unchanged": true
+    },
+    {
+      "file": "BaseCat.System.dll",
+      "sha256": "d69608134c29a6b4305df4f8ecb4a9c50f736a79b8e6e3f9f4fd10e807bd2718",
+      "unchanged": true
+    },
+    {
+      "file": "C9.cfg",
+      "sha256": "c7538b26cf3fd3859bf6ab3114bf0508b332ce528d4da84167ff7e8c43b2cc4d",
+      "unchanged": true
+    },
+    {
+      "file": "C9.exe",
+      "sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+      "unchanged": true
+    },
+    {
+      "file": "C9Config.exe",
+      "sha256": "c45912408abbc573e16b75685b305c4537493107c16a351fb0d0c99eb75e4821",
+      "unchanged": true
+    },
+    {
+      "file": "C9Launcher.exe",
+      "sha256": "c3221361367f84721e92bf360d54be7490e3aa443ebce908ee6f3064218439bf",
+      "unchanged": true
+    },
+    {
+      "file": "C9Patcher.exe",
+      "sha256": "26c1d3c2a44514f199f5709cfe2ec67825516c6a29668ae0eb22c6c1f9ef49df",
+      "unchanged": true
+    },
+    {
+      "file": "D3DX9_37.dll",
+      "sha256": "c2ccb84c672a9d8966e82a28005a4269886ee304972ac3590c0b8a9c1622a3d8",
+      "unchanged": true
+    },
+    {
+      "file": "HanReportForClient.dll",
+      "sha256": "0244403f828804462c8e2f7d265a1ba35edc286a461b199efded41345d0ee2f4",
+      "unchanged": true
+    },
+    {
+      "file": "IntelGfx.cfg",
+      "sha256": "6b8817b19c20afc4818cec16eb58eff5eca40336c0dd67218e29e6cbdeb4d534",
+      "unchanged": true
+    },
+    {
+      "file": "JoyPad.ini",
+      "sha256": "e85f7e2fdaacc88a99a70a62947a14336e24eea8f49b017cee9ba1e1ffc129a8",
+      "unchanged": true
+    },
+    {
+      "file": "PatchExpLib.dll",
+      "sha256": "0c970e45925bd78dd2574eb5c4a1569ad2e178e8fd9042e721b5b71ff706a86b",
+      "unchanged": true
+    },
+    {
+      "file": "PhysXCooking.dll",
+      "sha256": "cef52b68682679f571133a64e0449715061b16198649f5ae839278d4eee8b896",
+      "unchanged": true
+    },
+    {
+      "file": "PhysXDevice.dll",
+      "sha256": "e16d25cf060c7d3c2b3e3db95c3c1fc6e7a8c9495bef76c4138fd73cc6e7d0a4",
+      "unchanged": true
+    },
+    {
+      "file": "PhysXLoader.dll",
+      "sha256": "6f491b6073a6fd759f3eb5b83e010fa66c5e0e9075585d263bd63d1f622cec3f",
+      "unchanged": true
+    },
+    {
+      "file": "PhysX_10.01.29_9.10.0129_SystemSoftware.exe",
+      "sha256": "057c7bdb7a15dc7e8fb9ef5c8029dec15dd3719d234988e6e4528c3f04fbc33a",
+      "unchanged": true
+    },
+    {
+      "file": "Start Game.bat",
+      "sha256": "c475cc6c909f4c14168bd59b8e8e1cc7731e9fa66875ee01aef0fd1cace42a0f",
+      "unchanged": true
+    },
+    {
+      "file": "Start the game.bat",
+      "sha256": "c475cc6c909f4c14168bd59b8e8e1cc7731e9fa66875ee01aef0fd1cace42a0f",
+      "unchanged": true
+    },
+    {
+      "file": "VerCli.C9",
+      "sha256": "b1f1977dd131f5db131f3ef835a9c57b61e5b1f31a12772926540e4621e42c2c",
+      "unchanged": true
+    },
+    {
+      "file": "Version.cfs",
+      "sha256": "5a0179649fbb971ad49eabe10fe0bb0abcea04c175acdb822ebc83b6a3a4b0f7",
+      "unchanged": true
+    },
+    {
+      "file": "awesomium.dll",
+      "sha256": "4be9f9449603808bebcaded59bc562fd82425c95c3907d624ab91231316ab6d3",
+      "unchanged": true
+    },
+    {
+      "file": "awesomium_process.exe",
+      "sha256": "4ca1c5838541b319793f964a9b7364f8921dc3b57e6adb713e60ea7c54523422",
+      "unchanged": true
+    },
+    {
+      "file": "bdcap32.dll",
+      "sha256": "f1d91edc68d1d4df4f48742d0d425c12b81edd6cac8002a67c557aa0e8c17969",
+      "unchanged": true
+    },
+    {
+      "file": "bdvid32.dll",
+      "sha256": "fe840ce9c00e026c98455999a585eac0153e9238d722343d8f29e2152c0ccf65",
+      "unchanged": true
+    },
+    {
+      "file": "bdvid64.dll",
+      "sha256": "5c6075163a258e1a090602aea527b5fc5d92c00ebc08684699b1b2f584f71aab",
+      "unchanged": true
+    },
+    {
+      "file": "cudart32_30_9.dll",
+      "sha256": "08c137f66758b6c342c0dd32fa45e8fc8c9f0c287997e46e515610c2aa84d0ed",
+      "unchanged": true
+    },
+    {
+      "file": "dbghelp.dll",
+      "sha256": "412f6c0ed936316275e68e21df7255e4e35fad14e114e479e8c5c9d75ecac88c",
+      "unchanged": true
+    },
+    {
+      "file": "fmodex.dll",
+      "sha256": "2ee2c78359c1827a50d45365a00c1ca8d5eb596ea17c409e1ee4d766ff5cf826",
+      "unchanged": true
+    },
+    {
+      "file": "icudt.dll",
+      "sha256": "455b4341012dd3916920456580ae1ea4ea28528876bf83e65a44f7808eb398d0",
+      "unchanged": true
+    },
+    {
+      "file": "localinfo.dat",
+      "sha256": "6b3d047fe981aa6389111e44c3b256d77f202145011154b0dc6ae219316909c0",
+      "unchanged": true
+    },
+    {
+      "file": "pathengine.dll",
+      "sha256": "4b807a9d8688e0323c79ea023fb083de7c2c4909b33aedc178078e6fa8d8eea7",
+      "unchanged": true
+    },
+    {
+      "file": "physxcudart_20.dll",
+      "sha256": "e7b1965ab2ba441c2f4040f6203c10e7d9f02bfbb794a25d2a022d95b6f01c70",
+      "unchanged": true
+    },
+    {
+      "file": "vcomp90.dll",
+      "sha256": "9140efe26252b6329da254201219fc2d17a3f651e1591e32ae04c86a27e35bb2",
+      "unchanged": true
+    },
+    {
+      "file": "vcredist_x86_2008.exe",
+      "sha256": "bf48824342debc80768cbd294b03254558a6a891d5b5de9a8abf4153290825b3",
+      "unchanged": true
+    },
+    {
+      "file": "version.dat",
+      "sha256": "e01d0e12f1f95117f596bc51b82a2779a052bacc4075fe8c5bc215bfa17a5088",
+      "unchanged": true
+    },
+    {
+      "file": "version.ini",
+      "sha256": "f2ac644689d523e96148de0f0c23bc366beafa85aa18eef134367d9826b3f141",
+      "unchanged": true
+    },
+    {
+      "file": "xp.dll",
+      "sha256": "e9f1a700091089d966477172715470e3a9df103a3acc4623fc8688081c73fd2a",
+      "unchanged": true
+    },
+    {
+      "file": "\u5f00\u59cb\u6e38\u620f.bat",
+      "sha256": "c475cc6c909f4c14168bd59b8e8e1cc7731e9fa66875ee01aef0fd1cace42a0f",
+      "unchanged": true
+    }
+  ]
+}

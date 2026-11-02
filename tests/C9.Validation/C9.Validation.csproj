@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/C9.Server/C9.Server.csproj" />
+    <EmbeddedResource Include="../fixtures/rc6_kats.json" LogicalName="rc6_kats.json" />
+    <EmbeddedResource Include="../fixtures/python_port_vectors.json" LogicalName="python_port_vectors.json" />
+    <EmbeddedResource Include="../../config/lab-fixture.json" LogicalName="lab-fixture.json" />
+  </ItemGroup>
+</Project>

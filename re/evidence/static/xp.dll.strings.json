@@ -1,0 +1,3481 @@
+[
+  {
+    "file": "xp.dll",
+    "offset": "0x0000004d",
+    "va": "",
+    "encoding": "ascii",
+    "value": "!This program cannot be run in DOS mode."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000000d7",
+    "va": "",
+    "encoding": "ascii",
+    "value": "GRich"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000001f0",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".text"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00000217",
+    "va": "",
+    "encoding": "ascii",
+    "value": "`.rdata"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000023f",
+    "va": "",
+    "encoding": "ascii",
+    "value": "@.data"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00000268",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".rsrc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000028f",
+    "va": "",
+    "encoding": "ascii",
+    "value": "@.reloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000104b",
+    "va": "0x1000104b",
+    "encoding": "ascii",
+    "value": "T$4Rh"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00001155",
+    "va": "0x10001155",
+    "encoding": "ascii",
+    "value": "T$DRh"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00001305",
+    "va": "0x10001305",
+    "encoding": "ascii",
+    "value": "T$DVR"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000174d",
+    "va": "0x1000174d",
+    "encoding": "ascii",
+    "value": "SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00001b8a",
+    "va": "0x10001b8a",
+    "encoding": "ascii",
+    "value": "u WPS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00001bb3",
+    "va": "0x10001bb3",
+    "encoding": "ascii",
+    "value": "u&WVS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000201c",
+    "va": "0x1000201c",
+    "encoding": "ascii",
+    "value": ", <Xw"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002254",
+    "va": "0x10002254",
+    "encoding": "ascii",
+    "value": "HHt@HHt"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002301",
+    "va": "0x10002301",
+    "encoding": "ascii",
+    "value": "HHt]+"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000267c",
+    "va": "0x1000267c",
+    "encoding": "ascii",
+    "value": "2If90t"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000027f0",
+    "va": "0x100027f0",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002ba8",
+    "va": "0x10002ba8",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002bdf",
+    "va": "0x10002bdf",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002c44",
+    "va": "0x10002c44",
+    "encoding": "ascii",
+    "value": "YYuTVWh"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00002dee",
+    "va": "0x10002dee",
+    "encoding": "ascii",
+    "value": "QQSV3"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000030a0",
+    "va": "0x100030a0",
+    "encoding": "ascii",
+    "value": "YYt:V"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000033ce",
+    "va": "0x100033ce",
+    "encoding": "ascii",
+    "value": "YYt4V"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000353b",
+    "va": "0x1000353b",
+    "encoding": "ascii",
+    "value": "YYu-9D$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003593",
+    "va": "0x10003593",
+    "encoding": "ascii",
+    "value": "j8j ^V"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003617",
+    "va": "0x10003617",
+    "encoding": "ascii",
+    "value": "Rj8j "
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003863",
+    "va": "0x10003863",
+    "encoding": "ascii",
+    "value": ">=Yt/j"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003876",
+    "va": "0x10003876",
+    "encoding": "ascii",
+    "value": "tJVUP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003887",
+    "va": "0x10003887",
+    "encoding": "ascii",
+    "value": "SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000038bc",
+    "va": "0x100038bc",
+    "encoding": "ascii",
+    "value": "Y]_^["
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000039fc",
+    "va": "0x100039fc",
+    "encoding": "ascii",
+    "value": "< tK<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003bb1",
+    "va": "0x10003bb1",
+    "encoding": "ascii",
+    "value": "@PVSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003bcf",
+    "va": "0x10003bcf",
+    "encoding": "ascii",
+    "value": "t#SSUP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003bd6",
+    "va": "0x10003bd6",
+    "encoding": "ascii",
+    "value": "t$$VSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003c57",
+    "va": "0x10003c57",
+    "encoding": "ascii",
+    "value": "_^][YY"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003cc2",
+    "va": "0x10003cc2",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003cdd",
+    "va": "0x10003cdd",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003f9f",
+    "va": "0x10003f9f",
+    "encoding": "ascii",
+    "value": "Y__^["
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00003fb5",
+    "va": "0x10003fb5",
+    "encoding": "ascii",
+    "value": "\\$ UV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000040d5",
+    "va": "0x100040d5",
+    "encoding": "ascii",
+    "value": "D$,9h"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000042b6",
+    "va": "0x100042b6",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000042f7",
+    "va": "0x100042f7",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000043c2",
+    "va": "0x100043c2",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000442f",
+    "va": "0x1000442f",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000498b",
+    "va": "0x1000498b",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00004a87",
+    "va": "0x10004a87",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00004c6b",
+    "va": "0x10004c6b",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000511a",
+    "va": "0x1000511a",
+    "encoding": "ascii",
+    "value": "0A@@Ju"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005368",
+    "va": "0x10005368",
+    "encoding": "ascii",
+    "value": "t^9(uZ"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000053d0",
+    "va": "0x100053d0",
+    "encoding": "ascii",
+    "value": "tD9(u@"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000547f",
+    "va": "0x1000547f",
+    "encoding": "ascii",
+    "value": "Y_^]["
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000574a",
+    "va": "0x1000574a",
+    "encoding": "ascii",
+    "value": "^SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000057c2",
+    "va": "0x100057c2",
+    "encoding": "ascii",
+    "value": "j\"^SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000580c",
+    "va": "0x1000580c",
+    "encoding": "ascii",
+    "value": "QSWVj"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005a62",
+    "va": "0x10005a62",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005aa6",
+    "va": "0x10005aa6",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005abc",
+    "va": "0x10005abc",
+    "encoding": "ascii",
+    "value": "<Yv8V"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005ae9",
+    "va": "0x10005ae9",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005b0d",
+    "va": "0x10005b0d",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005b2f",
+    "va": "0x10005b2f",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005b84",
+    "va": "0x10005b84",
+    "encoding": "ascii",
+    "value": "]_^[Y"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005d6a",
+    "va": "0x10005d6a",
+    "encoding": "ascii",
+    "value": "QSUVW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00005e1d",
+    "va": "0x10005e1d",
+    "encoding": "ascii",
+    "value": "_^][Y"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00006103",
+    "va": "0x10006103",
+    "encoding": "ascii",
+    "value": "PPPPP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000628e",
+    "va": "0x1000628e",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007018",
+    "va": "0x10007018",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000070b1",
+    "va": "0x100070b1",
+    "encoding": "ascii",
+    "value": "uL9=D"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007179",
+    "va": "0x10007179",
+    "encoding": "ascii",
+    "value": "wIVSP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007340",
+    "va": "0x10007340",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007767",
+    "va": "0x10007767",
+    "encoding": "ascii",
+    "value": "URPQQh"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000078b4",
+    "va": "0x100078b4",
+    "encoding": "ascii",
+    "value": "VW|[;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007981",
+    "va": "0x10007981",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007d0f",
+    "va": "0x10007d0f",
+    "encoding": "ascii",
+    "value": "~,WPV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007ea9",
+    "va": "0x10007ea9",
+    "encoding": "ascii",
+    "value": "u8SS3"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00007f41",
+    "va": "0x10007f41",
+    "encoding": "ascii",
+    "value": "9]$SS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000082fc",
+    "va": "0x100082fc",
+    "encoding": "ascii",
+    "value": "9] SS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000086e0",
+    "va": "0x100086e0",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008746",
+    "va": "0x10008746",
+    "encoding": "ascii",
+    "value": "PPPPPPPP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000087ba",
+    "va": "0x100087ba",
+    "encoding": "ascii",
+    "value": "0SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008846",
+    "va": "0x10008846",
+    "encoding": "ascii",
+    "value": "PPPPPPPP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000089ad",
+    "va": "0x100089ad",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008c6e",
+    "va": "0x10008c6e",
+    "encoding": "ascii",
+    "value": "SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008d0d",
+    "va": "0x10008d0d",
+    "encoding": "ascii",
+    "value": "SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008dc2",
+    "va": "0x10008dc2",
+    "encoding": "ascii",
+    "value": "VVVVV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00008e01",
+    "va": "0x10008e01",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00009443",
+    "va": "0x10009443",
+    "encoding": "ascii",
+    "value": "SVWUj"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000094e4",
+    "va": "0x100094e4",
+    "encoding": "ascii",
+    "value": ";t$,v-"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00009569",
+    "va": "0x10009569",
+    "encoding": "ascii",
+    "value": "UQPXY]Y["
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000095d8",
+    "va": "0x100095d8",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00009660",
+    "va": "0x10009660",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000096f1",
+    "va": "0x100096f1",
+    "encoding": "ascii",
+    "value": "SSSSS"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000991d",
+    "va": "0x1000991d",
+    "encoding": "ascii",
+    "value": "WWWWV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00009940",
+    "va": "0x10009940",
+    "encoding": "ascii",
+    "value": "t+WWVPV"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00009c23",
+    "va": "0x10009c23",
+    "encoding": "ascii",
+    "value": "WWWWW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a19c",
+    "va": "0x1000a19c",
+    "encoding": "ascii",
+    "value": "NxCooking.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a1ac",
+    "va": "0x1000a1ac",
+    "encoding": "ascii",
+    "value": "PhysXCooking.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a1c0",
+    "va": "0x1000a1c0",
+    "encoding": "ascii",
+    "value": "PhysXCore.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a1e7",
+    "va": "0x1000a1e7",
+    "encoding": "ascii",
+    "value": "?\\v%s.%s.%s\\"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a1f4",
+    "va": "0x1000a1f4",
+    "encoding": "ascii",
+    "value": "PhysXCore Path"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a204",
+    "va": "0x1000a204",
+    "encoding": "ascii",
+    "value": "Software\\Ageia Technologies"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a220",
+    "va": "0x1000a220",
+    "encoding": "ascii",
+    "value": "Software\\NVIDIA Corporation\\PhysX\\Runtimes"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a24c",
+    "va": "0x1000a24c",
+    "encoding": "ascii",
+    "value": "NpCreatePhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a260",
+    "va": "0x1000a260",
+    "encoding": "ascii",
+    "value": "NpReleasePhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a274",
+    "va": "0x1000a274",
+    "encoding": "ascii",
+    "value": "NpGetPhysicsSDKAllocator"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a290",
+    "va": "0x1000a290",
+    "encoding": "ascii",
+    "value": "NpGetFoundationSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a2a4",
+    "va": "0x1000a2a4",
+    "encoding": "ascii",
+    "value": "NpGetPhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a2b4",
+    "va": "0x1000a2b4",
+    "encoding": "ascii",
+    "value": "NpGetUtilLib"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a2c4",
+    "va": "0x1000a2c4",
+    "encoding": "ascii",
+    "value": "NxGetCookingInterface"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a2dc",
+    "va": "0x1000a2dc",
+    "encoding": "ascii",
+    "value": "enableLocalPhysXCore"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a2f4",
+    "va": "0x1000a2f4",
+    "encoding": "ascii",
+    "value": "Software\\AGEIA Technologies\\"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a328",
+    "va": "0x1000a328",
+    "encoding": "ascii",
+    "value": "(null)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a351",
+    "va": "0x1000a351",
+    "encoding": "ascii",
+    "value": "( 8PX"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a359",
+    "va": "0x1000a359",
+    "encoding": "ascii",
+    "value": "700WP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a369",
+    "va": "0x1000a369",
+    "encoding": "ascii",
+    "value": "`h````"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a371",
+    "va": "0x1000a371",
+    "encoding": "ascii",
+    "value": "xpxxxx"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a394",
+    "va": "0x1000a394",
+    "encoding": "ascii",
+    "value": "CorExitProcess"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3a4",
+    "va": "0x1000a3a4",
+    "encoding": "ascii",
+    "value": "mscoree.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3b0",
+    "va": "0x1000a3b0",
+    "encoding": "ascii",
+    "value": ".mixcrt"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3b8",
+    "va": "0x1000a3b8",
+    "encoding": "ascii",
+    "value": "EncodePointer"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3c8",
+    "va": "0x1000a3c8",
+    "encoding": "ascii",
+    "value": "KERNEL32.DLL"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3d8",
+    "va": "0x1000a3d8",
+    "encoding": "ascii",
+    "value": "DecodePointer"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3e8",
+    "va": "0x1000a3e8",
+    "encoding": "ascii",
+    "value": "FlsFree"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3f0",
+    "va": "0x1000a3f0",
+    "encoding": "ascii",
+    "value": "FlsSetValue"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a3fc",
+    "va": "0x1000a3fc",
+    "encoding": "ascii",
+    "value": "FlsGetValue"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a408",
+    "va": "0x1000a408",
+    "encoding": "ascii",
+    "value": "FlsAlloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a437",
+    "va": "0x1000a437",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a4bd",
+    "va": "0x1000a4bd",
+    "encoding": "ascii",
+    "value": "('8PW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a4c6",
+    "va": "0x1000a4c6",
+    "encoding": "ascii",
+    "value": "700PP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a4d8",
+    "va": "0x1000a4d8",
+    "encoding": "ascii",
+    "value": "`h`hhh"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a4e1",
+    "va": "0x1000a4e1",
+    "encoding": "ascii",
+    "value": "xppwpp"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a4f4",
+    "va": "0x1000a4f4",
+    "encoding": "ascii",
+    "value": "runtime error "
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a508",
+    "va": "0x1000a508",
+    "encoding": "ascii",
+    "value": "TLOSS error"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a518",
+    "va": "0x1000a518",
+    "encoding": "ascii",
+    "value": "SING error"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a528",
+    "va": "0x1000a528",
+    "encoding": "ascii",
+    "value": "DOMAIN error"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a538",
+    "va": "0x1000a538",
+    "encoding": "ascii",
+    "value": "R6034"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a53f",
+    "va": "0x1000a53f",
+    "encoding": "ascii",
+    "value": "An application has made an attempt to load the C runtime library incorrectly."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a58d",
+    "va": "0x1000a58d",
+    "encoding": "ascii",
+    "value": "Please contact the application's support team for more information."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a5d8",
+    "va": "0x1000a5d8",
+    "encoding": "ascii",
+    "value": "R6033"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a5df",
+    "va": "0x1000a5df",
+    "encoding": "ascii",
+    "value": "- Attempt to use MSIL code from this assembly during native code initialization"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a62f",
+    "va": "0x1000a62f",
+    "encoding": "ascii",
+    "value": "This indicates a bug in your application. It is most likely the result of calling an MSIL-compiled (/clr) function from a native constructor or from DllMain."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a6d0",
+    "va": "0x1000a6d0",
+    "encoding": "ascii",
+    "value": "R6032"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a6d7",
+    "va": "0x1000a6d7",
+    "encoding": "ascii",
+    "value": "- not enough space for locale information"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a708",
+    "va": "0x1000a708",
+    "encoding": "ascii",
+    "value": "R6031"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a70f",
+    "va": "0x1000a70f",
+    "encoding": "ascii",
+    "value": "- Attempt to initialize the CRT more than once."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a73f",
+    "va": "0x1000a73f",
+    "encoding": "ascii",
+    "value": "This indicates a bug in your application."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a76c",
+    "va": "0x1000a76c",
+    "encoding": "ascii",
+    "value": "R6030"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a773",
+    "va": "0x1000a773",
+    "encoding": "ascii",
+    "value": "- CRT not initialized"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a78c",
+    "va": "0x1000a78c",
+    "encoding": "ascii",
+    "value": "R6028"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a793",
+    "va": "0x1000a793",
+    "encoding": "ascii",
+    "value": "- unable to initialize heap"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a7b4",
+    "va": "0x1000a7b4",
+    "encoding": "ascii",
+    "value": "R6027"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a7bb",
+    "va": "0x1000a7bb",
+    "encoding": "ascii",
+    "value": "- not enough space for lowio initialization"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a7ec",
+    "va": "0x1000a7ec",
+    "encoding": "ascii",
+    "value": "R6026"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a7f3",
+    "va": "0x1000a7f3",
+    "encoding": "ascii",
+    "value": "- not enough space for stdio initialization"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a824",
+    "va": "0x1000a824",
+    "encoding": "ascii",
+    "value": "R6025"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a82b",
+    "va": "0x1000a82b",
+    "encoding": "ascii",
+    "value": "- pure virtual function call"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a84c",
+    "va": "0x1000a84c",
+    "encoding": "ascii",
+    "value": "R6024"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a853",
+    "va": "0x1000a853",
+    "encoding": "ascii",
+    "value": "- not enough space for _onexit/atexit table"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a884",
+    "va": "0x1000a884",
+    "encoding": "ascii",
+    "value": "R6019"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a88b",
+    "va": "0x1000a88b",
+    "encoding": "ascii",
+    "value": "- unable to open console device"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a8b0",
+    "va": "0x1000a8b0",
+    "encoding": "ascii",
+    "value": "R6018"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a8b7",
+    "va": "0x1000a8b7",
+    "encoding": "ascii",
+    "value": "- unexpected heap error"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a8d4",
+    "va": "0x1000a8d4",
+    "encoding": "ascii",
+    "value": "R6017"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a8db",
+    "va": "0x1000a8db",
+    "encoding": "ascii",
+    "value": "- unexpected multithread lock error"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a904",
+    "va": "0x1000a904",
+    "encoding": "ascii",
+    "value": "R6016"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a90b",
+    "va": "0x1000a90b",
+    "encoding": "ascii",
+    "value": "- not enough space for thread data"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a932",
+    "va": "0x1000a932",
+    "encoding": "ascii",
+    "value": "This application has requested the Runtime to terminate it in an unusual way."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a980",
+    "va": "0x1000a980",
+    "encoding": "ascii",
+    "value": "Please contact the application's support team for more information."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a9c8",
+    "va": "0x1000a9c8",
+    "encoding": "ascii",
+    "value": "R6009"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a9cf",
+    "va": "0x1000a9cf",
+    "encoding": "ascii",
+    "value": "- not enough space for environment"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a9f4",
+    "va": "0x1000a9f4",
+    "encoding": "ascii",
+    "value": "R6008"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a9fb",
+    "va": "0x1000a9fb",
+    "encoding": "ascii",
+    "value": "- not enough space for arguments"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aa20",
+    "va": "0x1000aa20",
+    "encoding": "ascii",
+    "value": "R6002"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aa27",
+    "va": "0x1000aa27",
+    "encoding": "ascii",
+    "value": "- floating point support not loaded"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aa50",
+    "va": "0x1000aa50",
+    "encoding": "ascii",
+    "value": "Microsoft Visual C++ Runtime Library"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aa80",
+    "va": "0x1000aa80",
+    "encoding": "ascii",
+    "value": "<program name unknown>"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aa98",
+    "va": "0x1000aa98",
+    "encoding": "ascii",
+    "value": "Runtime Error!"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aaa8",
+    "va": "0x1000aaa8",
+    "encoding": "ascii",
+    "value": "Program: "
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aab4",
+    "va": "0x1000aab4",
+    "encoding": "ascii",
+    "value": "InitializeCriticalSectionAndSpinCount"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aadc",
+    "va": "0x1000aadc",
+    "encoding": "ascii",
+    "value": "kernel32.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b098",
+    "va": "0x1000b098",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b218",
+    "va": "0x1000b218",
+    "encoding": "ascii",
+    "value": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b2f8",
+    "va": "0x1000b2f8",
+    "encoding": "ascii",
+    "value": "HH:mm:ss"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b304",
+    "va": "0x1000b304",
+    "encoding": "ascii",
+    "value": "dddd, MMMM dd, yyyy"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b318",
+    "va": "0x1000b318",
+    "encoding": "ascii",
+    "value": "MM/dd/yy"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b32c",
+    "va": "0x1000b32c",
+    "encoding": "ascii",
+    "value": "December"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b338",
+    "va": "0x1000b338",
+    "encoding": "ascii",
+    "value": "November"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b344",
+    "va": "0x1000b344",
+    "encoding": "ascii",
+    "value": "October"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b34c",
+    "va": "0x1000b34c",
+    "encoding": "ascii",
+    "value": "September"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b358",
+    "va": "0x1000b358",
+    "encoding": "ascii",
+    "value": "August"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b370",
+    "va": "0x1000b370",
+    "encoding": "ascii",
+    "value": "April"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b378",
+    "va": "0x1000b378",
+    "encoding": "ascii",
+    "value": "March"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b380",
+    "va": "0x1000b380",
+    "encoding": "ascii",
+    "value": "February"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b38c",
+    "va": "0x1000b38c",
+    "encoding": "ascii",
+    "value": "January"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3c4",
+    "va": "0x1000b3c4",
+    "encoding": "ascii",
+    "value": "Saturday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3d0",
+    "va": "0x1000b3d0",
+    "encoding": "ascii",
+    "value": "Friday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3d8",
+    "va": "0x1000b3d8",
+    "encoding": "ascii",
+    "value": "Thursday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3e4",
+    "va": "0x1000b3e4",
+    "encoding": "ascii",
+    "value": "Wednesday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3f0",
+    "va": "0x1000b3f0",
+    "encoding": "ascii",
+    "value": "Tuesday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b3f8",
+    "va": "0x1000b3f8",
+    "encoding": "ascii",
+    "value": "Monday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b400",
+    "va": "0x1000b400",
+    "encoding": "ascii",
+    "value": "Sunday"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b424",
+    "va": "0x1000b424",
+    "encoding": "ascii",
+    "value": "GetProcessWindowStation"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b43c",
+    "va": "0x1000b43c",
+    "encoding": "ascii",
+    "value": "GetUserObjectInformationA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b458",
+    "va": "0x1000b458",
+    "encoding": "ascii",
+    "value": "GetLastActivePopup"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b46c",
+    "va": "0x1000b46c",
+    "encoding": "ascii",
+    "value": "GetActiveWindow"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b47c",
+    "va": "0x1000b47c",
+    "encoding": "ascii",
+    "value": "MessageBoxA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b488",
+    "va": "0x1000b488",
+    "encoding": "ascii",
+    "value": "USER32.DLL"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b494",
+    "va": "0x1000b494",
+    "encoding": "ascii",
+    "value": "CONOUT$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b49c",
+    "va": "0x1000b49c",
+    "encoding": "ascii",
+    "value": "SunMonTueWedThuFriSat"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b4b4",
+    "va": "0x1000b4b4",
+    "encoding": "ascii",
+    "value": "JanFebMarAprMayJunJulAugSepOctNovDec"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000b540",
+    "va": "0x1000b540",
+    "encoding": "ascii",
+    "value": "D:\\sw\\physx\\PhysXSDK\\2.8.3\\trunk\\bin\\win32\\PhysXLoader.pdb"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bab6",
+    "va": "0x1000bab6",
+    "encoding": "ascii",
+    "value": "GetAdaptersInfo"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bac6",
+    "va": "0x1000bac6",
+    "encoding": "ascii",
+    "value": "iphlpapi.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bad6",
+    "va": "0x1000bad6",
+    "encoding": "ascii",
+    "value": "LoadLibraryA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bae6",
+    "va": "0x1000bae6",
+    "encoding": "ascii",
+    "value": "GetProcAddress"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000baf8",
+    "va": "0x1000baf8",
+    "encoding": "ascii",
+    "value": "FreeLibrary"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb04",
+    "va": "0x1000bb04",
+    "encoding": "ascii",
+    "value": "KERNEL32.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb14",
+    "va": "0x1000bb14",
+    "encoding": "ascii",
+    "value": "RegCloseKey"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb22",
+    "va": "0x1000bb22",
+    "encoding": "ascii",
+    "value": "RegQueryValueExA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb36",
+    "va": "0x1000bb36",
+    "encoding": "ascii",
+    "value": "RegOpenKeyExA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb44",
+    "va": "0x1000bb44",
+    "encoding": "ascii",
+    "value": "ADVAPI32.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb54",
+    "va": "0x1000bb54",
+    "encoding": "ascii",
+    "value": "GetCurrentThreadId"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb6a",
+    "va": "0x1000bb6a",
+    "encoding": "ascii",
+    "value": "GetCommandLineA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb7c",
+    "va": "0x1000bb7c",
+    "encoding": "ascii",
+    "value": "HeapFree"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb88",
+    "va": "0x1000bb88",
+    "encoding": "ascii",
+    "value": "GetVersionExA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bb98",
+    "va": "0x1000bb98",
+    "encoding": "ascii",
+    "value": "HeapAlloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bba4",
+    "va": "0x1000bba4",
+    "encoding": "ascii",
+    "value": "GetProcessHeap"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bbb6",
+    "va": "0x1000bbb6",
+    "encoding": "ascii",
+    "value": "TerminateProcess"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bbca",
+    "va": "0x1000bbca",
+    "encoding": "ascii",
+    "value": "GetCurrentProcess"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bbde",
+    "va": "0x1000bbde",
+    "encoding": "ascii",
+    "value": "UnhandledExceptionFilter"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bbfa",
+    "va": "0x1000bbfa",
+    "encoding": "ascii",
+    "value": "SetUnhandledExceptionFilter"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc18",
+    "va": "0x1000bc18",
+    "encoding": "ascii",
+    "value": "IsDebuggerPresent"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc2c",
+    "va": "0x1000bc2c",
+    "encoding": "ascii",
+    "value": "GetModuleHandleA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc40",
+    "va": "0x1000bc40",
+    "encoding": "ascii",
+    "value": "ExitProcess"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc4e",
+    "va": "0x1000bc4e",
+    "encoding": "ascii",
+    "value": "TlsGetValue"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc5c",
+    "va": "0x1000bc5c",
+    "encoding": "ascii",
+    "value": "TlsAlloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc68",
+    "va": "0x1000bc68",
+    "encoding": "ascii",
+    "value": "TlsSetValue"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc76",
+    "va": "0x1000bc76",
+    "encoding": "ascii",
+    "value": "TlsFree"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc80",
+    "va": "0x1000bc80",
+    "encoding": "ascii",
+    "value": "InterlockedIncrement"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bc98",
+    "va": "0x1000bc98",
+    "encoding": "ascii",
+    "value": "SetLastError"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bca8",
+    "va": "0x1000bca8",
+    "encoding": "ascii",
+    "value": "GetLastError"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bcb8",
+    "va": "0x1000bcb8",
+    "encoding": "ascii",
+    "value": "InterlockedDecrement"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bcd0",
+    "va": "0x1000bcd0",
+    "encoding": "ascii",
+    "value": "Sleep"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bcd8",
+    "va": "0x1000bcd8",
+    "encoding": "ascii",
+    "value": "SetHandleCount"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bcea",
+    "va": "0x1000bcea",
+    "encoding": "ascii",
+    "value": "GetStdHandle"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bcfa",
+    "va": "0x1000bcfa",
+    "encoding": "ascii",
+    "value": "GetFileType"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd08",
+    "va": "0x1000bd08",
+    "encoding": "ascii",
+    "value": "GetStartupInfoA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd1a",
+    "va": "0x1000bd1a",
+    "encoding": "ascii",
+    "value": "DeleteCriticalSection"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd32",
+    "va": "0x1000bd32",
+    "encoding": "ascii",
+    "value": "GetModuleFileNameA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd48",
+    "va": "0x1000bd48",
+    "encoding": "ascii",
+    "value": "FreeEnvironmentStringsA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd62",
+    "va": "0x1000bd62",
+    "encoding": "ascii",
+    "value": "GetEnvironmentStrings"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd7a",
+    "va": "0x1000bd7a",
+    "encoding": "ascii",
+    "value": "FreeEnvironmentStringsW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bd94",
+    "va": "0x1000bd94",
+    "encoding": "ascii",
+    "value": "WideCharToMultiByte"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bdaa",
+    "va": "0x1000bdaa",
+    "encoding": "ascii",
+    "value": "GetEnvironmentStringsW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bdc4",
+    "va": "0x1000bdc4",
+    "encoding": "ascii",
+    "value": "HeapDestroy"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bdd2",
+    "va": "0x1000bdd2",
+    "encoding": "ascii",
+    "value": "HeapCreate"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bde0",
+    "va": "0x1000bde0",
+    "encoding": "ascii",
+    "value": "VirtualFree"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bdee",
+    "va": "0x1000bdee",
+    "encoding": "ascii",
+    "value": "QueryPerformanceCounter"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be08",
+    "va": "0x1000be08",
+    "encoding": "ascii",
+    "value": "GetTickCount"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be18",
+    "va": "0x1000be18",
+    "encoding": "ascii",
+    "value": "GetCurrentProcessId"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be2e",
+    "va": "0x1000be2e",
+    "encoding": "ascii",
+    "value": "GetSystemTimeAsFileTime"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be48",
+    "va": "0x1000be48",
+    "encoding": "ascii",
+    "value": "SetFilePointer"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be5a",
+    "va": "0x1000be5a",
+    "encoding": "ascii",
+    "value": "WriteFile"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be66",
+    "va": "0x1000be66",
+    "encoding": "ascii",
+    "value": "GetConsoleCP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be76",
+    "va": "0x1000be76",
+    "encoding": "ascii",
+    "value": "GetConsoleMode"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000be88",
+    "va": "0x1000be88",
+    "encoding": "ascii",
+    "value": "EnterCriticalSection"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bea0",
+    "va": "0x1000bea0",
+    "encoding": "ascii",
+    "value": "LeaveCriticalSection"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000beb8",
+    "va": "0x1000beb8",
+    "encoding": "ascii",
+    "value": "GetCPInfo"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bec4",
+    "va": "0x1000bec4",
+    "encoding": "ascii",
+    "value": "GetACP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bece",
+    "va": "0x1000bece",
+    "encoding": "ascii",
+    "value": "GetOEMCP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000beda",
+    "va": "0x1000beda",
+    "encoding": "ascii",
+    "value": "IsValidCodePage"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000beec",
+    "va": "0x1000beec",
+    "encoding": "ascii",
+    "value": "InitializeCriticalSection"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf08",
+    "va": "0x1000bf08",
+    "encoding": "ascii",
+    "value": "VirtualAlloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf18",
+    "va": "0x1000bf18",
+    "encoding": "ascii",
+    "value": "HeapReAlloc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf26",
+    "va": "0x1000bf26",
+    "encoding": "ascii",
+    "value": "RtlUnwind"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf32",
+    "va": "0x1000bf32",
+    "encoding": "ascii",
+    "value": "SetStdHandle"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf42",
+    "va": "0x1000bf42",
+    "encoding": "ascii",
+    "value": "WriteConsoleA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf52",
+    "va": "0x1000bf52",
+    "encoding": "ascii",
+    "value": "GetConsoleOutputCP"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf68",
+    "va": "0x1000bf68",
+    "encoding": "ascii",
+    "value": "WriteConsoleW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf78",
+    "va": "0x1000bf78",
+    "encoding": "ascii",
+    "value": "MultiByteToWideChar"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf8e",
+    "va": "0x1000bf8e",
+    "encoding": "ascii",
+    "value": "LCMapStringA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bf9e",
+    "va": "0x1000bf9e",
+    "encoding": "ascii",
+    "value": "LCMapStringW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bfae",
+    "va": "0x1000bfae",
+    "encoding": "ascii",
+    "value": "GetStringTypeA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bfc0",
+    "va": "0x1000bfc0",
+    "encoding": "ascii",
+    "value": "GetStringTypeW"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bfd2",
+    "va": "0x1000bfd2",
+    "encoding": "ascii",
+    "value": "GetLocaleInfoA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bfe4",
+    "va": "0x1000bfe4",
+    "encoding": "ascii",
+    "value": "HeapSize"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bff0",
+    "va": "0x1000bff0",
+    "encoding": "ascii",
+    "value": "CreateFileA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000bffe",
+    "va": "0x1000bffe",
+    "encoding": "ascii",
+    "value": "CloseHandle"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c00c",
+    "va": "0x1000c00c",
+    "encoding": "ascii",
+    "value": "FlushFileBuffers"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c0a2",
+    "va": "0x1000c0a2",
+    "encoding": "ascii",
+    "value": "PhysXLoader.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c0b2",
+    "va": "0x1000c0b2",
+    "encoding": "ascii",
+    "value": "NxCreatePhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c0c5",
+    "va": "0x1000c0c5",
+    "encoding": "ascii",
+    "value": "NxCreatePhysicsSDKWithID"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c0de",
+    "va": "0x1000c0de",
+    "encoding": "ascii",
+    "value": "NxGetCookingLib"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c0ee",
+    "va": "0x1000c0ee",
+    "encoding": "ascii",
+    "value": "NxGetCookingLibWithID"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c104",
+    "va": "0x1000c104",
+    "encoding": "ascii",
+    "value": "NxGetFoundationSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c117",
+    "va": "0x1000c117",
+    "encoding": "ascii",
+    "value": "NxGetPhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c127",
+    "va": "0x1000c127",
+    "encoding": "ascii",
+    "value": "NxGetPhysicsSDKAllocator"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c140",
+    "va": "0x1000c140",
+    "encoding": "ascii",
+    "value": "NxGetUtilLib"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000c14d",
+    "va": "0x1000c14d",
+    "encoding": "ascii",
+    "value": "NxReleasePhysicsSDK"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d56e",
+    "va": "0x1000d56e",
+    "encoding": "ascii",
+    "value": "                          "
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d64e",
+    "va": "0x1000d64e",
+    "encoding": "ascii",
+    "value": "abcdefghijklmnopqrstuvwxyz"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d66e",
+    "va": "0x1000d66e",
+    "encoding": "ascii",
+    "value": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d772",
+    "va": "0x1000d772",
+    "encoding": "ascii",
+    "value": "                          "
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d859",
+    "va": "0x1000d859",
+    "encoding": "ascii",
+    "value": "abcdefghijklmnopqrstuvwxyz"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000d879",
+    "va": "0x1000d879",
+    "encoding": "ascii",
+    "value": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e40c",
+    "va": "0x1001040c",
+    "encoding": "ascii",
+    "value": "<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e457",
+    "va": "0x10010457",
+    "encoding": "ascii",
+    "value": "</assembly>PAPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPAD"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f01b",
+    "va": "0x1001101b",
+    "encoding": "ascii",
+    "value": "141<1Z1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f029",
+    "va": "0x10011029",
+    "encoding": "ascii",
+    "value": "252=2B2Z2a2s2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f04b",
+    "va": "0x1001104b",
+    "encoding": "ascii",
+    "value": "4$474?4I4V4\\4h4"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f06f",
+    "va": "0x1001106f",
+    "encoding": "ascii",
+    "value": "5$5+565<5f5m5"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f08d",
+    "va": "0x1001108d",
+    "encoding": "ascii",
+    "value": "8P9a9w9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f0a5",
+    "va": "0x100110a5",
+    "encoding": "ascii",
+    "value": ":!:U:m:y:"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f0b7",
+    "va": "0x100110b7",
+    "encoding": "ascii",
+    "value": ";3;K;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f0bf",
+    "va": "0x100110bf",
+    "encoding": "ascii",
+    "value": ";+=2="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f0e0",
+    "va": "0x100110e0",
+    "encoding": "ascii",
+    "value": "(0;0S0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f0f1",
+    "va": "0x100110f1",
+    "encoding": "ascii",
+    "value": "6\"8&8*8.82868:8>8G8[8"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f10b",
+    "va": "0x1001110b",
+    "encoding": "ascii",
+    "value": "9'9.9M9u9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f127",
+    "va": "0x10011127",
+    "encoding": "ascii",
+    "value": ":!:(:/:6:=:D:L:T:\\:h:q:v:|:"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f15d",
+    "va": "0x1001115d",
+    "encoding": "ascii",
+    "value": ";#;*;I;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f16d",
+    "va": "0x1001116d",
+    "encoding": "ascii",
+    "value": "<)<4<9<K<U<\\<v<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f18b",
+    "va": "0x1001118b",
+    "encoding": "ascii",
+    "value": "< =%=0=5=S="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f19b",
+    "va": "0x1001119b",
+    "encoding": "ascii",
+    "value": ">.>Z>`>k>w>"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f1bb",
+    "va": "0x100111bb",
+    "encoding": "ascii",
+    "value": "?$?>?H?N?Z?i?o?x?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f1ed",
+    "va": "0x100111ed",
+    "encoding": "ascii",
+    "value": "0#0-0H0w0}0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f20b",
+    "va": "0x1001120b",
+    "encoding": "ascii",
+    "value": "1%282>2J2P2_2e2y2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f245",
+    "va": "0x10011245",
+    "encoding": "ascii",
+    "value": "3\"3'3-353A3W3b3g3r3w3"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f26d",
+    "va": "0x1001126d",
+    "encoding": "ascii",
+    "value": "4%4t4z4"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f281",
+    "va": "0x10011281",
+    "encoding": "ascii",
+    "value": "5G5P5\\5t5"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f291",
+    "va": "0x10011291",
+    "encoding": "ascii",
+    "value": "5*626l6v6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f29f",
+    "va": "0x1001129f",
+    "encoding": "ascii",
+    "value": "6(7:7"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f2b1",
+    "va": "0x100112b1",
+    "encoding": "ascii",
+    "value": "8J8R8"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f2cf",
+    "va": "0x100112cf",
+    "encoding": "ascii",
+    "value": ";,;6;O;[;g;n;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f2e1",
+    "va": "0x100112e1",
+    "encoding": "ascii",
+    "value": "<:<Q<a<f<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f2f1",
+    "va": "0x100112f1",
+    "encoding": "ascii",
+    "value": "=-=D=J=P=`=j=s=|="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f313",
+    "va": "0x10011313",
+    "encoding": "ascii",
+    "value": "=b>h>"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f31b",
+    "va": "0x1001131b",
+    "encoding": "ascii",
+    "value": ">Q?n?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f333",
+    "va": "0x10011333",
+    "encoding": "ascii",
+    "value": "001M1p1}1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f349",
+    "va": "0x10011349",
+    "encoding": "ascii",
+    "value": "2)2H2`2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f365",
+    "va": "0x10011365",
+    "encoding": "ascii",
+    "value": "788_8r8"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f36f",
+    "va": "0x1001136f",
+    "encoding": "ascii",
+    "value": "8?9s9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f38b",
+    "va": "0x1001138b",
+    "encoding": "ascii",
+    "value": ";);5;J;f;x;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f3a3",
+    "va": "0x100113a3",
+    "encoding": "ascii",
+    "value": "<,<V<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f3bd",
+    "va": "0x100113bd",
+    "encoding": "ascii",
+    "value": "?Q?Y?c?|?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f3e9",
+    "va": "0x100113e9",
+    "encoding": "ascii",
+    "value": "2$262Q2Y2a2x2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f405",
+    "va": "0x10011405",
+    "encoding": "ascii",
+    "value": "3)3:3Z3"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f41d",
+    "va": "0x1001141d",
+    "encoding": "ascii",
+    "value": "5%6Q6k6v6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f427",
+    "va": "0x10011427",
+    "encoding": "ascii",
+    "value": "8=8g9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f42f",
+    "va": "0x1001142f",
+    "encoding": "ascii",
+    "value": "9.:F:Q:u:~:"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f445",
+    "va": "0x10011445",
+    "encoding": "ascii",
+    "value": ";B;U;n;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f45b",
+    "va": "0x1001145b",
+    "encoding": "ascii",
+    "value": "<8<?<X<j<p<y<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f46b",
+    "va": "0x1001146b",
+    "encoding": "ascii",
+    "value": "<C=c=q=|="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f477",
+    "va": "0x10011477",
+    "encoding": "ascii",
+    "value": ">;>@>U>&?+?=?[?o?u?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f495",
+    "va": "0x10011495",
+    "encoding": "ascii",
+    "value": "0 0*0/04090D0t0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f4af",
+    "va": "0x100114af",
+    "encoding": "ascii",
+    "value": "1$1+101"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f4bb",
+    "va": "0x100114bb",
+    "encoding": "ascii",
+    "value": "142>2H2S2`2p2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f4d5",
+    "va": "0x100114d5",
+    "encoding": "ascii",
+    "value": "3'3.3"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f4e9",
+    "va": "0x100114e9",
+    "encoding": "ascii",
+    "value": "4\"4'4h6v6|6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f50d",
+    "va": "0x1001150d",
+    "encoding": "ascii",
+    "value": "72787C7H7P7V7`7g7{7"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f53d",
+    "va": "0x1001153d",
+    "encoding": "ascii",
+    "value": "<:<`<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f54f",
+    "va": "0x1001154f",
+    "encoding": "ascii",
+    "value": ">7?A?b?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f56f",
+    "va": "0x1001156f",
+    "encoding": "ascii",
+    "value": "1=1u1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f577",
+    "va": "0x10011577",
+    "encoding": "ascii",
+    "value": "172=2a2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f589",
+    "va": "0x10011589",
+    "encoding": "ascii",
+    "value": "4O4h4o4w4|4"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f5ad",
+    "va": "0x100115ad",
+    "encoding": "ascii",
+    "value": "5^5d5h5l5p5"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f5c5",
+    "va": "0x100115c5",
+    "encoding": "ascii",
+    "value": "616[6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f5e5",
+    "va": "0x100115e5",
+    "encoding": "ascii",
+    "value": "7m7y7"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f5f3",
+    "va": "0x100115f3",
+    "encoding": "ascii",
+    "value": "9U9i9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f5fd",
+    "va": "0x100115fd",
+    "encoding": "ascii",
+    "value": ":\":O:Z:f:t:|:"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f61f",
+    "va": "0x1001161f",
+    "encoding": "ascii",
+    "value": ";&<N<o<{<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f679",
+    "va": "0x10011679",
+    "encoding": "ascii",
+    "value": "6*6G6Y6k6}6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f689",
+    "va": "0x10011689",
+    "encoding": "ascii",
+    "value": "6q9|9"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f69b",
+    "va": "0x1001169b",
+    "encoding": "ascii",
+    "value": "<3<9<H<N<[<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f6b3",
+    "va": "0x100116b3",
+    "encoding": "ascii",
+    "value": "<3=Q=o="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f6c3",
+    "va": "0x100116c3",
+    "encoding": "ascii",
+    "value": ">X>^>"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f6cd",
+    "va": "0x100116cd",
+    "encoding": "ascii",
+    "value": ">Z?d?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f6eb",
+    "va": "0x100116eb",
+    "encoding": "ascii",
+    "value": "0-0S0q0x0|0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f70b",
+    "va": "0x1001170b",
+    "encoding": "ascii",
+    "value": "0V1a1|1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f725",
+    "va": "0x10011725",
+    "encoding": "ascii",
+    "value": "2 2$2(2,202z2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f73f",
+    "va": "0x1001173f",
+    "encoding": "ascii",
+    "value": "455O5X5"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f759",
+    "va": "0x10011759",
+    "encoding": "ascii",
+    "value": "7?7I7"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f77b",
+    "va": "0x1001177b",
+    "encoding": "ascii",
+    "value": "<:<P>"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f788",
+    "va": "0x10011788",
+    "encoding": "ascii",
+    "value": "D1H1L1P1T1`1d1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f7b1",
+    "va": "0x100117b1",
+    "encoding": "ascii",
+    "value": "6$6@6\\6`6"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f7c3",
+    "va": "0x100117c3",
+    "encoding": "ascii",
+    "value": "7 7@7\\7`7|7"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f7d9",
+    "va": "0x100117d9",
+    "encoding": "ascii",
+    "value": "8 8@8`8"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f7fd",
+    "va": "0x100117fd",
+    "encoding": "ascii",
+    "value": "0 0$0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f803",
+    "va": "0x10011803",
+    "encoding": "ascii",
+    "value": "1p2x2"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f831",
+    "va": "0x10011831",
+    "encoding": "ascii",
+    "value": "; ;$;(;,;4;<;D;L;T;\\;d;l;t;|;"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000f86b",
+    "va": "0x1001186b",
+    "encoding": "ascii",
+    "value": "= =$=(=,=0=4=8=<=@=D=H=L=P=T=X=\\=`=d=h=l=p=t=x=|="
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001003e",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Z0X03"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000100e5",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1+0)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000100fd",
+    "va": "",
+    "encoding": "ascii",
+    "value": "\"VeriSign Time Stamping Services CA0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010124",
+    "va": "",
+    "encoding": "ascii",
+    "value": "070615000000Z"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010133",
+    "va": "",
+    "encoding": "ascii",
+    "value": "120614235959Z0\\1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001015a",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1402"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010172",
+    "va": "",
+    "encoding": "ascii",
+    "value": "+VeriSign Time Stamping Services Signer - G20"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000101d5",
+    "va": "",
+    "encoding": "ascii",
+    "value": "6^bMRQ4q"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000101f7",
+    "va": "",
+    "encoding": "ascii",
+    "value": "JcEG.k"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010253",
+    "va": "",
+    "encoding": "ascii",
+    "value": "(0&0$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010264",
+    "va": "",
+    "encoding": "ascii",
+    "value": "http://ocsp.verisign.com0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010292",
+    "va": "",
+    "encoding": "ascii",
+    "value": ",0*0("
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001029c",
+    "va": "",
+    "encoding": "ascii",
+    "value": "\"http://crl.verisign.com/tss-ca.crl0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010301",
+    "va": "",
+    "encoding": "ascii",
+    "value": "TSA1-20"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000103d2",
+    "va": "",
+    "encoding": "ascii",
+    "value": "y>]r}"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010464",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Western Cape1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001047b",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Durbanville1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010491",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Thawte1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000104a2",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Thawte Certification1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000104c1",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Thawte Timestamping CA0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000104db",
+    "va": "",
+    "encoding": "ascii",
+    "value": "031204000000Z"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000104ea",
+    "va": "",
+    "encoding": "ascii",
+    "value": "131203235959Z0S1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010511",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1+0)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010529",
+    "va": "",
+    "encoding": "ascii",
+    "value": "\"VeriSign Time Stamping Services CA0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000105dd",
+    "va": "",
+    "encoding": "ascii",
+    "value": "_zj1."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010685",
+    "va": "",
+    "encoding": "ascii",
+    "value": "(0&0$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010696",
+    "va": "",
+    "encoding": "ascii",
+    "value": "http://ocsp.verisign.com0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000106ca",
+    "va": "",
+    "encoding": "ascii",
+    "value": ":0806"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000106d4",
+    "va": "",
+    "encoding": "ascii",
+    "value": "0http://crl.verisign.com/ThawteTimestampingCA.crl0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010744",
+    "va": "",
+    "encoding": "ascii",
+    "value": "TSA2048-1-530"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001079b",
+    "va": "",
+    "encoding": "ascii",
+    "value": "?7!Op1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001082b",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1705"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010843",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".Class 3 Public Primary Certification Authority0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010876",
+    "va": "",
+    "encoding": "ascii",
+    "value": "090521000000Z"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010885",
+    "va": "",
+    "encoding": "ascii",
+    "value": "190520235959Z0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000108ad",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000108c6",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign Trust Network1;09"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000108e6",
+    "va": "",
+    "encoding": "ascii",
+    "value": "2Terms of use at https://www.verisign.com/rpa (c)09100."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010923",
+    "va": "",
+    "encoding": "ascii",
+    "value": "'VeriSign Class 3 Code Signing 2009-2 CA0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000109bd",
+    "va": "",
+    "encoding": "ascii",
+    "value": "'tag'Mj"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010a59",
+    "va": "",
+    "encoding": "ascii",
+    "value": "`x^{`"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010a95",
+    "va": "",
+    "encoding": "ascii",
+    "value": "i0g0e"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010ab7",
+    "va": "",
+    "encoding": "ascii",
+    "value": "https://www.verisign.com/cps0*"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010ae3",
+    "va": "",
+    "encoding": "ascii",
+    "value": "https://www.verisign.com/rpa0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010b22",
+    "va": "",
+    "encoding": "ascii",
+    "value": "[0Y0W0U"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010b2b",
+    "va": "",
+    "encoding": "ascii",
+    "value": "image/gif0!0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010b5a",
+    "va": "",
+    "encoding": "ascii",
+    "value": "#http://logo.verisign.com/vslogo.gif0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010baa",
+    "va": "",
+    "encoding": "ascii",
+    "value": "(0&0$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010bbb",
+    "va": "",
+    "encoding": "ascii",
+    "value": "http://ocsp.verisign.com01"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010bdb",
+    "va": "",
+    "encoding": "ascii",
+    "value": "*0(0&"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010be5",
+    "va": "",
+    "encoding": "ascii",
+    "value": " http://crl.verisign.com/pca3.crl0)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010c20",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Class3CA2048-1-550"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010d2c",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010d45",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign Trust Network1;09"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010d65",
+    "va": "",
+    "encoding": "ascii",
+    "value": "2Terms of use at https://www.verisign.com/rpa (c)09100."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010da2",
+    "va": "",
+    "encoding": "ascii",
+    "value": "'VeriSign Class 3 Code Signing 2009-2 CA0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010dce",
+    "va": "",
+    "encoding": "ascii",
+    "value": "090731000000Z"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010ddd",
+    "va": "",
+    "encoding": "ascii",
+    "value": "110901235959Z0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010e05",
+    "va": "",
+    "encoding": "ascii",
+    "value": "California1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010e1a",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Santa Clara1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010e30",
+    "va": "",
+    "encoding": "ascii",
+    "value": "NVIDIA Corporation1>0<"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010e4c",
+    "va": "",
+    "encoding": "ascii",
+    "value": "5Digital ID Class 3 - Microsoft Software Validation v21"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010e8d",
+    "va": "",
+    "encoding": "ascii",
+    "value": "Software1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010ea0",
+    "va": "",
+    "encoding": "ascii",
+    "value": "NVIDIA Corporation0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010f31",
+    "va": "",
+    "encoding": "ascii",
+    "value": ".6$Jx"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010f7f",
+    "va": "",
+    "encoding": "ascii",
+    "value": "=0;09"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010f89",
+    "va": "",
+    "encoding": "ascii",
+    "value": "3http://csc3-2009-2-crl.verisign.com/CSC3-2009-2.crl0D"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010fc5",
+    "va": "",
+    "encoding": "ascii",
+    "value": "=0;09"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00010fe7",
+    "va": "",
+    "encoding": "ascii",
+    "value": "https://www.verisign.com/rpa0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011025",
+    "va": "",
+    "encoding": "ascii",
+    "value": "i0g0$"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011036",
+    "va": "",
+    "encoding": "ascii",
+    "value": "http://ocsp.verisign.com0?"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001105b",
+    "va": "",
+    "encoding": "ascii",
+    "value": "3http://csc3-2009-2-aia.verisign.com/CSC3-2009-2.cer0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000111ca",
+    "va": "",
+    "encoding": "ascii",
+    "value": "arMrc"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011218",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011231",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign Trust Network1;09"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011251",
+    "va": "",
+    "encoding": "ascii",
+    "value": "2Terms of use at https://www.verisign.com/rpa (c)09100."
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001128e",
+    "va": "",
+    "encoding": "ascii",
+    "value": "'VeriSign Class 3 Code Signing 2009-2 CA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x000113f5",
+    "va": "",
+    "encoding": "ascii",
+    "value": "0g0S1"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011411",
+    "va": "",
+    "encoding": "ascii",
+    "value": "VeriSign, Inc.1+0)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011429",
+    "va": "",
+    "encoding": "ascii",
+    "value": "\"VeriSign Time Stamping Services CA"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x00011496",
+    "va": "",
+    "encoding": "ascii",
+    "value": "100129034349Z0#"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000a318",
+    "va": "0x1000a318",
+    "encoding": "utf16le",
+    "value": "(null)"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000abf0",
+    "va": "0x1000abf0",
+    "encoding": "utf16le",
+    "value": "         (((((                  H"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000adf2",
+    "va": "0x1000adf2",
+    "encoding": "utf16le",
+    "value": "         h((((                  H"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000aef0",
+    "va": "0x1000aef0",
+    "encoding": "utf16le",
+    "value": "                                 H"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e0a6",
+    "va": "0x100100a6",
+    "encoding": "utf16le",
+    "value": "VS_VERSION_INFO"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e102",
+    "va": "0x10010102",
+    "encoding": "utf16le",
+    "value": "StringFileInfo"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e126",
+    "va": "0x10010126",
+    "encoding": "utf16le",
+    "value": "040904b0"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e13e",
+    "va": "0x1001013e",
+    "encoding": "utf16le",
+    "value": "CompanyName"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e158",
+    "va": "0x10010158",
+    "encoding": "utf16le",
+    "value": "NVIDIA Corporation"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e186",
+    "va": "0x10010186",
+    "encoding": "utf16le",
+    "value": "FileDescription"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e1a8",
+    "va": "0x100101a8",
+    "encoding": "utf16le",
+    "value": "PhysXLoader Dynamic Link Library"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e1f2",
+    "va": "0x100101f2",
+    "encoding": "utf16le",
+    "value": "FileVersion"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e20c",
+    "va": "0x1001020c",
+    "encoding": "utf16le",
+    "value": "2, 8, 3, 30"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e22a",
+    "va": "0x1001022a",
+    "encoding": "utf16le",
+    "value": "InternalName"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e244",
+    "va": "0x10010244",
+    "encoding": "utf16le",
+    "value": "PhysXLoader_FC30_GPU"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e276",
+    "va": "0x10010276",
+    "encoding": "utf16le",
+    "value": "LegalCopyright"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e294",
+    "va": "0x10010294",
+    "encoding": "utf16le",
+    "value": "Copyright (C) 2008 NVIDIA Corporation"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e2e6",
+    "va": "0x100102e6",
+    "encoding": "utf16le",
+    "value": "OriginalFilename"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e308",
+    "va": "0x10010308",
+    "encoding": "utf16le",
+    "value": "PhysXLoader.dll"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e32e",
+    "va": "0x1001032e",
+    "encoding": "utf16le",
+    "value": "ProductName"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e348",
+    "va": "0x10010348",
+    "encoding": "utf16le",
+    "value": " PhysXLoader Dynamic Link Library"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e392",
+    "va": "0x10010392",
+    "encoding": "utf16le",
+    "value": "ProductVersion"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e3b0",
+    "va": "0x100103b0",
+    "encoding": "utf16le",
+    "value": "2, 8, 3, 30"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e3ce",
+    "va": "0x100103ce",
+    "encoding": "utf16le",
+    "value": "VarFileInfo"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0000e3ee",
+    "va": "0x100103ee",
+    "encoding": "utf16le",
+    "value": "Translation"
+  },
+  {
+    "file": "xp.dll",
+    "offset": "0x0001005b",
+    "va": "",
+    "encoding": "utf16le",
+    "value": "<<<Obsolete>>"
+  }
+]

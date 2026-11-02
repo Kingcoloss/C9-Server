@@ -1,0 +1,33 @@
+0100b0a8	C9Reactor::HandleEvents -> FD_CONNECT (socket = %d, socket error = %d)
+0100b0f0	C9Reactor::HandleEvents -> FD_CONNECT - ignore 10004(WSAEINTR) error (socket = %d)
+0100b144	C9Reactor::HandleEvents -> FD_CONNECT - OK (socket = %d)
+0100b180	C9Reactor::HandleEvents -> FD_READ (socket = %d, socket error = %d)
+0100b1c8	C9Reactor::HandleEvents -> FD_CLOSE (socket = %d, socket error = %d)
+0100b234	connect failed ! (socket error = %d)
+0100b25c	WSARecv failed ! (socket error = %d)
+010113f4	#### TCP Relay connect failed
+0102abdc	TcpRelayClient::Connect: connect failed [error:%u]
+0112cb58	 -> PS_LoginData_Packet_REQ : 
+0112ccf4	 -> PS_ServerList_Ack : 
+0112cdc8	 -> PS_ServerList_Req : 
+010bea50	202.14.103.223
+010bea70	202.14.103.223:10080
+010c00f8	/clientversion
+0111bf64	 -> PS_Certify_2ndPassword_Req : 2
+0112cb2c	 -> PS_Certify_Req : 
+0112cbc8	 -> PS_Certify_Nak [
+0112cc1c	 -> PS_Certify_Nak [
+0112cc40	 -> PS_Certify_Ack : 
+0112cc6c	 -> PS_Certify2_Ack_TYPE : 
+0112cca0	 -> PS_TaiAuth_Nak_TYPE : 
+0112cd38	 -> PS_Wait_Notify_Ack
+0112cd54	 -> PS_Move_Auth_Server_Ack
+0112cd78	 -> PS_Select_Server_Ack
+0112cd98	 -> PS_Cancel_Waiting_Req : 
+0112cdf8	 -> PS_Select_Server_Req : 
+00563e40	code:receive-buffer processing
+00563a10	code:connect-success callback
+00563a30	code:disconnect callback
+009b6ccb	code:IP literal use
+009b6cd0	code:IP:port literal use
+009c48a1	code:clientversion command use

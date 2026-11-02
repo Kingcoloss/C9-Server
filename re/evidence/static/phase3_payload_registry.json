@@ -1,0 +1,1314 @@
+{
+  "source_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "initializer_va": "00410ae0",
+  "registered_count": 100,
+  "observed_wrapper_modulus": 80,
+  "observed_wrappers": [
+    "00412130",
+    "004121d0",
+    "00412230"
+  ],
+  "scope": "No claim about reachability through other callers",
+  "entries": [
+    {
+      "selector": 0,
+      "vtable_va": "0100b354",
+      "locator_va": "012529e0",
+      "type_descriptor_va": "0130ccb8",
+      "rtti_name": ".?AVPacketTwister_1@@",
+      "virtual_entries": [
+        "004121b0",
+        "00564cc0",
+        "00565310"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 1,
+      "vtable_va": "0100b374",
+      "locator_va": "01252994",
+      "type_descriptor_va": "0130cc98",
+      "rtti_name": ".?AVPacketTwister_2@@",
+      "virtual_entries": [
+        "004121b0",
+        "00565960",
+        "005660f0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 2,
+      "vtable_va": "0100b384",
+      "locator_va": "01252948",
+      "type_descriptor_va": "0130cc78",
+      "rtti_name": ".?AVPacketTwister_3@@",
+      "virtual_entries": [
+        "004121b0",
+        "00566880",
+        "00566fa0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 3,
+      "vtable_va": "0100b394",
+      "locator_va": "012528fc",
+      "type_descriptor_va": "0130cc58",
+      "rtti_name": ".?AVPacketTwister_4@@",
+      "virtual_entries": [
+        "004121b0",
+        "005676b0",
+        "00567e90"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 4,
+      "vtable_va": "0100b3a4",
+      "locator_va": "012528b0",
+      "type_descriptor_va": "0130cc38",
+      "rtti_name": ".?AVPacketTwister_5@@",
+      "virtual_entries": [
+        "004121b0",
+        "00568680",
+        "00568e90"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 5,
+      "vtable_va": "0100b3b4",
+      "locator_va": "01252864",
+      "type_descriptor_va": "0130cc18",
+      "rtti_name": ".?AVPacketTwister_6@@",
+      "virtual_entries": [
+        "004121b0",
+        "005696a0",
+        "00569e00"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 6,
+      "vtable_va": "0100b3c4",
+      "locator_va": "01252818",
+      "type_descriptor_va": "0130cbf8",
+      "rtti_name": ".?AVPacketTwister_7@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056a550",
+        "0056ae30"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 7,
+      "vtable_va": "0100b3d4",
+      "locator_va": "012527cc",
+      "type_descriptor_va": "0130cbd8",
+      "rtti_name": ".?AVPacketTwister_8@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056b710",
+        "0056bd70"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 8,
+      "vtable_va": "0100b3e4",
+      "locator_va": "01252780",
+      "type_descriptor_va": "0130cbb8",
+      "rtti_name": ".?AVPacketTwister_9@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056c3c0",
+        "0056cb30"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 9,
+      "vtable_va": "0100b3f4",
+      "locator_va": "01252734",
+      "type_descriptor_va": "0130cb98",
+      "rtti_name": ".?AVPacketTwister_10@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056d290",
+        "0056d950"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 10,
+      "vtable_va": "0100b404",
+      "locator_va": "012526e8",
+      "type_descriptor_va": "0130cb78",
+      "rtti_name": ".?AVPacketTwister_11@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056e010",
+        "0056e760"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 11,
+      "vtable_va": "0100b414",
+      "locator_va": "0125269c",
+      "type_descriptor_va": "0130cb58",
+      "rtti_name": ".?AVPacketTwister_12@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056eeb0",
+        "0056f650"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 12,
+      "vtable_va": "0100b424",
+      "locator_va": "01252650",
+      "type_descriptor_va": "0130cb38",
+      "rtti_name": ".?AVPacketTwister_13@@",
+      "virtual_entries": [
+        "004121b0",
+        "0056fdf0",
+        "005704d0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 13,
+      "vtable_va": "0100b434",
+      "locator_va": "01252604",
+      "type_descriptor_va": "0130cb18",
+      "rtti_name": ".?AVPacketTwister_14@@",
+      "virtual_entries": [
+        "004121b0",
+        "00570bb0",
+        "00571050"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 14,
+      "vtable_va": "0100b444",
+      "locator_va": "012525b8",
+      "type_descriptor_va": "0130caf8",
+      "rtti_name": ".?AVPacketTwister_15@@",
+      "virtual_entries": [
+        "004121b0",
+        "005714f0",
+        "00571ab0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 15,
+      "vtable_va": "0100b454",
+      "locator_va": "0125256c",
+      "type_descriptor_va": "0130cad8",
+      "rtti_name": ".?AVPacketTwister_16@@",
+      "virtual_entries": [
+        "004121b0",
+        "00572070",
+        "00572800"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 16,
+      "vtable_va": "0100b464",
+      "locator_va": "01252520",
+      "type_descriptor_va": "0130cab8",
+      "rtti_name": ".?AVPacketTwister_17@@",
+      "virtual_entries": [
+        "004121b0",
+        "00572f90",
+        "00573530"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 17,
+      "vtable_va": "0100b474",
+      "locator_va": "012524d4",
+      "type_descriptor_va": "0130ca98",
+      "rtti_name": ".?AVPacketTwister_18@@",
+      "virtual_entries": [
+        "004121b0",
+        "00573ad0",
+        "00574050"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 18,
+      "vtable_va": "0100b484",
+      "locator_va": "01252488",
+      "type_descriptor_va": "0130ca78",
+      "rtti_name": ".?AVPacketTwister_19@@",
+      "virtual_entries": [
+        "004121b0",
+        "005745d0",
+        "00574e30"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 19,
+      "vtable_va": "0100b494",
+      "locator_va": "0125243c",
+      "type_descriptor_va": "0130ca58",
+      "rtti_name": ".?AVPacketTwister_20@@",
+      "virtual_entries": [
+        "004121b0",
+        "00575690",
+        "00575b40"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 20,
+      "vtable_va": "0100b4a4",
+      "locator_va": "012523f0",
+      "type_descriptor_va": "0130ca38",
+      "rtti_name": ".?AVPacketTwister_21@@",
+      "virtual_entries": [
+        "004121b0",
+        "00575ff0",
+        "00576690"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 21,
+      "vtable_va": "0100b4b4",
+      "locator_va": "012523a4",
+      "type_descriptor_va": "0130ca18",
+      "rtti_name": ".?AVPacketTwister_22@@",
+      "virtual_entries": [
+        "004121b0",
+        "00576d30",
+        "00577390"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 22,
+      "vtable_va": "0100b4c4",
+      "locator_va": "01252358",
+      "type_descriptor_va": "0130c9f8",
+      "rtti_name": ".?AVPacketTwister_23@@",
+      "virtual_entries": [
+        "004121b0",
+        "005779f0",
+        "00578360"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 23,
+      "vtable_va": "0100b4d4",
+      "locator_va": "0125230c",
+      "type_descriptor_va": "0130c9d8",
+      "rtti_name": ".?AVPacketTwister_24@@",
+      "virtual_entries": [
+        "004121b0",
+        "00578ce0",
+        "005790a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 24,
+      "vtable_va": "0100b4e4",
+      "locator_va": "012522c0",
+      "type_descriptor_va": "0130c9b8",
+      "rtti_name": ".?AVPacketTwister_25@@",
+      "virtual_entries": [
+        "004121b0",
+        "00579460",
+        "00579c70"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 25,
+      "vtable_va": "0100b4f4",
+      "locator_va": "01252274",
+      "type_descriptor_va": "0130c998",
+      "rtti_name": ".?AVPacketTwister_26@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057a490",
+        "0057ac00"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 26,
+      "vtable_va": "0100b504",
+      "locator_va": "01252228",
+      "type_descriptor_va": "0130c978",
+      "rtti_name": ".?AVPacketTwister_27@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057b380",
+        "0057b9c0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 27,
+      "vtable_va": "0100b514",
+      "locator_va": "012521dc",
+      "type_descriptor_va": "0130c958",
+      "rtti_name": ".?AVPacketTwister_28@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057c000",
+        "0057c890"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 28,
+      "vtable_va": "0100b524",
+      "locator_va": "01252190",
+      "type_descriptor_va": "0130c938",
+      "rtti_name": ".?AVPacketTwister_29@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057d130",
+        "0057d8c0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 29,
+      "vtable_va": "0100b534",
+      "locator_va": "01252144",
+      "type_descriptor_va": "0130c918",
+      "rtti_name": ".?AVPacketTwister_30@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057e050",
+        "0057e820"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 30,
+      "vtable_va": "0100b544",
+      "locator_va": "012520f8",
+      "type_descriptor_va": "0130c8f8",
+      "rtti_name": ".?AVPacketTwister_31@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057efe0",
+        "0057f7c0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 31,
+      "vtable_va": "0100b554",
+      "locator_va": "012520ac",
+      "type_descriptor_va": "0130c8d8",
+      "rtti_name": ".?AVPacketTwister_32@@",
+      "virtual_entries": [
+        "004121b0",
+        "0057ff90",
+        "00580910"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 32,
+      "vtable_va": "0100b564",
+      "locator_va": "01252060",
+      "type_descriptor_va": "0130c8b8",
+      "rtti_name": ".?AVPacketTwister_33@@",
+      "virtual_entries": [
+        "004121b0",
+        "00581290",
+        "00581b40"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 33,
+      "vtable_va": "0100b574",
+      "locator_va": "01252014",
+      "type_descriptor_va": "0130c898",
+      "rtti_name": ".?AVPacketTwister_34@@",
+      "virtual_entries": [
+        "004121b0",
+        "005823f0",
+        "00582b90"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 34,
+      "vtable_va": "0100b584",
+      "locator_va": "01251fc8",
+      "type_descriptor_va": "0130c878",
+      "rtti_name": ".?AVPacketTwister_35@@",
+      "virtual_entries": [
+        "004121b0",
+        "00583320",
+        "00583a50"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 35,
+      "vtable_va": "0100b594",
+      "locator_va": "01251f7c",
+      "type_descriptor_va": "0130c858",
+      "rtti_name": ".?AVPacketTwister_36@@",
+      "virtual_entries": [
+        "004121b0",
+        "00584170",
+        "00584940"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 36,
+      "vtable_va": "0100b5a4",
+      "locator_va": "01251f30",
+      "type_descriptor_va": "0130c838",
+      "rtti_name": ".?AVPacketTwister_37@@",
+      "virtual_entries": [
+        "004121b0",
+        "00585100",
+        "00585960"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 37,
+      "vtable_va": "0100b5b4",
+      "locator_va": "01251ee4",
+      "type_descriptor_va": "0130c818",
+      "rtti_name": ".?AVPacketTwister_38@@",
+      "virtual_entries": [
+        "004121b0",
+        "005861c0",
+        "00586820"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 38,
+      "vtable_va": "0100b5c4",
+      "locator_va": "01251e98",
+      "type_descriptor_va": "0130c7f8",
+      "rtti_name": ".?AVPacketTwister_39@@",
+      "virtual_entries": [
+        "004121b0",
+        "00586e80",
+        "00587500"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 39,
+      "vtable_va": "0100b5d4",
+      "locator_va": "01251e4c",
+      "type_descriptor_va": "0130c7d8",
+      "rtti_name": ".?AVPacketTwister_40@@",
+      "virtual_entries": [
+        "004121b0",
+        "00587b80",
+        "00588240"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 40,
+      "vtable_va": "0100b5e4",
+      "locator_va": "01251e00",
+      "type_descriptor_va": "0130c7b8",
+      "rtti_name": ".?AVPacketTwister_41@@",
+      "virtual_entries": [
+        "004121b0",
+        "00588900",
+        "00589260"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 41,
+      "vtable_va": "0100b5f4",
+      "locator_va": "01251db4",
+      "type_descriptor_va": "0130c798",
+      "rtti_name": ".?AVPacketTwister_42@@",
+      "virtual_entries": [
+        "004121b0",
+        "00589bc0",
+        "0058a320"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 42,
+      "vtable_va": "0100b604",
+      "locator_va": "01251d68",
+      "type_descriptor_va": "0130c778",
+      "rtti_name": ".?AVPacketTwister_43@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058aa80",
+        "0058b130"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 43,
+      "vtable_va": "0100b614",
+      "locator_va": "01251d1c",
+      "type_descriptor_va": "0130c758",
+      "rtti_name": ".?AVPacketTwister_44@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058b7e0",
+        "0058bcf0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 44,
+      "vtable_va": "0100b624",
+      "locator_va": "01251cd0",
+      "type_descriptor_va": "0130c738",
+      "rtti_name": ".?AVPacketTwister_45@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058c200",
+        "0058c7d0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 45,
+      "vtable_va": "0100b634",
+      "locator_va": "01251c84",
+      "type_descriptor_va": "0130c718",
+      "rtti_name": ".?AVPacketTwister_46@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058cda0",
+        "0058d340"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 46,
+      "vtable_va": "0100b644",
+      "locator_va": "01251c38",
+      "type_descriptor_va": "0130c6f8",
+      "rtti_name": ".?AVPacketTwister_47@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058d8e0",
+        "0058e120"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 47,
+      "vtable_va": "0100b654",
+      "locator_va": "01251bec",
+      "type_descriptor_va": "0130c6d8",
+      "rtti_name": ".?AVPacketTwister_48@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058e960",
+        "0058f140"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 48,
+      "vtable_va": "0100b664",
+      "locator_va": "01251ba0",
+      "type_descriptor_va": "0130c6b8",
+      "rtti_name": ".?AVPacketTwister_49@@",
+      "virtual_entries": [
+        "004121b0",
+        "0058f920",
+        "0058feb0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 49,
+      "vtable_va": "0100b674",
+      "locator_va": "01251b54",
+      "type_descriptor_va": "0130c698",
+      "rtti_name": ".?AVPacketTwister_50@@",
+      "virtual_entries": [
+        "004121b0",
+        "00590440",
+        "00590c40"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 50,
+      "vtable_va": "0100b684",
+      "locator_va": "01251b08",
+      "type_descriptor_va": "0130c678",
+      "rtti_name": ".?AVPacketTwister_51@@",
+      "virtual_entries": [
+        "004121b0",
+        "00591440",
+        "00591b50"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 51,
+      "vtable_va": "0100b694",
+      "locator_va": "01251abc",
+      "type_descriptor_va": "0130c658",
+      "rtti_name": ".?AVPacketTwister_52@@",
+      "virtual_entries": [
+        "004121b0",
+        "00592260",
+        "00592a30"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 52,
+      "vtable_va": "0100b6a4",
+      "locator_va": "01251a70",
+      "type_descriptor_va": "0130c638",
+      "rtti_name": ".?AVPacketTwister_53@@",
+      "virtual_entries": [
+        "004121b0",
+        "00593200",
+        "005938d0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 53,
+      "vtable_va": "0100b6b4",
+      "locator_va": "01251a24",
+      "type_descriptor_va": "0130c618",
+      "rtti_name": ".?AVPacketTwister_54@@",
+      "virtual_entries": [
+        "004121b0",
+        "00593fa0",
+        "00594690"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 54,
+      "vtable_va": "0100b6c4",
+      "locator_va": "012519d8",
+      "type_descriptor_va": "0130c5f8",
+      "rtti_name": ".?AVPacketTwister_55@@",
+      "virtual_entries": [
+        "004121b0",
+        "00594d80",
+        "005954d0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 55,
+      "vtable_va": "0100b6d4",
+      "locator_va": "0125198c",
+      "type_descriptor_va": "0130c5d8",
+      "rtti_name": ".?AVPacketTwister_56@@",
+      "virtual_entries": [
+        "004121b0",
+        "00595c20",
+        "005962f0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 56,
+      "vtable_va": "0100b6e4",
+      "locator_va": "01251940",
+      "type_descriptor_va": "0130c5b8",
+      "rtti_name": ".?AVPacketTwister_57@@",
+      "virtual_entries": [
+        "004121b0",
+        "005969c0",
+        "00597180"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 57,
+      "vtable_va": "0100b6f4",
+      "locator_va": "012518f4",
+      "type_descriptor_va": "0130c598",
+      "rtti_name": ".?AVPacketTwister_58@@",
+      "virtual_entries": [
+        "004121b0",
+        "00597940",
+        "005980d0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 58,
+      "vtable_va": "0100b704",
+      "locator_va": "012518a8",
+      "type_descriptor_va": "0130c578",
+      "rtti_name": ".?AVPacketTwister_59@@",
+      "virtual_entries": [
+        "004121b0",
+        "00598870",
+        "00598f60"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 59,
+      "vtable_va": "0100b714",
+      "locator_va": "0125185c",
+      "type_descriptor_va": "0130c558",
+      "rtti_name": ".?AVPacketTwister_60@@",
+      "virtual_entries": [
+        "004121b0",
+        "00599650",
+        "0059a100"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 60,
+      "vtable_va": "0100b724",
+      "locator_va": "01251810",
+      "type_descriptor_va": "0130c538",
+      "rtti_name": ".?AVPacketTwister_61@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059aba0",
+        "0059b560"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 61,
+      "vtable_va": "0100b734",
+      "locator_va": "012517c4",
+      "type_descriptor_va": "0130c518",
+      "rtti_name": ".?AVPacketTwister_62@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059bf20",
+        "0059c440"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 62,
+      "vtable_va": "0100b744",
+      "locator_va": "01251778",
+      "type_descriptor_va": "0130c4f8",
+      "rtti_name": ".?AVPacketTwister_63@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059c960",
+        "0059d220"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 63,
+      "vtable_va": "0100b754",
+      "locator_va": "0125172c",
+      "type_descriptor_va": "0130c4d8",
+      "rtti_name": ".?AVPacketTwister_64@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059dae0",
+        "0059e4a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 64,
+      "vtable_va": "0100b764",
+      "locator_va": "012516e0",
+      "type_descriptor_va": "0130c4b8",
+      "rtti_name": ".?AVPacketTwister_65@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059ee70",
+        "0059f590"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 65,
+      "vtable_va": "0100b774",
+      "locator_va": "01251694",
+      "type_descriptor_va": "0130c498",
+      "rtti_name": ".?AVPacketTwister_66@@",
+      "virtual_entries": [
+        "004121b0",
+        "0059fcb0",
+        "005a0620"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 66,
+      "vtable_va": "0100b784",
+      "locator_va": "01251648",
+      "type_descriptor_va": "0130c478",
+      "rtti_name": ".?AVPacketTwister_67@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a0f80",
+        "005a1530"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 67,
+      "vtable_va": "0100b794",
+      "locator_va": "012515fc",
+      "type_descriptor_va": "0130c458",
+      "rtti_name": ".?AVPacketTwister_68@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a1ae0",
+        "005a25a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 68,
+      "vtable_va": "0100b7a4",
+      "locator_va": "012515b0",
+      "type_descriptor_va": "0130c438",
+      "rtti_name": ".?AVPacketTwister_69@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a3070",
+        "005a3760"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 69,
+      "vtable_va": "0100b7b4",
+      "locator_va": "01251564",
+      "type_descriptor_va": "0130c418",
+      "rtti_name": ".?AVPacketTwister_70@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a3e60",
+        "005a45f0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 70,
+      "vtable_va": "0100b7c4",
+      "locator_va": "01251518",
+      "type_descriptor_va": "0130c3f8",
+      "rtti_name": ".?AVPacketTwister_71@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a4d80",
+        "005a54e0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 71,
+      "vtable_va": "0100b7d4",
+      "locator_va": "012514cc",
+      "type_descriptor_va": "0130c3d8",
+      "rtti_name": ".?AVPacketTwister_72@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a5c50",
+        "005a6560"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 72,
+      "vtable_va": "0100b7e4",
+      "locator_va": "01251480",
+      "type_descriptor_va": "0130c3b8",
+      "rtti_name": ".?AVPacketTwister_73@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a6e70",
+        "005a7710"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 73,
+      "vtable_va": "0100b7f4",
+      "locator_va": "01251434",
+      "type_descriptor_va": "0130c398",
+      "rtti_name": ".?AVPacketTwister_74@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a7fb0",
+        "005a8800"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 74,
+      "vtable_va": "0100b804",
+      "locator_va": "012513e8",
+      "type_descriptor_va": "0130c378",
+      "rtti_name": ".?AVPacketTwister_75@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a9040",
+        "005a9750"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 75,
+      "vtable_va": "0100b814",
+      "locator_va": "0125139c",
+      "type_descriptor_va": "0130c358",
+      "rtti_name": ".?AVPacketTwister_76@@",
+      "virtual_entries": [
+        "004121b0",
+        "005a9e50",
+        "005aa9a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 76,
+      "vtable_va": "0100b824",
+      "locator_va": "01251350",
+      "type_descriptor_va": "0130c338",
+      "rtti_name": ".?AVPacketTwister_77@@",
+      "virtual_entries": [
+        "004121b0",
+        "005ab4f0",
+        "005abec0"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 77,
+      "vtable_va": "0100b834",
+      "locator_va": "01251304",
+      "type_descriptor_va": "0130c318",
+      "rtti_name": ".?AVPacketTwister_78@@",
+      "virtual_entries": [
+        "004121b0",
+        "005ac8a0",
+        "005ad080"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 78,
+      "vtable_va": "0100b844",
+      "locator_va": "012512b8",
+      "type_descriptor_va": "0130c2f8",
+      "rtti_name": ".?AVPacketTwister_79@@",
+      "virtual_entries": [
+        "004121b0",
+        "005ad860",
+        "005ae070"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 79,
+      "vtable_va": "0100b854",
+      "locator_va": "0125126c",
+      "type_descriptor_va": "0130c2d8",
+      "rtti_name": ".?AVPacketTwister_80@@",
+      "virtual_entries": [
+        "004121b0",
+        "005ae880",
+        "005aee30"
+      ],
+      "reachable_via_observed_mod80_wrappers": true
+    },
+    {
+      "selector": 80,
+      "vtable_va": "0100b864",
+      "locator_va": "01251220",
+      "type_descriptor_va": "0130c2b8",
+      "rtti_name": ".?AVPacketTwister_81@@",
+      "virtual_entries": [
+        "004121b0",
+        "005af3e0",
+        "005afb00"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 81,
+      "vtable_va": "0100b874",
+      "locator_va": "012511d4",
+      "type_descriptor_va": "0130c298",
+      "rtti_name": ".?AVPacketTwister_82@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b0220",
+        "005b09f0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 82,
+      "vtable_va": "0100b884",
+      "locator_va": "01251188",
+      "type_descriptor_va": "0130c278",
+      "rtti_name": ".?AVPacketTwister_83@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b11c0",
+        "005b15a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 83,
+      "vtable_va": "0100b894",
+      "locator_va": "0125113c",
+      "type_descriptor_va": "0130c258",
+      "rtti_name": ".?AVPacketTwister_84@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b1980",
+        "005b2160"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 84,
+      "vtable_va": "0100b8a4",
+      "locator_va": "012510f0",
+      "type_descriptor_va": "0130c238",
+      "rtti_name": ".?AVPacketTwister_85@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b2940",
+        "005b3090"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 85,
+      "vtable_va": "0100b8b4",
+      "locator_va": "012510a4",
+      "type_descriptor_va": "0130c218",
+      "rtti_name": ".?AVPacketTwister_86@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b37e0",
+        "005b3b70"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 86,
+      "vtable_va": "0100b8c4",
+      "locator_va": "01251058",
+      "type_descriptor_va": "0130c1f8",
+      "rtti_name": ".?AVPacketTwister_87@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b3f00",
+        "005b45c0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 87,
+      "vtable_va": "0100b8d4",
+      "locator_va": "0125100c",
+      "type_descriptor_va": "0130c1d8",
+      "rtti_name": ".?AVPacketTwister_88@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b4c80",
+        "005b5550"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 88,
+      "vtable_va": "0100b8e4",
+      "locator_va": "01250fc0",
+      "type_descriptor_va": "0130c1b8",
+      "rtti_name": ".?AVPacketTwister_89@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b5e30",
+        "005b66b0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 89,
+      "vtable_va": "0100b8f4",
+      "locator_va": "01250f74",
+      "type_descriptor_va": "0130c198",
+      "rtti_name": ".?AVPacketTwister_90@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b6f20",
+        "005b7860"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 90,
+      "vtable_va": "0100b904",
+      "locator_va": "01250f28",
+      "type_descriptor_va": "0130c178",
+      "rtti_name": ".?AVPacketTwister_91@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b81a0",
+        "005b8ab0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 91,
+      "vtable_va": "0100b914",
+      "locator_va": "01250edc",
+      "type_descriptor_va": "0130c158",
+      "rtti_name": ".?AVPacketTwister_92@@",
+      "virtual_entries": [
+        "004121b0",
+        "005b93c0",
+        "005b9bc0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 92,
+      "vtable_va": "0100b924",
+      "locator_va": "01250e90",
+      "type_descriptor_va": "0130c138",
+      "rtti_name": ".?AVPacketTwister_93@@",
+      "virtual_entries": [
+        "004121b0",
+        "005ba3c0",
+        "005ba840"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 93,
+      "vtable_va": "0100b934",
+      "locator_va": "01250e44",
+      "type_descriptor_va": "0130c118",
+      "rtti_name": ".?AVPacketTwister_94@@",
+      "virtual_entries": [
+        "004121b0",
+        "005bacc0",
+        "005bb4c0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 94,
+      "vtable_va": "0100b944",
+      "locator_va": "01250df8",
+      "type_descriptor_va": "0130c0f8",
+      "rtti_name": ".?AVPacketTwister_95@@",
+      "virtual_entries": [
+        "004121b0",
+        "005bbcc0",
+        "005bc3b0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 95,
+      "vtable_va": "0100b954",
+      "locator_va": "01250dac",
+      "type_descriptor_va": "0130c0d8",
+      "rtti_name": ".?AVPacketTwister_96@@",
+      "virtual_entries": [
+        "004121b0",
+        "005bcaa0",
+        "005bd1e0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 96,
+      "vtable_va": "0100b964",
+      "locator_va": "01250d60",
+      "type_descriptor_va": "0130c0b8",
+      "rtti_name": ".?AVPacketTwister_97@@",
+      "virtual_entries": [
+        "004121b0",
+        "005bd920",
+        "005be000"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 97,
+      "vtable_va": "0100b974",
+      "locator_va": "01250d14",
+      "type_descriptor_va": "0130c098",
+      "rtti_name": ".?AVPacketTwister_98@@",
+      "virtual_entries": [
+        "004121b0",
+        "005be6e0",
+        "005bef10"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 98,
+      "vtable_va": "0100b984",
+      "locator_va": "01250cc8",
+      "type_descriptor_va": "0130c078",
+      "rtti_name": ".?AVPacketTwister_99@@",
+      "virtual_entries": [
+        "004121b0",
+        "005bf740",
+        "005bfc50"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    },
+    {
+      "selector": 99,
+      "vtable_va": "0100b994",
+      "locator_va": "01250c7c",
+      "type_descriptor_va": "0130c058",
+      "rtti_name": ".?AVPacketTwister_100@@",
+      "virtual_entries": [
+        "004121b0",
+        "005c0160",
+        "005c09a0"
+      ],
+      "reachable_via_observed_mod80_wrappers": false
+    }
+  ]
+}

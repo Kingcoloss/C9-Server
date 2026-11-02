@@ -1,0 +1,12 @@
+Program: PhysXLoader.dll
+Executable SHA256: 6f491b6073a6fd759f3eb5b83e010fa66c5e0e9075585d263bd63d1f622cec3f
+Language: x86:LE:32:default
+Image base: 10000000
+Functions: 11377
+Block: Headers 10000000-100003ff
+Block: .text 10001000-10145fff
+Block: .rdata 10146000-10193fff
+Block: .data 10194000-101a1fff
+Block: .rsrc 101a2000-101a2fff
+Block: .reloc 101a3000-101bffff
+Block: tdb ffdff000-ffdfffff

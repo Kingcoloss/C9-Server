@@ -1,0 +1,41 @@
+{
+  "description": "Synthetic fixture scenario. No real credentials, authentication semantics or game compatibility are established.",
+  "profile": "fixture",
+  "host": "127.0.0.1",
+  "port": 14000,
+  "max_frame": 8192,
+  "max_packets": 64,
+  "greetings": [
+    {
+      "type": 4,
+      "flag": 0,
+      "payload_hex": "00"
+    }
+  ],
+  "rules": [
+    {
+      "state": "connected",
+      "request_type": 12001,
+      "payload_length": 2162,
+      "next_state": "login_fixture_sent",
+      "replies": [
+        {
+          "type": 12002,
+          "payload_hex": "0100000000000000000000000000000001000000"
+        }
+      ]
+    },
+    {
+      "state": "login_fixture_sent",
+      "request_type": 12005,
+      "payload_length": 0,
+      "next_state": "server_list_sent",
+      "replies": [
+        {
+          "type": 12006,
+          "payload_hex": "0100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  ]
+}

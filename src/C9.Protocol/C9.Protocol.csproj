@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <EmbeddedResource Include="../../c9server/data/twisters.json" LogicalName="C9.Protocol.twisters.json" />
+  </ItemGroup>
+</Project>

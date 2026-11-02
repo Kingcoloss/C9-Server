@@ -1,0 +1,8 @@
+trigger	target	reference_from	function_entry	function_name	reference_type
+GetCommandLineA	EXTERNAL:00000020	10146244			DATA
+GetCommandLineA	10146244	1011e68f	1011e656	FUN_1011e656	READ
+GetCommandLineA	EXTERNAL:00000020	1011e68f	1011e656	FUN_1011e656	COMPUTED_CALL
+string:xp.dll	10178028	1000256c	10002520	FUN_10002520	DATA
+string:C9_DATA.exm	101903a0	1019035c			DATA
+string:C9.exe	10177fb0	10001c25			READ
+string:C9.exe	10177fb0	10001c1d			DATA

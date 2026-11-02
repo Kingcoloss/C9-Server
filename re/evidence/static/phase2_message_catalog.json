@@ -1,0 +1,127 @@
+{
+  "source_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "evidence_kind": "static only; no client execution or runtime packet capture",
+  "constructed_headers": [
+    {
+      "constructor_va": "00a64380",
+      "type_hex": "0x1771",
+      "type_decimal": 6001,
+      "decoded_length": 62,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a643d0",
+      "type_hex": "0x2ee1",
+      "type_decimal": 12001,
+      "decoded_length": 2175,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a64430",
+      "type_hex": "0x2ee5",
+      "type_decimal": 12005,
+      "decoded_length": 13,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a64480",
+      "type_hex": "0x2eec",
+      "type_decimal": 12012,
+      "decoded_length": 33,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a644e0",
+      "type_hex": "0x2ee8",
+      "type_decimal": 12008,
+      "decoded_length": 41,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a64530",
+      "type_hex": "0xec4",
+      "type_decimal": 3780,
+      "decoded_length": 13,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    },
+    {
+      "constructor_va": "00a64580",
+      "type_hex": "0x2455",
+      "type_decimal": 9301,
+      "decoded_length": 29,
+      "flag": 1,
+      "direction": "constructed on client path",
+      "semantic_name": "unconfirmed",
+      "evidence": "phase2_login_constructors.c and .asm.txt"
+    }
+  ],
+  "login_handler": {
+    "va": "00a621f0",
+    "type_offset": 3,
+    "compared_types": [
+      {
+        "hex": "0x4",
+        "decimal": 4
+      },
+      {
+        "hex": "0x23f0",
+        "decimal": 9200
+      },
+      {
+        "hex": "0x23f1",
+        "decimal": 9201
+      },
+      {
+        "hex": "0x2454",
+        "decimal": 9300
+      },
+      {
+        "hex": "0x2ee2",
+        "decimal": 12002
+      },
+      {
+        "hex": "0x2ee3",
+        "decimal": 12003
+      },
+      {
+        "hex": "0x2ee6",
+        "decimal": 12006
+      },
+      {
+        "hex": "0x2ee9",
+        "decimal": 12009
+      },
+      {
+        "hex": "0x2eeb",
+        "decimal": 12011
+      },
+      {
+        "hex": "0x2eed",
+        "decimal": 12013
+      },
+      {
+        "hex": "0xed22",
+        "decimal": 60706
+      }
+    ]
+  },
+  "runtime_verified": false
+}

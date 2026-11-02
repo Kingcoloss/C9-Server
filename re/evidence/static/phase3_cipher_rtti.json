@@ -1,0 +1,495 @@
+[
+  {
+    "class": "AbstractCipher",
+    "type_descriptor_va": "012fc86c",
+    "vtables": [
+      {
+        "locator_va": "01248ac0",
+        "vtable_va": "011d8ca0",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dcf090"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd5c92"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd5c92"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd5c92"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VIDEA@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "012ff110",
+    "vtables": [
+      {
+        "locator_va": "0124b124",
+        "vtable_va": "011d9584",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd1960"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd0cf0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd0d40"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VDES@CryptoPP@@$07",
+    "type_descriptor_va": "012ff148",
+    "vtables": [
+      {
+        "locator_va": "0124b170",
+        "vtable_va": "011d9598",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd19f0"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd0f80"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd0fd0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VDES_EDE2@CryptoPP@@$07",
+    "type_descriptor_va": "012ff17c",
+    "vtables": [
+      {
+        "locator_va": "0124b1bc",
+        "vtable_va": "011d95ac",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd1a10"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd11c0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd1210"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VDES_EDE3@CryptoPP@@$0CA@",
+    "type_descriptor_va": "012ff1b4",
+    "vtables": [
+      {
+        "locator_va": "0124b208",
+        "vtable_va": "011d95c0",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd1a50"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd13b0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd1520"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VDES_XEX3@CryptoPP@@$07",
+    "type_descriptor_va": "012ff1f0",
+    "vtables": [
+      {
+        "locator_va": "0124b254",
+        "vtable_va": "011d95d4",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd1a90"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd1700"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd1740"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VThreeWay@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "01301658",
+    "vtables": [
+      {
+        "locator_va": "0124e6b0",
+        "vtable_va": "011d9df0",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3e50"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd2930"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd2970"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd2aa0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VCAST128@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "01301694",
+    "vtables": [
+      {
+        "locator_va": "0124e6fc",
+        "vtable_va": "011d9e04",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3e70"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd2cd0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd2d20"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VRC5@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "013016d0",
+    "vtables": [
+      {
+        "locator_va": "0124e748",
+        "vtable_va": "011d9e18",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3e90"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3060"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd2f00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VRC6@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "01301708",
+    "vtables": [
+      {
+        "locator_va": "0124e794",
+        "vtable_va": "011d9e2c",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3ef0"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3060"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd3990"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd30a0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VMARS@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "01301740",
+    "vtables": [
+      {
+        "locator_va": "0124e7e0",
+        "vtable_va": "011d9e40",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3f50"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3260"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd3990"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd32b0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VGOST@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "01301778",
+    "vtables": [
+      {
+        "locator_va": "0124e82c",
+        "vtable_va": "011d9e54",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3f70"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd34e0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd3520"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VTEA@CryptoPP@@$0BAA@",
+    "type_descriptor_va": "013017b0",
+    "vtables": [
+      {
+        "locator_va": "0124e878",
+        "vtable_va": "011d9e68",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3f90"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3730"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd3770"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VTwofish@CryptoPP@@$07",
+    "type_descriptor_va": "013017e8",
+    "vtables": [
+      {
+        "locator_va": "0124e8c4",
+        "vtable_va": "011d9e7c",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3fb0"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3940"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd3990"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd3ab0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VSKIPJACK@CryptoPP@@$0CA@",
+    "type_descriptor_va": "01301820",
+    "vtables": [
+      {
+        "locator_va": "0124e910",
+        "vtable_va": "011d9e90",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd3ff0"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd3c80"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd3cd0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VSAFER_K@CryptoPP@@$07",
+    "type_descriptor_va": "01302674",
+    "vtables": [
+      {
+        "locator_va": "0124f878",
+        "vtable_va": "011da080",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd4d50"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd4c10"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd4c50"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "?$ConcreteCipher@VSAFER_SK@CryptoPP@@$0CA@",
+    "type_descriptor_va": "013026ac",
+    "vtables": [
+      {
+        "locator_va": "0124f8c4",
+        "vtable_va": "011da094",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00dd4f30"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd4ef0"
+          },
+          {
+            "slot": 2,
+            "function_va": "00dd1400"
+          },
+          {
+            "slot": 3,
+            "function_va": "00dd4c50"
+          }
+        ]
+      }
+    ]
+  }
+]

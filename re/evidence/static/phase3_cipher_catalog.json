@@ -1,0 +1,378 @@
+{
+  "source_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "factory_va": "00dd5070",
+  "selector_rule": "selector % 10; case 9 uses key[0] & 7",
+  "evidence": [
+    "phase3_cipher_factory.c",
+    "phase3_cipher_constructors.c",
+    "phase2_codec_state.c",
+    "PE RTTI and vtable pointers"
+  ],
+  "status": "Static class selection confirmed; full key schedule and wire interoperability pending",
+  "branches": [
+    {
+      "selector_mod10": 0,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd3680",
+      "algorithm_class": "TEA",
+      "vtable_va": "011d9e68",
+      "locator_va": "0124e878",
+      "type_descriptor_va": "013017b0",
+      "rtti_name": ".?AV?$ConcreteCipher@VTEA@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3f90",
+        "00dd3730",
+        "00dd1400",
+        "00dd3770"
+      ]
+    },
+    {
+      "selector_mod10": 1,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd2880",
+      "algorithm_class": "ThreeWay",
+      "vtable_va": "011d9df0",
+      "locator_va": "0124e6b0",
+      "type_descriptor_va": "01301658",
+      "rtti_name": ".?AV?$ConcreteCipher@VThreeWay@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3e50",
+        "00dd2930",
+        "00dd2970",
+        "00dd2aa0"
+      ]
+    },
+    {
+      "selector_mod10": 2,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd2c10",
+      "algorithm_class": "CAST128",
+      "vtable_va": "011d9e04",
+      "locator_va": "0124e6fc",
+      "type_descriptor_va": "01301694",
+      "rtti_name": ".?AV?$ConcreteCipher@VCAST128@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3e70",
+        "00dd2cd0",
+        "00dd1400",
+        "00dd2d20"
+      ]
+    },
+    {
+      "selector_mod10": 3,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd3430",
+      "algorithm_class": "GOST",
+      "vtable_va": "011d9e54",
+      "locator_va": "0124e82c",
+      "type_descriptor_va": "01301778",
+      "rtti_name": ".?AV?$ConcreteCipher@VGOST@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3f70",
+        "00dd34e0",
+        "00dd1400",
+        "00dd3520"
+      ]
+    },
+    {
+      "selector_mod10": 4,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd2ea0",
+      "algorithm_class": "RC5",
+      "vtable_va": "011d9e18",
+      "locator_va": "0124e748",
+      "type_descriptor_va": "013016d0",
+      "rtti_name": ".?AV?$ConcreteCipher@VRC5@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3e90",
+        "00dd3060",
+        "00dd1400",
+        "00dd2f00"
+      ]
+    },
+    {
+      "selector_mod10": 5,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd3000",
+      "algorithm_class": "RC6",
+      "vtable_va": "011d9e2c",
+      "locator_va": "0124e794",
+      "type_descriptor_va": "01301708",
+      "rtti_name": ".?AV?$ConcreteCipher@VRC6@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3ef0",
+        "00dd3060",
+        "00dd3990",
+        "00dd30a0"
+      ]
+    },
+    {
+      "selector_mod10": 6,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd31a0",
+      "algorithm_class": "MARS",
+      "vtable_va": "011d9e40",
+      "locator_va": "0124e7e0",
+      "type_descriptor_va": "01301740",
+      "rtti_name": ".?AV?$ConcreteCipher@VMARS@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3f50",
+        "00dd3260",
+        "00dd3990",
+        "00dd32b0"
+      ]
+    },
+    {
+      "selector_mod10": 7,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd0c30",
+      "algorithm_class": "IDEA",
+      "vtable_va": "011d9584",
+      "locator_va": "0124b124",
+      "type_descriptor_va": "012ff110",
+      "rtti_name": ".?AV?$ConcreteCipher@VIDEA@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd1960",
+        "00dd0cf0",
+        "00dd1400",
+        "00dd0d40"
+      ]
+    },
+    {
+      "selector_mod10": 8,
+      "key_byte0_and7": null,
+      "constructor_va": "00dd3430",
+      "algorithm_class": "GOST",
+      "vtable_va": "011d9e54",
+      "locator_va": "0124e82c",
+      "type_descriptor_va": "01301778",
+      "rtti_name": ".?AV?$ConcreteCipher@VGOST@CryptoPP@@$0BAA@@@",
+      "virtual_entries": [
+        "00dd3f70",
+        "00dd34e0",
+        "00dd1400",
+        "00dd3520"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 0,
+      "constructor_va": "00dd38d0",
+      "algorithm_class": "Twofish",
+      "vtable_va": "011d9e7c",
+      "locator_va": "0124e8c4",
+      "type_descriptor_va": "013017e8",
+      "rtti_name": ".?AV?$ConcreteCipher@VTwofish@CryptoPP@@$07@@",
+      "virtual_entries": [
+        "00dd3fb0",
+        "00dd3940",
+        "00dd3990",
+        "00dd3ab0"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 1,
+      "constructor_va": "00dd0ec0",
+      "algorithm_class": "DES",
+      "vtable_va": "011d9598",
+      "locator_va": "0124b170",
+      "type_descriptor_va": "012ff148",
+      "rtti_name": ".?AV?$ConcreteCipher@VDES@CryptoPP@@$07@@",
+      "virtual_entries": [
+        "00dd19f0",
+        "00dd0f80",
+        "00dd1400",
+        "00dd0fd0"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 2,
+      "constructor_va": "00dd1150",
+      "algorithm_class": "DES_EDE2",
+      "vtable_va": "011d95ac",
+      "locator_va": "0124b1bc",
+      "type_descriptor_va": "012ff17c",
+      "rtti_name": ".?AV?$ConcreteCipher@VDES_EDE2@CryptoPP@@$07@@",
+      "virtual_entries": [
+        "00dd1a10",
+        "00dd11c0",
+        "00dd1400",
+        "00dd1210"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 3,
+      "constructor_va": "00dd1320",
+      "algorithm_class": "DES_EDE3",
+      "vtable_va": "011d95c0",
+      "locator_va": "0124b208",
+      "type_descriptor_va": "012ff1b4",
+      "rtti_name": ".?AV?$ConcreteCipher@VDES_EDE3@CryptoPP@@$0CA@@@",
+      "virtual_entries": [
+        "00dd1a50",
+        "00dd13b0",
+        "00dd1400",
+        "00dd1520"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 4,
+      "constructor_va": "00dd1630",
+      "algorithm_class": "DES_XEX3",
+      "vtable_va": "011d95d4",
+      "locator_va": "0124b254",
+      "type_descriptor_va": "012ff1f0",
+      "rtti_name": ".?AV?$ConcreteCipher@VDES_XEX3@CryptoPP@@$07@@",
+      "virtual_entries": [
+        "00dd1a90",
+        "00dd1700",
+        "00dd1400",
+        "00dd1740"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 5,
+      "constructor_va": "00dd3bc0",
+      "algorithm_class": "SKIPJACK",
+      "vtable_va": "011d9e90",
+      "locator_va": "0124e910",
+      "type_descriptor_va": "01301820",
+      "rtti_name": ".?AV?$ConcreteCipher@VSKIPJACK@CryptoPP@@$0CA@@@",
+      "virtual_entries": [
+        "00dd3ff0",
+        "00dd3c80",
+        "00dd1400",
+        "00dd3cd0"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 6,
+      "constructor_va": "00dd4bb0",
+      "algorithm_class": "SAFER_K",
+      "vtable_va": "011da080",
+      "locator_va": "0124f878",
+      "type_descriptor_va": "01302674",
+      "rtti_name": ".?AV?$ConcreteCipher@VSAFER_K@CryptoPP@@$07@@",
+      "virtual_entries": [
+        "00dd4d50",
+        "00dd4c10",
+        "00dd1400",
+        "00dd4c50"
+      ]
+    },
+    {
+      "selector_mod10": 9,
+      "key_byte0_and7": 7,
+      "constructor_va": "00dd4e90",
+      "algorithm_class": "SAFER_SK",
+      "vtable_va": "011da094",
+      "locator_va": "0124f8c4",
+      "type_descriptor_va": "013026ac",
+      "rtti_name": ".?AV?$ConcreteCipher@VSAFER_SK@CryptoPP@@$0CA@@@",
+      "virtual_entries": [
+        "00dd4f30",
+        "00dd4ef0",
+        "00dd1400",
+        "00dd4c50"
+      ]
+    }
+  ],
+  "key_derivation_hash_classes": [
+    {
+      "branch_mod11": "1",
+      "vtable_va": "011d91a4",
+      "locator_va": "0124a3f0",
+      "type_descriptor_va": "012fdbe4",
+      "rtti_name": ".?AVSHA256@CryptoPP@@",
+      "virtual_entries": [
+        "00dd06f0"
+      ]
+    },
+    {
+      "branch_mod11": "3",
+      "vtable_va": "011d9214",
+      "locator_va": "0124a5fc",
+      "type_descriptor_va": "012fdee8",
+      "rtti_name": ".?AVSHA512@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0c10"
+      ]
+    },
+    {
+      "branch_mod11": "4",
+      "vtable_va": "011d9284",
+      "locator_va": "0124a7cc",
+      "type_descriptor_va": "012fe1c4",
+      "rtti_name": ".?AVSHA384@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0c10"
+      ]
+    },
+    {
+      "branch_mod11": "5",
+      "vtable_va": "011d92f4",
+      "locator_va": "0124a918",
+      "type_descriptor_va": "012fe3dc",
+      "rtti_name": ".?AVMD4@Weak1@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    },
+    {
+      "branch_mod11": "6/default(0,2)",
+      "vtable_va": "011d935c",
+      "locator_va": "0124aaa8",
+      "type_descriptor_va": "012fe670",
+      "rtti_name": ".?AVMD5@Weak1@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    },
+    {
+      "branch_mod11": "7",
+      "vtable_va": "011d93c4",
+      "locator_va": "0124abf4",
+      "type_descriptor_va": "012fe890",
+      "rtti_name": ".?AVRIPEMD160@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    },
+    {
+      "branch_mod11": "8",
+      "vtable_va": "011d9434",
+      "locator_va": "0124ad40",
+      "type_descriptor_va": "012feab0",
+      "rtti_name": ".?AVRIPEMD320@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    },
+    {
+      "branch_mod11": "9",
+      "vtable_va": "011d94a4",
+      "locator_va": "0124ae8c",
+      "type_descriptor_va": "012fecd0",
+      "rtti_name": ".?AVRIPEMD128@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    },
+    {
+      "branch_mod11": "10",
+      "vtable_va": "011d9514",
+      "locator_va": "0124afd8",
+      "type_descriptor_va": "012feef0",
+      "rtti_name": ".?AVRIPEMD256@CryptoPP@@",
+      "virtual_entries": [
+        "00dd0aa0"
+      ]
+    }
+  ]
+}

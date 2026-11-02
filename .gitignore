@@ -1,0 +1,96 @@
+# Client data and downloaded tools (keep their sources/locations in docs).
+/52C9GL/
+/52C9GL*.rar
+/52C9GL*.zip
+/52C9GL*.7z
+/client-data/
+/ghidra_[0-9]*/
+/ghidra_[0-9]*.zip
+/die_*.pkg
+/die_*.dmg
+/die_*.zip
+/die_*.exe
+/installers/
+/tools/downloads/
+
+# Ghidra working databases and archives. Keep exported .c/.asm.txt/.json evidence.
+*.gpr
+*.rep/
+*.gar
+*.gpr.lock*
+/re/evidence/ghidra*/projects/
+
+# .NET outputs for all source and validation projects.
+/src/**/[Bb]in/
+/src/**/[Oo]bj/
+/tests/**/[Bb]in/
+/tests/**/[Oo]bj/
+/artifacts/
+**/TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Visual Studio / workstation state. Portable VS Code configuration stays visible.
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+.vscode/*.local.json
+
+# Python RE/reference environment and generated caches.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Machine-local paths/configuration and private deployment values.
+/config/*.local.json
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+.env
+.env.*
+!.env.example
+!.env.*.example
+/secrets/
+*.pfx
+*.p12
+
+# Runtime logs, raw captures, dumps and downloaded symbols.
+*.log
+/logs/
+/captures/
+/dumps/
+/symbols/
+*.pcap
+*.pcapng
+*.dmp
+*.mdmp
+*.hprof
+
+# UTM/other VM disks and installation media belong outside the source repository.
+*.utm/
+*.utm.zip
+*.qcow2
+*.vhd
+*.vhdx
+*.vmdk
+*.vdi
+*.iso
+/vm-images/
+
+# macOS / Windows file-manager metadata.
+.DS_Store
+._*
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/

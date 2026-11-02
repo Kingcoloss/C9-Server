@@ -1,0 +1,37 @@
+[
+  {
+    "file": "C9.exe",
+    "sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+    "unchanged": true
+  },
+  {
+    "file": "C9Launcher.exe",
+    "sha256": "c3221361367f84721e92bf360d54be7490e3aa443ebce908ee6f3064218439bf",
+    "unchanged": true
+  },
+  {
+    "file": "C9Patcher.exe",
+    "sha256": "26c1d3c2a44514f199f5709cfe2ec67825516c6a29668ae0eb22c6c1f9ef49df",
+    "unchanged": true
+  },
+  {
+    "file": "BaseCat.Network.dll",
+    "sha256": "005e5824a2be1e15c7401624d13646f2a2003613c7e4f424cf212c1ef29b43b1",
+    "unchanged": true
+  },
+  {
+    "file": "BaseCat.System.dll",
+    "sha256": "d69608134c29a6b4305df4f8ecb4a9c50f736a79b8e6e3f9f4fd10e807bd2718",
+    "unchanged": true
+  },
+  {
+    "file": "PhysXLoader.dll",
+    "sha256": "6f491b6073a6fd759f3eb5b83e010fa66c5e0e9075585d263bd63d1f622cec3f",
+    "unchanged": true
+  },
+  {
+    "file": "xp.dll",
+    "sha256": "e9f1a700091089d966477172715470e3a9df103a3acc4623fc8688081c73fd2a",
+    "unchanged": true
+  }
+]

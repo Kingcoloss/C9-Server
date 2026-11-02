@@ -1,0 +1,8 @@
+{
+  "selectors": 80,
+  "directions": 160,
+  "length_branches": 640,
+  "native_comparisons_and_inverse_basis_checks": 67520,
+  "reference": "Newly compiled recovered C, not the original PE",
+  "runtime_table_sha256": "5b380265f92ff3b2c900e505d322934ea400658591095f93c1bd45b66e741fc3"
+}

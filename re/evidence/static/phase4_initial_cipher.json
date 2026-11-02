@@ -1,0 +1,25 @@
+{
+  "client_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "seed_va": "012fc7f4",
+  "seed_length_va": "012fc818",
+  "seed_hex": "3333323334353637383930313233343536373839303132333435363738393132",
+  "seed_length": 32,
+  "hash_branch": 7,
+  "hash": "RIPEMD160",
+  "digest_hex": "6f749a998ed7373b8413712b6b3a201381850d31",
+  "factory_selector_offset": 5,
+  "factory_selector": 5,
+  "cipher": "RC6",
+  "key_length": 16,
+  "rounds": 20,
+  "block_size": 16,
+  "epoch_frame_limit_per_direction": 256,
+  "subsequent_rotation": "not implemented; reject after initial epoch",
+  "evidence": [
+    "phase4_hash_switch.asm.txt",
+    "phase4_outer_core.c",
+    "phase4_rc6_schedule.c",
+    "phase4_rc6_primitives.c"
+  ],
+  "status": "Static reconstruction; original-client runtime validation pending"
+}
