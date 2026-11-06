@@ -7,29 +7,46 @@ using Microsoft.Extensions.Logging;
 
 try
 {
-    string? configPath = null, hostOverride = null;
-    bool checkRuntime = false;
-    int? portOverride = null;
+    string? configPath = null, hostOverride = null, clientDirectory = null;
+    bool checkRuntime = false, launcherUpdate = false;
+    int updatePort = 18080;
+    int? portOverride = null, loginPort = null;
     for (int i = 0; i < args.Length; i++)
     {
         if (args[i] is "--help" or "-h")
         {
-            Console.WriteLine("C9 .NET server\nUsage: dotnet C9.Server.dll [--config FILE] [--host LOOPBACK] [--port PORT] [--check-runtime]\nOriginal-Client compatibility is unverified; fixture replies are synthetic.");
+            Console.WriteLine("C9 .NET server\nUsage: dotnet C9.Server.dll [--config FILE] [--host LOOPBACK] [--port PORT] [--check-runtime]\n       dotnet C9.Server.dll --launcher-update --client-dir DIR [--update-port PORT] [--login-port PORT]\nOriginal-Client compatibility is unverified; fixture replies are synthetic.");
             return 0;
         }
         if (args[i] == "--check-runtime") { checkRuntime = true; continue; }
+        if (args[i] == "--launcher-update") { launcherUpdate = true; continue; }
         if (i + 1 >= args.Length) throw new ArgumentException("Missing command-line value");
         switch (args[i])
         {
             case "--config": configPath = args[++i]; break;
             case "--host": hostOverride = args[++i]; break;
             case "--port": portOverride = int.Parse(args[++i], System.Globalization.CultureInfo.InvariantCulture); break;
+            case "--client-dir": clientDirectory = args[++i]; break;
+            case "--update-port": updatePort = int.Parse(args[++i], System.Globalization.CultureInfo.InvariantCulture); break;
+            case "--login-port": loginPort = int.Parse(args[++i], System.Globalization.CultureInfo.InvariantCulture); break;
             default: throw new ArgumentException("Unknown command-line option");
         }
     }
+    if (launcherUpdate)
+    {
+        if (clientDirectory is null) throw new ArgumentException("Launcher update mode requires --client-dir DIR");
+        if (checkRuntime || configPath is not null || hostOverride is not null || portOverride is not null)
+            throw new ArgumentException("Launcher update mode cannot be combined with game server options");
+        await LauncherUpdateServer.RunAsync(clientDirectory, updatePort, loginPort ?? 14000);
+        return 0;
+    }
+    if (clientDirectory is not null || updatePort != 18080 || loginPort is not null)
+        throw new ArgumentException("Client directory, update port and login port require --launcher-update");
     ServerOptions options = configPath is null ? new() : ServerOptions.FromJson(await File.ReadAllTextAsync(configPath));
     options = options with { Host = hostOverride ?? options.Host, Port = portOverride ?? options.Port };
     options.Validate();
+    if (options.CharacterStore is { } store)
+        options = options with { CharacterStore = Path.GetFullPath(store, Path.GetDirectoryName(Path.GetFullPath(configPath!))!) };
     if (checkRuntime)
     {
         _ = new ConnectionCodec(options.MaxFrame);

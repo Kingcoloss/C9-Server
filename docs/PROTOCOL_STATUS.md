@@ -1,5 +1,47 @@
 # Protocol implementation evidence
 
+5 November 2026 character lobby: the original Client created `Lab`, a level-1
+Fighter in slot 0, and loaded its name, class and appearance after the server
+restarted. Capture validation confirms `0BBB`/`0BBC` and `0EFB`/`0EFC` exchanges.
+The creation request carries template ID 0 for Fighter; its asset job code is 1.
+The list must use the unsigned 64-bit -1 sentinel for an active character's
+deletion time. `2EEA`/`2EEB` returns a populated character list to Choose World.
+The full .NET suite passes 40/40 cases (2,976 assertions).
+See [character lobby notes](WINDOWS_CHARACTER_LOBBY_TH.md).
+
+The initial `0BBF` -> `0BC0`, `0BC3` transition reaches the original Client's
+Waterford Village loading screen. Scene loading stops at an Error dialog:
+`The map key entered does not exist. Map Key:`. The key is blank. This is a
+partial world-loading experiment, not playable-world or gameplay validation.
+
+5 November 2026: the selected launcher reads the installed `version.ini` after
+applying the reversible executable patch. PLAY reached the original game's Log In
+screen with the HTTP updater stopped. See [offline launcher notes](WINDOWS_LAUNCHER_TH.md).
+
+4 November 2026 resume: .NET full validation passes 39/39 (2,919 assertions),
+Python protocol/server passes 19/19. A separate greeting-only `observer`
+profile accepts interleaved valid packets without application replies; malformed
+wire frames still fail validation. See [resume notes](WINDOWS_RESUME_20261104_TH.md).
+
+Windows session update (3 November 2026): the owner authorized opening the game.
+The .NET full suite passes 38/38 cases on Windows ARM64, including TCP; the
+launcher now downloads its local version manifest and shows
+`Patch success complete.`. See [Windows session notes](WINDOWS_LAUNCHER_TH.md)
+and `re/evidence/static/windows_launcher_validation.json`. This supersedes the
+historical environment/authorization limitations below for this session.
+The selected game has exchanged initial encrypted login/list frames with the
+synthetic profile, displayed C9 Local / Good, and followed a synthetic TCP
+handoff to loopback 14001. A mode-1 greeting there produces the expected
+49-byte 1771 request with fresh sequence 0. Authentication semantics, the game-endpoint reply
+and subsequent cipher epochs remain unverified. See
+[Windows handshake evidence](WINDOWS_HANDSHAKE_TH.md).
+
+Afternoon continuation: a reversible, hash-locked two-byte promotional-dialog
+fix in PhysXLoader.dll and the recovered SERVER/IP1/PORT1 manifest fields let
+the Client reach its Log In screen. C9.exe remains unchanged. See
+[Client startup notes](WINDOWS_CLIENT_STARTUP_TH.md). Displaying the login UI
+does not establish successful authentication or game-server interoperability.
+
 Target SHA-256:
 `b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25`
 
@@ -24,6 +66,11 @@ Addresses below are preferred-image VAs for the selected PE32 Client.
 | TCP sequence initialization and increment | 00563820, 00A38850, 00563E40 |
 | Server list count/stride | 00A621F0 type 2EE6: count +13, entry +14, stride 34h |
 | Opaque entry copy / lookup key | 00614D40 copies 13 DWORDs; 00A63630 compares DWORD at entry +1 |
+| Entry display name | 00A621F0 passes entry +5 to 0045DFE0; WORD scan and WideCharToMultiByte at IAT 00F99308 establish UTF-16LE |
+| Entry selection gate | 00B1D7CD / 00B1D7F1 read byte +33h; zero takes the error path, nonzero reaches 00A631B0; complete status enum remains unresolved |
+| Server selection request | 00A64480 / 00A631B0 construct 2EEC with 20-byte payload; captured game request has key 1 at payload +8 and sequence 14 |
+| Handoff TCP endpoint | 2EED reader 00A62E36..00A62E58 uses packet +1Ah/+1Eh; 0056386A..00563882 applies htons to the port and copies IPv4 bytes into sockaddr |
+| Periodic 9999 request | 00A6B3F0 constructs decoded length 15h; 00A68740 sends after 3000 ms and writes GetTickCount plus a DWORD flag; captured payload is 8 bytes |
 
 The fixed seed is 32 bytes. Its RIPEMD160 digest is
 `6f749a998ed7373b8413712b6b3a201381850d31`; digest byte 5 is D7h,

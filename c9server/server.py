@@ -40,14 +40,18 @@ class ServerConfig:
     def __post_init__(self):
         if not ipaddress.ip_address(self.host).is_loopback:
             raise ValueError('Research server requires a loopback bind address')
-        if not 0 <= self.port <= 65535 or self.profile not in ('probe', 'fixture'):
+        if not 0 <= self.port <= 65535 or self.profile not in ('probe', 'fixture', 'observer'):
             raise ValueError('Invalid port or profile')
         if not 20 <= self.max_frame <= 65535 or not 1 <= self.max_connections <= 32:
             raise ValueError('Invalid frame or connection limit')
         if not 1 <= self.max_packets <= 255 or not 0 < self.timeout_seconds <= 300:
             raise ValueError('Limits must stay within the implemented cipher epoch')
         if self.profile == 'probe' and (self.greetings or self.rules):
-            raise ValueError('Response rules require the explicit fixture profile')
+            raise ValueError('Passive probe cannot send greetings or replies')
+        if self.profile == 'observer' and (self.rules or len(self.greetings) != 1 or
+                self.greetings[0].kind != 4 or self.greetings[0].flag != 0 or
+                self.greetings[0].payload not in (b'\0', b'\1')):
+            raise ValueError('Observer requires one plain type-4 mode-0/1 greeting and no response rules')
         keys = [(r.state, r.request_type) for r in self.rules]
         if len(keys) != len(set(keys)):
             raise ValueError('Duplicate state/type rule')
@@ -134,7 +138,7 @@ class ResearchServer:
         self._session_number += 1
         session = self._session_number
         codec = ConnectionCodec(max_frame=self.config.max_frame, discover_receive_selector=True)
-        state = 'connected'
+        state = 'observing' if self.config.profile == 'observer' else 'connected'
         rules = {(r.state, r.request_type): r for r in self.config.rules}
         self.emit({'event': 'connected', 'session': session})
 
@@ -158,7 +162,7 @@ class ResearchServer:
                 self.emit({'event': 'received', 'session': session, 'type': packet.kind,
                            'payload_length': len(packet.payload), 'flag': packet.flag,
                            'sequence': packet.sequence, 'state': state})
-                if self.config.profile == 'probe':
+                if self.config.profile in ('probe', 'observer'):
                     continue
                 rule = rules.get((state, packet.kind))
                 if rule is None:

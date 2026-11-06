@@ -5,6 +5,7 @@ namespace C9.Server;
 
 public sealed record ServerEvent(string Event)
 {
+    public DateTimeOffset RecordedAtUtc { get; init; } = DateTimeOffset.UtcNow;
     public long? Session { get; init; }
     public ushort? Type { get; init; }
     public int? WireLength { get; init; }

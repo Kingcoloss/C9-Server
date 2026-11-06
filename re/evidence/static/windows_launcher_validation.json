@@ -1,0 +1,68 @@
+{
+  "recorded_at_utc": "2026-11-03T03:53:46.4969955Z",
+  "platform": "Windows ARM64",
+  "dotnet_sdk": "10.0.403",
+  "original_game_authorized": true,
+  "dotnet_validation": {
+    "passed": 36,
+    "total": 36,
+    "skipped": 0,
+    "assertions": 2834,
+    "mode": "full",
+    "status": "passed"
+  },
+  "python_protocol_server_tests": {
+    "passed": 17,
+    "total": 17
+  },
+  "python_client_path_tests": {
+    "passed": 7,
+    "total": 7
+  },
+  "baseline_before_changes": {
+    "preexisting_modification": "version.ini was already empty; original Mac manifest recorded 5788 bytes",
+    "unchanged": 37,
+    "checked": 38
+  },
+  "client_integrity_after": {
+    "unchanged": 36,
+    "unexpected_modified": [],
+    "checked": 38,
+    "expected_modified": [
+      "localinfo.dat",
+      "version.ini"
+    ]
+  },
+  "launcher_update": {
+    "url": "http://127.0.0.1:18080/C9Update/EN/version.ini",
+    "observed_ui": "Patch success complete.",
+    "installed_version": 1017,
+    "progress": 100,
+    "parser_function": "00413570",
+    "launcher_sha256": "c3221361367f84721e92bf360d54be7490e3aa443ebce908ee6f3064218439bf",
+    "download_key": "server1"
+  },
+  "lab_lifecycle": {
+    "restart": "passed",
+    "reuse": "passed",
+    "stop": "passed",
+    "bind": "127.0.0.1",
+    "start": "passed"
+  },
+  "game": {
+    "login_screen_verified": false,
+    "ui_blocker": "Java Windows Security prompt; awaiting user handling; security settings were not changed",
+    "authentication_verified": false,
+    "started": true,
+    "observed_window_title": "提示",
+    "arguments": "64bit"
+  },
+  "ghidra": {
+    "targeted_config_functions_exported": true,
+    "max_heap": "2G",
+    "full_analysis_completed": false,
+    "max_cpu": 2,
+    "analysis_timeout_seconds": 120
+  },
+  "original_client_compatibility": "unverified"
+}

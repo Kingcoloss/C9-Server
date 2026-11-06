@@ -5,6 +5,7 @@
   "port": 14000,
   "max_frame": 8192,
   "max_packets": 64,
+  "timeout_seconds": 120,
   "greetings": [
     {
       "type": 4,
@@ -33,8 +34,41 @@
       "replies": [
         {
           "type": 12006,
-          "payload_hex": "0100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          "payload_hex": "0100010000004300390020004c006f00630061006c0000000000000000000000000000000000000000000000000000000000000001"
         }
+      ]
+    },
+    {
+      "state": "server_list_sent",
+      "request_type": 12005,
+      "payload_length": 0,
+      "next_state": "server_list_sent",
+      "replies": [
+        {
+          "type": 12006,
+          "payload_hex": "0100010000004300390020004c006f00630061006c0000000000000000000000000000000000000000000000000000000000000001"
+        }
+      ]
+    },
+    {
+      "state": "server_list_sent",
+      "request_type": 12012,
+      "payload_length": 20,
+      "next_state": "handoff_fixture_sent",
+      "replies": [
+        {
+          "type": 12013,
+          "payload_hex": "010000000000000001000000007f000001b1367f000001b1360100"
+        }
+      ]
+    },
+    {
+      "state": "connected",
+      "request_type": 12008,
+      "payload_length": 28,
+      "next_state": "server_list_sent",
+      "replies": [
+        { "type": 12009, "payload_hex": "" }
       ]
     }
   ]

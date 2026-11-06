@@ -19,6 +19,17 @@ async def read_wire(reader):
 
 
 class ConfigTests(unittest.TestCase):
+    def test_observer_only_allows_a_plain_greeting_without_response_rules(self):
+        observer = ServerConfig.load(ROOT / 'config/lab-handoff-probe.json')
+        self.assertEqual(observer.profile, 'observer')
+        for greetings in [(), (Packet(4, b'\2', flag=0),), (Packet(4, b'\1'),),
+                          (Packet(12002, b'\1', flag=0),), (Packet(4, b'', flag=0),),
+                          (Packet(4, b'\0', flag=0), Packet(4, b'\1', flag=0))]:
+            with self.assertRaises(ValueError):
+                replace(observer, greetings=greetings)
+        with self.assertRaises(ValueError):
+            replace(observer, rules=ServerConfig.load(ROOT / 'config/lab-fixture.json').rules)
+
     def test_config_bounds_and_explicit_fixture_profile(self):
         with self.assertRaises(ValueError):
             ServerConfig(host='0.0.0.0')
@@ -46,11 +57,11 @@ class ServerTests(unittest.IsolatedAsyncioTestCase):
                 pass
         await self.server.close()
 
-    async def connect(self):
+    async def connect(self, greeting_mode=0):
         reader, writer = await asyncio.open_connection('127.0.0.1', self.server.port)
         self.writers.append(writer)
         codec = ConnectionCodec()
-        self.assertEqual(codec.decode(await read_wire(reader)), Packet(4, b'\0', flag=0))
+        self.assertEqual(codec.decode(await read_wire(reader)), Packet(4, bytes([greeting_mode]), flag=0))
         return reader, writer, codec
 
     async def test_encrypted_login_fixture_then_server_list_over_tcp(self):
@@ -93,6 +104,33 @@ class ServerTests(unittest.IsolatedAsyncioTestCase):
         await writer.drain()
         self.assertEqual(await asyncio.wait_for(reader.read(), 2), b'')
         self.assertTrue(any(e['event'] == 'session_error' for e in self.events))
+
+    async def test_observer_keeps_interleaved_unknown_requests_and_logs_no_payload(self):
+        await self.server.close()
+        self.config = ServerConfig.load(ROOT / 'config/lab-handoff-probe.json', port=0, timeout_seconds=2)
+        self.server = await ResearchServer(self.config, self.events.append).start()
+        _, writer, codec = await self.connect(greeting_mode=1)
+        marker = b'PRIVATE-OBSERVER-DO-NOT-LOG'
+        requests = [Packet(6001, bytes(49)), Packet(9999, bytes(8)), Packet(12005),
+                    Packet(9901, bytes(24)), Packet(0x7777, marker)]
+        writer.write(b''.join(codec.encode(packet) for packet in requests))
+        await writer.drain()
+        for _ in range(100):
+            if len([e for e in self.events if e['event'] == 'received']) == 5:
+                break
+            await asyncio.sleep(0.01)
+        writer.write(codec.encode(Packet(9999, bytes(8))))
+        await writer.drain()
+        for _ in range(100):
+            if len([e for e in self.events if e['event'] == 'received']) == 6:
+                break
+            await asyncio.sleep(0.01)
+        received = [e for e in self.events if e['event'] == 'received']
+        self.assertEqual([e['sequence'] for e in received], list(range(6)))
+        self.assertTrue(all(e['state'] == 'observing' for e in received))
+        self.assertEqual([e['type'] for e in self.events if e['event'] == 'sent'], [4])
+        self.assertFalse(any(e['event'] == 'session_error' for e in self.events))
+        self.assertNotIn(marker.decode(), json.dumps(self.events))
 
     async def test_oversized_length_rejected_before_body_read(self):
         reader, writer, _ = await self.connect()

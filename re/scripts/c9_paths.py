@@ -12,7 +12,7 @@ def resolve_client_dir(explicit=None, root=None):
     if not value:
         config = root / 'config/research.local.json'
         if config.exists():
-            document = json.loads(config.read_text())
+            document = json.loads(config.read_text(encoding='utf-8'))
             if not isinstance(document, dict) or set(document) != {'client_directory'}:
                 raise ValueError('research.local.json must contain only client_directory')
             value = document['client_directory']

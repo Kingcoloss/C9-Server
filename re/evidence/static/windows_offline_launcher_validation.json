@@ -1,0 +1,22 @@
+{
+  "local_date": "2026-11-05",
+  "client_directory": "F:\\52C9GL",
+  "launcher_original_sha256": "c3221361367f84721e92bf360d54be7490e3aa443ebce908ee6f3064218439bf",
+  "launcher_offline_sha256": "a90bfc010cbf189e3795fb6ed6266c02721165274ebdfa7dad0c93c4b9e38834",
+  "original_backup": "artifacts/client-backups/offline-launcher/C9Launcher.exe.original",
+  "manifest": {
+    "file": "version.ini",
+    "installed_version": 1017,
+    "sha256": "d7224e78adac20095c2c79f6d75fe28d87c8f7eeed825dab5ed2eaeb51141a52",
+    "login_endpoint": "127.0.0.1:14000"
+  },
+  "validation": {
+    "apply_repeat_and_restore": "passed",
+    "reject_invalid_manifest_and_unknown_executable": "passed",
+    "http_updater_listening": false,
+    "launcher_status": "Patch success complete.",
+    "original_game_launched_from_play": true,
+    "login_screen_displayed": true,
+    "authentication_tested_this_run": false
+  }
+}

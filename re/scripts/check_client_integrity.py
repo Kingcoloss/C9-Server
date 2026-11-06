@@ -20,7 +20,7 @@ def main():
         parser.error(str(error))
     if args.output.resolve().is_relative_to(client):
         parser.error('Integrity reports must be written outside the Client folder')
-    baseline = json.loads((PROJECT_ROOT / 're/evidence/static/phase2_client_manifest.json').read_text())
+    baseline = json.loads((PROJECT_ROOT / 're/evidence/static/phase2_client_manifest.json').read_text(encoding='utf-8'))
     rows = []
     for item in baseline['files']:
         path = (client / item['file']).resolve()
@@ -31,7 +31,7 @@ def main():
     output = {'recorded_at_utc': datetime.now(timezone.utc).isoformat(), 'client_directory': str(client),
               'scope': baseline['scope'], 'checked': len(rows), 'files': rows}
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(output, indent=2) + '\n')
+    args.output.write_text(json.dumps(output, indent=2) + '\n', encoding='utf-8')
     passed = sum(r['unchanged'] for r in rows)
     print(json.dumps({'unchanged': passed, 'checked': len(rows)}))
     return 0 if passed == len(rows) else 1

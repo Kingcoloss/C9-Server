@@ -2,13 +2,21 @@
 
 C#/.NET 10 server runtime and reverse-engineering tools for the selected C9
 Client build. Python is retained as a protocol reference and RE toolchain.
-The port supports encrypted login/server-list **fixtures**. Original-game
-compatibility, authentication semantics and successful game login remain unverified.
+The port supports encrypted login/server-list **fixtures**. The selected game
+has exchanged its initial login/list messages with these fixtures, displayed
+`C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second
+loopback endpoint. The character profile creates and persists a local character,
+reloads its appearance, and reaches the original Client's Waterford loading screen.
+Scene loading currently stops with a Map Key error. Credential validation and
+playable world entry remain unverified.
 
-The original game, Launcher and Patcher must stay closed until the project
-owner explicitly authorizes a debug session. Commands below run our own code.
+The owner authorized opening the original game and Launcher for the Windows
+debug session on 3 November 2026. The local update service and protocol probe
+are described in [the Windows session notes](docs/WINDOWS_LAUNCHER_TH.md).
+The [Client startup notes](docs/WINDOWS_CLIENT_STARTUP_TH.md) document the
+reversible two-byte wrapper fix and the Client's required SERVER manifest fields.
 
-## Run on this Mac
+## Run the protocol server
 
 From the repository root, using the installed .NET 10 SDK:
 
@@ -37,9 +45,22 @@ validation are pending.
 The fixture profile sends a constructed type-4 greeting, accepts a fixed-length
 `0x2EE1` payload, returns an opaque `0x2EE2` fixture, then answers `0x2EE5` with a
 one-entry `0x2EE6` fixture. These choices exercise static layouts and transport.
-They do not authenticate credentials or establish the original handshake.
+Repeated list requests receive the same list without resetting the session.
+Selecting the fixture server returns a constructed `0x2EED` endpoint reply;
+`scripts/Start-C9Lab.ps1 -GameProfile fixture` also starts the observer on 14001.
+The `observer` profile sends one plain type-4 mode-1 greeting, then validates
+framing, crypto and sequence while recording metadata for all packet types.
+It accepts interleaved keepalives/list requests without application replies.
+The separate `character_lobby` profile implements a single synthetic account's
+three character slots and local JSON persistence. Run
+`scripts/Start-C9Lab.ps1 -OfflineLauncher -GameProfile fixture -HandoffConfig config/lab-character-lobby.json`
+with the patched Launcher; see [character test notes](docs/WINDOWS_CHARACTER_LOBBY_TH.md).
+Authentication and a UDP service remain unimplemented.
+They do not authenticate credentials or establish the original authentication semantics.
 The five DWORD values in the login response and the server entry are synthetic.
-Entry text encoding and most entry fields remain unresolved.
+The entry includes a short UTF-16LE name at +5 and a synthetic nonzero selection
+gate at +51, based on selected-Client readers. Most entry fields remain unresolved.
+See [the Windows handshake evidence](docs/WINDOWS_HANDSHAKE_TH.md).
 
 ## Validate
 
@@ -56,15 +77,18 @@ python3 re/scripts/validate_dotnet_port.py
 ```
 
 The .NET validation executable is a package-free test harness. Offline mode runs
-24 cases and explicitly skips 10 socket cases. It checks 960 Python payload
+25 cases and explicitly skips 15 socket cases. It checks 960 Python payload
 vectors, 64 sequential wire vectors and state tables, independent RC6/RIPEMD160
 vectors, framing, session isolation, timeout, packet limits and backpressure.
 The same session processor is used by TCP and in-memory/stdio adapters.
 
-In the current execution environment, outbound loopback connection attempts
-returned `SocketException (13): Permission denied`. The .NET TCP suite and the
-Linux deployment target therefore remain unverified. Socket-free checks passing
-do not establish TCP or original-game compatibility.
+On Windows ARM64, the full .NET suite passed all 40 cases (2,976 assertions), including character
+persistence, the TCP suite and the local launcher HTTP contract, on 5 November 2026. The Python
+protocol/server suite passed all 19 cases. The Windows half-close test retains
+the connected NetworkStream before shutting down the sending socket.
+The earlier macOS environment rejected outbound loopback connects with
+`SocketException (13)`. Linux deployment and original-game authentication
+remain unverified.
 
 ## Publish
 
@@ -81,7 +105,8 @@ shared frameworks. Publish/runtime checks have been exercised on macOS ARM64.
 
 | Component | Current behavior |
 |---|---|
-| TCP host | Sockets, Pipelines, Generic Host, connection limits and graceful shutdown; socket integration remains pending in this environment |
+| TCP host | Sockets, Pipelines, Generic Host, connection limits and graceful shutdown; TCP suite passes on Windows ARM64 |
+| Launcher update host | Loopback HTTP manifest based on the installed version.dat; no patch archives or Client executables are served |
 | Session runtime | Shared processor with bounded framing, deadlines, backpressure and metadata logs |
 | Header/checksum | 13-byte decoded header, signed-byte checksum, uint32 wrap |
 | Payload transform | All 80 observed selectors, encode/decode, four length branches |
@@ -91,13 +116,15 @@ shared frameworks. Publish/runtime checks have been exercised on macOS ARM64.
 | Cipher rotation | Initial 256 transformed frames per direction; later epochs rejected |
 | Client send adjustment | Bounded search over 80 transforms; one checksum-valid plaintext |
 | Messages | Opaque 52-byte server-list entries, explicit fixture response rules |
-| Authentication / game world | Pending protocol and runtime evidence |
+| Character lobby | Create, persist and reload a synthetic character; verified with the original Client |
+| Initial world transition | Select-character and map replies reach Waterford loading; Map Key error unresolved |
+| Authentication / playable world | Unimplemented; real credential validation and gameplay remain unverified |
 
 The cipher implementation is grounded in the selected Client's static code.
 RC6 vectors validate the primitive, and differential/basis checks validate the
 recovered payload maps. They do not replace an original-Client trace. This is a
-research server, with no database, character service, world simulation or admin
-interface yet.
+research server with a local JSON character store. It has no production database,
+world simulation or admin interface yet.
 
 ## Relocated Client folder
 
@@ -134,6 +161,6 @@ Rebuild payload maps with `re/scripts/build_twister_tables.py` after the bounded
 Ghidra exports are available. Extraction needs the installed Clang; normal
 server execution uses portable JSON tables and never loads the Windows PE.
 
-Next work is subsequent key rotation, remaining message schemas and the first
-original-Client debug session after the owner permits opening the game. M4's
-original-Client acceptance criterion remains pending.
+The Windows session fixes the retired launcher update dependency and establishes
+initial encrypted game/fixture exchange and TCP handoff. Subsequent key rotation, authentication,
+remaining message schemas and M4's full acceptance remain pending.

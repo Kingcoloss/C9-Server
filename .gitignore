@@ -4,6 +4,13 @@
 /52C9GL*.zip
 /52C9GL*.7z
 /client-data/
+/client-backups/
+/client-extracted/
+*.cfs
+*.C9MM
+*.C9LW
+*.r3sd
+*.vertices
 /ghidra_[0-9]*/
 /ghidra_[0-9]*.zip
 /die_*.pkg
@@ -55,6 +62,8 @@ htmlcov/
 
 # Machine-local paths/configuration and private deployment values.
 /config/*.local.json
+*.local.json
+*.local.json.*.tmp
 **/appsettings.Local.json
 **/appsettings.*.Local.json
 .env
@@ -76,6 +85,8 @@ htmlcov/
 *.dmp
 *.mdmp
 *.hprof
+*.pdb
+*.ilk
 
 # UTM/other VM disks and installation media belong outside the source repository.
 *.utm/

@@ -44,6 +44,12 @@ class ClientPathTests(unittest.TestCase):
         folder = self.folder('52C9GL')
         self.assertEqual(resolve_client_dir(root=self.root), folder)
 
+    def test_utf8_local_config_with_non_ascii_path(self):
+        folder = self.folder('\u0e40\u0e01\u0e21 C9')
+        (self.root / 'config/research.local.json').write_text(
+            json.dumps({'client_directory': folder.name}, ensure_ascii=False), encoding='utf-8')
+        self.assertEqual(resolve_client_dir(root=self.root), folder)
+
     def test_missing_and_invalid_config_are_explicit(self):
         with self.assertRaisesRegex(ValueError, 'C9_CLIENT_DIR'):
             resolve_client_dir(root=self.root)

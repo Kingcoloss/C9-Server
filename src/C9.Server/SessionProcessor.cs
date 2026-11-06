@@ -9,11 +9,13 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
 {
     private static readonly Meter Metrics = new("C9.Server", "0.1.0");
     private static readonly Counter<long> Received = Metrics.CreateCounter<long>("c9.packets.received");
+    private readonly CharacterLobby? characterLobby = options.Profile == "character_lobby"
+        ? new CharacterLobby(options.CharacterStore!) : null;
 
     public async Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default)
     {
         ConnectionCodec codec = new(options.MaxFrame, discoverReceiveSelector: true);
-        string state = "connected";
+        string state = options.Profile == "observer" ? "observing" : "connected";
         Dictionary<(string, ushort), ResponseRule> rules = options.Rules.ToDictionary(r => (r.State, r.RequestType));
         events.Emit(new ServerEvent("connected") { Session = id });
         try
@@ -34,6 +36,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                 events.Emit(new ServerEvent("sent") { Session = id, Type = packet.Type, WireLength = wire.Length });
             }
 
+            if (characterLobby is not null) await SendAsync(new Packet(4, new byte[] { 1 }, 0));
             foreach (Packet greeting in options.Greetings) await SendAsync(greeting);
             for (int count = 0; count < options.MaxPackets; count++)
             {
@@ -51,7 +54,48 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     Session = id, Type = packet.Type, PayloadLength = packet.Payload.Length,
                     Flag = packet.Flag, Sequence = packet.Sequence, State = state
                 });
-                if (options.Profile == "probe") continue;
+                if (options.Profile is "probe" or "observer") continue;
+                if (characterLobby is not null)
+                {
+                    if (state == "connected" && packet.Type == 0x1771 && packet.Payload.Length == 49)
+                    {
+                        await SendAsync(characterLobby.List());
+                        state = "character_lobby";
+                        events.Emit(new ServerEvent("state") { Session = id, State = state });
+                    }
+                    else if (state == "character_lobby" && packet.Type == 0x0BBB)
+                    {
+                        await SendAsync(characterLobby.Create(packet.Payload.Span));
+                    }
+                    else if (state == "character_lobby" && packet.Type == 0x0EFB)
+                    {
+                        await SendAsync(characterLobby.Details(packet.Payload.Span));
+                    }
+                    else if (state == "character_lobby" && packet.Type == 0x0BBF)
+                    {
+                        await SendAsync(characterLobby.Select(packet.Payload.Span));
+                        await SendAsync(CharacterLobby.EnterWaterford());
+                        state = "world_loading";
+                        events.Emit(new ServerEvent("state") { Session = id, State = state });
+                    }
+                    else if (state is "character_lobby" or "world_loading" &&
+                        ((packet.Type == 0x0EC4 && packet.Payload.IsEmpty) ||
+                         (packet.Type == 0x2EEA && packet.Payload.Length == 16)))
+                    {
+                        // Client 00A62D76 reconnects to login and requests 2EE8.
+                        await SendAsync(new Packet(0x2EEB));
+                    }
+                    else if (state == "world_loading")
+                    {
+                        // Observe the next world requests without inventing replies.
+                        // Gameplay handlers are added only after verifying their readers.
+                    }
+                    else if (state != "character_lobby" || (packet.Type, packet.Payload.Length) is not ((9999, 8) or (9901, 24) or (12005, 0)))
+                    {
+                        throw new ProtocolException(ProtocolError.InvalidPacket, "Unexpected character lobby request");
+                    }
+                    continue;
+                }
                 if (!rules.TryGetValue((state, packet.Type), out ResponseRule? rule))
                     throw new ProtocolException(ProtocolError.InvalidPacket, "No fixture rule for session state/type");
                 if (packet.Payload.Length != rule.PayloadLength)

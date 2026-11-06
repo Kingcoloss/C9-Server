@@ -1,0 +1,13 @@
+{
+  "description": "Loopback handoff observer. Sends one mode-1 greeting, then validates framing/crypto/sequence and records metadata for every packet without application replies. No authentication, character, world or UDP service is implemented.",
+  "profile": "observer",
+  "host": "127.0.0.1",
+  "port": 14001,
+  "max_frame": 8192,
+  "max_packets": 64,
+  "timeout_seconds": 120,
+  "greetings": [
+    { "type": 4, "flag": 0, "payload_hex": "01" }
+  ],
+  "rules": []
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "class": "C9NetworkBase",
+    "type_descriptor_va": "012f4900",
+    "vtables": [
+      {
+        "locator_va": "0123d5ec",
+        "vtable_va": "0111c340",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a0bc30"
+          },
+          {
+            "slot": 1,
+            "function_va": "00dd5c92"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "C9NetworkCharacter",
+    "type_descriptor_va": "012f4d8c",
+    "vtables": [
+      {
+        "locator_va": "0123dbd0",
+        "vtable_va": "0112e058",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a69930"
+          },
+          {
+            "slot": 1,
+            "function_va": "00a391c0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "C9NetworkDefault",
+    "type_descriptor_va": "012f4f28",
+    "vtables": [
+      {
+        "locator_va": "0123dfac",
+        "vtable_va": "0112e0f4",
+        "object_offset": 0,
+        "entries": [
+          {
+            "slot": 0,
+            "function_va": "00a6ab70"
+          },
+          {
+            "slot": 1,
+            "function_va": "00a4da10"
+          }
+        ]
+      }
+    ]
+  }
+]

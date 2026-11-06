@@ -12,6 +12,7 @@ public sealed record ServerOptions
     public string Host { get; init; } = "127.0.0.1";
     public int Port { get; init; } = 14000;
     public string Profile { get; init; } = "probe";
+    public string? CharacterStore { get; init; }
     public int MaxFrame { get; init; } = 8192;
     public int MaxConnections { get; init; } = 4;
     public int MaxPackets { get; init; } = 64;
@@ -23,20 +24,29 @@ public sealed record ServerOptions
     {
         if (!IPAddress.TryParse(Host, out IPAddress? address) || !IPAddress.IsLoopback(address))
             throw new ArgumentException("Current protocol-validation host requires a numeric loopback bind address");
-        if (Port is < 0 or > 65535 || Profile is not ("probe" or "fixture"))
+        if (Port is < 0 or > 65535 || Profile is not ("probe" or "fixture" or "observer" or "character_lobby"))
             throw new ArgumentException("Invalid port or profile");
         if (MaxFrame is < 20 or > 65535 || MaxConnections is < 1 or > 32)
             throw new ArgumentException("Invalid frame or connection limit");
         if (MaxPackets is < 1 or > 255 || !double.IsFinite(TimeoutSeconds) || TimeoutSeconds <= 0 || TimeoutSeconds > 300)
             throw new ArgumentException("Invalid packet or timeout limit");
         if (Profile == "probe" && (Greetings.Count > 0 || Rules.Count > 0))
-            throw new ArgumentException("Response rules require the explicit fixture profile");
+            throw new ArgumentException("Passive probe cannot send greetings or replies");
+        if (Profile == "observer" && (Rules.Count != 0 || Greetings.Count != 1 ||
+            Greetings[0].Type != 4 || Greetings[0].Flag != 0 ||
+            Greetings[0].Payload.Length != 1 || Greetings[0].Payload.Span[0] > 1))
+            throw new ArgumentException("Observer requires one plain type-4 mode-0/1 greeting and no response rules");
+        if (Profile == "character_lobby" && (string.IsNullOrWhiteSpace(CharacterStore) ||
+            Greetings.Count != 0 || Rules.Count != 0 || MaxFrame < 7460))
+            throw new ArgumentException("Character lobby requires a store path, a frame limit of at least 7460 and no fixture rules or greetings");
+        if (Profile != "character_lobby" && CharacterStore is not null)
+            throw new ArgumentException("Character store requires the character_lobby profile");
         if (Rules.Select(r => (r.State, r.RequestType)).Distinct().Count() != Rules.Count)
             throw new ArgumentException("Duplicate state/type rule");
         if (Greetings.Count > 3 || Rules.Any(r => r.Replies.Count > 3))
             throw new ArgumentException("At most three greeting/reply packets are supported");
         // Preserve the reference server's conservative budget for the initial epoch.
-        if (3 * MaxPackets + Greetings.Count > 255)
+        if (Profile != "character_lobby" && 3 * MaxPackets + Greetings.Count > 255)
             throw new ArgumentException("Reply budget can exceed initial cipher epoch");
         foreach (ResponseRule rule in Rules)
         {
@@ -58,7 +68,7 @@ public sealed record ServerOptions
         using JsonDocument document = JsonDocument.Parse(json);
         JsonElement root = document.RootElement;
         RequireFields(root, ["description", "host", "port", "profile", "max_frame", "max_connections",
-            "max_packets", "timeout_seconds", "greetings", "rules"]);
+            "max_packets", "timeout_seconds", "greetings", "rules", "character_store"]);
         List<Packet> greetings = [];
         if (root.TryGetProperty("greetings", out JsonElement greetingArray))
             foreach (JsonElement packet in greetingArray.EnumerateArray()) greetings.Add(ParsePacket(packet));
@@ -79,6 +89,7 @@ public sealed record ServerOptions
         {
             Host = GetString(root, "host", "127.0.0.1"), Port = GetInt(root, "port", 14000),
             Profile = GetString(root, "profile", "probe"), MaxFrame = GetInt(root, "max_frame", 8192),
+            CharacterStore = root.TryGetProperty("character_store", out JsonElement store) ? store.GetString() : null,
             MaxConnections = GetInt(root, "max_connections", 4), MaxPackets = GetInt(root, "max_packets", 64),
             TimeoutSeconds = root.TryGetProperty("timeout_seconds", out JsonElement t) ? t.GetDouble() : 10,
             Greetings = greetings.AsReadOnly(), Rules = rules.AsReadOnly()

@@ -1,0 +1,255 @@
+{
+  "recorded_at_utc": "2026-11-03T18:51:44.170778+00:00",
+  "local_date": "2026-11-04",
+  "platform": "Windows ARM64",
+  "dotnet_validation": {
+    "passed": 39,
+    "total": 39,
+    "skipped": 0,
+    "assertions": 2919,
+    "mode": "full",
+    "status": "passed"
+  },
+  "python_protocol_server_tests": {
+    "passed": 19,
+    "total": 19
+  },
+  "client_exe_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "wrapper_sha256": "58631b7fd96f28fecfbbdd2e71f578f8a44cfc5031c943a4c1b846f3fd7ebef3",
+  "previous_failure": {
+    "game_endpoint_1771_received": true,
+    "keepalive_9999_accepted": true,
+    "next_request_type": "0x2ee5",
+    "next_request_sequence": 2,
+    "failure_reason": "No fixture rule for session state/type"
+  },
+  "previous_capture": {
+    "recorded_at_utc": "2026-11-03T14:14:06.964560+00:00",
+    "capture_name": "c9-game-keepalive-20261103-211305-snapshot.pcapng",
+    "capture_sha256": "5d83c971b770fa8fc8b804a35889b53116e0c3b616bd8b4d3beae8929aea7f38",
+    "capture_bytes": 8940,
+    "matched_tcp_packets": 49,
+    "decoded_frames": 14,
+    "tcp_direction_streams": 6,
+    "type_counts": {
+      "0x0004": 3,
+      "0x1771": 1,
+      "0x26ad": 1,
+      "0x270f": 1,
+      "0x2ee1": 2,
+      "0x2ee2": 1,
+      "0x2ee5": 2,
+      "0x2ee6": 1,
+      "0x2eec": 1,
+      "0x2eed": 1
+    },
+    "records": [
+      {
+        "capture_frame": 4,
+        "stream": 0,
+        "direction": "game_to_server",
+        "type": "0x26ad",
+        "flag": 1,
+        "sequence": 0,
+        "payload_length": 24,
+        "wire_length": 52
+      },
+      {
+        "capture_frame": 6,
+        "stream": 0,
+        "direction": "server_to_game",
+        "type": "0x0004",
+        "flag": 0,
+        "sequence": 0,
+        "payload_length": 1,
+        "wire_length": 14
+      },
+      {
+        "capture_frame": 8,
+        "stream": 0,
+        "direction": "game_to_server",
+        "type": "0x2ee1",
+        "flag": 1,
+        "sequence": 1,
+        "payload_length": 2162,
+        "wire_length": 2180
+      },
+      {
+        "capture_frame": 17,
+        "stream": 1,
+        "direction": "server_to_game",
+        "type": "0x0004",
+        "flag": 0,
+        "sequence": 0,
+        "payload_length": 1,
+        "wire_length": 14
+      },
+      {
+        "capture_frame": 19,
+        "stream": 1,
+        "direction": "game_to_server",
+        "type": "0x2ee1",
+        "flag": 1,
+        "sequence": 0,
+        "payload_length": 2162,
+        "wire_length": 2180
+      },
+      {
+        "capture_frame": 21,
+        "stream": 1,
+        "direction": "server_to_game",
+        "type": "0x2ee2",
+        "flag": 1,
+        "sequence": 0,
+        "payload_length": 20,
+        "wire_length": 36
+      },
+      {
+        "capture_frame": 23,
+        "stream": 1,
+        "direction": "game_to_server",
+        "type": "0x2ee5",
+        "flag": 1,
+        "sequence": 1,
+        "payload_length": 0,
+        "wire_length": 20
+      },
+      {
+        "capture_frame": 25,
+        "stream": 1,
+        "direction": "server_to_game",
+        "type": "0x2ee6",
+        "flag": 1,
+        "sequence": 1,
+        "payload_length": 53,
+        "wire_length": 68,
+        "server_count": 1,
+        "local_fixture_name_matches": true,
+        "first_entry_gate_byte": 1
+      },
+      {
+        "capture_frame": 27,
+        "stream": 1,
+        "direction": "game_to_server",
+        "type": "0x2eec",
+        "flag": 1,
+        "sequence": 2,
+        "payload_length": 20,
+        "wire_length": 36,
+        "selected_server_key": 1,
+        "reserved_tail_zero": true
+      },
+      {
+        "capture_frame": 29,
+        "stream": 1,
+        "direction": "server_to_game",
+        "type": "0x2eed",
+        "flag": 1,
+        "sequence": 2,
+        "payload_length": 27,
+        "wire_length": 52,
+        "selected_server_key": 1,
+        "tcp_endpoint_loopback": true,
+        "tcp_endpoint_port": 14001
+      },
+      {
+        "capture_frame": 38,
+        "stream": 2,
+        "direction": "server_to_game",
+        "type": "0x0004",
+        "flag": 0,
+        "sequence": 0,
+        "payload_length": 1,
+        "wire_length": 14
+      },
+      {
+        "capture_frame": 40,
+        "stream": 2,
+        "direction": "game_to_server",
+        "type": "0x1771",
+        "flag": 1,
+        "sequence": 0,
+        "payload_length": 49,
+        "wire_length": 68
+      },
+      {
+        "capture_frame": 42,
+        "stream": 2,
+        "direction": "game_to_server",
+        "type": "0x270f",
+        "flag": 1,
+        "sequence": 1,
+        "payload_length": 8,
+        "wire_length": 36
+      },
+      {
+        "capture_frame": 44,
+        "stream": 2,
+        "direction": "game_to_server",
+        "type": "0x2ee5",
+        "flag": 1,
+        "sequence": 2,
+        "payload_length": 0,
+        "wire_length": 20
+      }
+    ],
+    "credentials_or_payload_exported": false
+  },
+  "observer": {
+    "profile": "observer",
+    "config_sha256": "f79c41f9929c8e17133fbde413910f7788cf6f3341651d00dd2cee8a3181787d",
+    "greeting": {
+      "type": 4,
+      "flag": 0,
+      "mode": 1
+    },
+    "application_replies": false,
+    "rules": [],
+    "state": "observing",
+    "validation": [
+      "framing",
+      "crypto",
+      "checksum",
+      "sequence",
+      "connection/frame/packet/deadline/cipher-epoch limits"
+    ],
+    "configuration_rejects_application_rules": true
+  },
+  "relaunch": {
+    "local_update_manifest_verified": true,
+    "launcher_patch_success_displayed": true,
+    "original_game_launched_from_play": true,
+    "login_screen_displayed": true,
+    "observer_game_runtime_verification": "verified from server metadata"
+  },
+  "original_game_observer_flow": {
+    "connected_at_utc": "2026-11-03T19:11:31.210Z",
+    "packet_limit_at_utc": "2026-11-03T19:13:11.4495273Z",
+    "accepted_application_frames": 64,
+    "sequence_range": [0, 63],
+    "type_counts": { "0x1771": 1, "0x26ad": 10, "0x270f": 33, "0x2ee5": 20 },
+    "application_replies": 0,
+    "termination": "packet_limit",
+    "ui_report": ["Connecting", "Server Connection lost"],
+    "evidence": "server metadata only; packet capture expired before the session"
+  },
+  "synthetic_regression": {
+    "interleaved_request_types": [
+      6001,
+      9999,
+      12005,
+      9901,
+      30583,
+      9999
+    ],
+    "fresh_connection_sequence": 0,
+    "invalid_padding_rejected": true,
+    "payload_or_credentials_logged": false
+  },
+  "pending": [
+    "Game-endpoint authentication and character/lobby reply",
+    "Credential validation semantics",
+    "World entry",
+    "Subsequent cipher epochs"
+  ]
+}

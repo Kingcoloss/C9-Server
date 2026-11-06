@@ -1,0 +1,443 @@
+{
+  "recorded_at_utc": "2026-11-05T16:03:43.057955+00:00",
+  "capture_name": "character-create-2248-snapshot.pcapng",
+  "capture_sha256": "563d80a8f8f7323cf4091594b827116833f943ad4671bbb246ce2c1f98a17f45",
+  "capture_bytes": 11148,
+  "matched_tcp_packets": 90,
+  "decoded_frames": 40,
+  "tcp_direction_streams": 4,
+  "type_counts": {
+    "0x0004": 2,
+    "0x0bbb": 1,
+    "0x0bbc": 1,
+    "0x0efa": 1,
+    "0x1771": 1,
+    "0x26ad": 6,
+    "0x270f": 22,
+    "0x2ee1": 1,
+    "0x2ee2": 1,
+    "0x2ee5": 1,
+    "0x2ee6": 1,
+    "0x2eec": 1,
+    "0x2eed": 1
+  },
+  "records": [
+    {
+      "capture_frame": 4,
+      "stream": 0,
+      "direction": "server_to_game",
+      "type": "0x0004",
+      "flag": 0,
+      "sequence": 0,
+      "payload_length": 1,
+      "wire_length": 14
+    },
+    {
+      "capture_frame": 6,
+      "stream": 0,
+      "direction": "game_to_server",
+      "type": "0x2ee1",
+      "flag": 1,
+      "sequence": 0,
+      "payload_length": 2162,
+      "wire_length": 2180
+    },
+    {
+      "capture_frame": 8,
+      "stream": 0,
+      "direction": "server_to_game",
+      "type": "0x2ee2",
+      "flag": 1,
+      "sequence": 0,
+      "payload_length": 20,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 10,
+      "stream": 0,
+      "direction": "game_to_server",
+      "type": "0x2ee5",
+      "flag": 1,
+      "sequence": 1,
+      "payload_length": 0,
+      "wire_length": 20
+    },
+    {
+      "capture_frame": 12,
+      "stream": 0,
+      "direction": "server_to_game",
+      "type": "0x2ee6",
+      "flag": 1,
+      "sequence": 1,
+      "payload_length": 53,
+      "wire_length": 68,
+      "server_count": 1,
+      "local_fixture_name_matches": true,
+      "first_entry_gate_byte": 1
+    },
+    {
+      "capture_frame": 14,
+      "stream": 0,
+      "direction": "game_to_server",
+      "type": "0x2eec",
+      "flag": 1,
+      "sequence": 2,
+      "payload_length": 20,
+      "wire_length": 36,
+      "selected_server_key": 1,
+      "reserved_tail_zero": true
+    },
+    {
+      "capture_frame": 16,
+      "stream": 0,
+      "direction": "server_to_game",
+      "type": "0x2eed",
+      "flag": 1,
+      "sequence": 2,
+      "payload_length": 27,
+      "wire_length": 52,
+      "selected_server_key": 1,
+      "tcp_endpoint_loopback": true,
+      "tcp_endpoint_port": 14001
+    },
+    {
+      "capture_frame": 25,
+      "stream": 1,
+      "direction": "server_to_game",
+      "type": "0x0004",
+      "flag": 0,
+      "sequence": 0,
+      "payload_length": 1,
+      "wire_length": 14
+    },
+    {
+      "capture_frame": 27,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x1771",
+      "flag": 1,
+      "sequence": 0,
+      "payload_length": 49,
+      "wire_length": 68
+    },
+    {
+      "capture_frame": 29,
+      "stream": 1,
+      "direction": "server_to_game",
+      "type": "0x0efa",
+      "flag": 1,
+      "sequence": 0,
+      "payload_length": 42,
+      "wire_length": 68,
+      "character_slots": 3,
+      "character_count": 0,
+      "characters_active": true
+    },
+    {
+      "capture_frame": 31,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 1,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 33,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 2,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 35,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 3,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 37,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 4,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 39,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 5,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 41,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 6,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 43,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 7,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 45,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 8,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 47,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 9,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 49,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 10,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 51,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 11,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 53,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 12,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 55,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 13,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 57,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 14,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 59,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 15,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 61,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x0bbb",
+      "flag": 1,
+      "sequence": 16,
+      "payload_length": 90,
+      "wire_length": 116,
+      "create_slot": 0,
+      "create_template_id": 0,
+      "create_mode": 0,
+      "create_name_characters": 3,
+      "create_name_valid": true
+    },
+    {
+      "capture_frame": 63,
+      "stream": 1,
+      "direction": "server_to_game",
+      "type": "0x0bbc",
+      "flag": 1,
+      "sequence": 1,
+      "payload_length": 113,
+      "wire_length": 132
+    },
+    {
+      "capture_frame": 65,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 17,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 67,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 18,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 69,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 19,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 71,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 20,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 73,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 21,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 75,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 22,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 77,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 23,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 79,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 24,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 81,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 25,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 83,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x26ad",
+      "flag": 1,
+      "sequence": 26,
+      "payload_length": 24,
+      "wire_length": 52
+    },
+    {
+      "capture_frame": 85,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 27,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 87,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 28,
+      "payload_length": 8,
+      "wire_length": 36
+    },
+    {
+      "capture_frame": 89,
+      "stream": 1,
+      "direction": "game_to_server",
+      "type": "0x270f",
+      "flag": 1,
+      "sequence": 29,
+      "payload_length": 8,
+      "wire_length": 36
+    }
+  ],
+  "credentials_or_payload_exported": false
+}

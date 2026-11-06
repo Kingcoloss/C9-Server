@@ -1,5 +1,23 @@
 # แผน RE — ปรับถึง .NET Port Phase 5 และย้ายไป UTM
 
+อัปเดต 4 พฤศจิกายน 2026: ทำต่อหลังปิดเครื่องแล้ว; .NET 39/39 และ Python 19/19
+เพิ่ม greeting-only observer สำหรับฝั่งเกม เพื่อรับ interleaved packets โดยไม่
+ตัดเพราะยังไม่มี application rule; framing/crypto/sequence checks ยังทำงาน
+ดู [WINDOWS_RESUME_20261104_TH.md](../docs/WINDOWS_RESUME_20261104_TH.md)
+
+อัปเดต 3 พฤศจิกายน 2026: ผู้ใช้อนุญาตให้เปิดเกมและ launcher เพื่อ debug แล้ว
+สำหรับ session Windows นี้ ข้อความรออนุมัติเปิดเกมด้านล่างเป็นสถานะประวัติเดิม
+ย้าย Client path และ SDK แล้ว; .NET TCP/full validation ผ่าน 38/38;
+launcher โหลด manifest ในเครื่องและแสดง Patch success complete. แล้ว
+ดูผลและสิ่งที่ยังติดอยู่ใน [WINDOWS_LAUNCHER_TH.md](../docs/WINDOWS_LAUNCHER_TH.md)
+การล็อกอิน/แสดง server list ด้วย Client จริงยังไม่ผ่านเกณฑ์ M4
+ช่วงบ่าย: Client แสดงหน้า Log In ได้แล้ว หลังแก้ promotional dialog ใน wrapper
+สองไบต์และเติม SERVER fields จาก version.ini ต้นฉบับ เกมจริงส่ง encrypted login
+และขอ server list ได้แล้ว; แสดง C9 Local / Good, refresh ซ้ำ และ TCP handoff
+ไป endpoint ในเครื่องได้แล้ว ยังไม่ยืนยัน auth/เข้าโลก
+ดู [WINDOWS_CLIENT_STARTUP_TH.md](../docs/WINDOWS_CLIENT_STARTUP_TH.md)
+และ [WINDOWS_HANDSHAKE_TH.md](../docs/WINDOWS_HANDSHAKE_TH.md)
+
 วันที่ 2 พฤศจิกายน 2026 · อ้างอิงรายงาน Phase 1–5 · C#/.NET 10 เป็น server runtime หลัก · เตรียม UTM สำหรับการพัฒนาระยะยาว
 
 ## ขอบเขตที่อนุญาต — RE และ server implementation โดยยังไม่เปิดเกม

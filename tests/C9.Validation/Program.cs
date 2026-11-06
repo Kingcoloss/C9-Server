@@ -86,6 +86,7 @@ internal static partial class Validation
             ("Initial epoch boundary", Sync(EpochBoundary)),
             ("Opaque server list schema", Sync(ServerListSchema)),
             ("Configuration validation", Sync(Configuration)),
+            ("Launcher installed version validation", Sync(LauncherVersion)),
             ("Pipe fragmentation and coalescing", PipeBoundaries),
             ("Pipe EOF and invalid lengths", PipeErrors),
             ("Pipe read timeout", PipeTimeout),
@@ -101,6 +102,10 @@ internal static partial class Validation
             ("Memory probe stays passive", MemoryProbe),
             ("Memory output backpressure deadline", MemoryBackpressure),
             ("TCP encrypted fixture flow", TcpFixture),
+            ("TCP repeated server-list refresh", TcpServerListRefresh),
+            ("TCP synthetic server-selection handoff", TcpHandoff),
+            ("TCP greeting observer accepts interleaved packets without replies", TcpObserver),
+            ("TCP character creation persists across server restarts", TcpCharacterLobby),
             ("TCP coalescing and reconnect isolation", TcpReconnect),
             ("TCP rejects wrong session state", TcpWrongState),
             ("TCP rejects oversized prefix", TcpOversize),
@@ -109,7 +114,8 @@ internal static partial class Validation
             ("TCP connection limit", TcpConnectionLimit),
             ("TCP packet limit", TcpPacketLimit),
             ("TCP graceful shutdown during partial frame", TcpShutdown),
-            ("TCP probe profile stays passive", TcpProbe)
+            ("TCP probe profile stays passive", TcpProbe),
+            ("TCP launcher update HTTP contract", LauncherHttp)
         ];
         var selected = offline ? cases.Where(c => !c.Name.StartsWith("TCP ", StringComparison.Ordinal)).ToArray() : cases;
         int passed = 0;
@@ -284,6 +290,14 @@ internal static partial class Validation
         Check.Throws<ArgumentException>(() => ServerOptions.FromJson("{\"unexpected\":1}"));
         Check.Throws<ArgumentException>(() => ServerOptions.FromJson("{\"port\":1,\"port\":2}"));
         Check.Throws<ArgumentException>(() => ServerOptions.FromJson("{\"host\":null}"));
+        ServerOptions observer = new() { Profile = "observer", Greetings = [new Packet(4, [1], flag: 0)] };
+        observer.Validate();
+        foreach (IReadOnlyList<Packet> greetings in new IReadOnlyList<Packet>[]
+                 { [], [new Packet(4, [2], flag: 0)], [new Packet(4, [1])],
+                   [new Packet(0x2EE2, [1], flag: 0)], [new Packet(4, [], flag: 0)],
+                   [new Packet(4, [0], flag: 0), new Packet(4, [1], flag: 0)] })
+            Check.Throws<ArgumentException>(() => (observer with { Greetings = greetings }).Validate());
+        Check.Throws<ArgumentException>(() => (observer with { Rules = LabOptions().Rules }).Validate());
     }
 
     private static async Task PipeBoundaries()
@@ -341,18 +355,20 @@ internal static partial class Validation
         return frame;
     }
 
-    private static async Task<(TcpClient Client, ConnectionCodec Codec)> ConnectAsync(TcpGameServer server)
+    private static async Task<(TcpClient Client, ConnectionCodec Codec)> ConnectAsync(TcpGameServer server, byte greetingMode = 0)
     {
         TcpClient client = new(); await client.ConnectAsync(IPAddress.Loopback, server.Port);
         ConnectionCodec codec = new();
         Packet greeting = codec.Decode(await ReadWireAsync(client.GetStream()));
-        Check.Equal((ushort)4, greeting.Type); Check.Bytes(new byte[] { 0 }, greeting.Payload.Span);
+        Check.Equal((ushort)4, greeting.Type); Check.Bytes(new byte[] { greetingMode }, greeting.Payload.Span);
         return (client, codec);
     }
 
-    private static async Task ClosedAsync(TcpClient client)
+    private static Task ClosedAsync(TcpClient client) => ClosedAsync(client.GetStream());
+
+    private static async Task ClosedAsync(NetworkStream stream)
     {
-        try { Check.Equal(0, await client.GetStream().ReadAsync(new byte[1]).AsTask().WaitAsync(TimeSpan.FromSeconds(3))); }
+        try { Check.Equal(0, await stream.ReadAsync(new byte[1]).AsTask().WaitAsync(TimeSpan.FromSeconds(3))); }
         catch (IOException) { Check.True(true); }
     }
 
@@ -379,6 +395,113 @@ internal static partial class Validation
             Check.True(!JsonSerializer.Serialize(events.Values).Contains("PRIVATE-FIXTURE-DO-NOT-LOG", StringComparison.Ordinal));
         }
     });
+
+    private static Task TcpServerListRefresh() => WithServer(async (server, events) =>
+    {
+        var (client, codec) = await ConnectAsync(server);
+        using (client)
+        {
+            NetworkStream stream = client.GetStream();
+            await stream.WriteAsync(codec.Encode(new Packet(0x2EE1, new byte[2162])));
+            Check.Equal((ushort)0x2EE2, codec.Decode(await ReadWireAsync(stream)).Type);
+            for (uint refresh = 0; refresh < 3; refresh++)
+            {
+                await stream.WriteAsync(codec.Encode(new Packet(0x2EE5)));
+                Packet reply = codec.Decode(await ReadWireAsync(stream));
+                Check.Equal(refresh + 1, reply.Sequence);
+                var (entries, trailing) = ServerList.Parse(reply);
+                Check.Equal(1, entries.Length);
+                Check.Equal(1u, ServerList.LookupKey(entries[0]));
+                // These are explicitly synthetic fields read by the selected
+                // Client: UTF-16 name at +5, selection gate byte at +0x33.
+                Check.Bytes(Encoding.Unicode.GetBytes("C9 Local\0"), entries[0].AsSpan(5, 18));
+                Check.Equal((byte)1, entries[0][51]);
+                Check.Equal(0, trailing.Length);
+            }
+            Check.Equal(3, events.Values.Count(e => e.Event == "received" && e.Type == 0x2EE5));
+            Check.True(!events.Values.Any(e => e.Event == "session_error"));
+        }
+    });
+
+    private static async Task TcpHandoff()
+    {
+        await WithServer(async (server, events) =>
+        {
+            var (client, codec) = await ConnectAsync(server);
+            using (client)
+            {
+                NetworkStream stream = client.GetStream();
+                await stream.WriteAsync(codec.Encode(new Packet(0x2EE1, new byte[2162])));
+                Check.Equal((ushort)0x2EE2, codec.Decode(await ReadWireAsync(stream)).Type);
+                await stream.WriteAsync(codec.Encode(new Packet(0x2EE5)));
+                Check.Equal((ushort)0x2EE6, codec.Decode(await ReadWireAsync(stream)).Type);
+                byte[] selection = new byte[20];
+                BinaryPrimitives.WriteUInt32LittleEndian(selection.AsSpan(8), 1);
+                await stream.WriteAsync(codec.Encode(new Packet(0x2EEC, selection)));
+                Packet handoff = codec.Decode(await ReadWireAsync(stream));
+                Check.Equal((ushort)0x2EED, handoff.Type);
+                Check.Equal(2u, handoff.Sequence);
+                ReadOnlySpan<byte> payload = handoff.Payload.Span;
+                Check.Equal(27, payload.Length);
+                Check.Equal(1u, BinaryPrimitives.ReadUInt32LittleEndian(payload[8..]));
+                Check.Bytes(IPAddress.Loopback.GetAddressBytes(), payload.Slice(13, 4));
+                Check.Equal((ushort)14001, BinaryPrimitives.ReadUInt16LittleEndian(payload[17..]));
+                Check.Bytes(IPAddress.Loopback.GetAddressBytes(), payload.Slice(19, 4));
+                Check.Equal((ushort)14001, BinaryPrimitives.ReadUInt16LittleEndian(payload[23..]));
+                Check.True(!events.Values.Any(e => e.Event == "session_error"));
+            }
+        });
+    }
+
+    private static async Task TcpObserver()
+    {
+        using JsonDocument fixture = Fixture("lab-handoff-probe.json");
+        ServerOptions observer = ServerOptions.FromJson(fixture.RootElement.GetRawText())
+            with { Port = 0, TimeoutSeconds = 2 };
+        await WithServer(async (server, events) =>
+        {
+            async Task WaitForReceived(int expected)
+            {
+                for (int i = 0; i < 100 && events.Values.Count(e => e.Event == "received") < expected; i++)
+                    await Task.Delay(10);
+                Check.Equal(expected, events.Values.Count(e => e.Event == "received"));
+            }
+            var (client, codec) = await ConnectAsync(server, greetingMode: 1);
+            using (client)
+            {
+                byte[] marker = Encoding.ASCII.GetBytes("PRIVATE-OBSERVER-DO-NOT-LOG");
+                Packet[] requests = [new(0x1771, new byte[49]), new(9999, new byte[8]),
+                    new(0x2EE5), new(9901, new byte[24]), new(0x7777, marker)];
+                byte[] combined = requests.SelectMany(packet => codec.Encode(packet)).ToArray();
+                await client.GetStream().WriteAsync(combined);
+                await WaitForReceived(requests.Length);
+                await client.GetStream().WriteAsync(codec.Encode(new Packet(9999, new byte[8])));
+                await WaitForReceived(6);
+                ServerEvent[] received = events.Values.Where(e => e.Event == "received").ToArray();
+                for (int i = 0; i < received.Length; i++)
+                {
+                    Check.Equal((uint)i, received[i].Sequence);
+                    Check.Equal("observing", received[i].State);
+                }
+                Check.True(!events.Values.Any(e => e.Event == "session_error"));
+                Check.True(!JsonSerializer.Serialize(events.Values).Contains("PRIVATE-OBSERVER-DO-NOT-LOG", StringComparison.Ordinal));
+            }
+            var (nextClient, nextCodec) = await ConnectAsync(server, greetingMode: 1);
+            using (nextClient)
+            {
+                await nextClient.GetStream().WriteAsync(nextCodec.Encode(new Packet(0x2EE5)));
+                await WaitForReceived(7);
+                Check.Equal(0u, events.Values.Last(e => e.Event == "received").Sequence);
+                byte[] corrupt = nextCodec.Encode(new Packet(9999, new byte[8]));
+                corrupt[^1] = 16; // Invalid outer padding footer must still close an observer.
+                await nextClient.GetStream().WriteAsync(corrupt);
+                await ClosedAsync(nextClient);
+            }
+            Check.Equal(1, events.Values.Count(e => e.Event == "session_error"));
+            Check.Equal(2, events.Values.Count(e => e.Event == "sent" && e.Type == 4));
+            Check.True(!events.Values.Any(e => e.Event == "sent" && e.Type != 4));
+        }, observer);
+    }
 
     private static Task TcpReconnect() => WithServer(async (server, _) =>
     {
@@ -413,8 +536,11 @@ internal static partial class Validation
     {
         var (client, _) = await ConnectAsync(server); using (client)
         {
-            await client.GetStream().WriteAsync(new byte[] { 100, 0, 1 });
-            client.Client.Shutdown(SocketShutdown.Send); await ClosedAsync(client);
+            // Windows marks TcpClient disconnected after a send half-close;
+            // retain the established stream to verify the server's receive EOF.
+            NetworkStream stream = client.GetStream();
+            await stream.WriteAsync(new byte[] { 100, 0, 1 });
+            client.Client.Shutdown(SocketShutdown.Send); await ClosedAsync(stream);
         }
         Check.True(events.Values.Any(e => e.Event == "truncated_frame"));
     });

@@ -1,0 +1,67 @@
+{
+  "recorded_at_utc": "2026-11-03T07:44:25.1074826Z",
+  "platform": "Windows ARM64",
+  "dotnet_validation": {
+    "passed": 36,
+    "total": 36,
+    "skipped": 0,
+    "assertions": 2836,
+    "mode": "full",
+    "status": "passed"
+  },
+  "client_exe_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "client_exe_modified": false,
+  "wrapper_patch": {
+    "recorded_at_utc": "2026-11-03T14:38:53.152728+07:00",
+    "target": "F:\\52C9GL\\PhysXLoader.dll",
+    "action": "apply",
+    "changed": true,
+    "original_sha256": "6f491b6073a6fd759f3eb5b83e010fa66c5e0e9075585d263bd63d1f622cec3f",
+    "patched_sha256": "58631b7fd96f28fecfbbdd2e71f578f8a44cfc5031c943a4c1b846f3fd7ebef3",
+    "current_sha256": "58631b7fd96f28fecfbbdd2e71f578f8a44cfc5031c943a4c1b846f3fd7ebef3",
+    "preferred_patch_va": "0x1000269f",
+    "skipped_call_va": "0x100026ad",
+    "file_offset": "0x1a9f",
+    "original_bytes": "6a30",
+    "replacement_bytes": "eb12",
+    "backup": "F:\\C9-Server\\artifacts\\client-backups\\startup-notice\\PhysXLoader.dll.original",
+    "scope": "Promotional MessageBoxW only; protocol and other wrapper calls unchanged"
+  },
+  "wrapper_patch_changed_bytes": 2,
+  "wrapper_restore_roundtrip": "passed",
+  "archive_version_ini_sha256": "f2ac644689d523e96148de0f0c23bc366beafa85aa18eef134367d9826b3f141",
+  "archive_version_ini_matches_frozen_manifest": true,
+  "manifest_server": {
+    "count": 1,
+    "ip": "127.0.0.1",
+    "port": 14000,
+    "launcher_own_version": 17
+  },
+  "integrity": {
+    "checked": 38,
+    "expected_modified": [
+      "PhysXLoader.dll",
+      "localinfo.dat",
+      "version.ini"
+    ],
+    "unexpected_modified": [],
+    "unchanged": 35
+  },
+  "runtime": {
+    "intro_video_rendered": true,
+    "world_entry_verified": false,
+    "server_list_verified": false,
+    "invalid_version_data_error_resolved": true,
+    "startup_notice_skipped": true,
+    "login_screen_verified": true,
+    "authentication_verified": false,
+    "awaiting_user_test_login": true
+  },
+  "diagnostics": {
+    "raw_logs_directory": "artifacts/diagnostics",
+    "native_engine": "System DbgEng noninvasive/no-suspend",
+    "client_code_injection": false,
+    "x86_context": "Selected thread briefly suspended and resumed in finally",
+    "security_settings_changed": false
+  }
+}
