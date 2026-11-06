@@ -2,13 +2,16 @@
 
 C#/.NET 10 server runtime and reverse-engineering tools for the selected C9
 Client build. Python is retained as a protocol reference and RE toolchain.
+The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
+survey and planned Admin Portal features, dependencies and acceptance criteria.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
 `C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second
 loopback endpoint. The character profile creates and persists a local character,
 reloads its appearance, and reaches the original Client's Waterford loading screen.
-Scene loading currently stops with a Map Key error. Credential validation and
-playable world entry remain unverified.
+The zero-based sub-map lookup is fixed; the Client now sends additional
+post-load requests before crashing. Credential validation and playable world
+entry remain unverified.
 
 The owner authorized opening the original game and Launcher for the Windows
 debug session on 3 November 2026. The local update service and protocol probe
@@ -77,13 +80,13 @@ python3 re/scripts/validate_dotnet_port.py
 ```
 
 The .NET validation executable is a package-free test harness. Offline mode runs
-25 cases and explicitly skips 15 socket cases. It checks 960 Python payload
+26 cases and explicitly skips 15 socket cases. It checks 960 Python payload
 vectors, 64 sequential wire vectors and state tables, independent RC6/RIPEMD160
 vectors, framing, session isolation, timeout, packet limits and backpressure.
 The same session processor is used by TCP and in-memory/stdio adapters.
 
-On Windows ARM64, the full .NET suite passed all 40 cases (2,976 assertions), including character
-persistence, the TCP suite and the local launcher HTTP contract, on 5 November 2026. The Python
+On Windows ARM64, the full .NET suite passed all 41 cases (6,205 assertions), including all catalogued map routes,
+character persistence, the TCP suite and the local launcher HTTP contract, on 6 November 2026. The Python
 protocol/server suite passed all 19 cases. The Windows half-close test retains
 the connected NetworkStream before shutting down the sending socket.
 The earlier macOS environment rejected outbound loopback connects with
@@ -117,7 +120,8 @@ shared frameworks. Publish/runtime checks have been exercised on macOS ARM64.
 | Client send adjustment | Bounded search over 80 transforms; one checksum-valid plaintext |
 | Messages | Opaque 52-byte server-list entries, explicit fixture response rules |
 | Character lobby | Create, persist and reload a synthetic character; verified with the original Client |
-| Initial world transition | Select-character and map replies reach Waterford loading; Map Key error unresolved |
+| Map catalog | 257 map IDs / 516 sub-maps; 450 routes have matching geometry/marker prefixes, with one configurable entry builder |
+| Initial world transition | Waterford sub-map lookup fixed; Client sends post-load requests, then crashes before gameplay |
 | Authentication / playable world | Unimplemented; real credential validation and gameplay remain unverified |
 
 The cipher implementation is grounded in the selected Client's static code.

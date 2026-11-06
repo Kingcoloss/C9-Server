@@ -152,20 +152,6 @@ internal sealed class CharacterLobby
         }
     }
 
-    public static Packet EnterWaterford()
-    {
-        // 00A6DAEA handles 0BC3 and queues the map-load event. The selected
-        // Client's map table maps ID 10 to C9_1th_Town_Waterford. The position
-        // is marker 128 in that map's VILLAGE.C9MM (a local diagnostic spawn).
-        byte[] payload = new byte[46];
-        BinaryPrimitives.WriteUInt32LittleEndian(payload, 10);
-        payload[4] = 1;
-        BinaryPrimitives.WriteSingleLittleEndian(payload.AsSpan(6), 38496.95703125f);
-        BinaryPrimitives.WriteSingleLittleEndian(payload.AsSpan(10), 3501.44921875f);
-        BinaryPrimitives.WriteSingleLittleEndian(payload.AsSpan(14), 35871.8671875f);
-        return new Packet(0x0BC3, payload);
-    }
-
     private static Packet Created(Character character)
     {
         byte[] payload = new byte[113];

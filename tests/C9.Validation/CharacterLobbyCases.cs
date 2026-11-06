@@ -94,6 +94,7 @@ internal static partial class Validation
                     Check.Equal((ushort)0x0BC3, map.Type);
                     Check.Equal(46, map.Payload.Length);
                     Check.Equal(10u, BinaryPrimitives.ReadUInt32LittleEndian(map.Payload.Span));
+                    Check.Equal((byte)0, map.Payload.Span[4]); // First sub-map; 1 was out of bounds for Waterford.
                     await stream.WriteAsync(codec.Encode(new Packet(0x177D))); // Unimplemented world request is observed.
                     await stream.WriteAsync(codec.Encode(new Packet(0x0EC4)));
                     Check.Equal((ushort)0x2EEB, codec.Decode(await ReadWireAsync(stream)).Type);

@@ -13,6 +13,9 @@ public sealed record ServerOptions
     public int Port { get; init; } = 14000;
     public string Profile { get; init; } = "probe";
     public string? CharacterStore { get; init; }
+    public int InitialMapId { get; init; } = 10;
+    public int InitialSubmap { get; init; }
+    public MapPosition? InitialPosition { get; init; }
     public int MaxFrame { get; init; } = 8192;
     public int MaxConnections { get; init; } = 4;
     public int MaxPackets { get; init; } = 64;
@@ -41,6 +44,9 @@ public sealed record ServerOptions
             throw new ArgumentException("Character lobby requires a store path, a frame limit of at least 7460 and no fixture rules or greetings");
         if (Profile != "character_lobby" && CharacterStore is not null)
             throw new ArgumentException("Character store requires the character_lobby profile");
+        if (Profile == "character_lobby") _ = WorldMapCatalog.Resolve(InitialMapId, InitialSubmap, InitialPosition);
+        else if (InitialMapId != 10 || InitialSubmap != 0 || InitialPosition is not null)
+            throw new ArgumentException("Initial map options require the character_lobby profile");
         if (Rules.Select(r => (r.State, r.RequestType)).Distinct().Count() != Rules.Count)
             throw new ArgumentException("Duplicate state/type rule");
         if (Greetings.Count > 3 || Rules.Any(r => r.Replies.Count > 3))
@@ -68,7 +74,8 @@ public sealed record ServerOptions
         using JsonDocument document = JsonDocument.Parse(json);
         JsonElement root = document.RootElement;
         RequireFields(root, ["description", "host", "port", "profile", "max_frame", "max_connections",
-            "max_packets", "timeout_seconds", "greetings", "rules", "character_store"]);
+            "max_packets", "timeout_seconds", "greetings", "rules", "character_store",
+            "initial_map_id", "initial_submap", "initial_position"]);
         List<Packet> greetings = [];
         if (root.TryGetProperty("greetings", out JsonElement greetingArray))
             foreach (JsonElement packet in greetingArray.EnumerateArray()) greetings.Add(ParsePacket(packet));
@@ -90,10 +97,20 @@ public sealed record ServerOptions
             Host = GetString(root, "host", "127.0.0.1"), Port = GetInt(root, "port", 14000),
             Profile = GetString(root, "profile", "probe"), MaxFrame = GetInt(root, "max_frame", 8192),
             CharacterStore = root.TryGetProperty("character_store", out JsonElement store) ? store.GetString() : null,
+            InitialMapId = GetInt(root, "initial_map_id", 10), InitialSubmap = GetInt(root, "initial_submap", 0),
+            InitialPosition = ParsePosition(root),
             MaxConnections = GetInt(root, "max_connections", 4), MaxPackets = GetInt(root, "max_packets", 64),
             TimeoutSeconds = root.TryGetProperty("timeout_seconds", out JsonElement t) ? t.GetDouble() : 10,
             Greetings = greetings.AsReadOnly(), Rules = rules.AsReadOnly()
         };
+    }
+
+    private static MapPosition? ParsePosition(JsonElement root)
+    {
+        if (!root.TryGetProperty("initial_position", out JsonElement value)) return null;
+        float[] coordinates = value.EnumerateArray().Select(v => v.GetSingle()).ToArray();
+        if (coordinates.Length != 3) throw new ArgumentException("initial_position requires three coordinates");
+        return new(coordinates[0], coordinates[1], coordinates[2]);
     }
 
     private static Packet ParsePacket(JsonElement element)

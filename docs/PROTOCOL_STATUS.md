@@ -9,10 +9,21 @@ deletion time. `2EEA`/`2EEB` returns a populated character list to Choose World.
 The full .NET suite passes 40/40 cases (2,976 assertions).
 See [character lobby notes](WINDOWS_CHARACTER_LOBBY_TH.md).
 
-The initial `0BBF` -> `0BC0`, `0BC3` transition reaches the original Client's
-Waterford Village loading screen. Scene loading stops at an Error dialog:
-`The map key entered does not exist. Map Key:`. The key is blank. This is a
-partial world-loading experiment, not playable-world or gameplay validation.
+6 November 2026: `0BC3` payload +4 is a zero-based sub-map index, loaded into
+Player +0x2320 and checked by 004B5890 over 0x88-byte vector elements. Waterford
+has only index 0 (`_VILLAGE`); sending 1 caused the former Map Key dialog.
+With index 0 the Client sends `ED1D` (nine requests), `0E4B`, `0BC4`, plain `0EFD`
+and `0EB1`, then exits with Windows access violation `0xC0000005`.
+The complete validated capture metadata is in
+`re/evidence/static/windows_world_zero_submap_validation.json`.
+Playable-world and gameplay validation remain pending.
+
+The runtime asset survey covers all 257 map IDs, 136 folders and 516 sub-map
+records. All 1,887 MapData CFS indices (22,466 entries) validate; matching geometry
+and marker prefixes are available for 450 routes. The configurable entry builder
+uses this embedded catalog and rejects unknown/missing routes before startup.
+See [the complete map report](MAP_CATALOG_TH.md). The .NET suite passes 41/41
+cases with 6,205 assertions; the bounded CFS reader passes six additional tests.
 
 5 November 2026: the selected launcher reads the installed `version.ini` after
 applying the reversible executable patch. PLAY reached the original game's Log In

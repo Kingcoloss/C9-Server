@@ -1,5 +1,10 @@
 # แผน RE — ปรับถึง .NET Port Phase 5 และย้ายไป UTM
 
+อัปเดต 6 พฤศจิกายน 2026: แผนพัฒนาปัจจุบันรวมการสำรวจทุกแผนที่และ Admin Portal
+ตามฟีเจอร์ที่ผู้ใช้ระบุแล้ว ดู [Development Plan](../docs/DEVELOPMENT_PLAN_TH.md)
+งานเร่งด่วนคือแก้ client crash หลังเข้า Waterford และเติมระบบในโลกเกม
+ส่วนบันทึกขอบเขต/สถานะวันที่เก่าด้านล่างเก็บไว้เป็นประวัติ RE
+
 อัปเดต 4 พฤศจิกายน 2026: ทำต่อหลังปิดเครื่องแล้ว; .NET 39/39 และ Python 19/19
 เพิ่ม greeting-only observer สำหรับฝั่งเกม เพื่อรับ interleaved packets โดยไม่
 ตัดเพราะยังไม่มี application rule; framing/crypto/sequence checks ยังทำงาน
@@ -212,4 +217,5 @@ M1 และงาน static ใน M2 ทำสลับกันได้ ข�
 | 2 | ขยาย key rotation, auth response, server entry และ handoff ด้วย static evidence | ขอบเขต codec และ field semantics ที่มีหลักฐานเพิ่ม; จุดที่ต้องเปิดเกมพักรออนุมัติ |
 | 3 | ตรวจ Client interoperability หลังอนุมัติเปิดเกม แล้วเพิ่ม persistence/load/recovery tests | Client flows ที่ทำได้จริงและเกณฑ์ก่อนนำ server ไปรันใช้งาน |
 
-งานที่ลดลำดับความสำคัญในช่วงนี้คือการไล่ชื่อ packet ทั้ง 459 ชื่อให้ครบ การกำหนด schema ฐานข้อมูลทั้งเกม และการสร้าง admin panel เพราะยังไม่ช่วยยืนยันว่า Client สื่อสารกับเซิร์ฟเวอร์ใหม่ได้
+ลำดับงานปัจจุบันและขอบเขต Admin Portal อ้างอิง [Development Plan](../docs/DEVELOPMENT_PLAN_TH.md)
+การไล่ชื่อ packet ทั้ง 459 ชื่อยังทำตามความจำเป็นของ flow และ feature ที่กำลัง implement

@@ -1,0 +1,5933 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-11-06T02:52:05.419208+00:00",
+  "client_exe_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "read_only": true,
+  "process_suspended": false,
+  "map_count": 257,
+  "folder_count": 136,
+  "submap_count": 516,
+  "maps": [
+    {
+      "id": 1,
+      "name": "[튜토리얼]메슈리안 산맥",
+      "folder": "C9_0th_Stage_MeshurianMT",
+      "asset_fields_40_to_4c": [
+        4294901767,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "C9_0th_Stage_MeshurianMT_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "[1대륙 1-1]고블린 숲",
+      "folder": "C9_1th_Stage_GoblinForest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_GoblinForest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_GoblinForest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_GoblinForest_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_GoblinForest_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_GoblinForest.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_GoblinForest_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "[1대륙 3-3]임프의 숲",
+      "folder": "C9_1th_Stage_ImpForest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_ImpForest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_ImpForest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_ImpForest_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_ImpForest_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_ImpForest.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_ImpForest_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "[1대륙 2-2]고블린 지하제단",
+      "folder": "C9_1th_Stage_GoblinUA",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_GoblinUA_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_GoblinUA_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_GoblinUA_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_GoblinUA_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_GoblinUA.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_GoblinUA_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "[1대륙 4-4]임프의 빼앗긴 광산",
+      "folder": "C9_1th_Stage_ImpCave",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_ImpCave_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_ImpCave_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_ImpCave_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_ImpCave_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_ImpCave.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_ImpCave_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "[1대륙 마을]워터포드 마을",
+      "folder": "C9_1th_Town_Waterford",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_1th_Town_Waterford_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "[1대륙 5-5]바닷가 폐허 마을",
+      "folder": "C9_1th_Stage_SeaRuinsVill",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_SeaRuinsVill_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "[1대륙 6-6]메슈리안 고원",
+      "folder": "C9_1th_Stage_MeshurianMT",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_MeshurianMT_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_MeshurianMT_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_MeshurianMT_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_MeshurianMT_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_MeshurianMT.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_MeshurianMT_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "[1대륙 9-8]망자의 사원",
+      "folder": "C9_1th_Stage_DeadTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        7208961,
+        1,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_DeadTemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_DeadTemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_DeadTemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_DeadTemple_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_DeadTemple.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_DeadTemple_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "[1대륙 10-9]델파스트 북쪽 경계지역",
+      "folder": "C9_1th_Stage_DelpastNorth",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_DelpastNorth_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_DelpastNorth_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_DelpastNorth_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_DelpastNorth_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_DelpastNorth.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_DelpastNorth_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "[1대륙 8-7]매혹의 숲",
+      "folder": "C9_1th_Stage_CharmForest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_CharmForest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_CharmForest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_CharmForest_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_CharmForest_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_CharmForest.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_CharmForest_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "[2대륙 마을]빔펠리 성",
+      "folder": "C9_2th_Town_Vimpeli",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        2,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_2th_Town_Vimpeli_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "[PVP Zone]빔펠리",
+      "folder": "PvP_Vimpeli",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Vimpeli_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "[2대륙 1-1]불타는 중부 평야",
+      "folder": "C9_2th_Stage_DistrickPlain",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_DistrickPlain_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_DistrickPlain_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_DistrickPlain_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_DistrickPlain_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_2th_Stage_DistrickPlain_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "[2대륙 4-4]붉은 안개 늪지대",
+      "folder": "C9_2th_Stage_RedFogMarsh",
+      "asset_fields_40_to_4c": [
+        519,
+        7208961,
+        2,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_RedFogMarsh_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_RedFogMarsh_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_RedFogMarsh_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_RedFogMarsh_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "길드하우스 여관급",
+      "folder": "C9_In_GuildHouse_a",
+      "asset_fields_40_to_4c": [
+        4294902535,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILD",
+          "marker_file": "C9_In_GuildHouse_a_GUILD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "[2대륙 3-3]픽시의 황금 광산",
+      "folder": "C9_2th_Stage_PixyMine",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_PixyMine_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_PixyMine_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_PixyMine_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_PixyMine_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "[2대륙 2-2]서부 국경",
+      "folder": "C9_2th_Stage_WestFrontier",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_WestFrontier_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_WestFrontier_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_WestFrontier_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_WestFrontier_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "[2대륙 6-5]고통의 구덩이",
+      "folder": "C9_2th_Stage_PainHole",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_PainHole_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_PainHole_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_PainHole_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_PainHole_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "[2대륙 7-6]오베론의 안식처",
+      "folder": "C9_2th_Stage_OberonShelter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_OberonShelter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_OberonShelter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_OberonShelter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_OberonShelter_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_2th_Stage_OberonShelter_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "[사용안함]잊혀진 해안가",
+      "folder": "HiddenStage_1th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        16843271,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "HiddenStage_1th_ForgSeaForest_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "[2대륙 9-7]오레아스의 신전",
+      "folder": "C9_2th_Stage_OrearsAlter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_OrearsAlter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_OrearsAlter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_OrearsAlter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_OrearsAlter_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "[2대륙 10-8]화산섬 지하통로",
+      "folder": "C9_2th_Stage_VolslandUT",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_VolslandUT_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_VolslandUT_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_VolslandUT_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_VolslandUT_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_2th_Stage_VolslandUT_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "[2대륙 11-9]헨코 분화구",
+      "folder": "C9_2th_Stage_HenSlandCrater",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_HenSlandCrater_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_HenSlandCrater_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_HenSlandCrater_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_HenSlandCrater_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "[3대륙 마을]러너스빌",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_3th_Town_RunnersVill_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "[2대륙 숨던]북부 국경지대",
+      "folder": "HiddenStage_2th_NorthFrontier",
+      "asset_fields_40_to_4c": [
+        16843271,
+        1,
+        2,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_STAGE",
+          "marker_file": "HiddenStage_2th_NorthFrontier_HIDDEN_STAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "[사용안함]고블린 창고",
+      "folder": "HiddenDepot_1th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_1th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "[2대륙 숨창]오크의 창고",
+      "folder": "HiddenDepot_2th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        2,
+        13
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_2th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "[3대륙 숨창]바베가지 창고",
+      "folder": "HiddenDepot_3th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        3,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_3th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "[3대륙 1-1]강제 노역소",
+      "folder": "C9_3th_stage_LaborArea",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_stage_LaborArea_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_stage_LaborArea_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_stage_LaborArea_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_stage_LaborArea_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "name": "[3대륙 2-2]웬디고 캠프",
+      "folder": "C9_3th_Stage_WendigoCamp",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_WendigoCamp_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_WendigoCamp_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_WendigoCamp_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_WendigoCamp_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "[3대륙 4-3]영혼의 계곡",
+      "folder": "C9_3th_Stage_SoulValley",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_SoulValley_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_SoulValley_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_SoulValley_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_SoulValley_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "[3대륙 5-4]극한의 고원",
+      "folder": "C9_3th_Stage_ExtrmeHL",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "[3대륙 7-5]얼음의 협곡",
+      "folder": "C9_3th_Stage_IceValley",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_IceValley_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_IceValley_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_IceValley_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_IceValley_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "[3대륙 8-6]타락한 루나드의 성",
+      "folder": "C9_3th_Stage_HiredBase",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_HiredBase_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_HiredBase_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_HiredBase_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_HiredBase_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_3th_Stage_HiredBase_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "name": "[3대륙 10-7]녹아 내리는 얼음 섬",
+      "folder": "C9_3th_Stage_MeltIceIsland",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_MeltIceIsland_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_MeltIceIsland_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_MeltIceIsland_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_MeltIceIsland_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "name": "[PVP 연습장]녹아 내린 협곡",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        4278453511,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Training_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "GVG 경기장",
+      "folder": "GvG_Stage_a",
+      "asset_fields_40_to_4c": [
+        4294903047,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GVG",
+          "marker_file": "GvG_Stage_a_GVG.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "name": "테스트용 더미맵",
+      "folder": "C9_DummyMap",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "C9_DummyMap_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "길드하우스 회관급",
+      "folder": "C9_In_GuildHouse_b",
+      "asset_fields_40_to_4c": [
+        4294902535,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILD",
+          "marker_file": "C9_In_GuildHouse_b_GUILD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "name": "[3대륙 숨던]이단자의 섬",
+      "folder": "HiddenStage_3th_HereticIsland",
+      "asset_fields_40_to_4c": [
+        16843271,
+        1,
+        3,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_STAGE",
+          "marker_file": "HiddenStage_3th_HereticIsland_HIDDEN_STAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "name": "[PVP Zone]워터포드",
+      "folder": "PvP_Waterford",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Waterford_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "name": "[5대륙]서바이벌",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322439,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_5",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_5.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "name": "길드 난입 테스트",
+      "folder": "C9_In_GuildHouse_c_intrusion",
+      "asset_fields_40_to_4c": [
+        4294902791,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "C9_In_GuildHouse_c_intrusion_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "name": "[PVP Zone]러너스빌",
+      "folder": "PvP_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_RunnersVill_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "name": "[4대륙 1-1] 암흑 결계 지역",
+      "folder": "C9_4th_Stage_DarkFogArea",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_DarkFogArea_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_DarkFogArea_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_DarkFogArea_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_DarkFogArea_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "[4대륙 2-2] 참혹한 유적지",
+      "folder": "C9_4th_Stage_MiseryRuins",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_MiseryRuins_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_MiseryRuins_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_MiseryRuins_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_MiseryRuins_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "[공성] 1성 벤투스 성",
+      "folder": "Siege_1th_Ventus",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SIEGE",
+          "marker_file": "Siege_1th_Ventus_SIEGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "[튜토리얼]잊혀진 해안가",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        4294901767,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "C9_0th_ForgSeaForest_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "name": "녹아 내린 협곡(퀘스트용)",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278453511,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_A",
+          "marker_file": "PvP_Training_Quest_QUEST_A.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "[데스매치] 투사의 전당",
+      "folder": "DeathMatch_Aria",
+      "asset_fields_40_to_4c": [
+        16779015,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Aria_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "[데스매치] 크로스로드",
+      "folder": "Deathmatch_Crossroad",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Deathmatch_Crossroad_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "name": "[데스매치] 천공의 결투장",
+      "folder": "Deathmatch_Stadium",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Deathmatch_Stadium_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "[팀매치] 운명의 결투장",
+      "folder": "DeathMatch_Rounding",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEAMMATCH",
+          "marker_file": "DeathMatch_Rounding_TEAMMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "name": "[데스매치] Q3_Test",
+      "folder": "DeathMatch_Q3_Test",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Q3_Test_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "name": "[데스매치] 공성테스트_팀",
+      "folder": "DeathMatch_Test",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Test_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "name": "[데스매치] 아케네의 대전당",
+      "folder": "DeathMatch_CenterStrike",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_CenterStrike_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "[데스매치] 혈전의 전당",
+      "folder": "DeathMatch_Iris",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Iris_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "name": "[공성] 2성 아르테르 성",
+      "folder": "Siege_2th_Arteree",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SIEGE",
+          "marker_file": "Siege_2th_Arteree_SIEGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "name": "[공성] 3성 칸디둠 성",
+      "folder": "Siege_3th_Candidum",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SIEGE",
+          "marker_file": "Siege_3th_Candidum_SIEGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "name": "[4대륙 3-3] 타락한 신의 정원",
+      "folder": "C9_4th_Stage_CorruptGarden",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_CorruptGarden_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_CorruptGarden_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_CorruptGarden_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_CorruptGarden_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "name": "[4대륙 4-4] 비밀의 신전",
+      "folder": "C9_4th_Stage_SecretTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_SecretTemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_SecretTemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_SecretTemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_SecretTemple_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_4th_Stage_SecretTemple_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "name": "아레나 더미맵",
+      "folder": "C9_ArenaLobby",
+      "asset_fields_40_to_4c": [
+        65799,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "C9_ArenaLobby_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "name": "[데스매치] 잊혀진 유적",
+      "folder": "DeathMatch_Hideout",
+      "asset_fields_40_to_4c": [
+        16779015,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Hideout_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "name": "[데스매치] 로스트메이즈",
+      "folder": "DeathMatch_Lostmaze",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Lostmaze_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "name": "[4대륙 8-5] 크나토스 양성소",
+      "folder": "C9_4th_Stage_CnatoCenter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_CnatoCenter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_CnatoCenter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_CnatoCenter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_CnatoCenter_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "name": "[4대륙 9-6] 아쿠바의 둥지",
+      "folder": "C9_4th_Stage_FearHole",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_FearHole_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_FearHole_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_FearHole_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_FearHole_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "name": "[4대륙 10-7] 신의 부름터",
+      "folder": "C9_4th_Stage_AncientsCave",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_AncientsCave_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_AncientsCave_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_AncientsCave_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_AncientsCave_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_4th_Stage_AncientsCave_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "name": "[데스매치] 웨어하우스_테스트",
+      "folder": "DeathMatch_WareHouse_test",
+      "asset_fields_40_to_4c": [
+        4294903303,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_WareHouse_test_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "name": "[4대륙 숨던] 고대인의 유적지",
+      "folder": "HiddenStage_4th",
+      "asset_fields_40_to_4c": [
+        16843271,
+        1,
+        4,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_STAGE",
+          "marker_file": "HiddenStage_4th_HIDDEN_STAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "name": "[4대륙 숨창] 크나토스 창고",
+      "folder": "HiddenDepot_4th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        4,
+        13
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_4th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "name": "[릴레이매치] 거상의 무덤",
+      "folder": "PvP_okapia",
+      "asset_fields_40_to_4c": [
+        67335,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_RELAYMATCH",
+          "marker_file": "PvP_okapia_RELAYMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "name": "[1대륙 숨창]고블린 창고",
+      "folder": "HiddenDepot_1th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        1,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_1th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "name": "[1대륙 7-10]델파스트 전선",
+      "folder": "C9_1th_Stage_DelpastBattleField",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_1th_Stage_DelpastBattleField_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_1th_Stage_DelpastBattleField_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_1th_Stage_DelpastBattleField_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_1th_Stage_DelpastBattleField_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "",
+          "marker_file": "C9_1th_Stage_DelpastBattleField.C9MM"
+        },
+        {
+          "index": 5,
+          "suffix": "_E",
+          "marker_file": "C9_1th_Stage_DelpastBattleField_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "name": "[2대륙 5-10]바루카 요새",
+      "folder": "C9_2th_Stage_Barooka",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_Barooka_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_Barooka_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_Barooka_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_Barooka_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "name": "[2대륙 8-11]스팀팔리아 망루",
+      "folder": "C9_2th_Stage_Truekia-ElonBorder",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        2,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_2th_Stage_Truekia-ElonBorder_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_2th_Stage_Truekia-ElonBorder_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_2th_Stage_Truekia-ElonBorder_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_2th_Stage_Truekia-ElonBorder_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "name": "[3대륙 3-8]노르간트 저항선",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "name": "[3대륙 6-9]타하라 고원",
+      "folder": "C9_3th_Stage_TaharaHL",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_TaharaHL_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_TaharaHL_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_TaharaHL_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_TaharaHL_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "name": "[3대륙 9-10]엘퀴네스의 쉼터",
+      "folder": "C9_3th_Stage_ElquinesShelter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        3,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "name": "[4대륙 5-8] 스카라브 번식지",
+      "folder": "C9_4th_Stage_ScaravPlace",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_ScaravPlace_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_ScaravPlace_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_ScaravPlace_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_ScaravPlace_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "name": "[4대륙 6-9] 마쉬아 왕조의 무덤",
+      "folder": "C9_4th_Stage_TreasureHouse",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_TreasureHouse_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_TreasureHouse_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_TreasureHouse_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_TreasureHouse_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "name": "[4대륙 7-10] 크나토스 지하 감옥",
+      "folder": "C9_4th_Stage_CnatosDungeon",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        4,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_4th_Stage_CnatosDungeon_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_4th_Stage_CnatosDungeon_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_4th_Stage_CnatosDungeon_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_4th_Stage_CnatosDungeon_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "name": "[데스매치] 상인들의 거리",
+      "folder": "DeathMatch_Market",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Market_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "name": "[5대륙-1] 부서지는 파도 해안",
+      "folder": "C9_5th_Stage_SurfCoast",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_SurfCoast_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_SurfCoast_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_SurfCoast_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_SurfCoast_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "name": "[5대륙-2] 홀리스의 전진기지",
+      "folder": "C9_5th_Stage_HollisCenter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_HollisCenter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_HollisCenter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_HollisCenter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_HollisCenter_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "name": "[5대륙-3] 신성한 대지 코데스",
+      "folder": "C9_5th_stage_HolyLand",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_stage_HolyLand_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_stage_HolyLand_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_stage_HolyLand_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_stage_HolyLand_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "name": "[5대륙-4] 불의 신전 유피아",
+      "folder": "C9_5th_Stage_suntemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_suntemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_suntemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_suntemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_suntemple_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "name": "[5대륙-5] 대사막 마노아",
+      "folder": "C9_5th_Stage_DesertManoa",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_DesertManoa_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_DesertManoa_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_DesertManoa_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_DesertManoa_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_5th_Stage_DesertManoa_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "name": "[5대륙 숨던] 숨겨진 최후의 보루",
+      "folder": "HiddenStage_5th_HiddenFortress",
+      "asset_fields_40_to_4c": [
+        16843271,
+        1,
+        5,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_STAGE",
+          "marker_file": "HiddenStage_5th_HiddenFortress_HIDDEN_STAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "name": "[5대륙 숨창] 말라버린 신의 창고",
+      "folder": "HiddenDepot_5th_DriedDepot",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        5,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_5th_DriedDepot_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "name": "[5대륙-6] 다브엘 성전",
+      "folder": "C9_5th_Stage_DabealTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_DabealTemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_DabealTemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_DabealTemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_DabealTemple_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "name": "[5대륙-7] 타오르는 붉은 전장",
+      "folder": "C9_5th_Stage_RedBattle",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_RedBattle_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_RedBattle_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_RedBattle_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_RedBattle_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "name": "[5대륙-8] 화염 장막 카미노스",
+      "folder": "C9_5th_Stage_FlameCurtain",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_FlameCurtain_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_FlameCurtain_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_FlameCurtain_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_FlameCurtain_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "name": "[5대륙-9] 달의 사막",
+      "folder": "C9_5th_Stage_DesertMoon",
+      "asset_fields_40_to_4c": [
+        519,
+        13313,
+        5,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_DesertMoon_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_DesertMoon_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_DesertMoon_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_DesertMoon_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "name": "[5대륙-10] 성도 바실루스",
+      "folder": "C9_5th_Stage_SaintsBasileus",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        5,
+        13
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_5th_Stage_SaintsBasileus_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_5th_Stage_SaintsBasileus_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_5th_Stage_SaintsBasileus_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_5th_Stage_SaintsBasileus_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_5th_Stage_SaintsBasileus_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "name": "[길드대전] 1 상인들의 거리",
+      "folder": "Guild_2th_Stage01",
+      "asset_fields_40_to_4c": [
+        4294903815,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILDMATCH",
+          "marker_file": "Guild_2th_Stage01_GUILDMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 115,
+      "name": "[길드대전] 2 성벽 전투",
+      "folder": "Guild_2th_Stage02",
+      "asset_fields_40_to_4c": [
+        4294903815,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILDMATCH",
+          "marker_file": "Guild_2th_Stage02_GUILDMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 116,
+      "name": "[길드대전] 3 내성 전투",
+      "folder": "Guild_2th_Stage03",
+      "asset_fields_40_to_4c": [
+        4294903815,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILDMATCH",
+          "marker_file": "Guild_2th_Stage03_GUILDMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 117,
+      "name": "[길드대전] 4 왕좌 전투",
+      "folder": "Guild_2th_Stage04",
+      "asset_fields_40_to_4c": [
+        4294903815,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILDMATCH",
+          "marker_file": "Guild_2th_Stage04_GUILDMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 118,
+      "name": "[튜토리얼]워터포드 마을",
+      "folder": "C9_1th_Town_Waterford",
+      "asset_fields_40_to_4c": [
+        4294901767,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "C9_1th_Town_Waterford_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "name": "[5대륙 익스트림]바르디엘 봉인터",
+      "folder": "Raid_5th_sarad",
+      "asset_fields_40_to_4c": [
+        4278452743,
+        1,
+        5,
+        14
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_X",
+          "marker_file": "Raid_5th_sarad_X.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "name": "[3대륙 전승 최종]극한의 고원",
+      "folder": "C9_3th_Stage_ExtrmeHL",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Jun",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_Jun.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "name": "[3대륙 전승] 노르간트 저항선",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "name": "[1대륙 2차 전직]망자의 사원",
+      "folder": "C9_1th_Stage_DeadTemple",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_1th_Stage_DeadTemple_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 127,
+      "name": "[전직퀘스트]잊혀진 해안가",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL_B",
+          "marker_file": "C9_0th_ForgSeaForest_TUTORIAL_B.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 128,
+      "name": "[전직퀘스트]임프의 빼앗긴 광산",
+      "folder": "C9_1th_Stage_ImpCave",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        5791746,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST",
+          "marker_file": "C9_1th_Stage_ImpCave_QUEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "name": "[전직퀘스트]녹아 내린 협곡-전투력",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_C",
+          "marker_file": "PvP_Training_Quest_QUEST_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "name": "[전직퀘스트]녹아 내린 협곡-순발력",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_C",
+          "marker_file": "PvP_Training_Quest_QUEST_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "name": "[전직퀘스트]녹아 내린 협곡-결투",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_C",
+          "marker_file": "PvP_Training_Quest_QUEST_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 132,
+      "name": "[전직퀘스트]녹아 내린 협곡-기민함",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_C",
+          "marker_file": "PvP_Training_Quest_QUEST_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 133,
+      "name": "[전직퀘스트]매혹의 숲",
+      "folder": "C9_1th_Stage_CharmForest",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST",
+          "marker_file": "C9_1th_Stage_CharmForest_QUEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 134,
+      "name": "[팀매치]빔펠리",
+      "folder": "PvP_Vimpeli",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        22018,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Vimpeli_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "name": "[팀매치]워터포드",
+      "folder": "PvP_Waterford",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Waterford_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 136,
+      "name": "[팀매치]러너스빌",
+      "folder": "PvP_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_RunnersVill_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 137,
+      "name": "[4대륙]서바이벌",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322439,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_4",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_4.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "name": "[3대륙]서바이벌",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322439,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_3",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 139,
+      "name": "[2대륙 Hell] 오베론의 안식처",
+      "folder": "C9_2th_Stage_OberonShelter",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        2,
+        14
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_2th_Stage_OberonShelter_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 140,
+      "name": "[3대륙 Hell] 타락한 루나드의 성",
+      "folder": "C9_3th_Stage_HiredBase",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        3,
+        13
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_3th_Stage_HiredBase_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 141,
+      "name": "[4대륙 Hell] 신의 부름터",
+      "folder": "C9_4th_Stage_AncientsCave",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        4,
+        14
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_4th_Stage_AncientsCave_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "name": "[2대륙-퀘스트]고통의 구덩이",
+      "folder": "C9_2th_Stage_PainHole",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        2,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_2th_Stage_PainHole_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 143,
+      "name": "길드대전 로비맵",
+      "folder": "C9_GuildwarLobby",
+      "asset_fields_40_to_4c": [
+        16843015,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "C9_GuildwarLobby_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "name": "[2대륙-퀘스트]서부 국경 지대",
+      "folder": "C9_2th_Stage_WestFrontier",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        2,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_2th_Stage_WestFrontier_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 145,
+      "name": "[3대륙-퀘스트]강제 노역소",
+      "folder": "C9_3th_stage_LaborArea",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_3th_stage_LaborArea_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 146,
+      "name": "[3대륙-퀘스트]극한의 고원",
+      "folder": "C9_3th_Stage_ExtrmeHL",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_3th_Stage_ExtrmeHL_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "name": "[3대륙-퀘스트]엘퀴네스의 쉼터",
+      "folder": "C9_3th_Stage_ElquinesShelter",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Q",
+          "marker_file": "C9_3th_Stage_ElquinesShelter_Q.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 148,
+      "name": "[튜토리얼]잊혀진 해안가",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        4294901767,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL_B",
+          "marker_file": "C9_0th_ForgSeaForest_TUTORIAL_B.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 149,
+      "name": "녹아내린 협곡",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278453511,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_B",
+          "marker_file": "PvP_Training_Quest_QUEST_B.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 150,
+      "name": "녹아내린 협곡",
+      "folder": "PvP_Training_Quest",
+      "asset_fields_40_to_4c": [
+        4278453511,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_QUEST_C",
+          "marker_file": "PvP_Training_Quest_QUEST_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 151,
+      "name": "[6대륙-1] 감춰진 바람의 계곡",
+      "folder": "C9_6th_Stage_WindValley",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_WindValley_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_WindValley_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_WindValley_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_WindValley_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_WindValley_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 152,
+      "name": "[6대륙-2] 갈라진 코데스의 파편",
+      "folder": "C9_6th_Stage_TornFragments",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_TornFragments_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_TornFragments_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_TornFragments_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_TornFragments_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_TornFragments_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 153,
+      "name": "[6대륙-3] 시들어가는 영원의 숲",
+      "folder": "C9_6th_Stage_EternalForest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_EternalForest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_EternalForest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_EternalForest_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_EternalForest_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_EternalForest_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 154,
+      "name": "[6대륙-4] 슈테르넨 숲 벌목지",
+      "folder": "C9_6th_Stage_Syutereunenforest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 155,
+      "name": "[6대륙-5] 심연의 지하통로",
+      "folder": "C9_6th_Stage_AbyssUnderPass",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 156,
+      "name": "[6대륙-6] 뒤틀린 미로의 숲",
+      "folder": "C9_6th_Stage_GodShelter",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_GodShelter_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_GodShelter_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_GodShelter_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_GodShelter_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_GodShelter_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 157,
+      "name": "[6대륙-7] 무너진 수룡의 신전",
+      "folder": "C9_6th_Stage_DragonTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_DragonTemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6th_Stage_DragonTemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6th_Stage_DragonTemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6th_Stage_DragonTemple_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6th_Stage_DragonTemple_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 158,
+      "name": "[6대륙-8] 마르지 않는 샘 엔도르",
+      "folder": "C9_6thcom_ChaosEndor",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        9
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6thcom_ChaosEndor_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_6thcom_ChaosEndor_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_6thcom_ChaosEndor_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_6thcom_ChaosEndor_D.C9MM"
+        },
+        {
+          "index": 4,
+          "suffix": "_E",
+          "marker_file": "C9_6thcom_ChaosEndor_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 159,
+      "name": "[6대륙 익스트림] 혼돈의 첨탑",
+      "folder": "C9_6th_Stage_ChaosSteeple",
+      "asset_fields_40_to_4c": [
+        4278452743,
+        1,
+        6,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_X",
+          "marker_file": "C9_6th_Stage_ChaosSteeple_X.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 160,
+      "name": "[6대륙 숨던] 가시 그늘의 숲",
+      "folder": "HiddenStage_6th_a",
+      "asset_fields_40_to_4c": [
+        16843271,
+        1,
+        6,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_STAGE",
+          "marker_file": "HiddenStage_6th_a_HIDDEN_STAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "name": "[6대륙 숨창] 요정의 쉼터",
+      "folder": "HiddenDepot_6th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        6,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT",
+          "marker_file": "HiddenDepot_6th_a_HIDDEN_DEPOT.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 162,
+      "name": "[팀매치]중국",
+      "folder": "PVP_Chi",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PVP_Chi_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "name": "[PVP Zone]중국",
+      "folder": "PVP_Chi",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PVP_Chi_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "name": "[PVP Zone]일본",
+      "folder": "PvP_Japan",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Japan_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 165,
+      "name": "[팀매치]일본",
+      "folder": "PvP_Japan",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Japan_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 166,
+      "name": "<C9Color0xFF56e353>튜토리얼<C9OldColor>",
+      "folder": "C9_0th_Stage_MeshurianMT",
+      "asset_fields_40_to_4c": [
+        4294902023,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "C9_0th_Stage_MeshurianMT_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "name": "[팀매치] 테스트맵",
+      "folder": "PVP_GOA",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PVP_GOA_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "name": "[PVP Zone]한국",
+      "folder": "PvP_Kor",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Kor_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 169,
+      "name": "[팀매치]한국",
+      "folder": "PvP_Kor",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Kor_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 170,
+      "name": "[3대륙-퀘스트]노르간트 저항선_파이터",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 171,
+      "name": "[3대륙]서바이벌_CHN",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322434,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_3",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 172,
+      "name": "[3대륙-퀘스트]영혼의 계곡",
+      "folder": "C9_3th_Stage_SoulValley",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_T",
+          "marker_file": "C9_3th_Stage_SoulValley_T.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "name": "[3대륙-퀘스트]러너스 빌_파이터",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_3th_Town_RunnersVill_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 174,
+      "name": "[3대륙-퀘스트]얼음의 협곡",
+      "folder": "C9_3th_Stage_IceValley",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        7
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_T",
+          "marker_file": "C9_3th_Stage_IceValley_T.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 175,
+      "name": "[포츈 서바이벌]",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278387975,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_6",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_6.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 176,
+      "name": "[4대륙 퀘스트]실종 사건 발생지",
+      "folder": "C9_2th_Stage_RedFogMarsh",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        4,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Quest",
+          "marker_file": "C9_2th_Stage_RedFogMarsh_Quest.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 177,
+      "name": "길드하우스 저택급",
+      "folder": "C9_In_GuildHouse_a_new",
+      "asset_fields_40_to_4c": [
+        4294902535,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILD",
+          "marker_file": "C9_In_GuildHouse_a_new_GUILD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "name": "길드하우스 대회관급",
+      "folder": "C9_In_GuildHouse_b_new",
+      "asset_fields_40_to_4c": [
+        4294902535,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILD",
+          "marker_file": "C9_In_GuildHouse_b_new_GUILD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 179,
+      "name": "[전직]잊혀진 해안가 - 파이터",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_0th_ForgSeaForest_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 180,
+      "name": "[전직]잊혀진 해안가 - 헌터",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_H",
+          "marker_file": "C9_0th_ForgSeaForest_H.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 181,
+      "name": "[전직]잊혀진 해안가 - 샤먼",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_S",
+          "marker_file": "C9_0th_ForgSeaForest_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 182,
+      "name": "[전직]잊혀진 해안가 - 위치블레이드",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_W",
+          "marker_file": "C9_0th_ForgSeaForest_W.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 183,
+      "name": "이벤트 표시용 더미맵",
+      "folder": "C9_0th_Stage_MeshurianMT",
+      "asset_fields_40_to_4c": [
+        4294902023,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TUTORIAL",
+          "marker_file": "C9_0th_Stage_MeshurianMT_TUTORIAL.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 184,
+      "name": "[데스매치] 데스매치_테스트",
+      "folder": "Deathmatch_strasbourg",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Deathmatch_strasbourg_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 185,
+      "name": "녹아 내린 협곡(이벤트용)",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        16843271,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP_Event",
+          "marker_file": "PvP_Training_PVP_Event.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 186,
+      "name": "[6대륙 마을]엔실롯",
+      "folder": "C9_6th_Town_Ensilrot",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        6,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_6th_Town_Ensilrot_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 187,
+      "name": "[6대륙-1] 시들어가는 영원의 숲(사용안함)",
+      "folder": "C9_6thcom_DisorderlyForest",
+      "asset_fields_40_to_4c": [
+        512,
+        2,
+        6,
+        15
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_U",
+          "marker_file": "C9_6thcom_DisorderlyForest_U.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 188,
+      "name": "[6대륙-2] 마르지 않는 샘 엔도르(사용안함)",
+      "folder": "C9_6thcom_ChaosEndor",
+      "asset_fields_40_to_4c": [
+        512,
+        2,
+        6,
+        15
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_U",
+          "marker_file": "C9_6thcom_ChaosEndor_U.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 189,
+      "name": "[PVP Zone]태국",
+      "folder": "PvP_Thai",
+      "asset_fields_40_to_4c": [
+        4278191367,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP",
+          "marker_file": "PvP_Thai_PVP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 190,
+      "name": "[팀매치]태국",
+      "folder": "PvP_Thai",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Thai_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 191,
+      "name": "총명의 수련장",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        4278519047,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_ITR",
+          "marker_file": "PvP_Training_ITR.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 192,
+      "name": "[4대륙 숨창] 크나토스 창고_유료",
+      "folder": "HiddenDepot_4th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        4,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT_C",
+          "marker_file": "HiddenDepot_4th_a_HIDDEN_DEPOT_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 193,
+      "name": "[5대륙 숨창] 말라버린 신의 창고_유료",
+      "folder": "HiddenDepot_5th_DriedDepot",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        5,
+        8
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT_C",
+          "marker_file": "HiddenDepot_5th_DriedDepot_HIDDEN_DEPOT_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 194,
+      "name": "[AOS]전장 모드",
+      "folder": "LOCL",
+      "asset_fields_40_to_4c": [
+        4278256896,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_AOS",
+          "marker_file": "LOCL_AOS.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 195,
+      "name": "전장모드 캐릭터 선택 더미맵",
+      "folder": "LOC",
+      "asset_fields_40_to_4c": [
+        33620224,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "LOC_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 196,
+      "name": "[1대륙 숨창]고블린 창고_유료",
+      "folder": "HiddenDepot_1th_a",
+      "asset_fields_40_to_4c": [
+        66055,
+        1,
+        1,
+        12
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_HIDDEN_DEPOT_C",
+          "marker_file": "HiddenDepot_1th_a_HIDDEN_DEPOT_C.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 197,
+      "name": "[6대륙] 숨겨진 탑",
+      "folder": "C9_6thcom_SecretTower_new",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        6,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_U",
+          "marker_file": "C9_6thcom_SecretTower_new_U.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 198,
+      "name": "[6대륙]서바이벌",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322439,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_5_S",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_5_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 199,
+      "name": "[전직]잊혀진 해안가 - 노블레스",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_N",
+          "marker_file": "C9_0th_ForgSeaForest_N.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "name": "[6대륙] 숨겨진 탑 - 중국용",
+      "folder": "C9_6thcom_SecretTower_new",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        6,
+        15
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_U",
+          "marker_file": "C9_6thcom_SecretTower_new_U.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 201,
+      "name": "버그테스트용맵",
+      "folder": "C9_1th_Stage_DelpastNorth",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        1,
+        15
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TEST",
+          "marker_file": "C9_1th_Stage_DelpastNorth_TEST.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 202,
+      "name": "[좀비모드] 투사의 전당",
+      "folder": "DeathMatch_Aria",
+      "asset_fields_40_to_4c": [
+        4278388487,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "DeathMatch_Aria_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 203,
+      "name": "[데스매치] 빔펠리 시가지",
+      "folder": "Guild_2th_Stage01",
+      "asset_fields_40_to_4c": [
+        1799,
+        22018,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Guild_2th_Stage01_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 204,
+      "name": "[데스매치] 빔펠리 성벽",
+      "folder": "Guild_2th_Stage02",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Guild_2th_Stage02_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 205,
+      "name": "[데스매치] 빔펠리 내성",
+      "folder": "Guild_2th_Stage03",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Guild_2th_Stage03_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 206,
+      "name": "[데스매치] 클라우스의 왕좌",
+      "folder": "Guild_2th_Stage04",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH",
+          "marker_file": "Guild_2th_Stage04_DEATHMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 207,
+      "name": "[팀매치] 빔펠리 내성",
+      "folder": "Guild_2th_Stage03",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "Guild_2th_Stage03_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 208,
+      "name": "[팀매치] 빔펠리 성벽",
+      "folder": "Guild_2th_Stage02",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "Guild_2th_Stage02_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 209,
+      "name": "[팀매치] 빔펠리 시가지",
+      "folder": "Guild_2th_Stage01",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "Guild_2th_Stage01_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 210,
+      "name": "[팀매치] 클라우스의 왕좌",
+      "folder": "Guild_2th_Stage04",
+      "asset_fields_40_to_4c": [
+        4278322951,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "Guild_2th_Stage04_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 211,
+      "name": "[데스매치] 아케네의 대전당",
+      "folder": "DeathMatch_CenterStrike",
+      "asset_fields_40_to_4c": [
+        1799,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH2",
+          "marker_file": "DeathMatch_CenterStrike_DEATHMATCH2.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 212,
+      "name": "[좀비모드] 상인들의 거리",
+      "folder": "Guild_2th_Stage01",
+      "asset_fields_40_to_4c": [
+        4278388487,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_GUILDMATCH",
+          "marker_file": "Guild_2th_Stage01_GUILDMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 213,
+      "name": "[좀비모드] 아케네의 대전당",
+      "folder": "DeathMatch_CenterStrike",
+      "asset_fields_40_to_4c": [
+        4278388487,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DEATHMATCH2",
+          "marker_file": "DeathMatch_CenterStrike_DEATHMATCH2.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 214,
+      "name": "[이벤트]실드보스 미션",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        16777735,
+        1,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP_EventSB",
+          "marker_file": "PvP_Training_PVP_EventSB.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 215,
+      "name": "[이벤트]오브젝트 파괴",
+      "folder": "C9_1th_Stage_DeadTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        1,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Event",
+          "marker_file": "C9_1th_Stage_DeadTemple_Event.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 216,
+      "name": "[이벤트]악동 소탕 대작전",
+      "folder": "C9_1th_Town_Waterford",
+      "asset_fields_40_to_4c": [
+        4278584583,
+        1,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Event",
+          "marker_file": "C9_1th_Town_Waterford_Event.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 217,
+      "name": "[이벤트]내일은 X10",
+      "folder": "DeathMatch_Iris",
+      "asset_fields_40_to_4c": [
+        4278584583,
+        1,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_EventMission",
+          "marker_file": "DeathMatch_Iris_EventMission.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 218,
+      "name": "[모드] 몬스터 소환대전",
+      "folder": "Mode_SummonersWar",
+      "asset_fields_40_to_4c": [
+        4278322944,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "Mode_SummonersWar_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 219,
+      "name": "[종말모드]운명의 결투장",
+      "folder": "DeathMatch_Rounding",
+      "asset_fields_40_to_4c": [
+        4278192903,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_END",
+          "marker_file": "DeathMatch_Rounding_END.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 220,
+      "name": "[3대륙-퀘스트]러너스 빌_샤먼",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_S",
+          "marker_file": "C9_3th_Town_RunnersVill_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 221,
+      "name": "[3대륙-퀘스트]러너스 빌_헌터",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_H",
+          "marker_file": "C9_3th_Town_RunnersVill_H.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 222,
+      "name": "[3대륙-퀘스트]러너스 빌_위치",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_W",
+          "marker_file": "C9_3th_Town_RunnersVill_W.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 223,
+      "name": "[3대륙-퀘스트]러너스 빌_미스틱",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_M",
+          "marker_file": "C9_3th_Town_RunnersVill_M.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 224,
+      "name": "[종말모드]지하 감옥",
+      "folder": "C9_4th_Stage_CnatosDungeon",
+      "asset_fields_40_to_4c": [
+        4278192903,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_END",
+          "marker_file": "C9_4th_Stage_CnatosDungeon_END.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 225,
+      "name": "[릴레이매치치]러너스빌",
+      "folder": "PvP_RunnersVill",
+      "asset_fields_40_to_4c": [
+        67335,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_RELAYMATCH",
+          "marker_file": "PvP_RunnersVill_RELAYMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 226,
+      "name": "[릴레이매치] 천공의 결투장",
+      "folder": "Deathmatch_Stadium",
+      "asset_fields_40_to_4c": [
+        67335,
+        2,
+        0,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_RELAYMATCH",
+          "marker_file": "Deathmatch_Stadium_RELAYMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 227,
+      "name": "[3대륙-퀘스트]노르간트 저항선_샤먼",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_S",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 228,
+      "name": "[3대륙-퀘스트]노르간트 저항선_헌터",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_H",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_H.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 229,
+      "name": "[3대륙-퀘스트]노르간트 저항선_위치",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_W",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_W.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 230,
+      "name": "[3대륙-퀘스트]노르간트 저항선_미스틱",
+      "folder": "C9_3th_Stage_NorgantBattlefront",
+      "asset_fields_40_to_4c": [
+        4278321671,
+        2,
+        3,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_M",
+          "marker_file": "C9_3th_Stage_NorgantBattlefront_M.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 231,
+      "name": "고대의 경기장",
+      "folder": "PVP_Russia",
+      "asset_fields_40_to_4c": [
+        4278650119,
+        1,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_RANK",
+          "marker_file": "PVP_Russia_RANK.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 232,
+      "name": "[6대륙-퀘스트]각성의 장",
+      "folder": "C9_0th_ForgSeaForest",
+      "asset_fields_40_to_4c": [
+        4278584583,
+        2,
+        6,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_AWAKE",
+          "marker_file": "C9_0th_ForgSeaForest_AWAKE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 233,
+      "name": "[요일던전]스카라브전 알 섬멸전",
+      "folder": "C9_4th_Stage_AncientsCave",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD",
+          "marker_file": "C9_4th_Stage_AncientsCave_DD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 234,
+      "name": "[요일던전]오크들의 습격",
+      "folder": "C9_2th_Stage_Barooka",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD",
+          "marker_file": "C9_2th_Stage_Barooka_DD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 235,
+      "name": "[요일던전]얼음 동굴 파수꾼",
+      "folder": "C9_3th_Stage_MeltIceIsland",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD",
+          "marker_file": "C9_3th_Stage_MeltIceIsland_DD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 236,
+      "name": "[요일던전]러너스빌의 악몽",
+      "folder": "C9_3th_Town_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD",
+          "marker_file": "C9_3th_Town_RunnersVill_DD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 237,
+      "name": "[요일던전]성장의 증거",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD",
+          "marker_file": "PvP_Training_DD.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 238,
+      "name": "[요일던전]운을 시험해 보세요",
+      "folder": "C9_4th_Stage_AncientsCave",
+      "asset_fields_40_to_4c": [
+        4278715655,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_DD2",
+          "marker_file": "C9_4th_Stage_AncientsCave_DD2.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 239,
+      "name": "[6대륙-어나더] 감춰진 바람의 계곡",
+      "folder": "C9_6th_Stage_WindValley",
+      "asset_fields_40_to_4c": [
+        33554951,
+        2,
+        6,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_WindValley_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_T1",
+          "marker_file": "C9_6th_Stage_WindValley_T1.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_T2",
+          "marker_file": "C9_6th_Stage_WindValley_T2.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_T3",
+          "marker_file": "C9_6th_Stage_WindValley_T3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 240,
+      "name": "[6대륙-어나더] 갈라진 코데스의 파편",
+      "folder": "C9_6th_Stage_TornFragments",
+      "asset_fields_40_to_4c": [
+        33554951,
+        2,
+        6,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_TornFragments_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_T1",
+          "marker_file": "C9_6th_Stage_TornFragments_T1.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_T2",
+          "marker_file": "C9_6th_Stage_TornFragments_T2.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_T3",
+          "marker_file": "C9_6th_Stage_TornFragments_T3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 241,
+      "name": "[6대륙-어나더] 시들어가는 영원의 숲",
+      "folder": "C9_6th_Stage_EternalForest",
+      "asset_fields_40_to_4c": [
+        33554951,
+        2,
+        6,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_EternalForest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_T1",
+          "marker_file": "C9_6th_Stage_EternalForest_T1.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_T2",
+          "marker_file": "C9_6th_Stage_EternalForest_T2.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_T3",
+          "marker_file": "C9_6th_Stage_EternalForest_T3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 242,
+      "name": "[6대륙-어나더] 슈테르넨 숲 벌목지",
+      "folder": "C9_6th_Stage_Syutereunenforest",
+      "asset_fields_40_to_4c": [
+        33554951,
+        2,
+        6,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_T1",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_T1.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_T2",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_T2.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_T3",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_T3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 243,
+      "name": "[6대륙-어나더] 심연의 지하통로",
+      "folder": "C9_6th_Stage_AbyssUnderPass",
+      "asset_fields_40_to_4c": [
+        33554951,
+        2,
+        6,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_T1",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_T1.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_T2",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_T2.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_T3",
+          "marker_file": "C9_6th_Stage_AbyssUnderPass_T3.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 244,
+      "name": "[6대륙 익스트림] 혼돈의 첨탑_2",
+      "folder": "C9_6th_Stage_ChaosSteeple",
+      "asset_fields_40_to_4c": [
+        4278452743,
+        1,
+        6,
+        10
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_X2",
+          "marker_file": "C9_6th_Stage_ChaosSteeple_X2.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 245,
+      "name": "시간의 균열",
+      "folder": "C9_6th_Stage_Syutereunenforest",
+      "asset_fields_40_to_4c": [
+        4278781191,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_S1",
+          "marker_file": "C9_6th_Stage_Syutereunenforest_S1.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 246,
+      "name": "[크래시] 운명의 결투장",
+      "folder": "PvP_Thai",
+      "asset_fields_40_to_4c": [
+        4278454023,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_CRASH",
+          "marker_file": "PvP_Thai_CRASH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 247,
+      "name": "[6대륙 더미]쉐도우",
+      "folder": "C9_6th_Town_Ensilrot",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        6,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_6th_Town_Ensilrot_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 248,
+      "name": "[경쟁전] 끝없는 전쟁",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278519559,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_COMP",
+          "marker_file": "SUV_ArenaStage_COMP.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 249,
+      "name": "[7대륙-1] 사념의 듀라한 기지",
+      "folder": "C9_7th_Stage_prisoncastle",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        7,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_7th_Stage_prisoncastle_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_7th_Stage_prisoncastle_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_7th_Stage_prisoncastle_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_E",
+          "marker_file": "C9_7th_Stage_prisoncastle_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 250,
+      "name": "[7대륙-2] 문드러진 정령의 숲",
+      "folder": "C9_7th_Stage_elfvillage",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        7,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_7th_Stage_elfvillage_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_7th_Stage_elfvillage_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_7th_Stage_elfvillage_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_E",
+          "marker_file": "C9_7th_Stage_elfvillage_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 251,
+      "name": "[7대륙-3] 빛바랜 신전",
+      "folder": "C9_7th_Stage_temple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        7,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_7th_Stage_temple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_7th_Stage_temple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_7th_Stage_temple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_E",
+          "marker_file": "C9_7th_Stage_temple_E.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 252,
+      "name": "[7대륙 마을]엔노르",
+      "folder": "C9_7th_Town_Ennor",
+      "asset_fields_40_to_4c": [
+        4278190343,
+        1,
+        7,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_VILLAGE",
+          "marker_file": "C9_7th_Town_Ennor_VILLAGE.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 253,
+      "name": "[이벤트]실드보스 미션_7대륙",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        16777735,
+        1,
+        7,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_PVP_EventSB",
+          "marker_file": "PvP_Training_PVP_EventSB.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 254,
+      "name": "[이벤트]오브젝트 파괴_7대륙",
+      "folder": "C9_1th_Stage_DeadTemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        7,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Event",
+          "marker_file": "C9_1th_Stage_DeadTemple_Event.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 255,
+      "name": "[이벤트]무차별 총공격",
+      "folder": "PvP_Training",
+      "asset_fields_40_to_4c": [
+        4278846727,
+        1,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_Lim",
+          "marker_file": "PvP_Training_Lim.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 261,
+      "name": "[랭킹아레나듀얼]일본",
+      "folder": "PvP_Japan",
+      "asset_fields_40_to_4c": [
+        4278585095,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Japan_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 262,
+      "name": "[랭킹아레나듀얼]중국",
+      "folder": "PVP_Chi",
+      "asset_fields_40_to_4c": [
+        4278585095,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PVP_Chi_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 263,
+      "name": "[랭킹아레나듀얼]한국",
+      "folder": "PvP_Kor",
+      "asset_fields_40_to_4c": [
+        4278585095,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Kor_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 264,
+      "name": "[랭킹아레나릴레이]빔펠리",
+      "folder": "PvP_Vimpeli",
+      "asset_fields_40_to_4c": [
+        4278650631,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Vimpeli_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 265,
+      "name": "[랭킹아레나릴레이]워터포드",
+      "folder": "PvP_Waterford",
+      "asset_fields_40_to_4c": [
+        4278650631,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_TeamMatch",
+          "marker_file": "PvP_Waterford_TeamMatch.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 266,
+      "name": "[랭킹아레나릴레이]러너스빌",
+      "folder": "PvP_RunnersVill",
+      "asset_fields_40_to_4c": [
+        4278650631,
+        2,
+        0,
+        0
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_RELAYMATCH",
+          "marker_file": "PvP_RunnersVill_RELAYMATCH.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 267,
+      "name": "[8대륙-1]잊혀진 숲의 신전",
+      "folder": "C9_8th_Stage_A_Vinetemple",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        8,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 268,
+      "name": "[8대륙-2] 더러운 지하수로",
+      "folder": "C9_8th_Stage_B_Ancientregion",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        8,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 269,
+      "name": "[8대륙-3] 지배자의 성",
+      "folder": "C9_8th_Stage_C_Sapientia",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        8,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_C_Sapientia_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_C_Sapientia_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_C_Sapientia_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_C_Sapientia_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 270,
+      "name": "[深?]???安息?",
+      "folder": "C9_2th_Stage_OberonShelter",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        8,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_2th_Stage_OberonShelter_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 271,
+      "name": "赫?那德生存",
+      "folder": "SUV_ArenaStage",
+      "asset_fields_40_to_4c": [
+        4278322439,
+        2,
+        8,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_SURVIVAL_7_S",
+          "marker_file": "SUV_ArenaStage_SURVIVAL_7_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 272,
+      "name": "[深?]?落的??德城",
+      "folder": "C9_3th_Stage_HiredBase",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        8,
+        6
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_S",
+          "marker_file": "C9_3th_Stage_HiredBase_S.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 273,
+      "name": "[8대륙 Hell]8-4-地?",
+      "folder": "C9_8th_Hell_A",
+      "asset_fields_40_to_4c": [
+        4278452743,
+        1,
+        8,
+        4
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Hell_A_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 274,
+      "name": "8-5-?巢",
+      "folder": "C9_8th_Stage_DragonNest",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        8,
+        5
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_DragonNest_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_DragonNest_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_DragonNest_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 275,
+      "name": "[7대륙-1] 사념의 듀라한 기지[?界]",
+      "folder": "C9_7th_Stage_prisoncastle",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        7,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_H",
+          "marker_file": "C9_7th_Stage_prisoncastle_H.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 276,
+      "name": "[7대륙-2] 문드러진 정령의 숲[?界]",
+      "folder": "C9_7th_Stage_elfvillage",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        7,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_F",
+          "marker_file": "C9_7th_Stage_elfvillage_F.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 277,
+      "name": "[7대륙-3] 빛바랜 신전[?界]",
+      "folder": "C9_7th_Stage_temple",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        7,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_H",
+          "marker_file": "C9_7th_Stage_temple_H.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 278,
+      "name": "[8대륙-1]잊혀진 숲의 신전[?界]",
+      "folder": "C9_8th_Stage_A_Vinetemple",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        8,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_A_Vinetemple_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 279,
+      "name": "[8대륙-2] 더러운 지하수로[?界]",
+      "folder": "C9_8th_Stage_B_Ancientregion",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        8,
+        2
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_B_Ancientregion_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 280,
+      "name": "[8대륙-3] 지배자의 성[?界]",
+      "folder": "C9_8th_Stage_C_Sapientia",
+      "asset_fields_40_to_4c": [
+        519,
+        2,
+        8,
+        3
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_A",
+          "marker_file": "C9_8th_Stage_C_Sapientia_A.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_B",
+          "marker_file": "C9_8th_Stage_C_Sapientia_B.C9MM"
+        },
+        {
+          "index": 2,
+          "suffix": "_C",
+          "marker_file": "C9_8th_Stage_C_Sapientia_C.C9MM"
+        },
+        {
+          "index": 3,
+          "suffix": "_D",
+          "marker_file": "C9_8th_Stage_C_Sapientia_D.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 281,
+      "name": "被腐?的守?者之塔",
+      "folder": "C9_6thcom_SecretTower_new",
+      "asset_fields_40_to_4c": [
+        519,
+        6553601,
+        6,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_V",
+          "marker_file": "C9_6thcom_SecretTower_new_V.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 282,
+      "name": "[深?]神之召?地",
+      "folder": "C9_4th_Stage_AncientsCave",
+      "asset_fields_40_to_4c": [
+        4278387207,
+        1,
+        4,
+        14
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_G",
+          "marker_file": "C9_4th_Stage_AncientsCave_G.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 283,
+      "name": "Boss Arena",
+      "folder": "C9_8th_Stage_DragonNest",
+      "asset_fields_40_to_4c": [
+        519,
+        1,
+        8,
+        11
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_X1",
+          "marker_file": "C9_8th_Stage_DragonNest_X1.C9MM"
+        },
+        {
+          "index": 1,
+          "suffix": "_D2",
+          "marker_file": "C9_8th_Stage_DragonNest_D2.C9MM"
+        }
+      ]
+    },
+    {
+      "id": 284,
+      "name": "[9th Continent] Judge Factory",
+      "folder": "C9_9th_Stage_JudgeFactory",
+      "asset_fields_40_to_4c": [
+        4278452743,
+        2,
+        9,
+        1
+      ],
+      "submaps": [
+        {
+          "index": 0,
+          "suffix": "_X1",
+          "marker_file": "C9_9th_Stage_JudgeFactory_X1.C9MM"
+        }
+      ]
+    }
+  ]
+}

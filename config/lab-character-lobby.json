@@ -6,5 +6,7 @@
   "max_connections": 1,
   "max_packets": 255,
   "timeout_seconds": 120,
-  "character_store": "../artifacts/lab-characters.local.json"
+  "character_store": "../artifacts/lab-characters.local.json",
+  "initial_map_id": 10,
+  "initial_submap": 0
 }

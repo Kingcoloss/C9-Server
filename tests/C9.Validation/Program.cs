@@ -86,6 +86,7 @@ internal static partial class Validation
             ("Initial epoch boundary", Sync(EpochBoundary)),
             ("Opaque server list schema", Sync(ServerListSchema)),
             ("Configuration validation", Sync(Configuration)),
+            ("World map catalog and destinations", Sync(WorldMapDestinations)),
             ("Launcher installed version validation", Sync(LauncherVersion)),
             ("Pipe fragmentation and coalescing", PipeBoundaries),
             ("Pipe EOF and invalid lengths", PipeErrors),
