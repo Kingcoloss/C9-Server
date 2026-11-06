@@ -23,8 +23,13 @@ internal static partial class Validation
         Check.Equal(11, updatedFields.Length);
         Check.Equal("", updatedFields[1]);
         Check.Equal("VALOFE", updatedFields[2]);
-        Check.Equal("test", updatedFields[3]);
+        Check.Equal("fromVLauncher", updatedFields[0]);
+        byte[] localTicket = Convert.FromBase64String(Uri.UnescapeDataString(updatedFields[3]));
+        Check.Equal(16, localTicket.Length);
+        Check.True(localTicket.All(value => value == 0));
         Check.Equal("c9-gl", updatedFields[4]);
+        Check.Equal(13, updatedFields[5].Length);
+        Check.Equal("test", updatedFields[6]);
         Check.Equal("", updatedFields[7]);
         Check.Equal("127.0.0.1", updatedFields[8]);
         Check.Equal("14000", updatedFields[9]);

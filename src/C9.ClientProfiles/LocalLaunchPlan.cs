@@ -31,7 +31,7 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
         // colon fields, empty fields 1/7 and EN at 10; there are no comma or
         // pipe fields. Reuse that structure with synthetic lab values only.
         string arguments = clientHash.Equals(OfficialUpdated20261106, StringComparison.OrdinalIgnoreCase)
-            ? $"local::VALOFE:test:c9-gl:local:local::{endpoint}:{port}:EN"
+            ? $"fromVLauncher::VALOFE:AAAAAAAAAAAAAAAAAAAAAA%3D%3D:c9-gl:0000000000001:test::{endpoint}:{port}:EN"
             : $"{endpoint},{port},test|1|local|0|-1:0:0:lab:0:lab:0:0:{endpoint}:{port}";
         return new(Path.Combine(folder, "C9.exe"), folder, arguments, clientHash.ToLowerInvariant());
     }

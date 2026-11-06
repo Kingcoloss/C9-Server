@@ -15,12 +15,41 @@
   "official_argument_structure": {
     "argument_sets": 1,
     "colon_fields": 11,
-    "empty_indexes": [1, 7],
-    "public_literal_indexes": {"2": "VALOFE", "4": "c9-gl", "10": "EN"},
-    "endpoint_indexes": [8, 9],
+    "empty_indexes": [
+      1,
+      7
+    ],
+    "public_literal_indexes": {
+      "0": "fromVLauncher",
+      "2": "VALOFE",
+      "4": "c9-gl",
+      "10": "EN"
+    },
+    "endpoint_indexes": [
+      8,
+      9
+    ],
     "commas": 0,
     "pipes": 0,
-    "identity_or_authentication_values_retained": false
+    "identity_or_authentication_values_retained": false,
+    "observed_field_formats": {
+      "0": {
+        "length": 13,
+        "encoding": "public launch marker fromVLauncher"
+      },
+      "3": {
+        "length": 28,
+        "encoding": "URL-escaped opaque value; percent-encoded suffix"
+      },
+      "5": {
+        "length": 13,
+        "encoding": "hex-compatible"
+      },
+      "6": {
+        "length": 10,
+        "encoding": "identifier; value not retained"
+      }
+    }
   },
   "local_experiments": {
     "previous_profile_arguments": "open version.ini failed!",
@@ -30,7 +59,9 @@
     "fault_module": "C9.exe",
     "fault_module_offset": "0x0045E47E",
     "game_packets_observed": false,
-    "compatibility_verified": false
+    "compatibility_verified": false,
+    "corrected_synthetic_format": "fromVLauncher marker; URL-escaped base64 of sixteen zero bytes; thirteen hex digits; test identifier; loopback endpoint",
+    "corrected_launch_observed": "C9 window and loading splash reached from local launcher; game handshake pending"
   },
   "next_check": "Field encodings/lengths and local pre-launch authentication flow; then game handshake",
   "protection_modified": false,
