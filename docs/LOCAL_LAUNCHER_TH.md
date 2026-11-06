@@ -1,9 +1,9 @@
-# ตัวเปิด local สำหรับ Official Client รุ่น 52893
+# ตัวเปิด local สำหรับ Official Client รุ่น 52893 และ 55350
 
 อัปเดต 6 พฤศจิกายน 2026
 
 ใช้ `C9LocalLauncher.exe` ที่สร้างจากโครงการนี้เปิดเข้า local lab และใช้
-`C9Launcher.exe` ของ Official สำหรับอัปเดตเกมตามเดิม ตัวเปิด local ไม่แก้
+**VFUN Launcher** ของ VALOFE สำหรับช่องทาง Official ตัวเปิด local ไม่แก้
 `C9.exe`, `C9Launcher.exe`, `C9Patcher.exe`, `C9Server.ini` หรือ `VerCli.C9`
 และไม่ใช้ awesomium.dll/icudt.dll จาก launcher เก่า ไฟล์ที่ผู้ใช้คัดลอกไว้ยังคงอยู่
 
@@ -13,7 +13,8 @@
 - กดเปิดเกมเพื่อเริ่ม observer ที่ `127.0.0.1:14000` อัตโนมัติเมื่อยังไม่มีบริการ
   บันทึกข้อมูลชนิด/ขนาด packet ใน `L9.server.log` โดยไม่มี payload หรือข้อมูลยืนยันตัวตน
 - เปิด C9 ด้วยรูปแบบพารามิเตอร์ที่อ่านโดย client ใหม่ แสดงสถานะเริ่มเกม/รอเกม/เกมปิด
-- ปุ่มแยกสำหรับโฟลเดอร์เกมและ Official Launcher
+- ปุ่มแยกสำหรับโฟลเดอร์เกมและ VFUN Launcher ที่ติดตั้งไว้ หากยังไม่กำหนด path
+  จะเปิดหน้าดาวน์โหลด VFUN ทางการ
 - บัญชีและค่าพารามิเตอร์เป็นข้อมูลสมมติสำหรับ local lab เท่านั้น ยังไม่มีระบบยืนยันบัญชีจริง
 - ชุดติดตั้งสำหรับเครื่องทดสอบ Windows ARM64 รวม runtime ไว้ใน exe แล้ว
   การตรวจ `--check` ผ่านและไฟล์ Official ทั้งห้ารายการมี hash เท่าเดิม
@@ -21,7 +22,44 @@
   แต่ประมาณ 4 นาทีต่อมาเกมแสดง **GameGuard Init Error (Code: 114)**
   ยังไม่มีคำขอจากเกมถึง local endpoint; การเชื่อมต่อที่พบใน log เป็น readiness probe ของ UI
 - เครื่องทดสอบเป็น Windows 11 ARM64 บน QEMU VM ยังไม่ได้ยืนยันการเปิด client
-  รุ่นใหม่นี้ผ่าน Official Launcher จนถึงหน้าจอเกมบนเครื่องเดียวกัน
+  รุ่นใหม่นี้ผ่าน VFUN Launcher จนถึงหน้าจอเกมบนเครื่องเดียวกัน
+- ผู้ใช้รายงานว่าเข้าสู่ระบบผ่าน launcher Webzen เดิมไม่ได้ ปุ่ม Official รุ่นแรกของเรา
+  ชี้ผิดไปที่ `C9Launcher.exe` ในโฟลเดอร์เกม จึงแก้ให้ชี้ไป VFUN ที่ติดตั้งแยก
+  ผลการเข้าสู่ระบบเดิมยังใช้เป็นผลทดสอบการเริ่มเกมผ่าน VFUN ไม่ได้
+
+### หลังอัปเดตผ่าน VFUN: Build 55350
+
+ผู้ใช้ดาวน์โหลดแพตช์และรายงานว่า nProtect อัปเดตได้เมื่อเปิดจาก Official
+ไฟล์เกมเปลี่ยนเป็น SHA-256
+`9c6816ab93a6de55e93a9c98cb3837879f0d8e9682e94932d122cf7995845529`
+ขนาด 6,791,064 ไบต์ และลายเซ็น VALOFE ผ่านการตรวจ
+ทดสอบเปิดจาก VFUN ที่ล็อกอินแล้วจริง: เกมแสดง Build 55350 และถึงหน้าเลือกโลก
+โดยมี Acharon / Good จึงมีผลทดสอบ Official ที่สำเร็จสำหรับ client หลังแพตช์แล้ว
+
+การเปิดของ VFUN ใช้ argument หนึ่งชุด คั่นด้วย colon 11 ช่อง ช่อง 1/7 ว่าง
+ช่อง 2 เป็น VALOFE, ช่อง 4 เป็น c9-gl, ช่อง 8/9 เป็น endpoint และช่อง 10 เป็น EN
+เก็บเฉพาะโครงสร้าง ไม่เก็บค่า account/token ของผู้ใช้ ตัวเปิด local ทดลองใช้รูปแบบนี้
+กับข้อมูลสมมติและ endpoint loopback ยังไม่ได้ยืนยันความหมาย/รูปแบบครบทุกช่อง
+
+ผล local ที่ตรวจแล้ว:
+
+- ชุด arguments ของรุ่นก่อนทำให้เกมรายงาน `open version.ini failed!`
+- ทดลองไฟล์ endpoint ขั้นต่ำแล้วเปลี่ยนเป็น `Get url failed!` จึงนำไฟล์ทดลองออก
+  และกลับไปตรวจ flow ของ VFUN ไม่มี version.ini ทดลองเหลือในโฟลเดอร์เกม
+- เปลี่ยนเป็นโครงสร้าง 11 ช่องด้วยค่าทดสอบ: เกมปิดก่อนเชื่อม local
+  Windows บันทึก `0xC0000005`, module offset `0x0045E47E`
+- ตอน 21:18 น. ตัวเปิดเริ่ม observer และเกมได้ แต่ไม่มี game packet เข้า observer
+  การเชื่อมต่อใน log รอบนั้นเป็น readiness probe
+
+ขั้นถัดไปคือตรวจชนิดและขนาดของช่องเริ่มเกมให้ครบ ก่อนทำ local account/ticket
+และ handshake ของ build นี้ การที่ UI/ชุดทดสอบผ่านยังไม่หมายความว่า build นี้เล่น local ได้
+ดูหลักฐานสรุป `re/evidence/static/windows_official_55350_startup.json`
+
+`C9Launcher.exe` รุ่น 1.0.0.26 ที่มากับโฟลเดอร์ยังอ่าน auth URL ของ Webzen
+จาก GameInfo.txt ขณะที่ C9 ย้ายบริการมา VALOFE/VFUN แล้วตาม
+[ประกาศ C9 บน Steam](https://store.steampowered.com/news/posts/?appids=212390&enddate=1634123662&feed=steam_community_announcements).
+หน้า [VFUN Launcher Download](https://vfun.valofe.com/game/download) เปิดได้จริงใน Edge
+ส่วนหน้า C9 เก่าที่ `c9-gl.valofe.com` เปลี่ยนทางไปหน้า 404 ในรอบตรวจนี้
 
 Error 114 ยืนยันว่าการเริ่ม GameGuard ไม่สำเร็จ แต่ยังแยกไม่ได้ว่าเกิดจาก
 สภาพแวดล้อม ARM/VM, โปรแกรมที่ทำงานอยู่, ไฟล์/การอัปเดต หรือปัจจัยอื่น
@@ -29,9 +67,8 @@ Microsoft ระบุว่า driver ต้องสร้างให้ต�
 ผ่าน emulation ได้ ([เอกสาร Microsoft](https://learn.microsoft.com/en-us/windows/arm/apps-on-arm-troubleshooting-x86)).
 นี่เป็นประเด็นตรวจสอบ ไม่ใช่ข้อสรุปว่า GameGuard รุ่นนี้ไม่รองรับ ARM
 
-ขั้นตรวจถัดไปคือเปิดผ่าน Official Launcher ตามปกติบนเครื่องเดียวกัน
-หากมีการลงชื่อเข้าใช้ ผู้ใช้ทำขั้นนั้นเอง แล้วเปรียบเทียบผลเริ่มเกมและ error
-ยังไม่มีการแก้ ปิด หรือข้าม GameGuard และยังไม่ย้าย lobby/world profile เดิมมาใช้กับ build นี้
+ผล Error 114 ข้างต้นเป็นประวัติก่อนอัปเดต ไม่ใช่จุดติดล่าสุดหลังอัปเดต
+ยังไม่มีการแก้ ปิด หรือข้าม GameGuard และยังไม่ย้าย lobby/world profile เดิมมาใช้กับ build ใหม่
 
 ## ติดตั้งจาก source
 
@@ -44,7 +81,7 @@ dotnet publish src/C9.Server/C9.Server.csproj -c Release -o artifacts/official-b
 dotnet publish src/C9.LocalLauncher/C9.LocalLauncher.csproj -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/local-launcher-standalone --source https://api.nuget.org/v3/index.json
 
 # ตรวจรายการที่จะติดตั้งก่อน; ใส่ --apply เพื่อเขียนไฟล์จริง
-python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion' --backend 'F:/C9-Server/artifacts/official-backend/C9.Server.dll' --dotnet 'C:/Users/kanganapong.s/.dotnet/dotnet.exe'
+python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion' --backend 'F:/C9-Server/artifacts/official-backend/C9.Server.dll' --dotnet 'C:/Users/kanganapong.s/.dotnet/dotnet.exe' --official-launcher 'C:/VFUN/VLauncher/VFUNLauncher.exe'
 ```
 
 ตัวติดตั้งตรวจ ownership จาก record ใน `artifacts/client-backups/dual-launcher-*/`
@@ -57,6 +94,7 @@ python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion'
 
 Client SHA-256 ที่ตรวจแล้ว:
 `704687c39a293db92999c8a1ef5f22d9e147d743a94d3decb3de0a35af69dd63`
+สำหรับรุ่น 52893; รุ่น 55350 ใช้ hash ที่ระบุในผลหลังอัปเดตข้างต้น
 
 ฟังก์ชัน `007E9480` อ่านสามส่วนที่คั่นด้วย comma ส่วน flow VFUN ใน
 `007E9EC0` ยังเข้าถึง vector ที่แยกด้วย colon ตำแหน่ง 3/4/5/8/9

@@ -17,6 +17,20 @@ internal static partial class Validation
         Check.Equal("C9.exe", Path.GetFileName(plan.Executable));
         Check.Equal(LocalLaunchPlan.Official52893, plan.ClientHash);
         Check.True(!plan.Arguments.Contains(' '));
+        LocalLaunchPlan updated = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
+            LocalLaunchPlan.OfficialUpdated20261106);
+        string[] updatedFields = updated.Arguments.Split(':');
+        Check.Equal(11, updatedFields.Length);
+        Check.Equal("", updatedFields[1]);
+        Check.Equal("VALOFE", updatedFields[2]);
+        Check.Equal("test", updatedFields[3]);
+        Check.Equal("c9-gl", updatedFields[4]);
+        Check.Equal("", updatedFields[7]);
+        Check.Equal("127.0.0.1", updatedFields[8]);
+        Check.Equal("14000", updatedFields[9]);
+        Check.Equal("EN", updatedFields[10]);
+        Check.True(!updated.Arguments.Contains(',') && !updated.Arguments.Contains('|'));
+        Check.Equal("55350", updated.DisplayName);
         foreach (string invalid in new[] { "8.8.8.8", "localhost", "::1", "127.0.0.1,10021" })
             Check.Throws<ArgumentException>(() => LocalLaunchPlan.Create(Path.GetTempPath(), invalid, 14000,
                 LocalLaunchPlan.Official52893));

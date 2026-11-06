@@ -1,0 +1,38 @@
+{
+  "recorded_date": "2026-11-06",
+  "client_build_observed_in_ui": 55350,
+  "client_sha256": "9c6816ab93a6de55e93a9c98cb3837879f0d8e9682e94932d122cf7995845529",
+  "client_size": 6791064,
+  "authenticode_status": "Valid",
+  "signer": "VALOFE Co.,Ltd.",
+  "official_control_test": {
+    "launcher": "Installed VFUN Launcher",
+    "user_signed_in_manually": true,
+    "game_reached_world_selection": true,
+    "world_status_observed": "Good",
+    "user_reported_nprotect_update_resolved_prior_initialization_failure": true
+  },
+  "official_argument_structure": {
+    "argument_sets": 1,
+    "colon_fields": 11,
+    "empty_indexes": [1, 7],
+    "public_literal_indexes": {"2": "VALOFE", "4": "c9-gl", "10": "EN"},
+    "endpoint_indexes": [8, 9],
+    "commas": 0,
+    "pipes": 0,
+    "identity_or_authentication_values_retained": false
+  },
+  "local_experiments": {
+    "previous_profile_arguments": "open version.ini failed!",
+    "temporary_minimal_endpoint_manifest": "Get url failed!; experiment removed",
+    "eleven_fields_with_synthetic_values": "Process exited before local game connection",
+    "windows_exception": "0xC0000005",
+    "fault_module": "C9.exe",
+    "fault_module_offset": "0x0045E47E",
+    "game_packets_observed": false,
+    "compatibility_verified": false
+  },
+  "next_check": "Field encodings/lengths and local pre-launch authentication flow; then game handshake",
+  "protection_modified": false,
+  "raw_artifacts": "Ignored local artifacts only; no binaries, memory, credentials or raw argument values included."
+}

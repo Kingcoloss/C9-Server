@@ -15,6 +15,7 @@ import tempfile
 from c9_paths import PROJECT_ROOT
 
 OFFICIAL_52893_SHA256 = '704687c39a293db92999c8a1ef5f22d9e147d743a94d3decb3de0a35af69dd63'
+OFFICIAL_UPDATED_20261106_SHA256 = '9c6816ab93a6de55e93a9c98cb3837879f0d8e9682e94932d122cf7995845529'
 OFFICIAL_FILES = ['C9.exe', 'C9Launcher.exe', 'C9Patcher.exe', 'C9Server.ini', 'VerCli.C9']
 UI_FILES = {'C9LocalLauncher.exe': 'L9.exe'}
 # These obsolete files came only from our earlier legacy-UI prototype.
@@ -46,7 +47,7 @@ def child(client, name):
     return path
 
 
-def prepare(ui_directory, backend, settings, dotnet, port):
+def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=None):
     if not 1 <= port <= 65535:
         raise ValueError('Invalid local server port')
     backend, settings, dotnet = [path.resolve(strict=True) for path in (backend, settings, dotnet)]
@@ -56,21 +57,26 @@ def prepare(ui_directory, backend, settings, dotnet, port):
     if config.get('host') != '127.0.0.1' or config.get('port') != port or config.get('profile') != 'observer':
         raise ValueError('New Client currently requires the matching loopback observer configuration')
     files = {target: (ui_directory / source).read_bytes() for target, source in UI_FILES.items()}
-    files['L9.local.json'] = (json.dumps({'host': '127.0.0.1', 'port': port,
-        'backend_assembly': str(backend), 'backend_config': str(settings), 'dotnet_path': str(dotnet)},
-        indent=2) + '\n').encode('utf-8')
+    local_config = {'host': '127.0.0.1', 'port': port, 'backend_assembly': str(backend),
+                    'backend_config': str(settings), 'dotnet_path': str(dotnet)}
+    if official_launcher is not None:
+        official_launcher = official_launcher.resolve(strict=True)
+        if not official_launcher.is_file() or official_launcher.suffix.lower() != '.exe':
+            raise ValueError('Select the installed VFUN launcher executable')
+        local_config['official_launcher'] = str(official_launcher)
+    files['L9.local.json'] = (json.dumps(local_config, indent=2) + '\n').encode('utf-8')
     return files
 
 
-def install(client, ui_directory, backend, settings, dotnet, record_directory, port, apply):
+def install(client, ui_directory, backend, settings, dotnet, record_directory, port, apply, official_launcher=None):
     client = client.resolve(strict=True)
     record_directory = record_directory.resolve()
     if record_directory.is_relative_to(client):
         raise ValueError('Keep installation records outside the Client folder')
     official = {name: sha((client / name).read_bytes()) for name in OFFICIAL_FILES}
-    if official['C9.exe'] != OFFICIAL_52893_SHA256:
+    if official['C9.exe'] not in (OFFICIAL_52893_SHA256, OFFICIAL_UPDATED_20261106_SHA256):
         raise ValueError('Updated game build requires a verified launch-argument profile')
-    files = prepare(ui_directory, backend, settings, dotnet, port)
+    files = prepare(ui_directory, backend, settings, dotnet, port, official_launcher)
     record_file = record_directory / 'install.local.json'
     previous = json.loads(record_file.read_text(encoding='utf-8')) if record_file.exists() else None
     if previous is not None and previous['client_directory'] != str(client):
@@ -81,7 +87,7 @@ def install(client, ui_directory, backend, settings, dotnet, record_directory, p
         if path.exists() and sha(path.read_bytes()) != owned.get(name):
             raise ValueError(f'Existing {name} is not owned by this installation; leaving it untouched')
     retired, preserved = [], []
-    for name in RETIRABLE & owned.keys():
+    for name in (RETIRABLE & owned.keys()) - files.keys():
         path = child(client, name)
         if path.exists():
             (retired if sha(path.read_bytes()) == owned[name] else preserved).append(name)
@@ -99,7 +105,8 @@ def install(client, ui_directory, backend, settings, dotnet, record_directory, p
             path = child(client, name)
             if path.exists() and sha(path.read_bytes()) != owned.get(name):
                 raise ValueError(f'{name} changed during installation')
-            atomic_write(path, data)
+            if not path.exists() or path.read_bytes() != data:
+                atomic_write(path, data)
         for name in retired:
             path = child(client, name)
             if sha(path.read_bytes()) != owned[name]:
@@ -131,6 +138,7 @@ def main():
     parser.add_argument('--backend', type=Path, required=True)
     parser.add_argument('--backend-config', type=Path, default=PROJECT_ROOT / 'config/lab-official-observer.json')
     parser.add_argument('--dotnet', type=Path, required=True)
+    parser.add_argument('--official-launcher', type=Path, help='Installed VFUN launcher; otherwise opens its official download page')
     parser.add_argument('--port', type=int, default=14000)
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
@@ -138,7 +146,7 @@ def main():
     record = PROJECT_ROOT / 'artifacts/client-backups' / ('dual-launcher-' + identity)
     try:
         print(json.dumps(install(args.client_dir, args.ui_dir, args.backend, args.backend_config,
-                                 args.dotnet, record, args.port, args.apply)))
+                                 args.dotnet, record, args.port, args.apply, args.official_launcher)))
     except (OSError, ValueError, KeyError) as error:
         parser.error(str(error))
 

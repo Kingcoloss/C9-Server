@@ -32,7 +32,7 @@ internal sealed class LauncherForm : Form
         Label name = new() { Text = "CLIENT", Bounds = new Rectangle(18, 14, 570, 24), ForeColor = gold };
         Label location = new() { Text = folder.TrimEnd(Path.DirectorySeparatorChar), AutoEllipsis = true,
             Bounds = new Rectangle(18, 42, 570, 25) };
-        Label note = new() { Text = "อัปเดตเกมผ่าน Official Launcher ได้ตามเดิม", Bounds = new Rectangle(18, 75, 570, 25),
+        Label note = new() { Text = "อัปเดตเกมผ่าน VFUN Launcher", Bounds = new Rectangle(18, 75, 570, 25),
             ForeColor = Color.Silver };
         card.Controls.AddRange([name, location, note]);
         status.Bounds = new Rectangle(34, 260, 612, 31);
@@ -46,7 +46,7 @@ internal sealed class LauncherForm : Form
         check.Click += async (_, _) => await CheckAsync();
         Button openFolder = new(), official = new();
         ConfigureButton(openFolder, "โฟลเดอร์เกม", new Rectangle(32, 432, 200, 36), BackColor, Color.Silver);
-        ConfigureButton(official, "เปิด Official Launcher", new Rectangle(250, 432, 244, 36), BackColor, Color.Silver);
+        ConfigureButton(official, "เปิด VFUN Launcher", new Rectangle(250, 432, 244, 36), BackColor, Color.Silver);
         openFolder.Click += (_, _) => RunShell(folder);
         official.Click += (_, _) => OpenOfficial();
         AddLabel("บัญชีทดสอบ: test  •  โหมดพัฒนา local server", new Rectangle(34, 484, 612, 24), 9, Color.Gray);
@@ -82,11 +82,11 @@ internal sealed class LauncherForm : Form
         SetBusy(true);
         try
         {
-            LocalLaunchPlan.Read(folder);
+            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder);
             bool ready = await ServerReadyAsync();
             status.Text = ready ? "พร้อมเปิดเกม local" : "Client พร้อม • เซิร์ฟเวอร์ยังไม่เปิด";
             status.ForeColor = ready ? Color.LightGreen : gold;
-            detail.Text = ready ? "ตรวจพบ client รุ่น 52893 และเซิร์ฟเวอร์ในเครื่อง" :
+            detail.Text = ready ? $"ตรวจพบ client {plan.DisplayName} และเซิร์ฟเวอร์ในเครื่อง" :
                 "กดเปิดเกมเพื่อเริ่มเซิร์ฟเวอร์ในเครื่องโดยอัตโนมัติ";
         }
         catch (Exception error) when (IsExpected(error)) { ShowError(error); }
@@ -197,12 +197,21 @@ internal sealed class LauncherForm : Form
 
     private void OpenOfficial()
     {
-        if (Process.GetProcessesByName("C9").Length > 0)
+        try
         {
-            ShowError(new InvalidOperationException("กรุณาปิดเกมก่อนเปิด Official Launcher"));
-            return;
+            using JsonDocument config = ReadConfiguration();
+            if (!config.RootElement.TryGetProperty("official_launcher", out _))
+            {
+                RunShell("https://vfun.valofe.com/game/download");
+                return;
+            }
+            if (Process.GetProcessesByName("C9").Length > 0)
+                throw new InvalidOperationException("กรุณาปิดเกมก่อนเปิด VFUN Launcher");
+            string launcher = RequiredPath(config.RootElement, "official_launcher", null);
+            using Process? process = Process.Start(new ProcessStartInfo(launcher)
+                { WorkingDirectory = Path.GetDirectoryName(launcher)!, UseShellExecute = true });
         }
-        RunShell(Path.Combine(folder, "C9Launcher.exe"));
+        catch (Exception error) when (IsExpected(error)) { ShowError(error); }
     }
 
     private void RunShell(string path)
@@ -227,5 +236,5 @@ internal sealed class LauncherForm : Form
     }
 
     internal static bool IsExpected(Exception error) => error is IOException or ArgumentException or JsonException or
-        InvalidOperationException or KeyNotFoundException or UnauthorizedAccessException or System.ComponentModel.Win32Exception;
+        InvalidOperationException or KeyNotFoundException or UnauthorizedAccessException or FormatException or System.ComponentModel.Win32Exception;
 }

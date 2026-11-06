@@ -5,9 +5,10 @@ Client build. Python is retained as a protocol reference and RE toolchain.
 The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
 survey and planned Admin Portal features, dependencies and acceptance criteria.
 The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the official
-updater for the newly supplied build 52893. Its UI and backend startup work;
-the new game currently stops at GameGuard initialization error 114 on the
-Windows ARM64 VM, before any game connection to the local server. The gameplay
+updater for the newly supplied client. After official updates, signed build 55350
+reaches world selection through VFUN on the Windows ARM64 VM. Its local startup
+still exits before game traffic reaches the server; argument field formats and
+the pre-launch authentication flow remain under investigation. The gameplay
 results below apply to the older lab Client, not build 52893.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
@@ -91,7 +92,7 @@ vectors, 64 sequential wire vectors and state tables, independent RC6/RIPEMD160
 vectors, framing, session isolation, timeout, packet limits and backpressure.
 The same session processor is used by TCP and in-memory/stdio adapters.
 
-On Windows ARM64, the full .NET suite passed all 43 cases (6,269 assertions), including all catalogued map routes,
+On Windows ARM64, the full .NET suite passed all 43 cases (6,280 assertions), including all catalogued map routes,
 character persistence, the TCP suite and the local launcher HTTP contract, on 6 November 2026. The Python
 protocol/server suite passed all 19 cases. The Windows half-close test retains
 the connected NetworkStream before shutting down the sending socket.

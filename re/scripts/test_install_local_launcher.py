@@ -83,6 +83,23 @@ class InstallationOwnership(unittest.TestCase):
             self.install()
         self.assertFalse((self.client / 'C9LocalLauncher.exe').exists())
 
+    def test_updated_profile_does_not_install_legacy_patch_manifest(self):
+        with patch.object(installer, 'OFFICIAL_UPDATED_20261106_SHA256', installer.sha(self.official['C9.exe'])):
+            self.install()
+            self.install()
+        self.assertFalse((self.client / 'version.ini').exists())
+        self.assert_official_unchanged()
+
+    def test_explicit_vfun_path_is_local_configuration_only(self):
+        vfun = self.root / 'VFUNLauncher.exe'
+        vfun.write_bytes(b'fixture-vfun')
+        installer.install(self.client, self.ui, self.backend, self.settings, self.dotnet,
+                          self.records, 14000, True, vfun)
+        config = json.loads((self.client / 'L9.local.json').read_text())
+        self.assertEqual(str(vfun.resolve()), config['official_launcher'])
+        self.assertEqual(b'fixture-vfun', vfun.read_bytes())
+        self.assert_official_unchanged()
+
 
 if __name__ == '__main__':
     unittest.main()

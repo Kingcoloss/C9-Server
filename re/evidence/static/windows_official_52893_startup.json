@@ -3,6 +3,9 @@
   "client_build": 52893,
   "client_sha256": "704687c39a293db92999c8a1ef5f22d9e147d743a94d3decb3de0a35af69dd63",
   "official_launcher_version": "1.0.0.26",
+  "bundled_launcher_provider": "legacy Webzen; not the current VFUN entry",
+  "current_official_entry": "Installed VALOFE VFUN Launcher",
+  "official_control_test": "Bundled Webzen login failed; after VFUN installation and official update, see windows_official_55350_startup.json for the successful control test",
   "official_files_modified": false,
   "argument_readers": {
     "legacy_three_comma_fields": "007E9480",
