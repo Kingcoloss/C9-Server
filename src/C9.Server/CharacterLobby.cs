@@ -14,6 +14,9 @@ internal sealed class CharacterLobby
     private const int AppearanceBytes = 44;
     private const int ListHeaderBytes = 42;
     private const int ListEntryBytes = 136;
+    // Diagnostic baseline, pending extraction of the original level/job tables.
+    private const uint InitialHp = 100;
+    private const uint InitialMp = 100;
     private static readonly UnicodeEncoding NameEncoding = new(false, false, true);
 
     // Indexed by the asset job code. The 0BBB request sends the template instead.
@@ -141,15 +144,50 @@ internal sealed class CharacterLobby
             // copies populate Player +0x10 (80 bytes) and +0x60 (168 bytes).
             byte[] payload = new byte[0x1D14];
             BinaryPrimitives.WriteUInt64LittleEndian(payload, character.Id);
-            BinaryPrimitives.WriteUInt64LittleEndian(payload.AsSpan(8), character.Id);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), (uint)character.Id);
+            // 00DA5130 -> 00DA5150 -> 00499F20 reads Player +0x14.
+            // Zero skips actor creation, leaving CharacterLODState +0xE0 null
+            // when the HUD calls 0078F5A0 after map loading.
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(12), character.Job);
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(16), 1);
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(32), 100); // Current HP.
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(36), 100); // Current MP.
+            // 009EC510 reads Player +0x20/+0x24, not +0x28/+0x2C.
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), InitialHp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), InitialMp);
             NameEncoding.GetBytes(character.Name, payload.AsSpan(44, NameBytes)); // 009D31E0 / 009A7A50.
+            // Existing diagnostic progression fields; their full semantics
+            // remain unresolved. The actor's class is the DWORD at +12 above.
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(0x6E), character.Job); // 009FA200.
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(0x70), 1); // 009ECA00.
             return new Packet(0x0BC0, payload);
         }
+    }
+
+    public static Packet InitialAttributes()
+    {
+        // 0C1E -> 00A3FBC3: two 168-byte attribute blocks, then a WORD
+        // count of 8-byte entries. 00A41070/00A410A0 copy the fixed blocks.
+        byte[] payload = new byte[338];
+        BinaryPrimitives.WriteUInt32LittleEndian(payload, InitialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(4), InitialMp);
+        // 009EC5D0 scales both signed WORD factors by 0.001 before use.
+        // Keep their diagnostic value at 1.0; exact attribute names pending.
+        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x2C), 1000);
+        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x2E), 1000);
+        return new Packet(0x0C1E, payload);
+    }
+
+    public static Packet InitialVitals()
+    {
+        // 0C1C -> 00A320F0 -> 009EC370: level, current/max HP and MP.
+        // The handler also reads optional progression fields through +0x4F
+        // in the decoded packet. Leave those fields zero for the new character.
+        byte[] payload = new byte[70];
+        BinaryPrimitives.WriteUInt16LittleEndian(payload, 1);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(2), InitialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(6), InitialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(10), InitialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(14), InitialMp);
+        return new Packet(0x0C1C, payload);
     }
 
     private static Packet Created(Character character)

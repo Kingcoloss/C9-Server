@@ -8,10 +8,11 @@ The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
 `C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second
 loopback endpoint. The character profile creates and persists a local character,
-reloads its appearance, and reaches the original Client's Waterford loading screen.
-The zero-based sub-map lookup is fixed; the Client now sends additional
-post-load requests before crashing. Credential validation and playable world
-entry remain unverified.
+reloads its appearance, and enters Waterford Village in the original Client.
+The zero-based sub-map lookup and missing actor-class field are fixed. The
+Client reaches C9StageGame and opens Inventory; stats, bag capacity, skills,
+connection lifecycle and server gameplay remain incomplete. Credential validation
+is still unimplemented.
 
 The owner authorized opening the original game and Launcher for the Windows
 debug session on 3 November 2026. The local update service and protocol probe
@@ -85,7 +86,7 @@ vectors, 64 sequential wire vectors and state tables, independent RC6/RIPEMD160
 vectors, framing, session isolation, timeout, packet limits and backpressure.
 The same session processor is used by TCP and in-memory/stdio adapters.
 
-On Windows ARM64, the full .NET suite passed all 41 cases (6,205 assertions), including all catalogued map routes,
+On Windows ARM64, the full .NET suite passed all 41 cases (6,226 assertions), including all catalogued map routes,
 character persistence, the TCP suite and the local launcher HTTP contract, on 6 November 2026. The Python
 protocol/server suite passed all 19 cases. The Windows half-close test retains
 the connected NetworkStream before shutting down the sending socket.

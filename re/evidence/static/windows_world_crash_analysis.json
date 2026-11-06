@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "client_exe_sha256": "b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25",
+  "diagnostic_sha256": "b1980bdf15126ce64eb9b4b2de76d0f3e0afb08e2a84ad5bf610baad1466932e",
+  "exception_code": "0xc0000005",
+  "second_chance": true,
+  "guest_x86_fault_va": "0x0078f5bf",
+  "null_operand_register": "edx",
+  "fault_instruction": "mov edx, dword ptr [edx]",
+  "client_return_addresses": [
+    "0x0080ae85",
+    "0x00aec28d",
+    "0x00ae8f41",
+    "0x00d4d275",
+    "0x00d5ddb8",
+    "0x00d5573a",
+    "0x00d4d990",
+    "0x00da4d57",
+    "0x00da3b87",
+    "0x00d4d400",
+    "0x00d4d7a3",
+    "0x009b94f7",
+    "0x009b92f8",
+    "0x009b7149",
+    "0x00dd6549"
+  ],
+  "static_chain": [
+    {
+      "va": "00A39813",
+      "meaning": "0BC0 decoded +0x15 (payload +8) copies 80 bytes to Player +0x10 via 0050D030"
+    },
+    {
+      "va": "00DA42DF",
+      "meaning": "Map loader calls 00DA5130 and branches past actor creation when the result is zero"
+    },
+    {
+      "va": "00DA5150",
+      "meaning": "Returns DWORD Player +0x14 via 00499F20(Player +0x10)"
+    },
+    {
+      "va": "00999020",
+      "meaning": "Uses that code to look up asset table 2 (class/job record) and its character definition"
+    },
+    {
+      "va": "0078F5A0",
+      "meaning": "HUD refresh dereferences CharacterLODState +0xE0, which remains null after actor creation is skipped"
+    }
+  ],
+  "server_correction": {
+    "packet_type": "0x0bc0",
+    "payload_offset": 12,
+    "width": 4,
+    "value_for_fighter": 1
+  },
+  "runtime_after_correction": {
+    "original_client_entered_waterford": true,
+    "active_stage": "C9StageGame",
+    "base_class": 1,
+    "access_violation_snapshots_in_600_seconds": 0,
+    "inventory_ui_opened": true,
+    "hp_mp_display_before_vitals_fix": "0/0",
+    "inventory_capacity_display": "0/0",
+    "gameplay_systems_complete": false,
+    "remaining_connection_issue": true
+  },
+  "raw_stack_or_account_data_exported": false,
+  "notes": [
+    "Progression words at payload +0x6E/+0x70 were previously mislabeled as class/level. Their full semantics are unresolved.",
+    "Remaining player initialization fields and gameplay packets still require research."
+  ]
+}

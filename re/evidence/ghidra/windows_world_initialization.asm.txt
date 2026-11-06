@@ -1,0 +1,236 @@
+; Selected original Client x86 ranges. Read-only offline disassembly.
+; SHA256 b2f23c8d00b50f0909f8cfbe059ec893deb2de266a3ab557301daa3c36cf8a25
+; Recovered class gate and attribute/vitals readers; unknown fields remain unresolved.
+
+; Range 0050D030, 17 bytes
+0050d030 push ebp
+0050d031 mov ebp, esp
+0050d033 push ecx
+0050d034 mov dword ptr [ebp - 4], ecx
+0050d037 mov eax, dword ptr [ebp - 4]
+0050d03a add eax, 0x10
+0050d03d mov esp, ebp
+0050d03f pop ebp
+0050d040 ret 
+
+; Range 00499F20, 17 bytes
+00499f20 push ebp
+00499f21 mov ebp, esp
+00499f23 push ecx
+00499f24 mov dword ptr [ebp - 4], ecx
+00499f27 mov eax, dword ptr [ebp - 4]
+00499f2a mov eax, dword ptr [eax + 4]
+00499f2d mov esp, ebp
+00499f2f pop ebp
+00499f30 ret 
+
+; Range 00DA5130, 19 bytes
+00da5130 push ebp
+00da5131 mov ebp, esp
+00da5133 push ecx
+00da5134 mov dword ptr [ebp - 4], ecx
+00da5137 mov ecx, dword ptr [ebp - 4]
+00da513a call 0xda5150
+00da513f mov esp, ebp
+00da5141 pop ebp
+00da5142 ret 
+
+; Range 00DA5150, 22 bytes
+00da5150 push ebp
+00da5151 mov ebp, esp
+00da5153 push ecx
+00da5154 mov dword ptr [ebp - 4], ecx
+00da5157 mov ecx, dword ptr [ebp - 4]
+00da515a add ecx, 0x10
+00da515d call 0x499f20
+00da5162 mov esp, ebp
+00da5164 pop ebp
+00da5165 ret 
+
+; Range 00DA42DF, 19 bytes
+00da42df mov ecx, dword ptr [0x1914ac0]
+00da42e5 call 0xda5130
+00da42ea test eax, eax
+00da42ec jbe 0xda4601
+
+; Range 0078F5A0, 52 bytes
+0078f5a0 push ebp
+0078f5a1 mov ebp, esp
+0078f5a3 push ecx
+0078f5a4 mov dword ptr [ebp - 4], ecx
+0078f5a7 mov eax, dword ptr [0x12e9350]
+0078f5ac push eax
+0078f5ad mov ecx, dword ptr [ebp - 4]
+0078f5b0 mov edx, dword ptr [ecx + 0xe0]
+0078f5b6 mov eax, dword ptr [ebp - 4]
+0078f5b9 mov ecx, dword ptr [eax + 0xe0]
+0078f5bf mov edx, dword ptr [edx]
+0078f5c1 mov eax, dword ptr [edx + 4]
+0078f5c4 call eax
+0078f5c6 mov ecx, dword ptr [ebp - 4]
+0078f5c9 mov byte ptr [ecx + 0xe4], 1
+0078f5d0 mov esp, ebp
+0078f5d2 pop ebp
+0078f5d3 ret 
+
+; Range 009EC510, 112 bytes
+009ec510 push ebp
+009ec511 mov ebp, esp
+009ec513 push ecx
+009ec514 push esi
+009ec515 mov dword ptr [ebp - 4], ecx
+009ec518 mov eax, dword ptr [ebp - 4]
+009ec51b movzx esi, word ptr [eax + 0x18]
+009ec51f mov ecx, dword ptr [ebp + 8]
+009ec522 call 0x8c2de0
+009ec527 mov dword ptr [eax + 0x404], esi
+009ec52d mov ecx, dword ptr [ebp + 8]
+009ec530 call 0x8c2de0
+009ec535 mov ecx, dword ptr [ebp - 4]
+009ec538 mov edx, dword ptr [ecx + 0x20]
+009ec53b mov dword ptr [eax + 0x38], edx
+009ec53e mov ecx, dword ptr [ecx + 0x24]
+009ec541 mov dword ptr [eax + 0x3c], ecx
+009ec544 mov ecx, dword ptr [ebp + 8]
+009ec547 call 0x8c2de0
+009ec54c mov edx, dword ptr [ebp - 4]
+009ec54f mov ecx, dword ptr [edx + 0x718]
+009ec555 mov dword ptr [eax + 0x40], ecx
+009ec558 mov edx, dword ptr [edx + 0x71c]
+009ec55e mov dword ptr [eax + 0x44], edx
+009ec561 mov ecx, dword ptr [ebp + 8]
+009ec564 call 0x8c2de0
+009ec569 mov ecx, dword ptr [ebp - 4]
+009ec56c mov edx, dword ptr [ecx + 0x6e4]
+009ec572 mov dword ptr [eax + 0x40c], edx
+009ec578 mov ecx, dword ptr [ebp + 8]
+009ec57b call 0x8c2de0
+
+; Range 00A3FBC3, 205 bytes
+00a3fbc3 mov ecx, dword ptr [ebp + 0xc]
+00a3fbc6 mov dword ptr [ebp - 0x4c], ecx
+00a3fbc9 mov edx, dword ptr [ebp - 0x4c]
+00a3fbcc add edx, 0xd
+00a3fbcf push edx
+00a3fbd0 mov ecx, dword ptr [0x1914ac0]
+00a3fbd6 call 0xa41070
+00a3fbdb mov eax, dword ptr [ebp - 0x4c]
+00a3fbde add eax, 0xb5
+00a3fbe3 push eax
+00a3fbe4 mov ecx, dword ptr [0x1914ac0]
+00a3fbea call 0xa410a0
+00a3fbef mov ecx, dword ptr [ebp - 0x4c]
+00a3fbf2 movzx edx, word ptr [ecx + 0x15d]
+00a3fbf9 push edx
+00a3fbfa mov ecx, dword ptr [0x1914ac0]
+00a3fc00 call 0xa411f0
+00a3fc05 mov dword ptr [ebp - 0x50], 0
+00a3fc0c jmp 0xa3fc17
+00a3fc0e mov eax, dword ptr [ebp - 0x50]
+00a3fc11 add eax, 1
+00a3fc14 mov dword ptr [ebp - 0x50], eax
+00a3fc17 mov ecx, dword ptr [ebp - 0x4c]
+00a3fc1a movsx edx, word ptr [ecx + 0x15d]
+00a3fc21 cmp dword ptr [ebp - 0x50], edx
+00a3fc24 jge 0xa3fc45
+00a3fc26 mov eax, dword ptr [ebp - 0x50]
+00a3fc29 mov ecx, dword ptr [ebp - 0x4c]
+00a3fc2c lea edx, [ecx + eax*8 + 0x15f]
+00a3fc33 push edx
+00a3fc34 mov eax, dword ptr [ebp - 0x50]
+00a3fc37 push eax
+00a3fc38 mov ecx, dword ptr [0x1914ac0]
+00a3fc3e call 0x9ee350
+00a3fc43 jmp 0xa3fc0e
+00a3fc45 lea ecx, [ebp - 0x48]
+00a3fc48 call 0x609a10
+00a3fc4d mov dword ptr [ebp - 4], 1
+00a3fc54 push 0x1c
+00a3fc56 lea ecx, [ebp - 0x48]
+00a3fc59 call 0x4a19a0
+00a3fc5e push 0
+00a3fc60 mov ecx, dword ptr [0x13522f4]
+00a3fc66 call 0x938130
+00a3fc6b movzx ecx, al
+00a3fc6e push ecx
+00a3fc6f lea edx, [ebp - 0x48]
+00a3fc72 push edx
+00a3fc73 mov ecx, dword ptr [0x13522f4]
+00a3fc79 call 0x8b7830
+00a3fc7e mov dword ptr [ebp - 4], 0xffffffff
+00a3fc85 lea ecx, [ebp - 0x48]
+00a3fc88 call 0x743270
+
+; Range 00A41070, 34 bytes
+00a41070 push ebp
+00a41071 mov ebp, esp
+00a41073 push ecx
+00a41074 push esi
+00a41075 push edi
+00a41076 mov dword ptr [ebp - 4], ecx
+00a41079 mov edi, dword ptr [ebp - 4]
+00a4107c add edi, 0x4c8
+00a41082 mov ecx, 0x2a
+00a41087 mov esi, dword ptr [ebp + 8]
+00a4108a rep movsd dword ptr es:[edi], dword ptr [esi]
+00a4108c pop edi
+00a4108d pop esi
+00a4108e mov esp, ebp
+00a41090 pop ebp
+
+; Range 00A410A0, 34 bytes
+00a410a0 push ebp
+00a410a1 mov ebp, esp
+00a410a3 push ecx
+00a410a4 push esi
+00a410a5 push edi
+00a410a6 mov dword ptr [ebp - 4], ecx
+00a410a9 mov edi, dword ptr [ebp - 4]
+00a410ac add edi, 0x570
+00a410b2 mov ecx, 0x2a
+00a410b7 mov esi, dword ptr [ebp + 8]
+00a410ba rep movsd dword ptr es:[edi], dword ptr [esi]
+00a410bc pop edi
+00a410bd pop esi
+00a410be mov esp, ebp
+00a410c0 pop ebp
+
+; Range 009EC370, 67 bytes
+009ec370 push ebp
+009ec371 mov ebp, esp
+009ec373 push ecx
+009ec374 mov dword ptr [ebp - 4], ecx
+009ec377 mov eax, dword ptr [ebp - 4]
+009ec37a mov ecx, dword ptr [ebp + 8]
+009ec37d mov dx, word ptr [ecx + 0xd]
+009ec381 mov word ptr [eax + 0x18], dx
+009ec385 mov eax, dword ptr [ebp - 4]
+009ec388 mov ecx, dword ptr [ebp + 8]
+009ec38b mov edx, dword ptr [ecx + 0xf]
+009ec38e mov dword ptr [eax + 0x20], edx
+009ec391 mov ecx, dword ptr [ecx + 0x13]
+009ec394 mov dword ptr [eax + 0x24], ecx
+009ec397 mov edx, dword ptr [ebp - 4]
+009ec39a mov eax, dword ptr [ebp + 8]
+009ec39d mov ecx, dword ptr [eax + 0x17]
+009ec3a0 mov dword ptr [edx + 0x718], ecx
+009ec3a6 mov eax, dword ptr [eax + 0x1b]
+009ec3a9 mov dword ptr [edx + 0x71c], eax
+009ec3af mov esp, ebp
+009ec3b1 pop ebp
+
+; Range 00A31419, 38 bytes
+00a31419 mov edx, dword ptr [ebp - 8]
+00a3141c sub edx, 0xbc7
+00a31422 mov dword ptr [ebp - 8], edx
+00a31425 cmp dword ptr [ebp - 8], 0x56
+00a31429 ja 0xa318ce
+00a3142f mov eax, dword ptr [ebp - 8]
+00a31432 movzx ecx, byte ptr [eax + 0xa31914]
+
+; Range 00A315FF, 17 bytes
+00a315ff mov ecx, dword ptr [ebp + 0xc]
+00a31602 push ecx
+00a31603 mov ecx, dword ptr [ebp - 4]
+00a31606 call 0xa320f0
+00a3160b jmp 0xa318d2

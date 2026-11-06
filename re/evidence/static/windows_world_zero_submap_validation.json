@@ -122,8 +122,10 @@
       "payload_length": 7444,
       "wire_length": 7460,
       "synthetic_character_id_matches": true,
-      "job_code": 1,
-      "level": 1
+      "level": 1,
+      "base_job_code": 0,
+      "progression_code_unverified": 1,
+      "progression_index_unverified": 1
     },
     {
       "capture_frame": 43,
@@ -1008,8 +1010,10 @@
       "payload_length": 7444,
       "wire_length": 7460,
       "synthetic_character_id_matches": true,
-      "job_code": 1,
-      "level": 1
+      "level": 1,
+      "base_job_code": 0,
+      "progression_code_unverified": 1,
+      "progression_index_unverified": 1
     },
     {
       "capture_frame": 247,

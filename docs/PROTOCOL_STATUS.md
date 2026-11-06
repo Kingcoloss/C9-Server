@@ -16,14 +16,21 @@ With index 0 the Client sends `ED1D` (nine requests), `0E4B`, `0BC4`, plain `0EF
 and `0EB1`, then exits with Windows access violation `0xC0000005`.
 The complete validated capture metadata is in
 `re/evidence/static/windows_world_zero_submap_validation.json`.
-Playable-world and gameplay validation remain pending.
+Later the same day, native exception monitoring recovered guest x86 fault
+0078F5BF in CharacterLODState. The class DWORD at `0BC0` payload +12 was zero,
+so 00DA42DF skipped actor creation. Sending Fighter class 1 lets `Lab` enter
+Waterford Village, with C9StageGame active and Inventory visible. Capture
+metadata is in `windows_waterford_entry_validation.json`; the sanitized crash
+chain is in `windows_world_crash_analysis.json`. Inventory capacity and stats
+were still zero, and the session later ended with connection lost.
+Gameplay systems and lifecycle handling remain incomplete.
 
 The runtime asset survey covers all 257 map IDs, 136 folders and 516 sub-map
 records. All 1,887 MapData CFS indices (22,466 entries) validate; matching geometry
 and marker prefixes are available for 450 routes. The configurable entry builder
 uses this embedded catalog and rejects unknown/missing routes before startup.
 See [the complete map report](MAP_CATALOG_TH.md). The .NET suite passes 41/41
-cases with 6,205 assertions; the bounded CFS reader passes six additional tests.
+cases with 6,226 assertions; the bounded CFS reader passes six additional tests.
 
 5 November 2026: the selected launcher reads the installed `version.ini` after
 applying the reversible executable patch. PLAY reached the original game's Log In

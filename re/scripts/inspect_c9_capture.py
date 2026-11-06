@@ -98,8 +98,10 @@ def inspect(capture, tshark, ports):
                 record['equipment_count'] = packet.payload[52]
             if packet.kind == 0x0BC0 and len(packet.payload) == 7444:
                 record['synthetic_character_id_matches'] = struct.unpack_from('<Q', packet.payload)[0] == 1
-                record['job_code'] = struct.unpack_from('<H', packet.payload, 0x6e)[0]
-                record['level'] = struct.unpack_from('<H', packet.payload, 0x70)[0]
+                record['base_job_code'] = struct.unpack_from('<I', packet.payload, 12)[0]
+                record['level'] = struct.unpack_from('<H', packet.payload, 16)[0]
+                record['progression_code_unverified'] = struct.unpack_from('<H', packet.payload, 0x6e)[0]
+                record['progression_index_unverified'] = struct.unpack_from('<H', packet.payload, 0x70)[0]
             if packet.kind == 0x0BC3 and len(packet.payload) == 46:
                 record['map_id'] = struct.unpack_from('<I', packet.payload)[0]
                 record['submap_index'] = packet.payload[4]

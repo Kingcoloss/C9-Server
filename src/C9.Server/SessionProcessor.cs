@@ -74,6 +74,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     else if (state == "character_lobby" && packet.Type == 0x0BBF)
                     {
                         await SendAsync(characterLobby.Select(packet.Payload.Span));
+                        await SendAsync(CharacterLobby.InitialAttributes());
+                        await SendAsync(CharacterLobby.InitialVitals());
                         await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition));
                         state = "world_loading";
                         events.Emit(new ServerEvent("state") { Session = id, State = state });

@@ -88,8 +88,27 @@ internal static partial class Validation
                     Check.Equal((ushort)0x0BC0, selected.Type);
                     Check.Equal(7444, selected.Payload.Length);
                     Check.Equal(3ul, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
+                    Check.Equal(1u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
+                    Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[16..]));
+                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
+                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
+                    Check.Equal(0ul, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span[32..]));
                     Check.Bytes(name, selected.Payload.Span.Slice(44, name.Length));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[0x6E..]));
+                    Packet attributes = codec.Decode(await ReadWireAsync(stream));
+                    Check.Equal((ushort)0x0C1E, attributes.Type);
+                    Check.Equal(338, attributes.Payload.Length);
+                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
+                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[4..]));
+                    Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2C..]));
+                    Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2E..]));
+                    Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[336..]));
+                    Packet vitals = codec.Decode(await ReadWireAsync(stream));
+                    Check.Equal((ushort)0x0C1C, vitals.Type);
+                    Check.Equal(70, vitals.Payload.Length);
+                    Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(vitals.Payload.Span));
+                    foreach (int offset in new[] { 2, 6, 10, 14 })
+                        Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[offset..]));
                     Packet map = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0BC3, map.Type);
                     Check.Equal(46, map.Payload.Length);
