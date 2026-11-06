@@ -88,6 +88,8 @@ internal static partial class Validation
             ("Configuration validation", Sync(Configuration)),
             ("World map catalog and destinations", Sync(WorldMapDestinations)),
             ("Launcher installed version validation", Sync(LauncherVersion)),
+            ("Official Client local launch arguments", Sync(LocalLauncherArguments)),
+            ("Concurrent metadata file logging", Sync(MetadataFileLogging)),
             ("Pipe fragmentation and coalescing", PipeBoundaries),
             ("Pipe EOF and invalid lengths", PipeErrors),
             ("Pipe read timeout", PipeTimeout),

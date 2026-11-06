@@ -2,6 +2,8 @@
   <Folder Name="/src/">
     <Project Path="src/C9.Protocol/C9.Protocol.csproj" />
     <Project Path="src/C9.Server/C9.Server.csproj" />
+    <Project Path="src/C9.LocalLauncher/C9.LocalLauncher.csproj" />
+    <Project Path="src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/C9.Validation/C9.Validation.csproj" />

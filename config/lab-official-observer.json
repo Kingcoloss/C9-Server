@@ -1,0 +1,14 @@
+{
+  "description": "Mode-0 loopback observer for the user-supplied official Client. Application replies and compatibility are not yet verified.",
+  "host": "127.0.0.1",
+  "port": 14000,
+  "profile": "observer",
+  "max_frame": 16384,
+  "max_connections": 2,
+  "max_packets": 64,
+  "timeout_seconds": 120,
+  "greetings": [
+    { "type": 4, "flag": 0, "payload_hex": "00" }
+  ],
+  "rules": []
+}

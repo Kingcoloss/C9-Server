@@ -1,0 +1,35 @@
+{
+  "recorded_date": "2026-11-06",
+  "client_build": 52893,
+  "client_sha256": "704687c39a293db92999c8a1ef5f22d9e147d743a94d3decb3de0a35af69dd63",
+  "official_launcher_version": "1.0.0.26",
+  "official_files_modified": false,
+  "argument_readers": {
+    "legacy_three_comma_fields": "007E9480",
+    "vfun_colon_splitter": "007EA8A0",
+    "vfun_field_reader": "007E9EC0",
+    "vfun_field_indexes": [3, 4, 5, 8, 9],
+    "endpoint_indexes": [8, 9],
+    "legacy_only_access_violation": "004139B0",
+    "full_synthetic_arguments_avoid_observed_argument_crash": true
+  },
+  "normal_launch": {
+    "ui_started": true,
+    "backend_auto_started": true,
+    "readiness_greeting_verified": true,
+    "game_started": true,
+    "gameguard_process_started": true,
+    "error_title": "Error",
+    "error_message": "GameGuard Init Error(Code : 114)",
+    "approximate_error_delay_seconds": 240,
+    "game_connection_to_local_observed": false,
+    "character_or_world_compatibility_verified": false
+  },
+  "environment": {
+    "os": "Windows 11 ARM64",
+    "virtual_machine": "QEMU",
+    "same_client_official_launch_control_test": "not_yet_performed",
+    "gameguard_failure_root_cause": "unresolved"
+  },
+  "raw_artifacts": "Kept outside Git; no raw memory, credentials, binaries or protection logs included."
+}

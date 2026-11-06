@@ -4,6 +4,11 @@ C#/.NET 10 server runtime and reverse-engineering tools for the selected C9
 Client build. Python is retained as a protocol reference and RE toolchain.
 The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
 survey and planned Admin Portal features, dependencies and acceptance criteria.
+The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the official
+updater for the newly supplied build 52893. Its UI and backend startup work;
+the new game currently stops at GameGuard initialization error 114 on the
+Windows ARM64 VM, before any game connection to the local server. The gameplay
+results below apply to the older lab Client, not build 52893.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
 `C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second
@@ -86,7 +91,7 @@ vectors, 64 sequential wire vectors and state tables, independent RC6/RIPEMD160
 vectors, framing, session isolation, timeout, packet limits and backpressure.
 The same session processor is used by TCP and in-memory/stdio adapters.
 
-On Windows ARM64, the full .NET suite passed all 41 cases (6,226 assertions), including all catalogued map routes,
+On Windows ARM64, the full .NET suite passed all 43 cases (6,269 assertions), including all catalogued map routes,
 character persistence, the TCP suite and the local launcher HTTP contract, on 6 November 2026. The Python
 protocol/server suite passed all 19 cases. The Windows half-close test retains
 the connected NetworkStream before shutting down the sending socket.
@@ -111,6 +116,7 @@ shared frameworks. Publish/runtime checks have been exercised on macOS ARM64.
 |---|---|
 | TCP host | Sockets, Pipelines, Generic Host, connection limits and graceful shutdown; TCP suite passes on Windows ARM64 |
 | Launcher update host | Loopback HTTP manifest based on the installed version.dat; no patch archives or Client executables are served |
+| Independent local UI | Own Windows UI, profile-checked new-Client arguments, automatic loopback observer startup, separate official updater entry |
 | Session runtime | Shared processor with bounded framing, deadlines, backpressure and metadata logs |
 | Header/checksum | 13-byte decoded header, signed-byte checksum, uint32 wrap |
 | Payload transform | All 80 observed selectors, encode/decode, four length branches |
@@ -122,7 +128,7 @@ shared frameworks. Publish/runtime checks have been exercised on macOS ARM64.
 | Messages | Opaque 52-byte server-list entries, explicit fixture response rules |
 | Character lobby | Create, persist and reload a synthetic character; verified with the original Client |
 | Map catalog | 257 map IDs / 516 sub-maps; 450 routes have matching geometry/marker prefixes, with one configurable entry builder |
-| Initial world transition | Waterford sub-map lookup fixed; Client sends post-load requests, then crashes before gameplay |
+| Initial world transition | Older lab Client enters Waterford and opens Inventory; vitals, lifecycle and gameplay remain incomplete |
 | Authentication / playable world | Unimplemented; real credential validation and gameplay remain unverified |
 
 The cipher implementation is grounded in the selected Client's static code.

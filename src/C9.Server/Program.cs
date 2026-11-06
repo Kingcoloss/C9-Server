@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 try
 {
-    string? configPath = null, hostOverride = null, clientDirectory = null;
+    string? configPath = null, hostOverride = null, clientDirectory = null, eventLog = null;
     bool checkRuntime = false, launcherUpdate = false;
     int updatePort = 18080;
     int? portOverride = null, loginPort = null;
@@ -15,7 +15,7 @@ try
     {
         if (args[i] is "--help" or "-h")
         {
-            Console.WriteLine("C9 .NET server\nUsage: dotnet C9.Server.dll [--config FILE] [--host LOOPBACK] [--port PORT] [--check-runtime]\n       dotnet C9.Server.dll --launcher-update --client-dir DIR [--update-port PORT] [--login-port PORT]\nOriginal-Client compatibility is unverified; fixture replies are synthetic.");
+            Console.WriteLine("C9 .NET server\nUsage: dotnet C9.Server.dll [--config FILE] [--host LOOPBACK] [--port PORT] [--event-log FILE] [--check-runtime]\n       dotnet C9.Server.dll --launcher-update --client-dir DIR [--update-port PORT] [--login-port PORT]\nOriginal-Client compatibility is unverified; fixture replies are synthetic.");
             return 0;
         }
         if (args[i] == "--check-runtime") { checkRuntime = true; continue; }
@@ -24,6 +24,7 @@ try
         switch (args[i])
         {
             case "--config": configPath = args[++i]; break;
+            case "--event-log": eventLog = args[++i]; break;
             case "--host": hostOverride = args[++i]; break;
             case "--port": portOverride = int.Parse(args[++i], System.Globalization.CultureInfo.InvariantCulture); break;
             case "--client-dir": clientDirectory = args[++i]; break;
@@ -35,7 +36,7 @@ try
     if (launcherUpdate)
     {
         if (clientDirectory is null) throw new ArgumentException("Launcher update mode requires --client-dir DIR");
-        if (checkRuntime || configPath is not null || hostOverride is not null || portOverride is not null)
+        if (checkRuntime || configPath is not null || hostOverride is not null || portOverride is not null || eventLog is not null)
             throw new ArgumentException("Launcher update mode cannot be combined with game server options");
         await LauncherUpdateServer.RunAsync(clientDirectory, updatePort, loginPort ?? 14000);
         return 0;
@@ -60,7 +61,7 @@ try
     HostApplicationBuilder builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings { Args = [] });
     builder.Logging.ClearProviders();
     builder.Services.AddSingleton(options);
-    builder.Services.AddSingleton<IServerEvents, JsonServerEvents>();
+    builder.Services.AddSingleton<IServerEvents>(new JsonServerEvents(eventLog));
     builder.Services.AddSingleton<TcpGameServer>();
     builder.Services.AddHostedService<ServerHostedService>();
     using IHost host = builder.Build();

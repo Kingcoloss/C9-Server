@@ -2,6 +2,7 @@
   <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/C9.Server/C9.Server.csproj" />
+    <ProjectReference Include="../../src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
     <EmbeddedResource Include="../fixtures/rc6_kats.json" LogicalName="rc6_kats.json" />
     <EmbeddedResource Include="../fixtures/python_port_vectors.json" LogicalName="python_port_vectors.json" />
     <EmbeddedResource Include="../../config/lab-fixture.json" LogicalName="lab-fixture.json" />

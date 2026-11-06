@@ -27,6 +27,13 @@ public interface IServerEvents { void Emit(ServerEvent value); }
 public sealed class JsonServerEvents : IServerEvents
 {
     private readonly object sync = new();
+    private readonly string? filePath;
+
+    public JsonServerEvents(string? filePath = null)
+    {
+        this.filePath = filePath is null ? null : Path.GetFullPath(filePath);
+        if (this.filePath is not null) File.AppendAllText(this.filePath, "");
+    }
     public static JsonSerializerOptions Options { get; } = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
@@ -36,6 +43,11 @@ public sealed class JsonServerEvents : IServerEvents
     public void Emit(ServerEvent value)
     {
         // Event schema deliberately has no payload/credential fields.
-        lock (sync) Console.WriteLine(JsonSerializer.Serialize(value, Options));
+        lock (sync)
+        {
+            string line = JsonSerializer.Serialize(value, Options);
+            if (filePath is null) Console.WriteLine(line);
+            else File.AppendAllText(filePath, line + Environment.NewLine);
+        }
     }
 }
