@@ -55,15 +55,21 @@
   และส่ง `0x2F04` ขนาด payload 1,092 ไบต์ แบบ plain (flag 0, sequence 0)
   เข้า local จริงสองรอบ เวลา 21:53:36 และ 21:56:07 น. วันที่ 6 พฤศจิกายน
   จึงผ่านจุดปิดก่อนเชื่อมต่อของการทดลองก่อนหน้าแล้ว
-- เพิ่ม `config/lab-official-login-fixture.json` สำหรับทดลองตอบ `0x2EE2`
-  และรายการ `0x2EE6` แบบ plain โดยอ้างอิง reader ของ build 52893 และ fixture เดิม
-  ยังไม่ยืนยันว่า build 55350 รับผลตอบนี้ จึงแยกจาก observer และ lobby ของ client เดิม
+- หลังผู้ใช้โหลด GameGuard ใหม่ผ่าน VFUN เกม local ตอบ `0x2EE2` ด้วยคำขอ
+  `0x2EF6` ขนาด 4 ไบต์ ค่า `1` ในคำตอบ `0x2EF7` เปิดหน้า Authenticator
+  ส่วนค่า `0` สำหรับบัญชีสมมติ local ทำให้เกมไปต่อได้โดยใช้บัญชีที่ไม่ได้ผูก OTP
+- รอบ 13:03 น. เกมส่ง `0x2EE5` แบบเข้ารหัสและรีเฟรชรายชื่อโลกได้
+  เมื่อเลือกโลก เกมส่ง `0x2EEC` ขนาด 20 ไบต์ รอบนั้นยังไม่มีคำตอบสำหรับคำขอนี้
+- เพิ่ม `0x2EED` เพื่อทดลองส่งเกมต่อไปยัง `127.0.0.1:14001`
+  โดยใช้ observer ที่ส่ง greeting mode 1 เพื่อดูคำขอแรกของห้องตัวละคร
+- หลังเปิดเครื่องรอบเย็น เกมที่เปิดจาก Local Launcher กลับขึ้น GameGuard 114
+  ก่อนเชื่อมต่อ จึงยังต้องยืนยันการส่งต่อด้วยเกมจริง
 - รอบควบคุมผ่าน VFUN วันที่ 7 พฤศจิกายนกลับขึ้น GameGuard Error 114
   ก่อนส่งข้อมูลเกม ไม่พบ packet ในช่วงที่สังเกต จึงยังไม่มีผลตอบจริงจาก Official
   สำหรับยืนยันโครงสร้าง login ใหม่
 
-ขั้นถัดไปคือยืนยันผลตอบ login/list กับ build 55350 ก่อนทำ local account/ticket
-และ handoff/character/world ของ build นี้ การที่ UI/ชุดทดสอบผ่านยังไม่หมายความว่า build นี้เล่น local ได้
+ขั้นถัดไปคือยืนยันว่า Build 55350 เชื่อมถึงพอร์ตห้องตัวละคร แล้วตรวจรูปแบบ
+character list, การสร้างตัวละคร และการเข้าโลกของ build นี้
 ดูหลักฐานสรุป `re/evidence/static/windows_official_55350_startup.json`
 
 `C9Launcher.exe` รุ่น 1.0.0.26 ที่มากับโฟลเดอร์ยังอ่าน auth URL ของ Webzen
@@ -96,14 +102,16 @@ dotnet publish src/C9.LocalLauncher/C9.LocalLauncher.csproj -c Release -r win-ar
 python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion' --backend 'F:/C9-Server/artifacts/official-backend/C9.Server.dll' --dotnet 'C:/Users/kanganapong.s/.dotnet/dotnet.exe' --official-launcher 'C:/VFUN/VLauncher/VFUNLauncher.exe'
 ```
 
-ค่าปริยายยังเป็น observer ถ้าต้องทดสอบผลตอบ login ที่ยังไม่ยืนยัน ให้เพิ่ม
-`--backend-config config/lab-official-login-fixture.json` และตรวจ preview ก่อน `--apply`
-ชุดนี้รองรับเฉพาะ loopback และยังไม่มี handoff หรือ character/world ของ build ใหม่
+ค่าปริยายยังเป็น observer สำหรับชุดทดสอบ login/list/handoff ให้เพิ่ม
+`--backend-config config/lab-official-login-fixture.json` และ
+`--handoff-config config/lab-handoff-probe.json` แล้วตรวจ preview ก่อน `--apply`
+Local Launcher จะเปิดทั้งสองพอร์ตและตรวจ greeting ก่อนเริ่มเกม
+พอร์ตห้องตัวละครบันทึกข้อมูลชนิดและขนาดข้อความไว้ที่ `L9.handoff.log`
 
 ผลตรวจชุดทดลอง 7 พฤศจิกายน: build ไม่มี warning/error, validation ของ server
-ผ่าน 45 ชุด / 6,323 assertions, ตัวติดตั้งผ่าน 8 ชุด และทดสอบ TCP กับ backend
-ที่ติดตั้งแล้วได้รับ greeting → 2EE2 → 2EE6 ครบ ผล TCP นี้ใช้ client จำลอง
-จึงยังไม่ถือเป็นการยืนยันการเข้าเกมจริง
+ผ่าน 45 ชุด / 6,332 assertions และตัวติดตั้งผ่าน 9 ชุด Client จำลองผ่าน TCP
+ตั้งแต่ `2F04` จนได้รับ `2EED` แล้วเชื่อมถึงพอร์ต `14001` และรับ greeting mode 1
+การส่งต่อของเกมจริงยังรอทดสอบหลัง GameGuard เริ่มทำงานได้
 
 เครื่องมือ `re/scripts/observe_game_frames.py` ใช้สังเกตชนิด/ขนาดข้อความของ endpoint
 ที่เลือกผ่าน tshark โดยไม่เขียน pcap หรือเก็บ packet body และรายงานเมื่อมีช่องว่างของ TCP

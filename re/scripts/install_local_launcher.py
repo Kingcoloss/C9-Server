@@ -47,7 +47,7 @@ def child(client, name):
     return path
 
 
-def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=None):
+def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=None, handoff_config=None):
     if not 1 <= port <= 65535:
         raise ValueError('Invalid local server port')
     backend, settings, dotnet = [path.resolve(strict=True) for path in (backend, settings, dotnet)]
@@ -60,6 +60,16 @@ def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=Non
     files = {target: (ui_directory / source).read_bytes() for target, source in UI_FILES.items()}
     local_config = {'host': '127.0.0.1', 'port': port, 'backend_assembly': str(backend),
                     'backend_config': str(settings), 'dotnet_path': str(dotnet)}
+    if handoff_config is not None:
+        handoff_config = handoff_config.resolve(strict=True)
+        handoff = json.loads(handoff_config.read_text(encoding='utf-8-sig'))
+        mode_one = [{'type': 4, 'flag': 0, 'payload_hex': '01'}]
+        if (port == 14001 or config.get('profile') != 'fixture'
+                or handoff.get('host') != '127.0.0.1' or handoff.get('port') != 14001
+                or handoff.get('profile') not in ('observer', 'character_lobby')
+                or (handoff.get('profile') == 'observer' and handoff.get('greetings') != mode_one)):
+            raise ValueError('Handoff requires a separate loopback mode-1 backend on port 14001')
+        local_config['handoff_backend_config'] = str(handoff_config)
     if official_launcher is not None:
         official_launcher = official_launcher.resolve(strict=True)
         if not official_launcher.is_file() or official_launcher.suffix.lower() != '.exe':
@@ -69,7 +79,8 @@ def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=Non
     return files
 
 
-def install(client, ui_directory, backend, settings, dotnet, record_directory, port, apply, official_launcher=None):
+def install(client, ui_directory, backend, settings, dotnet, record_directory, port, apply,
+            official_launcher=None, handoff_config=None):
     client = client.resolve(strict=True)
     record_directory = record_directory.resolve()
     if record_directory.is_relative_to(client):
@@ -77,7 +88,7 @@ def install(client, ui_directory, backend, settings, dotnet, record_directory, p
     official = {name: sha((client / name).read_bytes()) for name in OFFICIAL_FILES}
     if official['C9.exe'] not in (OFFICIAL_52893_SHA256, OFFICIAL_UPDATED_20261106_SHA256):
         raise ValueError('Updated game build requires a verified launch-argument profile')
-    files = prepare(ui_directory, backend, settings, dotnet, port, official_launcher)
+    files = prepare(ui_directory, backend, settings, dotnet, port, official_launcher, handoff_config)
     record_file = record_directory / 'install.local.json'
     previous = json.loads(record_file.read_text(encoding='utf-8')) if record_file.exists() else None
     if previous is not None and previous['client_directory'] != str(client):
@@ -140,6 +151,7 @@ def main():
     parser.add_argument('--backend-config', type=Path, default=PROJECT_ROOT / 'config/lab-official-observer.json')
     parser.add_argument('--dotnet', type=Path, required=True)
     parser.add_argument('--official-launcher', type=Path, help='Installed VFUN launcher; otherwise opens its official download page')
+    parser.add_argument('--handoff-config', type=Path, help='Optional mode-1 backend config on loopback port 14001')
     parser.add_argument('--port', type=int, default=14000)
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
@@ -147,7 +159,8 @@ def main():
     record = PROJECT_ROOT / 'artifacts/client-backups' / ('dual-launcher-' + identity)
     try:
         print(json.dumps(install(args.client_dir, args.ui_dir, args.backend, args.backend_config,
-                                 args.dotnet, record, args.port, args.apply, args.official_launcher)))
+                                 args.dotnet, record, args.port, args.apply, args.official_launcher,
+                                 args.handoff_config)))
     except (OSError, ValueError, KeyError) as error:
         parser.error(str(error))
 

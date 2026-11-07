@@ -70,7 +70,26 @@
     "installed_fixture_probe": { "status": "passed", "synthetic_client": true, "responses": ["0x0004", "0x2EE2", "0x2EE6"], "game_compatibility_verified": false },
     "official_control_retry_20261107": "GameGuard error 114 before game TCP; no official response captured"
   },
-  "next_check": "Verify login response and server list against build 55350; then handoff and character/world layouts",
+  "local_retest_20261107": {
+    "user_reported_official_reload_of_gameguard_resolved_114": true,
+    "first_attempt": "Reached loading, then an access violation in an unidentified module before game TCP",
+    "second_attempt": {
+      "request": { "type": "0x2F04", "payload_length": 1092, "flag": 0 },
+      "response": { "type": "0x2EE2", "payload_length": 20, "flag": 0 },
+      "followup": { "recorded_at_utc": "2026-11-07T05:57:30.3640381+00:00", "type": "0x2EF6", "payload_length": 4, "flag": 0 },
+      "outcome": "The fixture closed the connection because no rule matched 2EF6; game displayed Server connection lost"
+    },
+    "reference_build_52893": { "request_writer": "0x0086D5F0", "response_dispatch": "0x0086D5D0", "response_reader": "0x0086D4F0", "response_type": "0x2EF7", "reader_first_word": "32-bit value at payload offset 0; value 1 selects event 0xFE, other values select 0xFF" },
+    "local_account_followup": {
+      "word_1_ui_observed": "Google Authenticator prompt",
+      "word_0_world_list": { "recorded_at_utc": "2026-11-07T06:03:55.7746973+00:00", "request_type": "0x2EE5", "payload_length": 0, "flag": 1, "response_type": "0x2EE6" },
+      "world_selection": { "recorded_at_utc": "2026-11-07T06:06:13.9294223+00:00", "request_type": "0x2EEC", "payload_length": 20, "flag": 1 },
+      "handoff_experiment": "2EED with a 27-byte payload and encrypted framing directs the test session to loopback port 14001. Live handoff remains unverified.",
+      "installed_tcp_smoke": { "synthetic_client": true, "login_port": 14000, "handoff_port": 14001, "handoff_greeting_mode": 1, "status": "passed" },
+      "evening_local_retry": "GameGuard 114 before game TCP; Windows recorded a nearby XtaCache fault"
+    }
+  },
+  "next_check": "Verify the 2EED reply and first mode-1 lobby request against build 55350; then character/world layouts",
   "protection_modified": false,
   "raw_artifacts": "Ignored local artifacts only; no binaries, memory, credentials or raw argument values included."
 }

@@ -43,7 +43,7 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
         JsonElement root = config.RootElement;
         if (root.ValueKind != JsonValueKind.Object ||
             root.EnumerateObject().Any(p => p.Name is not ("host" or "port" or
-                "backend_assembly" or "backend_config" or "dotnet_path" or "official_launcher")) ||
+                "backend_assembly" or "backend_config" or "handoff_backend_config" or "dotnet_path" or "official_launcher")) ||
             !root.TryGetProperty("host", out _) || !root.TryGetProperty("port", out _))
             throw new InvalidDataException("Invalid local launcher configuration");
         string host = root.GetProperty("host").GetString() ?? "";

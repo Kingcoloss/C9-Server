@@ -8,10 +8,11 @@ The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the offici
 updater for the newly supplied client. After official updates, signed build 55350
 reaches world selection through VFUN on the Windows ARM64 VM. With the corrected
 `fromVLauncher` marker and synthetic launch fields, it also reaches our loopback
-server and sends a plain `0x2F04` request with a 1,092-byte payload. A separate
-[login experiment](config/lab-official-login-fixture.json) proposes the older
-`0x2EE2` response; acceptance by build 55350 remains unverified. GameGuard error
-114 recurred during the next official control run on 7 November. The gameplay
+server and sends a plain `0x2F04` request with a 1,092-byte payload. After the
+`0x2EE2` response, the live Client sent `0x2EF6` with four payload bytes. With
+the local-account `0x2EF7` reply it refreshed the world list and sent `0x2EEC`
+when a world was selected. The [loopback fixture](config/lab-official-login-fixture.json)
+now replies with a proposed handoff to port 14001. The gameplay
 results below apply to the older lab Client, not builds 52893 or 55350.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed

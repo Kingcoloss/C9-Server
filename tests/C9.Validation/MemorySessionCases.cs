@@ -118,8 +118,8 @@ internal static partial class Validation
         return ServerOptions.FromJson(fixture.RootElement.GetRawText()) with { Port = 0, TimeoutSeconds = 2 };
     }
 
-    // Validates our proposed exchange only. The latest game has not yet accepted
-    // this response; its 2F04 request type/size is the sole observed new layout.
+    // The game sent 2EF6 after our 2EE2 reply, then encrypted list and selection
+    // requests after the plain 2EF7 reply for the synthetic account.
     private static async Task MemoryOfficialLoginFixture()
     {
         await using MemorySession session = new(OfficialLoginOptions());
@@ -133,9 +133,14 @@ internal static partial class Validation
         Check.Equal((ushort)0x2EE2, login.Type);
         Check.Equal((byte)0, login.Flag);
         Check.Bytes(Convert.FromHexString("0100000000000000000000000000000001000000"), login.Payload.Span);
+        await session.SendAsync(new Packet(0x2EF6, new byte[4], flag: 0));
+        Packet followup = await session.ReceiveAsync();
+        Check.Equal((ushort)0x2EF7, followup.Type);
+        Check.Equal((byte)0, followup.Flag);
+        Check.Bytes(new byte[4], followup.Payload.Span);
         for (int refresh = 0; refresh < 3; refresh++)
         {
-            await session.SendAsync(new Packet(0x2EE5, flag: 0));
+            await session.SendAsync(new Packet(0x2EE5));
             Packet list = await session.ReceiveAsync();
             Check.Equal((byte)0, list.Flag);
             var (entries, tail) = ServerList.Parse(list);
@@ -143,6 +148,14 @@ internal static partial class Validation
             Check.Bytes(Encoding.Unicode.GetBytes("C9 Local\0"), entries[0].AsSpan(5, 18));
             Check.Equal(0, tail.Length);
         }
+        byte[] selection = new byte[20];
+        selection[8] = 1;
+        await session.SendAsync(new Packet(0x2EEC, selection));
+        Packet handoff = await session.ReceiveAsync();
+        Check.Equal((ushort)0x2EED, handoff.Type);
+        Check.Equal((byte)1, handoff.Flag);
+        Check.Equal(27, handoff.Payload.Length);
+        Check.Bytes(new byte[] { 127, 0, 0, 1, 0xb1, 0x36 }, handoff.Payload.Span.Slice(13, 6));
         Check.True(!session.Events.Values.Any(e => e.Event == "session_error"));
         Check.True(!JsonSerializer.Serialize(session.Events.Values).Contains("PRIVATE-LOCAL-IDENTITY", StringComparison.Ordinal));
     }

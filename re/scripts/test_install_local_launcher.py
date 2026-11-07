@@ -119,6 +119,24 @@ class InstallationOwnership(unittest.TestCase):
                     self.install()
                 self.assertFalse((self.client / 'C9LocalLauncher.exe').exists())
 
+    def test_handoff_requires_mode_one_on_separate_loopback_port(self):
+        self.settings.write_text(json.dumps({'host': '127.0.0.1', 'port': 14000, 'profile': 'fixture'}))
+        handoff_path = self.root / 'handoff.json'
+        handoff = {'host': '127.0.0.1', 'port': 14001, 'profile': 'observer',
+                   'greetings': [{'type': 4, 'flag': 0, 'payload_hex': '00'}]}
+        handoff_path.write_text(json.dumps(handoff))
+        with self.assertRaisesRegex(ValueError, 'loopback mode-1'):
+            installer.install(self.client, self.ui, self.backend, self.settings, self.dotnet,
+                              self.records, 14000, True, handoff_config=handoff_path)
+        self.assertFalse((self.client / 'C9LocalLauncher.exe').exists())
+        handoff['greetings'][0]['payload_hex'] = '01'
+        handoff_path.write_text(json.dumps(handoff))
+        installer.install(self.client, self.ui, self.backend, self.settings, self.dotnet,
+                          self.records, 14000, True, handoff_config=handoff_path)
+        config = json.loads((self.client / 'L9.local.json').read_text())
+        self.assertEqual(str(handoff_path.resolve()), config['handoff_backend_config'])
+        self.assert_official_unchanged()
+
 
 if __name__ == '__main__':
     unittest.main()

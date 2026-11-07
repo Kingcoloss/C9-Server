@@ -1,5 +1,5 @@
 {
-  "description": "Unverified build-55350 loopback experiment: observed plain 2F04/1092 request, provisional legacy 2EE2 result and server list. Synthetic identity only; not official authentication or gameplay compatibility.",
+  "description": "Build-55350 loopback fixture: observed login, world-list refresh and 2EEC world selection. The 2EED reply directs the synthetic session to the loopback handoff endpoint.",
   "profile": "fixture",
   "host": "127.0.0.1",
   "port": 14000,
@@ -22,6 +22,15 @@
     },
     {
       "state": "login_fixture_sent",
+      "request_type": 12022,
+      "payload_length": 4,
+      "next_state": "login_followup_fixture_sent",
+      "replies": [
+        { "type": 12023, "flag": 0, "payload_hex": "00000000" }
+      ]
+    },
+    {
+      "state": "login_followup_fixture_sent",
       "request_type": 12005,
       "payload_length": 0,
       "next_state": "server_list_sent",
@@ -36,6 +45,15 @@
       "next_state": "server_list_sent",
       "replies": [
         { "type": 12006, "flag": 0, "payload_hex": "0100010000004300390020004c006f00630061006c0000000000000000000000000000000000000000000000000000000000000001" }
+      ]
+    },
+    {
+      "state": "server_list_sent",
+      "request_type": 12012,
+      "payload_length": 20,
+      "next_state": "handoff_fixture_sent",
+      "replies": [
+        { "type": 12013, "flag": 1, "payload_hex": "010000000000000001000000007f000001b1367f000001b1360100" }
       ]
     }
   ]

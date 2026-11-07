@@ -103,16 +103,14 @@ internal sealed class LauncherForm : Form
             if (Process.GetProcessesByName("C9").Length > 0)
                 throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
             status.Text = "กำลังเตรียมเซิร์ฟเวอร์…";
-            if (!await ServerReadyAsync())
+            using (JsonDocument config = ReadConfiguration())
             {
-                StartBackend();
-                bool ready = false;
-                for (int attempt = 0; attempt < 20; attempt++)
-                {
-                    await Task.Delay(250);
-                    if (await ServerReadyAsync()) { ready = true; break; }
-                }
-                if (!ready) throw new InvalidOperationException("เปิดเซิร์ฟเวอร์ไม่สำเร็จ กรุณาตรวจ L9.server.log");
+                JsonElement settings = config.RootElement;
+                string loginHost = settings.GetProperty("host").GetString()!;
+                int loginPort = settings.GetProperty("port").GetInt32();
+                if (settings.TryGetProperty("handoff_backend_config", out _))
+                    await EnsureBackendAsync(settings, "handoff_backend_config", "127.0.0.1", 14001, 1, "L9.handoff.log");
+                await EnsureBackendAsync(settings, "backend_config", loginHost, loginPort, 0, "L9.server.log");
             }
             ProcessStartInfo start = new(plan.Executable) { WorkingDirectory = plan.Directory, UseShellExecute = false };
             start.ArgumentList.Add(plan.Arguments);
@@ -153,8 +151,13 @@ internal sealed class LauncherForm : Form
     private async Task<bool> ServerReadyAsync()
     {
         using JsonDocument config = ReadConfiguration();
-        string host = config.RootElement.GetProperty("host").GetString()!;
-        int port = config.RootElement.GetProperty("port").GetInt32();
+        JsonElement settings = config.RootElement;
+        return await EndpointReadyAsync(settings.GetProperty("host").GetString()!, settings.GetProperty("port").GetInt32(), 0) &&
+            (!settings.TryGetProperty("handoff_backend_config", out _) || await EndpointReadyAsync("127.0.0.1", 14001, 1));
+    }
+
+    private static async Task<bool> EndpointReadyAsync(string host, int port, byte mode)
+    {
         try
         {
             using CancellationTokenSource limit = new(TimeSpan.FromMilliseconds(700));
@@ -162,28 +165,35 @@ internal sealed class LauncherForm : Form
             await client.ConnectAsync(host, port, limit.Token);
             byte[] greeting = new byte[14];
             await client.GetStream().ReadExactlyAsync(greeting, limit.Token);
-            return greeting.AsSpan().SequenceEqual(new byte[] { 14, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            return greeting.AsSpan().SequenceEqual(new byte[] { 14, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, mode });
         }
         catch (Exception error) when (error is SocketException or IOException or OperationCanceledException) { return false; }
     }
 
     private JsonDocument ReadConfiguration() => JsonDocument.Parse(File.ReadAllBytes(Path.Combine(folder, "L9.local.json")));
 
-    private void StartBackend()
+    private async Task EnsureBackendAsync(JsonElement config, string configKey, string host, int port, byte mode, string logName)
     {
-        using JsonDocument config = ReadConfiguration();
-        string dotnet = RequiredPath(config.RootElement, "dotnet_path", "dotnet.exe");
-        string assembly = RequiredPath(config.RootElement, "backend_assembly", "C9.Server.dll");
-        string settings = RequiredPath(config.RootElement, "backend_config", null);
+        if (await EndpointReadyAsync(host, port, mode)) return;
+        string dotnet = RequiredPath(config, "dotnet_path", "dotnet.exe");
+        string assembly = RequiredPath(config, "backend_assembly", "C9.Server.dll");
+        string settings = RequiredPath(config, configKey, null);
         ProcessStartInfo start = new(dotnet) { WorkingDirectory = Path.GetDirectoryName(settings)!,
             UseShellExecute = false, CreateNoWindow = true };
         start.ArgumentList.Add(assembly);
         start.ArgumentList.Add("--config");
         start.ArgumentList.Add(settings);
         start.ArgumentList.Add("--event-log");
-        start.ArgumentList.Add(Path.Combine(folder, "L9.server.log"));
+        start.ArgumentList.Add(Path.Combine(folder, logName));
         using Process server = Process.Start(start) ?? throw new IOException("Cannot start local server");
-        Log($"server started pid={server.Id}");
+        Log($"server started pid={server.Id} port={port}");
+        for (int attempt = 0; attempt < 20; attempt++)
+        {
+            await Task.Delay(250);
+            if (await EndpointReadyAsync(host, port, mode)) return;
+            if (server.HasExited) break;
+        }
+        throw new InvalidOperationException($"เปิดเซิร์ฟเวอร์พอร์ต {port} ไม่สำเร็จ กรุณาตรวจ {logName}");
     }
 
     private static string RequiredPath(JsonElement config, string name, string? expectedName)
