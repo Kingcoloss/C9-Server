@@ -94,6 +94,8 @@ internal static partial class Validation
             ("Pipe EOF and invalid lengths", PipeErrors),
             ("Pipe read timeout", PipeTimeout),
             ("Memory session encrypted fixture", MemoryFixture),
+            ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),
+            ("Memory official-build fixture rejects wrong size and state", MemoryOfficialLoginInvalid),
             ("Stream pipe adapters encrypted fixture", StreamAdapterFixture),
             ("Memory session coalescing and reset", MemoryReconnect),
             ("Memory shared processor concurrency", MemoryConcurrent),

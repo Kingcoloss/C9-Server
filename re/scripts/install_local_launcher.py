@@ -54,8 +54,9 @@ def prepare(ui_directory, backend, settings, dotnet, port, official_launcher=Non
     if backend.name != 'C9.Server.dll' or dotnet.name.lower() != 'dotnet.exe':
         raise ValueError('Select the published server assembly and installed dotnet.exe')
     config = json.loads(settings.read_text(encoding='utf-8-sig'))
-    if config.get('host') != '127.0.0.1' or config.get('port') != port or config.get('profile') != 'observer':
-        raise ValueError('New Client currently requires the matching loopback observer configuration')
+    if (config.get('host') != '127.0.0.1' or config.get('port') != port
+            or config.get('profile') not in ('observer', 'fixture')):
+        raise ValueError('New Client requires a matching loopback observer or fixture configuration')
     files = {target: (ui_directory / source).read_bytes() for target, source in UI_FILES.items()}
     local_config = {'host': '127.0.0.1', 'port': port, 'backend_assembly': str(backend),
                     'backend_config': str(settings), 'dotnet_path': str(dotnet)}

@@ -23,6 +23,8 @@ def main():
     parser.add_argument('--recover-functions', action='store_true', help='Define missing functions at explicitly selected addresses in the research database')
     parser.add_argument('--function-range', nargs=2, metavar=('START', 'END'), help='Export defined functions in a bounded address range')
     parser.add_argument('--export-prefix', default='packet_framing')
+    parser.add_argument('--export-original', type=Path, help='Recover original import bytes into ignored artifacts')
+    parser.add_argument('--expected-original-sha256', help='Required hash guard for original-byte recovery')
     args = parser.parse_args()
     out = args.output.resolve()
     (out / 'projects').mkdir(parents=True, exist_ok=True)
@@ -47,9 +49,13 @@ def main():
         command += ['-noanalysis']
     command += ['-analysisTimeoutPerFile', str(args.timeout), '-max-cpu', '2',
                 '-scriptPath', str(root / 're/scripts'), '-postScript']
+    if args.export_original and (args.functions or args.function_range or not args.expected_original_sha256):
+        parser.error('Original-byte recovery requires its expected hash and no function export options')
     if args.functions and args.function_range:
         parser.error('Choose --functions or --function-range')
-    if args.function_range:
+    if args.export_original:
+        command += ['ExportC9OriginalFile.java', str(args.export_original.resolve()), args.expected_original_sha256]
+    elif args.function_range:
         command += ['ExportC9Range.java', str(out / args.export_prefix)] + args.function_range
     elif args.functions:
         command += ['RecoverC9Functions.java' if args.recover_functions else 'ExportC9Functions.java', str(out / args.export_prefix)] + args.functions

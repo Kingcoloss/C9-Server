@@ -112,6 +112,55 @@ internal static partial class Validation
         Check.Equal(1, ServerList.Parse(packets[2]).Entries.Length);
     }
 
+    private static ServerOptions OfficialLoginOptions()
+    {
+        using JsonDocument fixture = Fixture("lab-official-login-fixture.json");
+        return ServerOptions.FromJson(fixture.RootElement.GetRawText()) with { Port = 0, TimeoutSeconds = 2 };
+    }
+
+    // Validates our proposed exchange only. The latest game has not yet accepted
+    // this response; its 2F04 request type/size is the sole observed new layout.
+    private static async Task MemoryOfficialLoginFixture()
+    {
+        await using MemorySession session = new(OfficialLoginOptions());
+        await session.HelloAsync();
+        byte[] payload = new byte[1092];
+        Encoding.ASCII.GetBytes("PRIVATE-LOCAL-IDENTITY").CopyTo(payload, 0);
+        byte[] wire = session.Client.Encode(new Packet(0x2F04, payload, flag: 0));
+        await session.SendBytesAsync(wire.AsMemory(0, 7));
+        await session.SendBytesAsync(wire.AsMemory(7));
+        Packet login = await session.ReceiveAsync();
+        Check.Equal((ushort)0x2EE2, login.Type);
+        Check.Equal((byte)0, login.Flag);
+        Check.Bytes(Convert.FromHexString("0100000000000000000000000000000001000000"), login.Payload.Span);
+        for (int refresh = 0; refresh < 3; refresh++)
+        {
+            await session.SendAsync(new Packet(0x2EE5, flag: 0));
+            Packet list = await session.ReceiveAsync();
+            Check.Equal((byte)0, list.Flag);
+            var (entries, tail) = ServerList.Parse(list);
+            Check.Equal(1, entries.Length);
+            Check.Bytes(Encoding.Unicode.GetBytes("C9 Local\0"), entries[0].AsSpan(5, 18));
+            Check.Equal(0, tail.Length);
+        }
+        Check.True(!session.Events.Values.Any(e => e.Event == "session_error"));
+        Check.True(!JsonSerializer.Serialize(session.Events.Values).Contains("PRIVATE-LOCAL-IDENTITY", StringComparison.Ordinal));
+    }
+
+    private static async Task MemoryOfficialLoginInvalid()
+    {
+        foreach (Packet invalid in new[] { new Packet(0x2F04, new byte[1091], flag: 0),
+                     new Packet(0x2EE1, new byte[2162], flag: 0), new Packet(0x2EE5, flag: 0) })
+        {
+            await using MemorySession session = new(OfficialLoginOptions());
+            await session.HelloAsync();
+            await session.SendAsync(invalid);
+            await session.Completion.WaitAsync(TimeSpan.FromSeconds(2));
+            Check.Equal(1, session.Events.Values.Count(e => e.Event == "session_error"));
+            Check.Equal(1, session.Events.Values.Count(e => e.Event == "sent"));
+        }
+    }
+
     private static async Task MemoryReconnect()
     {
         for (int i = 0; i < 2; i++)

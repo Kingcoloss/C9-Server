@@ -100,6 +100,25 @@ class InstallationOwnership(unittest.TestCase):
         self.assertEqual(b'fixture-vfun', vfun.read_bytes())
         self.assert_official_unchanged()
 
+    def test_loopback_fixture_can_replace_observer_without_client_changes(self):
+        self.install()
+        fixture = self.root / 'fixture.json'
+        fixture.write_text(json.dumps({'host': '127.0.0.1', 'port': 14000, 'profile': 'fixture'}))
+        installer.install(self.client, self.ui, self.backend, fixture, self.dotnet,
+                          self.records, 14000, True)
+        config = json.loads((self.client / 'L9.local.json').read_text())
+        self.assertEqual(str(fixture.resolve()), config['backend_config'])
+        self.assert_official_unchanged()
+
+    def test_public_mismatched_or_legacy_lobby_settings_are_rejected(self):
+        for overrides in ({'host': '0.0.0.0'}, {'port': 14001}, {'profile': 'character_lobby'}):
+            with self.subTest(overrides=overrides):
+                config = {'host': '127.0.0.1', 'port': 14000, 'profile': 'fixture', **overrides}
+                self.settings.write_text(json.dumps(config))
+                with self.assertRaisesRegex(ValueError, 'matching loopback'):
+                    self.install()
+                self.assertFalse((self.client / 'C9LocalLauncher.exe').exists())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,6 @@
 # ตัวเปิด local สำหรับ Official Client รุ่น 52893 และ 55350
 
-อัปเดต 6 พฤศจิกายน 2026
+อัปเดต 7 พฤศจิกายน 2026
 
 ใช้ `C9LocalLauncher.exe` ที่สร้างจากโครงการนี้เปิดเข้า local lab และใช้
 **VFUN Launcher** ของ VALOFE สำหรับช่องทาง Official ตัวเปิด local ไม่แก้
@@ -10,7 +10,7 @@
 ## สิ่งที่ทำได้และผลทดสอบจริง
 
 - UI ภาษาไทยตรวจ SHA-256 ของ client และตรวจ greeting ของ server ก่อนเปิดเกม
-- กดเปิดเกมเพื่อเริ่ม observer ที่ `127.0.0.1:14000` อัตโนมัติเมื่อยังไม่มีบริการ
+- กดเปิดเกมเพื่อเริ่ม backend ที่ `127.0.0.1:14000` อัตโนมัติเมื่อยังไม่มีบริการ
   บันทึกข้อมูลชนิด/ขนาด packet ใน `L9.server.log` โดยไม่มี payload หรือข้อมูลยืนยันตัวตน
 - เปิด C9 ด้วยรูปแบบพารามิเตอร์ที่อ่านโดย client ใหม่ แสดงสถานะเริ่มเกม/รอเกม/เกมปิด
 - ปุ่มแยกสำหรับโฟลเดอร์เกมและ VFUN Launcher ที่ติดตั้งไว้ หากยังไม่กำหนด path
@@ -36,8 +36,9 @@
 ทดสอบเปิดจาก VFUN ที่ล็อกอินแล้วจริง: เกมแสดง Build 55350 และถึงหน้าเลือกโลก
 โดยมี Acharon / Good จึงมีผลทดสอบ Official ที่สำเร็จสำหรับ client หลังแพตช์แล้ว
 
-การเปิดของ VFUN ใช้ argument หนึ่งชุด คั่นด้วย colon 11 ช่อง ช่อง 1/7 ว่าง
-ช่อง 2 เป็น VALOFE, ช่อง 4 เป็น c9-gl, ช่อง 8/9 เป็น endpoint และช่อง 10 เป็น EN
+การเปิดของ VFUN ใช้ argument หนึ่งชุด คั่นด้วย colon 11 ช่อง ช่อง 0 เป็น
+`fromVLauncher` ช่อง 1/7 ว่าง ช่อง 2 เป็น VALOFE, ช่อง 4 เป็น c9-gl,
+ช่อง 8/9 เป็น endpoint และช่อง 10 เป็น EN
 เก็บเฉพาะโครงสร้าง ไม่เก็บค่า account/token ของผู้ใช้ ตัวเปิด local ทดลองใช้รูปแบบนี้
 กับข้อมูลสมมติและ endpoint loopback ยังไม่ได้ยืนยันความหมาย/รูปแบบครบทุกช่อง
 
@@ -50,9 +51,19 @@
   Windows บันทึก `0xC0000005`, module offset `0x0045E47E`
 - ตอน 21:18 น. ตัวเปิดเริ่ม observer และเกมได้ แต่ไม่มี game packet เข้า observer
   การเชื่อมต่อใน log รอบนั้นเป็น readiness probe
+- หลังแก้ marker เป็น `fromVLauncher` และรูปแบบช่องสมมติ เกมถึงหน้ากำลังโหลด
+  และส่ง `0x2F04` ขนาด payload 1,092 ไบต์ แบบ plain (flag 0, sequence 0)
+  เข้า local จริงสองรอบ เวลา 21:53:36 และ 21:56:07 น. วันที่ 6 พฤศจิกายน
+  จึงผ่านจุดปิดก่อนเชื่อมต่อของการทดลองก่อนหน้าแล้ว
+- เพิ่ม `config/lab-official-login-fixture.json` สำหรับทดลองตอบ `0x2EE2`
+  และรายการ `0x2EE6` แบบ plain โดยอ้างอิง reader ของ build 52893 และ fixture เดิม
+  ยังไม่ยืนยันว่า build 55350 รับผลตอบนี้ จึงแยกจาก observer และ lobby ของ client เดิม
+- รอบควบคุมผ่าน VFUN วันที่ 7 พฤศจิกายนกลับขึ้น GameGuard Error 114
+  ก่อนส่งข้อมูลเกม ไม่พบ packet ในช่วงที่สังเกต จึงยังไม่มีผลตอบจริงจาก Official
+  สำหรับยืนยันโครงสร้าง login ใหม่
 
-ขั้นถัดไปคือตรวจชนิดและขนาดของช่องเริ่มเกมให้ครบ ก่อนทำ local account/ticket
-และ handshake ของ build นี้ การที่ UI/ชุดทดสอบผ่านยังไม่หมายความว่า build นี้เล่น local ได้
+ขั้นถัดไปคือยืนยันผลตอบ login/list กับ build 55350 ก่อนทำ local account/ticket
+และ handoff/character/world ของ build นี้ การที่ UI/ชุดทดสอบผ่านยังไม่หมายความว่า build นี้เล่น local ได้
 ดูหลักฐานสรุป `re/evidence/static/windows_official_55350_startup.json`
 
 `C9Launcher.exe` รุ่น 1.0.0.26 ที่มากับโฟลเดอร์ยังอ่าน auth URL ของ Webzen
@@ -67,7 +78,8 @@ Microsoft ระบุว่า driver ต้องสร้างให้ต�
 ผ่าน emulation ได้ ([เอกสาร Microsoft](https://learn.microsoft.com/en-us/windows/arm/apps-on-arm-troubleshooting-x86)).
 นี่เป็นประเด็นตรวจสอบ ไม่ใช่ข้อสรุปว่า GameGuard รุ่นนี้ไม่รองรับ ARM
 
-ผล Error 114 ข้างต้นเป็นประวัติก่อนอัปเดต ไม่ใช่จุดติดล่าสุดหลังอัปเดต
+Error 114 เคยหายหลังผู้ใช้โหลดไฟล์ nProtect ใหม่ด้วยการกด GAME START จาก VFUN
+และกลับมาอีกครั้งในรอบวันที่ 7 พฤศจิกายน การเปิด VFUN เฉย ๆ ไม่ใช่ขั้นที่โหลด GameGuard
 ยังไม่มีการแก้ ปิด หรือข้าม GameGuard และยังไม่ย้าย lobby/world profile เดิมมาใช้กับ build ใหม่
 
 ## ติดตั้งจาก source
@@ -83,6 +95,19 @@ dotnet publish src/C9.LocalLauncher/C9.LocalLauncher.csproj -c Release -r win-ar
 # ตรวจรายการที่จะติดตั้งก่อน; ใส่ --apply เพื่อเขียนไฟล์จริง
 python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion' --backend 'F:/C9-Server/artifacts/official-backend/C9.Server.dll' --dotnet 'C:/Users/kanganapong.s/.dotnet/dotnet.exe' --official-launcher 'C:/VFUN/VLauncher/VFUNLauncher.exe'
 ```
+
+ค่าปริยายยังเป็น observer ถ้าต้องทดสอบผลตอบ login ที่ยังไม่ยืนยัน ให้เพิ่ม
+`--backend-config config/lab-official-login-fixture.json` และตรวจ preview ก่อน `--apply`
+ชุดนี้รองรับเฉพาะ loopback และยังไม่มี handoff หรือ character/world ของ build ใหม่
+
+ผลตรวจชุดทดลอง 7 พฤศจิกายน: build ไม่มี warning/error, validation ของ server
+ผ่าน 45 ชุด / 6,323 assertions, ตัวติดตั้งผ่าน 8 ชุด และทดสอบ TCP กับ backend
+ที่ติดตั้งแล้วได้รับ greeting → 2EE2 → 2EE6 ครบ ผล TCP นี้ใช้ client จำลอง
+จึงยังไม่ถือเป็นการยืนยันการเข้าเกมจริง
+
+เครื่องมือ `re/scripts/observe_game_frames.py` ใช้สังเกตชนิด/ขนาดข้อความของ endpoint
+ที่เลือกผ่าน tshark โดยไม่เขียน pcap หรือเก็บ packet body และรายงานเมื่อมีช่องว่างของ TCP
+การตรวจ `.erl` แยกต่างหากยังไม่ได้ถอดรหัสเนื้อหาภายใน GameGuard
 
 ตัวติดตั้งตรวจ ownership จาก record ใน `artifacts/client-backups/dual-launcher-*/`
 เก็บไฟล์ local ชุดก่อนหน้า และแทนที่หรือลบเฉพาะไฟล์เก่าที่ hash ยังตรงกับ record

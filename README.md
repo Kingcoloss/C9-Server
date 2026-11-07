@@ -6,10 +6,13 @@ The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
 survey and planned Admin Portal features, dependencies and acceptance criteria.
 The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the official
 updater for the newly supplied client. After official updates, signed build 55350
-reaches world selection through VFUN on the Windows ARM64 VM. Its local startup
-still exits before game traffic reaches the server; argument field formats and
-the pre-launch authentication flow remain under investigation. The gameplay
-results below apply to the older lab Client, not build 52893.
+reaches world selection through VFUN on the Windows ARM64 VM. With the corrected
+`fromVLauncher` marker and synthetic launch fields, it also reaches our loopback
+server and sends a plain `0x2F04` request with a 1,092-byte payload. A separate
+[login experiment](config/lab-official-login-fixture.json) proposes the older
+`0x2EE2` response; acceptance by build 55350 remains unverified. GameGuard error
+114 recurred during the next official control run on 7 November. The gameplay
+results below apply to the older lab Client, not builds 52893 or 55350.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
 `C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second

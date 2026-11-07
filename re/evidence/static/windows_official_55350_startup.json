@@ -1,5 +1,5 @@
 {
-  "recorded_date": "2026-11-06",
+  "recorded_date": "2026-11-07",
   "client_build_observed_in_ui": 55350,
   "client_sha256": "9c6816ab93a6de55e93a9c98cb3837879f0d8e9682e94932d122cf7995845529",
   "client_size": 6791064,
@@ -58,12 +58,19 @@
     "windows_exception": "0xC0000005",
     "fault_module": "C9.exe",
     "fault_module_offset": "0x0045E47E",
-    "game_packets_observed": false,
+    "game_packets_observed": true,
     "compatibility_verified": false,
     "corrected_synthetic_format": "fromVLauncher marker; URL-escaped base64 of sixteen zero bytes; thirteen hex digits; test identifier; loopback endpoint",
-    "corrected_launch_observed": "C9 window and loading splash reached from local launcher; game handshake pending"
+    "corrected_launch_observed": "C9 window and loading splash reached; two plain 2F04 requests received by local server",
+    "observed_requests": [
+      { "recorded_at_utc": "2026-11-06T14:53:36.862473+00:00", "type": "0x2F04", "payload_length": 1092, "flag": 0, "sequence": 0 },
+      { "recorded_at_utc": "2026-11-06T14:56:07.621952+00:00", "type": "0x2F04", "payload_length": 1092, "flag": 0, "sequence": 0 }
+    ],
+    "reply_experiment": "Legacy 2EE2/20-byte result followed by 2EE6 server list, plain mode; latest Client acceptance unverified",
+    "installed_fixture_probe": { "status": "passed", "synthetic_client": true, "responses": ["0x0004", "0x2EE2", "0x2EE6"], "game_compatibility_verified": false },
+    "official_control_retry_20261107": "GameGuard error 114 before game TCP; no official response captured"
   },
-  "next_check": "Field encodings/lengths and local pre-launch authentication flow; then game handshake",
+  "next_check": "Verify login response and server list against build 55350; then handoff and character/world layouts",
   "protection_modified": false,
   "raw_artifacts": "Ignored local artifacts only; no binaries, memory, credentials or raw argument values included."
 }

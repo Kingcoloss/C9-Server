@@ -1,6 +1,6 @@
 # แผนพัฒนา C9 Server และ Admin Portal
 
-อัปเดต 6 พฤศจิกายน 2026 ตามขอบเขตที่ผู้ใช้เพิ่มเรื่องทุกแผนที่และ Admin Portal
+อัปเดต 7 พฤศจิกายน 2026 ตามขอบเขตที่ผู้ใช้เพิ่มเรื่องทุกแผนที่และ Admin Portal
 เอกสารนี้เป็นแผนพัฒนาปัจจุบัน ส่วนประวัติ RE และหลักฐานแต่ละเฟสอยู่ใน
 [แผน RE](../re/C9_RE_PLAN_TH.md) และ [Protocol status](PROTOCOL_STATUS.md)
 
@@ -8,7 +8,7 @@
 
 | ส่วน | สถานะที่ตรวจพบ |
 |---|---|
-| Launcher | มี UI ของเราแยกจาก VFUN updater; หลังแพตช์เป็น Build 55350 เปิด Official ถึงหน้าเลือกโลกได้แล้ว ส่วน local ยังปิดก่อนเชื่อมต่อ ต้องตรวจรูปแบบค่าเริ่มต้นและ pre-launch authentication ต่อ |
+| Launcher | มี UI ของเราแยกจาก VFUN updater; Build 55350 เปิด Official ถึงหน้าเลือกโลกได้แล้ว แก้ marker เป็น fromVLauncher และ local ส่ง 2F04/1092 ไบต์มาถึง server แล้ว; กำลังยืนยันข้อความตอบ login/list ส่วนรอบ Official 7 พ.ย. กลับขึ้น GameGuard 114 |
 | ตัวละคร | สร้าง Fighter ชื่อ Lab และโหลดชื่อ คลาส รูปลักษณ์จากไฟล์หลังเริ่มบริการใหม่ได้ |
 | เข้าโลก | แก้ sub-map index และรหัสคลาสแล้ว เข้า Waterford Village และเปิด Inventory ได้; ค่าสถานะ ช่องกระเป๋า สกิล และวงจรการเชื่อมต่อยังต้องทำต่อ |
 | ทะเบียนแผนที่ | พบ 257 รหัส, 136 โฟลเดอร์ฉาก, 516 ส่วนย่อย; ตรวจตารางแพ็ก 1,887 ไฟล์ / 22,466 รายการ |
@@ -23,7 +23,8 @@
 ผู้ใช้ให้เปลี่ยนฐานพัฒนาเป็น Official Client ล่าสุด โดยเก็บ Official Launcher
 เพื่อรับแพตช์ และใช้ตัวเปิด local ของเราเอง รายละเอียดและผลทดสอบอยู่ใน
 [Local Launcher](LOCAL_LAUNCHER_TH.md) หลังอัปเดต nProtect และเกมผ่าน VFUN
-ยืนยันแล้วว่า Build 55350 เปิด Official ได้ งานถัดไปคือตรวจ startup/handshake, character/world layouts และ
+ยืนยันแล้วว่า Build 55350 เปิด Official ได้ และ local ส่งคำขอ login แบบ plain ถึง server
+งานถัดไปคือตรวจผลตอบ login/list ให้ผ่าน ก่อนตรวจ character/world layouts และ
 GameData format ของ build ใหม่ก่อนนำความคืบหน้าจาก client เดิมมาใช้
 แผนที่ 257 รหัส/516 ส่วนย่อยข้างต้นเป็น catalog ของ client เดิม ยังไม่ใช่ผลสำรวจ build ใหม่
 
