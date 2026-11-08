@@ -14,6 +14,7 @@ public sealed record ServerOptions
     public string Profile { get; init; } = "probe";
     public string? CharacterStore { get; init; }
     public int CharacterListHeaderBytes { get; init; } = CharacterLobby.LegacyListHeaderBytes;
+    public int CharacterSlots { get; init; } = CharacterLobby.LegacySlotCount;
     public int InitialMapId { get; init; } = 10;
     public int InitialSubmap { get; init; }
     public MapPosition? InitialPosition { get; init; }
@@ -45,9 +46,18 @@ public sealed record ServerOptions
             throw new ArgumentException("Character lobby requires a store path, a frame limit of at least 7460 and no fixture rules or greetings");
         if (CharacterListHeaderBytes is not (CharacterLobby.LegacyListHeaderBytes or CharacterLobby.ExtendedListHeaderBytes))
             throw new ArgumentException("Unsupported character list header size");
-        if (Profile != "character_lobby" && (CharacterStore is not null || CharacterListHeaderBytes != CharacterLobby.LegacyListHeaderBytes))
+        if (CharacterSlots is < 1 or > byte.MaxValue)
+            throw new ArgumentException("Character slots must fit in the lobby capacity byte");
+        if (Profile != "character_lobby" && (CharacterStore is not null || CharacterListHeaderBytes != CharacterLobby.LegacyListHeaderBytes ||
+            CharacterSlots != CharacterLobby.LegacySlotCount))
             throw new ArgumentException("Character options require the character_lobby profile");
-        if (Profile == "character_lobby") _ = WorldMapCatalog.Resolve(InitialMapId, InitialSubmap, InitialPosition);
+        if (Profile == "character_lobby")
+        {
+            int maxListBody = Packet.HeaderSize - 3 + CharacterListHeaderBytes + CharacterSlots * CharacterLobby.ListEntryBytes;
+            if (3 + (maxListBody + 15) / 16 * 16 + 1 > MaxFrame)
+                throw new ArgumentException("Character slot capacity can exceed the configured frame limit");
+            _ = WorldMapCatalog.Resolve(InitialMapId, InitialSubmap, InitialPosition);
+        }
         else if (InitialMapId != 10 || InitialSubmap != 0 || InitialPosition is not null)
             throw new ArgumentException("Initial map options require the character_lobby profile");
         if (Rules.Select(r => (r.State, r.RequestType)).Distinct().Count() != Rules.Count)
@@ -78,7 +88,7 @@ public sealed record ServerOptions
         JsonElement root = document.RootElement;
         RequireFields(root, ["description", "host", "port", "profile", "max_frame", "max_connections",
             "max_packets", "timeout_seconds", "greetings", "rules", "character_store",
-            "character_list_header_bytes", "initial_map_id", "initial_submap", "initial_position"]);
+            "character_list_header_bytes", "character_slots", "initial_map_id", "initial_submap", "initial_position"]);
         List<Packet> greetings = [];
         if (root.TryGetProperty("greetings", out JsonElement greetingArray))
             foreach (JsonElement packet in greetingArray.EnumerateArray()) greetings.Add(ParsePacket(packet));
@@ -101,6 +111,7 @@ public sealed record ServerOptions
             Profile = GetString(root, "profile", "probe"), MaxFrame = GetInt(root, "max_frame", 8192),
             CharacterStore = root.TryGetProperty("character_store", out JsonElement store) ? store.GetString() : null,
             CharacterListHeaderBytes = GetInt(root, "character_list_header_bytes", CharacterLobby.LegacyListHeaderBytes),
+            CharacterSlots = GetInt(root, "character_slots", CharacterLobby.LegacySlotCount),
             InitialMapId = GetInt(root, "initial_map_id", 10), InitialSubmap = GetInt(root, "initial_submap", 0),
             InitialPosition = ParsePosition(root),
             MaxConnections = GetInt(root, "max_connections", 4), MaxPackets = GetInt(root, "max_packets", 64),

@@ -9,12 +9,12 @@ namespace C9.Server;
 // This store belongs to the single, synthetic account on the loopback lab.
 internal sealed class CharacterLobby
 {
-    private const int SlotCount = 3;
+    internal const int LegacySlotCount = 3;
     private const int NameBytes = 42;
     private const int AppearanceBytes = 44;
     internal const int LegacyListHeaderBytes = 42;
     internal const int ExtendedListHeaderBytes = 47;
-    private const int ListEntryBytes = 136;
+    internal const int ListEntryBytes = 136;
     // Diagnostic baseline, pending extraction of the original level/job tables.
     private const uint InitialHp = 100;
     private const uint InitialMp = 100;
@@ -38,16 +38,18 @@ internal sealed class CharacterLobby
     private readonly object gate = new();
     private readonly string path;
     private readonly int listHeaderBytes;
+    private readonly byte slotCount;
     private Character[] characters;
 
-    public CharacterLobby(string path, int listHeaderBytes)
+    public CharacterLobby(string path, int listHeaderBytes, int slotCount)
     {
         this.path = Path.GetFullPath(path);
         this.listHeaderBytes = listHeaderBytes;
+        this.slotCount = checked((byte)slotCount);
         characters = File.Exists(this.path)
             ? JsonSerializer.Deserialize<Character[]>(File.ReadAllBytes(this.path)) ?? throw new InvalidDataException("Empty character store")
             : [];
-        if (characters.Length > SlotCount || characters.Any(c => c is null || c.Slot >= SlotCount ||
+        if (characters.Length > slotCount || characters.Any(c => c is null || c.Slot >= slotCount ||
             !ValidJob(c.Job) || !ValidName(c.Name) || c.Appearance?.Length != AppearanceBytes) ||
             characters.Select(c => c.Slot).Distinct().Count() != characters.Length ||
             characters.Select(c => c.Name).Distinct(StringComparer.OrdinalIgnoreCase).Count() != characters.Length)
@@ -62,7 +64,7 @@ internal sealed class CharacterLobby
             payload[0] = 1;
             payload[8] = 1; // Enables creation when the account has an unused slot (00CF65DB).
             // The extended reader in 52893 uses decoded offsets 0x3A/0x3B.
-            payload[listHeaderBytes - 2] = SlotCount;
+            payload[listHeaderBytes - 2] = slotCount;
             payload[listHeaderBytes - 1] = (byte)characters.Length;
             for (int index = 0; index < characters.Length; index++)
             {
@@ -88,7 +90,7 @@ internal sealed class CharacterLobby
         byte slot = payload[0];
         ushort template = BinaryPrimitives.ReadUInt16LittleEndian(payload[1..]);
         int jobIndex = template < 40 ? Array.IndexOf(TemplateIds, (byte)template, 1) : -1;
-        if (slot >= SlotCount)
+        if (slot >= slotCount)
             throw new ProtocolException(ProtocolError.InvalidPacket, $"Unsupported local character slot {slot}");
         if (jobIndex < 1)
             throw new ProtocolException(ProtocolError.InvalidPacket, $"Unsupported local character template {template}");
