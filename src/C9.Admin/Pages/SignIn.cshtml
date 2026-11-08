@@ -1,0 +1,25 @@
+@page
+@model SignInModel
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in · C9 Admin Console</title>
+    <link rel="stylesheet" href="~/console.css" asp-append-version="true">
+</head>
+<body class="signin-page">
+    <main class="signin panel">
+        <div class="brand"><span class="crest">C9</span><span>ADMIN CONSOLE</span></div>
+        <h1>เข้าสู่ Console</h1>
+        <p class="muted">เปิดดูและควบคุมบริการ C9 Local บนเครื่องนี้</p>
+        <form method="post" asp-page="/SignIn">
+            <label for="key">กุญแจเข้า Console</label>
+            <input id="key" name="key" type="password" autocomplete="current-password" maxlength="128" required autofocus>
+            <div asp-validation-summary="ModelOnly" role="alert" class="validation"></div>
+            <button class="primary" type="submit">เข้าสู่ Console</button>
+        </form>
+        <p class="hint">คัดลอกกุญแจจาก <code>artifacts/admin-console/access-key.local.txt</code></p>
+    </main>
+</body>
+</html>

@@ -4,6 +4,8 @@ C#/.NET 10 server runtime and reverse-engineering tools for the selected C9
 Client build. Python is retained as a protocol reference and RE toolchain.
 The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
 survey and planned Admin Portal features, dependencies and acceptance criteria.
+The [local Admin Console](docs/ADMIN_CONSOLE_TH.md) starts, stops, restarts and
+monitors the build 55350 login and character services on this machine.
 The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the official
 updater for the newly supplied client. After official updates, signed build 55350
 reaches world selection through VFUN on the Windows ARM64 VM. With the corrected

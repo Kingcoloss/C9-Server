@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="../C9.Server/C9.Server.csproj" />
+  </ItemGroup>
+</Project>

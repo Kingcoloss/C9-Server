@@ -1,0 +1,111 @@
+@page
+@model IndexModel
+@{
+    string? message = TempData["OperationMessage"] as string;
+    bool failed = TempData["OperationFailed"] is true;
+}
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C9 Admin Console</title>
+    <link rel="stylesheet" href="~/console.css" asp-append-version="true">
+    <script src="~/monitor.js" asp-append-version="true" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/"><span class="crest">C9</span><span>ADMIN CONSOLE</span></a>
+        <nav aria-label="ส่วนของ Console">
+            <a href="#services">บริการ</a>
+            <a href="#activity">ประวัติคำสั่ง</a>
+        </nav>
+        <form method="post" asp-page-handler="SignOut"><button class="quiet" type="submit">ออกจากระบบ</button></form>
+    </header>
+    <main class="workspace">
+        <section class="intro" aria-labelledby="title">
+            <div>
+                <p class="eyebrow">BUILD 55350 <span>·</span> LOCAL LAB</p>
+                <h1 id="title">จัดการเซิร์ฟเวอร์</h1>
+                <p class="muted">เปิดและติดตาม Login กับห้องตัวละครจากที่เดียว</p>
+            </div>
+            <form method="post" asp-page-handler="Operate" data-controls="all" class="actions">
+                <input name="target" type="hidden" value="all">
+                <button type="submit" class="primary" name="action" value="start" disabled="@(!Model.Status.Services.Any(item => item.CanStart))">Start all</button>
+                <button type="submit" name="action" value="stop" disabled="@(!Model.Status.Services.Any(item => item.CanStop))">Stop all</button>
+            </form>
+        </section>
+        @if (message is not null)
+        {
+            <p class="notice @(failed ? "failure" : "success")" role="status">@message</p>
+        }
+        <div class="summary" aria-label="สถานะรวม">
+            <div class="metric"><span>บริการที่ Console ดูแล</span><strong id="running">@Model.Status.Services.Count(item => item.State == "Running") / @Model.Status.Services.Count</strong></div>
+            <div class="metric"><span>การเชื่อมต่อ TCP</span><strong id="connections">@Model.Status.Services.Sum(item => item.Connections)</strong></div>
+            <div class="metric"><span>อัปเดตสถานะ</span><strong class="monitor-label" id="monitor-state">ทุก 5 วินาที</strong></div>
+        </div>
+        <section id="services" aria-labelledby="service-title">
+            <div class="section-title"><h2 id="service-title">บริการเกม</h2><span class="muted">Loopback · 127.0.0.1</span></div>
+            <div class="services">
+                @foreach (ServiceStatus item in Model.Status.Services)
+                {
+                    <article class="panel service" data-service="@item.Id" data-connections="@item.Connections">
+                        <div class="service-title">
+                            <div><h3>@item.Name</h3><p><code>127.0.0.1:@item.Port</code> <span class="muted">· @item.Profile</span></p></div>
+                            <span class="badge @item.State.ToLowerInvariant()" data-field="state">@item.State</span>
+                        </div>
+                        <dl class="details">
+                            <div><dt>PID</dt><dd data-field="pid">@(item.Pid?.ToString() ?? "—")</dd></div>
+                            <div><dt>Uptime</dt><dd data-field="uptime">@item.Uptime</dd></div>
+                            <div><dt>TCP</dt><dd data-field="connections">@item.Connections</dd></div>
+                            <div><dt>Memory</dt><dd data-field="memory">@(item.MemoryMiB is { } memory ? $"{memory} MiB" : "—")</dd></div>
+                        </dl>
+                        <p class="service-note" data-field="message" hidden="@(item.Message is null)">@item.Message</p>
+                        <form method="post" asp-page-handler="Operate" data-controls="@item.Id" class="actions">
+                            <input name="target" type="hidden" value="@item.Id">
+                            <button type="submit" class="primary" name="action" value="start" disabled="@(!item.CanStart)">Start</button>
+                            <button type="submit" name="action" value="restart" disabled="@(!item.CanStop)">Restart</button>
+                            <button type="submit" name="action" value="stop" disabled="@(!item.CanStop)">Stop</button>
+                        </form>
+                        <details class="logs" open>
+                            <summary>เหตุการณ์ล่าสุด <span class="muted" data-field="logSource">@item.LogSource</span></summary>
+                            <div class="table-scroll event-scroll">
+                                <table><thead><tr><th>เวลา (UTC)</th><th>เหตุการณ์</th><th>Session</th><th>ข้อความ</th></tr></thead>
+                                    <tbody data-events>
+                                        @foreach (var entry in item.Events.Reverse())
+                                        {
+                                            <tr><td>@entry.RecordedAtUtc.ToString("HH:mm:ss")</td><td>@entry.Event</td><td>@(entry.Session?.ToString() ?? "—")</td><td>@(entry.Reason ?? (entry.Type is { } type ? $"0x{type:X4}" : entry.State ?? "—"))</td></tr>
+                                        }
+                                        @if (item.Events.Count == 0)
+                                        {
+                                            <tr><td colspan="4" class="muted">ยังไม่มีเหตุการณ์</td></tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
+                    </article>
+                }
+            </div>
+            <p class="hint">Stop และ Restart จะปิดการเชื่อมต่อของบริการนั้น พอร์ตที่เปิดจากโปรแกรมอื่นจะแสดงเป็น External</p>
+        </section>
+        <section id="activity" aria-labelledby="activity-title">
+            <div class="section-title"><h2 id="activity-title">ประวัติคำสั่ง</h2><span class="muted">เวลามาตรฐาน UTC</span></div>
+            <div class="panel table-scroll">
+                <table><thead><tr><th>เวลา</th><th>คำสั่ง</th><th>บริการ</th><th>ผล</th><th>รายละเอียด</th></tr></thead>
+                    <tbody>
+                        @foreach (OperationRecord entry in Model.Status.Operations)
+                        {
+                            <tr><td>@entry.TimeUtc.ToString("yyyy-MM-dd HH:mm:ss")</td><td>@entry.Action</td><td>@entry.Service</td><td><span class="badge @(entry.Success ? "running" : "failed")">@(entry.Success ? "สำเร็จ" : "ไม่สำเร็จ")</span></td><td>@entry.Message</td></tr>
+                        }
+                        @if (Model.Status.Operations.Count == 0)
+                        {
+                            <tr><td colspan="5" class="muted">ยังไม่มีคำสั่งที่ดำเนินการจาก Console</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

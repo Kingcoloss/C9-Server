@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/C9.Admin/C9.Admin.csproj" />
     <Project Path="src/C9.Protocol/C9.Protocol.csproj" />
     <Project Path="src/C9.Server/C9.Server.csproj" />
     <Project Path="src/C9.LocalLauncher/C9.LocalLauncher.csproj" />
