@@ -1,0 +1,13 @@
+{
+  "description": "Build-55350 loopback character lobby for the synthetic local account, with its own character store.",
+  "profile": "character_lobby",
+  "host": "127.0.0.1",
+  "port": 14001,
+  "max_connections": 1,
+  "max_packets": 255,
+  "timeout_seconds": 120,
+  "character_store": "../artifacts/official-55350-characters.local.json",
+  "character_list_header_bytes": 47,
+  "initial_map_id": 10,
+  "initial_submap": 0
+}

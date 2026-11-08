@@ -10,7 +10,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
     private static readonly Meter Metrics = new("C9.Server", "0.1.0");
     private static readonly Counter<long> Received = Metrics.CreateCounter<long>("c9.packets.received");
     private readonly CharacterLobby? characterLobby = options.Profile == "character_lobby"
-        ? new CharacterLobby(options.CharacterStore!) : null;
+        ? new CharacterLobby(options.CharacterStore!, options.CharacterListHeaderBytes) : null;
 
     public async Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default)
     {

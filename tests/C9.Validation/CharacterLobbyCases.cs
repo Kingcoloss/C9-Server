@@ -6,12 +6,13 @@ using C9.Server;
 
 internal static partial class Validation
 {
-    private static async Task TcpCharacterLobby()
+    private static async Task TcpCharacterLobby(int listHeaderBytes)
     {
         string store = Path.Combine(Path.GetTempPath(), $"c9-characters-{Guid.NewGuid():N}.json");
         ServerOptions config = new()
         {
-            Profile = "character_lobby", Port = 0, CharacterStore = store, MaxPackets = 255, TimeoutSeconds = 3
+            Profile = "character_lobby", Port = 0, CharacterStore = store, CharacterListHeaderBytes = listHeaderBytes,
+            MaxPackets = 255, TimeoutSeconds = 3
         };
         byte[] name = Encoding.Unicode.GetBytes("LabFighter");
         byte[] appearance = Enumerable.Range(0, 44).Select(i => (byte)i).ToArray();
@@ -32,9 +33,9 @@ internal static partial class Validation
                     await stream.WriteAsync(codec.Encode(new Packet(0x1771, new byte[49])));
                     Packet list = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0EFA, list.Type);
-                    Check.Equal(42, list.Payload.Length);
+                    Check.Equal(listHeaderBytes, list.Payload.Length);
                     Check.Equal((byte)1, list.Payload.Span[8]);
-                    Check.Bytes(new byte[] { 3, 0 }, list.Payload.Span[40..]);
+                    Check.Bytes(new byte[] { 3, 0 }, list.Payload.Span[(listHeaderBytes - 2)..]);
                     await stream.WriteAsync(codec.Encode(new Packet(9999, new byte[8])));
                     await stream.WriteAsync(codec.Encode(new Packet(0x0BBB, create)));
                     Packet ack = codec.Decode(await ReadWireAsync(stream));
@@ -67,13 +68,13 @@ internal static partial class Validation
                     await stream.WriteAsync(codec.Encode(new Packet(0x1771, new byte[49])));
                     Packet list = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0EFA, list.Type);
-                    Check.Equal(178, list.Payload.Length);
-                    Check.Bytes(new byte[] { 3, 1 }, list.Payload.Span.Slice(40, 2));
-                    Check.Equal(3ul, BinaryPrimitives.ReadUInt64LittleEndian(list.Payload.Span[42..]));
-                    Check.Bytes(name, list.Payload.Span.Slice(50, name.Length));
-                    Check.Equal(2u, BinaryPrimitives.ReadUInt32LittleEndian(list.Payload.Span[(42 + 0x32)..]));
-                    Check.Equal(0u, BinaryPrimitives.ReadUInt32LittleEndian(list.Payload.Span[(42 + 0x38)..]));
-                    Check.Equal(ulong.MaxValue, BinaryPrimitives.ReadUInt64LittleEndian(list.Payload.Span[(42 + 0x3C)..]));
+                    Check.Equal(listHeaderBytes + 136, list.Payload.Length);
+                    Check.Bytes(new byte[] { 3, 1 }, list.Payload.Span.Slice(listHeaderBytes - 2, 2));
+                    Check.Equal(3ul, BinaryPrimitives.ReadUInt64LittleEndian(list.Payload.Span[listHeaderBytes..]));
+                    Check.Bytes(name, list.Payload.Span.Slice(listHeaderBytes + 8, name.Length));
+                    Check.Equal(2u, BinaryPrimitives.ReadUInt32LittleEndian(list.Payload.Span[(listHeaderBytes + 0x32)..]));
+                    Check.Equal(0u, BinaryPrimitives.ReadUInt32LittleEndian(list.Payload.Span[(listHeaderBytes + 0x38)..]));
+                    Check.Equal(ulong.MaxValue, BinaryPrimitives.ReadUInt64LittleEndian(list.Payload.Span[(listHeaderBytes + 0x3C)..]));
                     byte[] identity = new byte[8];
                     BinaryPrimitives.WriteUInt64LittleEndian(identity, 3);
                     await stream.WriteAsync(codec.Encode(new Packet(0x0EFB, identity)));

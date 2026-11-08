@@ -12,7 +12,8 @@ internal sealed class CharacterLobby
     private const int SlotCount = 3;
     private const int NameBytes = 42;
     private const int AppearanceBytes = 44;
-    private const int ListHeaderBytes = 42;
+    internal const int LegacyListHeaderBytes = 42;
+    internal const int ExtendedListHeaderBytes = 47;
     private const int ListEntryBytes = 136;
     // Diagnostic baseline, pending extraction of the original level/job tables.
     private const uint InitialHp = 100;
@@ -36,11 +37,13 @@ internal sealed class CharacterLobby
 
     private readonly object gate = new();
     private readonly string path;
+    private readonly int listHeaderBytes;
     private Character[] characters;
 
-    public CharacterLobby(string path)
+    public CharacterLobby(string path, int listHeaderBytes)
     {
         this.path = Path.GetFullPath(path);
+        this.listHeaderBytes = listHeaderBytes;
         characters = File.Exists(this.path)
             ? JsonSerializer.Deserialize<Character[]>(File.ReadAllBytes(this.path)) ?? throw new InvalidDataException("Empty character store")
             : [];
@@ -55,15 +58,16 @@ internal sealed class CharacterLobby
     {
         lock (gate)
         {
-            byte[] payload = new byte[ListHeaderBytes + characters.Length * ListEntryBytes];
+            byte[] payload = new byte[listHeaderBytes + characters.Length * ListEntryBytes];
             payload[0] = 1;
             payload[8] = 1; // Enables creation when the account has an unused slot (00CF65DB).
-            payload[40] = SlotCount;
-            payload[41] = (byte)characters.Length;
+            // The extended reader in 52893 uses decoded offsets 0x3A/0x3B.
+            payload[listHeaderBytes - 2] = SlotCount;
+            payload[listHeaderBytes - 1] = (byte)characters.Length;
             for (int index = 0; index < characters.Length; index++)
             {
                 Character character = characters[index];
-                Span<byte> entry = payload.AsSpan(ListHeaderBytes + index * ListEntryBytes, ListEntryBytes);
+                Span<byte> entry = payload.AsSpan(listHeaderBytes + index * ListEntryBytes, ListEntryBytes);
                 BinaryPrimitives.WriteUInt64LittleEndian(entry, character.Id);
                 NameEncoding.GetBytes(character.Name, entry.Slice(0x08, NameBytes));
                 BinaryPrimitives.WriteUInt32LittleEndian(entry[0x32..], character.Slot);

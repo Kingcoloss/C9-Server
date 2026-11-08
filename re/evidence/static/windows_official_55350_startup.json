@@ -89,7 +89,16 @@
       "evening_local_retry": "GameGuard 114 before game TCP; Windows recorded a nearby XtaCache fault"
     }
   },
-  "next_check": "Verify the 2EED reply and first mode-1 lobby request against build 55350; then character/world layouts",
+  "live_handoff_20261107": {
+    "world_observed_in_ui": "C9 Local / Good",
+    "selection": { "recorded_at_utc": "2026-11-07T14:15:38.7193125+00:00", "type": "0x2EEC", "payload_length": 20, "flag": 1 },
+    "reply": { "type": "0x2EED", "wire_length": 52 },
+    "lobby_connection": { "port": 14001, "greeting_mode": 1, "first_request": { "recorded_at_utc": "2026-11-07T14:15:38.9661038+00:00", "type": "0x1771", "payload_length": 49, "flag": 1, "sequence": 0 } },
+    "subsequent_types": [9999, 12005, 9901],
+    "legacy_character_list_result": "The 42-byte 0EFA header opened Select Character but the client displayed 1/67 slots for the empty store",
+    "reference_extended_list_reader_52893": { "reader_va": "0x00854DA0", "slot_capacity_payload_offset": 45, "character_count_payload_offset": 46, "list_header_bytes": 47, "entry_bytes": 136 }
+  },
+  "next_check": "Verify character list, creation, and world entry layouts against build 55350",
   "protection_modified": false,
   "raw_artifacts": "Ignored local artifacts only; no binaries, memory, credentials or raw argument values included."
 }

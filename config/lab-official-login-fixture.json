@@ -55,6 +55,15 @@
       "replies": [
         { "type": 12013, "flag": 1, "payload_hex": "010000000000000001000000007f000001b1367f000001b1360100" }
       ]
+    },
+    {
+      "state": "connected",
+      "request_type": 12008,
+      "payload_length": 28,
+      "next_state": "server_list_sent",
+      "replies": [
+        { "type": 12009, "flag": 1, "payload_hex": "" }
+      ]
     }
   ]
 }
