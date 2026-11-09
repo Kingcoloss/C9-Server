@@ -2,10 +2,12 @@
 
 C#/.NET 10 server runtime and reverse-engineering tools for the selected C9
 Client build. Python is retained as a protocol reference and RE toolchain.
+To continue on another Windows machine, use the [migration guide](docs/WINDOWS_MIGRATION_TH.md).
 The [development plan](docs/DEVELOPMENT_PLAN_TH.md) includes the complete-map
 survey and planned Admin Portal features, dependencies and acceptance criteria.
-The [local Admin Console](docs/ADMIN_CONSOLE_TH.md) starts, stops, restarts and
-monitors the build 55350 login and character services on this machine.
+The [C9 Server Manager](docs/ADMIN_CONSOLE_TH.md) is a Windows MAUI Blazor Hybrid
+app that starts, stops, restarts and monitors the build 55350 services. It also
+manages access to the local test account, startup parameters and pending grants.
 The [independent local launcher](docs/LOCAL_LAUNCHER_TH.md) preserves the official
 updater for the newly supplied client. After official updates, signed build 55350
 reaches world selection through VFUN on the Windows ARM64 VM. With the corrected
@@ -14,8 +16,9 @@ server and sends a plain `0x2F04` request with a 1,092-byte payload. After the
 `0x2EE2` response, the live Client sent `0x2EF6` with four payload bytes. With
 the local-account `0x2EF7` reply it refreshed the world list and sent `0x2EEC`
 when a world was selected. The [loopback fixture](config/lab-official-login-fixture.json)
-now replies with a proposed handoff to port 14001. The gameplay
-results below apply to the older lab Client, not builds 52893 or 55350.
+hands off to port 14001. Build 55350 displayed 17 character slots, created
+the Fighter `Lab`, and entered Waterford. The live HUD showed HP 100/100.
+The corrected MP update passes server-side validation and awaits a live HUD check.
 The port supports encrypted login/server-list **fixtures**. The selected game
 has exchanged its initial login/list messages with these fixtures, displayed
 `C9 Local` with status `Good`, and followed a synthetic TCP handoff to a second

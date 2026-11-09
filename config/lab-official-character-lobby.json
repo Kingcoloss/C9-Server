@@ -8,6 +8,8 @@
   "timeout_seconds": 120,
   "character_store": "../artifacts/official-55350-characters.local.json",
   "character_list_header_bytes": 47,
+  "character_slots": 17,
+  "world_vitals_layout": "extended",
   "initial_map_id": 10,
   "initial_submap": 0
 }

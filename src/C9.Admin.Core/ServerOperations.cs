@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Text.Json;
 using C9.Server;
+using Microsoft.Extensions.Hosting;
 
 namespace C9.Admin;
 
@@ -32,12 +33,13 @@ public sealed class ServerOperations : IHostedService
 
     private readonly Endpoint[] endpoints =
     [
-        new("lobby", "Character & World", 14001, "character_lobby", "lab-official-character-lobby.json", "L9.handoff.log"),
-        new("login", "Login & World List", 14000, "fixture", "lab-official-login-fixture.json", "L9.server.log")
+        new("lobby", "Character & World", 14001, "character_lobby", AdminSettings.LobbyConfig, "L9.handoff.log"),
+        new("login", "Login & World List", 14000, "fixture", AdminSettings.LoginConfig, "L9.server.log")
     ];
     private readonly SemaphoreSlim operations = new(1);
     private readonly object state = new();
     private readonly string workspace;
+    private readonly AdminSettings settings;
     private readonly string backend;
     private readonly string dotnet;
     private readonly string? clientDirectory;
@@ -47,6 +49,7 @@ public sealed class ServerOperations : IHostedService
     public ServerOperations(string workspace, string stateDirectory, string backend, string dotnet, string? clientDirectory)
     {
         this.workspace = workspace;
+        settings = new AdminSettings(workspace, stateDirectory);
         this.backend = backend;
         this.dotnet = dotnet;
         this.clientDirectory = clientDirectory;
@@ -133,7 +136,7 @@ public sealed class ServerOperations : IHostedService
     {
         if (endpoint.Process is { HasExited: false } && endpoint.Ready) return;
         if (PortInUse(endpoint.Port)) throw new InvalidOperationException($"พอร์ต {endpoint.Port} ถูกใช้งานอยู่");
-        string configPath = Path.Combine(workspace, "config", endpoint.Config);
+        string configPath = settings.PrepareConfig(endpoint.Config);
         ServerOptions config = ServerOptions.FromJson(File.ReadAllText(configPath));
         config.Validate();
         if (config.Host != "127.0.0.1" || config.Port != endpoint.Port || config.Profile != endpoint.Profile)

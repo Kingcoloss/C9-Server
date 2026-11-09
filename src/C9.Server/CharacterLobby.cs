@@ -15,9 +15,8 @@ internal sealed class CharacterLobby
     internal const int LegacyListHeaderBytes = 42;
     internal const int ExtendedListHeaderBytes = 47;
     internal const int ListEntryBytes = 136;
-    // Diagnostic baseline, pending extraction of the original level/job tables.
-    private const uint InitialHp = 100;
-    private const uint InitialMp = 100;
+    private readonly uint initialHp;
+    private readonly uint initialMp;
     private static readonly UnicodeEncoding NameEncoding = new(false, false, true);
 
     // Indexed by the asset job code. The 0BBB request sends the template instead.
@@ -41,13 +40,15 @@ internal sealed class CharacterLobby
     private readonly byte slotCount;
     private Character[] characters;
 
-    public CharacterLobby(string path, int listHeaderBytes, int slotCount)
+    public CharacterLobby(ServerOptions options)
     {
-        this.path = Path.GetFullPath(path);
-        this.listHeaderBytes = listHeaderBytes;
-        this.slotCount = checked((byte)slotCount);
-        characters = File.Exists(this.path)
-            ? JsonSerializer.Deserialize<Character[]>(File.ReadAllBytes(this.path)) ?? throw new InvalidDataException("Empty character store")
+        path = Path.GetFullPath(options.CharacterStore!);
+        listHeaderBytes = options.CharacterListHeaderBytes;
+        slotCount = checked((byte)options.CharacterSlots);
+        initialHp = checked((uint)options.InitialHp);
+        initialMp = checked((uint)options.InitialMp);
+        characters = File.Exists(path)
+            ? JsonSerializer.Deserialize<Character[]>(File.ReadAllBytes(path)) ?? throw new InvalidDataException("Empty character store")
             : [];
         if (characters.Length > slotCount || characters.Any(c => c is null || c.Slot >= slotCount ||
             !ValidJob(c.Job) || !ValidName(c.Name) || c.Appearance?.Length != AppearanceBytes) ||
@@ -157,8 +158,8 @@ internal sealed class CharacterLobby
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(12), character.Job);
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(16), 1);
             // 009EC510 reads Player +0x20/+0x24, not +0x28/+0x2C.
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), InitialHp);
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), InitialMp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), initialHp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
             NameEncoding.GetBytes(character.Name, payload.AsSpan(44, NameBytes)); // 009D31E0 / 009A7A50.
             // Existing diagnostic progression fields; their full semantics
             // remain unresolved. The actor's class is the DWORD at +12 above.
@@ -168,13 +169,13 @@ internal sealed class CharacterLobby
         }
     }
 
-    public static Packet InitialAttributes()
+    public Packet InitialAttributes()
     {
         // 0C1E -> 00A3FBC3: two 168-byte attribute blocks, then a WORD
         // count of 8-byte entries. 00A41070/00A410A0 copy the fixed blocks.
         byte[] payload = new byte[338];
-        BinaryPrimitives.WriteUInt32LittleEndian(payload, InitialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(4), InitialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload, initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(4), initialMp);
         // 009EC5D0 scales both signed WORD factors by 0.001 before use.
         // Keep their diagnostic value at 1.0; exact attribute names pending.
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x2C), 1000);
@@ -182,18 +183,41 @@ internal sealed class CharacterLobby
         return new Packet(0x0C1E, payload);
     }
 
-    public static Packet InitialVitals()
+    public Packet InitialVitals()
     {
         // 0C1C -> 00A320F0 -> 009EC370: level, current/max HP and MP.
         // The handler also reads optional progression fields through +0x4F
         // in the decoded packet. Leave those fields zero for the new character.
         byte[] payload = new byte[70];
         BinaryPrimitives.WriteUInt16LittleEndian(payload, 1);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(2), InitialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(6), InitialMp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(10), InitialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(14), InitialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(2), initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(6), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(10), initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(14), initialMp);
         return new Packet(0x0C1C, payload);
+    }
+
+    public Packet ExtendedAttributes()
+    {
+        // 52893 00858560 reads two 176-byte blocks and a WORD entry count.
+        // In the extended block, HP and MP are the first and third DWORDs.
+        byte[] payload = new byte[354];
+        BinaryPrimitives.WriteUInt32LittleEndian(payload, initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), initialMp);
+        return new Packet(0x0C1E, payload);
+    }
+
+    public Packet ExtendedVitals(ulong characterId)
+    {
+        // 52893 00858506 -> 00812F20 checks the 64-bit character ID before
+        // applying current HP/MP and their maxima to the local player.
+        byte[] payload = new byte[32];
+        BinaryPrimitives.WriteUInt64LittleEndian(payload, characterId);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(16), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(20), initialHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
+        return new Packet(0x0C20, payload);
     }
 
     private static Packet Created(Character character)

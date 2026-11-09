@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <OutputType>Exe</OutputType>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <PublishSelfContained>true</PublishSelfContained>
+    <!-- Shared server types are loaded as a library. The child server is published separately into game/. -->
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifierOverride)' != ''">$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+    <ApplicationTitle>C9 Server Manager</ApplicationTitle>
+    <ApplicationId>com.c9local.servermanager</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <RestoreSources>https://api.nuget.org/v3/index.json</RestoreSources>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../C9.Admin.Core/C9.Admin.Core.csproj"
+                      GlobalPropertiesToRemove="RuntimeIdentifier;RuntimeIdentifierOverride;SelfContained" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
+    <Content Include="../C9.Admin/wwwroot/console.css" Link="wwwroot/console.css" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

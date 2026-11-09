@@ -1,0 +1,20 @@
+.topbar { flex-wrap: wrap; }
+.topbar nav { display: flex; flex-wrap: wrap; gap: .45rem; }
+.tab { background: transparent; border-color: transparent; }
+.tab.selected { color: var(--gold); background: var(--panel); border-color: var(--line); }
+.local-label { font-size: .75rem; }
+.workspace > .notice { margin: 0 0 1rem; }
+.admin-grid { margin-top: 1.15rem; }
+.admin-grid section + section, .admin-grid > .actions { margin-top: 1rem; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; margin: .9rem 0 0; }
+.form-grid label { display: grid; gap: .35rem; color: var(--muted); font-size: .86rem; }
+.form-grid input, .form-grid select {
+    width: 100%; min-height: 40px; padding: .5rem .6rem; color: inherit; font: inherit;
+    border: 1px solid var(--line); border-radius: 6px; background: #101722;
+}
+.form-grid .actions { grid-column: 1 / -1; }
+.form-grid.rates { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
+.admin-grid fieldset { min-width: 0; margin: .85rem 0 0; padding: .65rem .8rem .85rem; border: 1px solid var(--line); border-radius: 6px; }
+.admin-grid legend { padding: 0 .3rem; font-size: .86rem; color: var(--gold); }
+.admin-grid h2 + .muted { margin-top: .45rem; font-size: .86rem; }
+.admin-grid .table-scroll { margin: .75rem 0; }

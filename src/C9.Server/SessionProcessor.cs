@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Diagnostics.Metrics;
 using System.IO.Pipelines;
 using C9.Protocol;
@@ -10,12 +11,14 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
     private static readonly Meter Metrics = new("C9.Server", "0.1.0");
     private static readonly Counter<long> Received = Metrics.CreateCounter<long>("c9.packets.received");
     private readonly CharacterLobby? characterLobby = options.Profile == "character_lobby"
-        ? new CharacterLobby(options.CharacterStore!, options.CharacterListHeaderBytes, options.CharacterSlots) : null;
+        ? new CharacterLobby(options) : null;
 
     public async Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default)
     {
         ConnectionCodec codec = new(options.MaxFrame, discoverReceiveSelector: true);
         string state = options.Profile == "observer" ? "observing" : "connected";
+        ulong selectedCharacterId = 0;
+        bool worldVitalsSent = false;
         Dictionary<(string, ushort), ResponseRule> rules = options.Rules.ToDictionary(r => (r.State, r.RequestType));
         events.Emit(new ServerEvent("connected") { Session = id });
         try
@@ -55,6 +58,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     Flag = packet.Flag, Sequence = packet.Sequence, State = state
                 });
                 if (options.Profile is "probe" or "observer") continue;
+                if (state == "connected" && !options.LocalAccountEnabled)
+                    throw new ProtocolException(ProtocolError.InvalidPacket, "Local account is disabled");
                 if (characterLobby is not null)
                 {
                     if (state == "connected" && packet.Type == 0x1771 && packet.Payload.Length == 49)
@@ -74,11 +79,23 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     else if (state == "character_lobby" && packet.Type == 0x0BBF)
                     {
                         await SendAsync(characterLobby.Select(packet.Payload.Span));
-                        await SendAsync(CharacterLobby.InitialAttributes());
-                        await SendAsync(CharacterLobby.InitialVitals());
+                        selectedCharacterId = BinaryPrimitives.ReadUInt64LittleEndian(packet.Payload.Span);
+                        if (options.WorldVitals == WorldVitalsLayout.Legacy)
+                        {
+                            await SendAsync(characterLobby.InitialAttributes());
+                            await SendAsync(characterLobby.InitialVitals());
+                        }
                         await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition));
                         state = "world_loading";
                         events.Emit(new ServerEvent("state") { Session = id, State = state });
+                    }
+                    else if (state == "world_loading" && options.WorldVitals == WorldVitalsLayout.Extended &&
+                        packet.Type == 0x0BC5 && packet.Payload.IsEmpty && !worldVitalsSent)
+                    {
+                        await SendAsync(characterLobby.ExtendedAttributes());
+                        await SendAsync(characterLobby.ExtendedVitals(selectedCharacterId));
+                        worldVitalsSent = true;
+                        events.Emit(new ServerEvent("world_vitals_sent") { Session = id, State = state });
                     }
                     else if (state is "character_lobby" or "world_loading" &&
                         ((packet.Type == 0x0EC4 && packet.Payload.IsEmpty) ||

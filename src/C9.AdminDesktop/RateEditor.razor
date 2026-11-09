@@ -1,0 +1,19 @@
+<fieldset>
+    <legend>@Label</legend>
+    <div class="form-grid rates">
+        <label>Drop<input type="number" min="0" max="100" step="any" required @bind:get="Value.Drop"
+                          @bind:set="rate => ValueChanged.InvokeAsync(Value with { Drop = rate })" /></label>
+        <label>Rare Drop<input type="number" min="0" max="100" step="any" required @bind:get="Value.RareDrop"
+                               @bind:set="rate => ValueChanged.InvokeAsync(Value with { RareDrop = rate })" /></label>
+        <label>Upgrade<input type="number" min="0" max="100" step="any" required @bind:get="Value.Upgrade"
+                             @bind:set="rate => ValueChanged.InvokeAsync(Value with { Upgrade = rate })" /></label>
+        <label>EXP<input type="number" min="0" max="100" step="any" required @bind:get="Value.Exp"
+                         @bind:set="rate => ValueChanged.InvokeAsync(Value with { Exp = rate })" /></label>
+    </div>
+</fieldset>
+
+@code {
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter, EditorRequired] public RateMultipliers Value { get; set; } = new();
+    [Parameter] public EventCallback<RateMultipliers> ValueChanged { get; set; }
+}

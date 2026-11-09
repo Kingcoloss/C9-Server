@@ -98,7 +98,23 @@
     "legacy_character_list_result": "The 42-byte 0EFA header opened Select Character but the client displayed 1/67 slots for the empty store",
     "reference_extended_list_reader_52893": { "reader_va": "0x00854DA0", "slot_capacity_payload_offset": 45, "character_count_payload_offset": 46, "list_header_bytes": 47, "entry_bytes": 136 }
   },
-  "next_check": "Verify character list, creation, and world entry layouts against build 55350",
+  "official_character_slots_20261108": { "source": "Select Character UI after launching build 55350 through VFUN", "used": 0, "total": 17 },
+  "local_character_and_world_20261108": {
+    "character_slots_observed": 17,
+    "character_created": { "recorded_at_utc": "2026-11-08T04:38:23.8961055+00:00", "type": "0x0BBB", "payload_length": 90, "reply_type": "0x0BBC", "persisted_fighter_slot": 0 },
+    "world_observed_in_ui": "Waterford",
+    "vitals_reference_build_52893": {
+      "attributes_type": "0x0C1E",
+      "attribute_block_bytes": 176,
+      "attribute_reader_va": "0x00858560",
+      "update_type": "0x0C20",
+      "update_reader_va": "0x00812F20",
+      "identity_bytes": 8,
+      "payload_bytes": 32
+    },
+    "first_vitals_update_20261108": { "recorded_at_utc": "2026-11-08T09:34:03.7912048+00:00", "trigger_type": "0x0BC5", "hp_observed": "100/100", "mp_observed": "0/0" }
+  },
+  "next_check": "Verify corrected maximum MP and subsequent world initialization",
   "protection_modified": false,
   "raw_artifacts": "Ignored local artifacts only; no binaries, memory, credentials or raw argument values included."
 }

@@ -7,6 +7,8 @@ namespace C9.Server;
 public sealed record ResponseRule(string State, ushort RequestType, int PayloadLength,
     string NextState, IReadOnlyList<Packet> Replies);
 
+public enum WorldVitalsLayout { Legacy, Extended }
+
 public sealed record ServerOptions
 {
     public string Host { get; init; } = "127.0.0.1";
@@ -15,6 +17,10 @@ public sealed record ServerOptions
     public string? CharacterStore { get; init; }
     public int CharacterListHeaderBytes { get; init; } = CharacterLobby.LegacyListHeaderBytes;
     public int CharacterSlots { get; init; } = CharacterLobby.LegacySlotCount;
+    public WorldVitalsLayout WorldVitals { get; init; }
+    public bool LocalAccountEnabled { get; init; } = true;
+    public int InitialHp { get; init; } = 100;
+    public int InitialMp { get; init; } = 100;
     public int InitialMapId { get; init; } = 10;
     public int InitialSubmap { get; init; }
     public MapPosition? InitialPosition { get; init; }
@@ -48,8 +54,15 @@ public sealed record ServerOptions
             throw new ArgumentException("Unsupported character list header size");
         if (CharacterSlots is < 1 or > byte.MaxValue)
             throw new ArgumentException("Character slots must fit in the lobby capacity byte");
+        if (WorldVitals is not (WorldVitalsLayout.Legacy or WorldVitalsLayout.Extended))
+            throw new ArgumentException("Unknown world vitals layout");
+        if (InitialHp is < 1 or > 1_000_000 || InitialMp is < 0 or > 1_000_000)
+            throw new ArgumentException("Invalid starting HP or MP");
+        if (!LocalAccountEnabled && Profile is not ("character_lobby" or "fixture"))
+            throw new ArgumentException("Local account access requires a login or lobby profile");
         if (Profile != "character_lobby" && (CharacterStore is not null || CharacterListHeaderBytes != CharacterLobby.LegacyListHeaderBytes ||
-            CharacterSlots != CharacterLobby.LegacySlotCount))
+            CharacterSlots != CharacterLobby.LegacySlotCount || WorldVitals != WorldVitalsLayout.Legacy ||
+            InitialHp != 100 || InitialMp != 100))
             throw new ArgumentException("Character options require the character_lobby profile");
         if (Profile == "character_lobby")
         {
@@ -87,8 +100,9 @@ public sealed record ServerOptions
         using JsonDocument document = JsonDocument.Parse(json);
         JsonElement root = document.RootElement;
         RequireFields(root, ["description", "host", "port", "profile", "max_frame", "max_connections",
+            "local_account_enabled", "initial_hp", "initial_mp",
             "max_packets", "timeout_seconds", "greetings", "rules", "character_store",
-            "character_list_header_bytes", "character_slots", "initial_map_id", "initial_submap", "initial_position"]);
+            "character_list_header_bytes", "character_slots", "world_vitals_layout", "initial_map_id", "initial_submap", "initial_position"]);
         List<Packet> greetings = [];
         if (root.TryGetProperty("greetings", out JsonElement greetingArray))
             foreach (JsonElement packet in greetingArray.EnumerateArray()) greetings.Add(ParsePacket(packet));
@@ -112,6 +126,14 @@ public sealed record ServerOptions
             CharacterStore = root.TryGetProperty("character_store", out JsonElement store) ? store.GetString() : null,
             CharacterListHeaderBytes = GetInt(root, "character_list_header_bytes", CharacterLobby.LegacyListHeaderBytes),
             CharacterSlots = GetInt(root, "character_slots", CharacterLobby.LegacySlotCount),
+            LocalAccountEnabled = !root.TryGetProperty("local_account_enabled", out JsonElement enabled) || enabled.GetBoolean(),
+            InitialHp = GetInt(root, "initial_hp", 100), InitialMp = GetInt(root, "initial_mp", 100),
+            WorldVitals = GetString(root, "world_vitals_layout", "legacy") switch
+            {
+                "legacy" => WorldVitalsLayout.Legacy,
+                "extended" => WorldVitalsLayout.Extended,
+                _ => throw new ArgumentException("Unknown world vitals layout")
+            },
             InitialMapId = GetInt(root, "initial_map_id", 10), InitialSubmap = GetInt(root, "initial_submap", 0),
             InitialPosition = ParsePosition(root),
             MaxConnections = GetInt(root, "max_connections", 4), MaxPackets = GetInt(root, "max_packets", 64),

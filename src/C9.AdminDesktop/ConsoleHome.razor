@@ -1,0 +1,238 @@
+@implements IAsyncDisposable
+@inject DesktopWorkspace Workspace
+
+<header class="topbar">
+    <div class="brand"><span class="crest">C9</span><span>SERVER MANAGER</span></div>
+    <nav aria-label="หน้าจอจัดการ">
+        @foreach (Section section in Enum.GetValues<Section>())
+        {
+            <button class="tab @(current == section ? "selected" : "")" aria-current="@(current == section ? "page" : null)"
+                    disabled="@busy" @onclick="() => Navigate(section)">@SectionTitle(section)</button>
+        }
+    </nav>
+    <span class="muted local-label">BUILD 55350 · LOCAL</span>
+</header>
+
+<main class="workspace">
+    @if (message is not null)
+    {
+        <p class="notice @(failed ? "failure" : "")" role="status">@message</p>
+    }
+    @if (current == Section.Services)
+    {
+        <section class="intro">
+            <div>
+                <p class="eyebrow">127.0.0.1 · BUILD 55350</p>
+                <h1>จัดการเซิร์ฟเวอร์</h1>
+                <p class="muted">เปิดบริการทั้งสอง แล้วเข้าเกมจาก C9 Local Launcher</p>
+            </div>
+            <div class="actions">
+                <button class="primary" disabled="@(busy || !status.Services.Any(service => service.CanStart))"
+                        @onclick='() => OperateAsync("start", "all")'>Start all</button>
+                <button disabled="@(busy || !status.Services.Any(service => service.CanStop))"
+                        @onclick='() => RequestOperationAsync("restart", "all")'>Restart all</button>
+                <button disabled="@(busy || !status.Services.Any(service => service.CanStop))"
+                        @onclick='() => RequestOperationAsync("stop", "all")'>Stop all</button>
+            </div>
+        </section>
+        @if (confirmation is { } operation)
+        {
+            <section class="notice actions" aria-label="ยืนยันคำสั่ง">
+                <span>คำสั่ง @operation.Action จะตัดการเชื่อมต่อของผู้เล่น</span>
+                <button class="primary" @onclick="() => OperateAsync(operation.Action, operation.Target)">ยืนยัน</button>
+                <button @onclick="() => confirmation = null">ยกเลิก</button>
+            </section>
+        }
+        <div class="summary" aria-label="สถานะรวม">
+            <div class="metric"><span>บริการพร้อมใช้งาน</span><strong>@status.Services.Count(s => s.State == "Running") / @status.Services.Count</strong></div>
+            <div class="metric"><span>การเชื่อมต่อ TCP</span><strong>@status.Services.Sum(s => s.Connections)</strong></div>
+            <div class="metric"><span>อัปเดต Monitor</span><strong class="monitor-label">ทุก 5 วินาที</strong></div>
+        </div>
+        <div class="services">
+            @foreach (ServiceStatus service in status.Services)
+            {
+                <article class="panel service" @key="service.Id">
+                    <div class="service-title">
+                        <div><h2>@service.Name</h2><p class="muted">พอร์ต @service.Port</p></div>
+                        <span class="badge @service.State.ToLowerInvariant()">@service.State</span>
+                    </div>
+                    <dl class="details">
+                        <div><dt>PID</dt><dd>@(service.Pid?.ToString() ?? "—")</dd></div>
+                        <div><dt>Uptime</dt><dd>@service.Uptime</dd></div>
+                        <div><dt>TCP</dt><dd>@service.Connections</dd></div>
+                        <div><dt>Memory</dt><dd>@(service.MemoryMiB is { } memory ? $"{memory} MiB" : "—")</dd></div>
+                    </dl>
+                    @if (service.Message is { } note)
+                    {
+                        <p class="service-note">@note</p>
+                    }
+                    <div class="actions">
+                        <button class="primary" disabled="@(busy || !service.CanStart)" @onclick='() => OperateAsync("start", service.Id)'>Start</button>
+                        <button disabled="@(busy || !service.CanStop)" @onclick='() => RequestOperationAsync("restart", service.Id)'>Restart</button>
+                        <button disabled="@(busy || !service.CanStop)" @onclick='() => RequestOperationAsync("stop", service.Id)'>Stop</button>
+                    </div>
+                    <details class="logs" open>
+                        <summary>เหตุการณ์ล่าสุด</summary>
+                        <div class="table-scroll event-scroll">
+                            <table>
+                                <thead><tr><th>เวลา (UTC)</th><th>เหตุการณ์</th><th>Session</th><th>รายละเอียด</th></tr></thead>
+                                <tbody>
+                                    @foreach (var entry in service.Events.Reverse())
+                                    {
+                                        <tr><td>@entry.RecordedAtUtc.ToString("HH:mm:ss")</td><td>@entry.Event</td>
+                                            <td>@(entry.Session?.ToString() ?? "—")</td>
+                                            <td>@(entry.Reason ?? (entry.Type is { } type ? $"0x{type:X4}" : entry.State ?? "—"))</td></tr>
+                                    }
+                                    @if (service.Events.Count == 0)
+                                    {
+                                        <tr><td colspan="4" class="muted">ยังไม่มีเหตุการณ์</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </article>
+            }
+        </div>
+        <p class="hint">เปิดแอปนี้ค้างไว้ขณะเล่น การปิดแอปจะปิดบริการที่แอปเปิดไว้ด้วย</p>
+        <section id="activity">
+            <div class="section-title"><h2>ประวัติคำสั่ง</h2><span class="muted">เวลา UTC</span></div>
+            <div class="panel table-scroll">
+                <table>
+                    <thead><tr><th>เวลา</th><th>คำสั่ง</th><th>บริการ</th><th>ผล</th><th>รายละเอียด</th></tr></thead>
+                    <tbody>
+                        @foreach (OperationRecord entry in status.Operations)
+                        {
+                            <tr><td>@entry.TimeUtc.ToString("yyyy-MM-dd HH:mm:ss")</td><td>@entry.Action</td><td>@entry.Service</td>
+                                <td><span class="badge @(entry.Success ? "running" : "failed")">@(entry.Success ? "สำเร็จ" : "ไม่สำเร็จ")</span></td>
+                                <td>@entry.Message</td></tr>
+                        }
+                        @if (status.Operations.Count == 0)
+                        {
+                            <tr><td colspan="5" class="muted">ยังไม่มีคำสั่ง</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+    else if (current == Section.Players && parameters is not null)
+    {
+        <section class="intro">
+            <div>
+                <p class="eyebrow">PLAYER ADMINISTRATION</p>
+                <h1>บัญชีและตัวละคร</h1>
+                <p class="muted">ข้อมูลตัวละครจากไฟล์เซฟของ Build 55350</p>
+            </div>
+            <button @onclick="LoadPlayers">โหลดข้อมูลใหม่</button>
+        </section>
+        <div class="services admin-grid">
+            <article class="panel service">
+                <div class="service-title">
+                    <div><h2>บัญชี Local</h2><p class="muted">บัญชีทดสอบ · @characters.Count ตัวละคร</p></div>
+                    <span class="badge @(parameters.LocalAccountEnabled ? "running" : "failed")">@(parameters.LocalAccountEnabled ? "อนุญาตให้เข้า" : "ระงับการเข้า")</span>
+                </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>ชื่อ</th><th>ช่อง</th><th>รหัสคลาส</th></tr></thead>
+                        <tbody>
+                            @foreach (PlayerCharacter character in characters)
+                            {
+                                <tr><td>@character.Name</td><td>@(character.Slot + 1)</td><td>@character.Job</td></tr>
+                            }
+                            @if (characters.Count == 0)
+                            {
+                                <tr><td colspan="3" class="muted">ยังไม่มีตัวละคร</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="actions">
+                    <button @onclick="ToggleAccount">@(parameters.LocalAccountEnabled ? "ระงับบัญชี" : "เปิดบัญชี")</button>
+                </div>
+                <p class="hint">สถานะที่บันทึกมีผลหลัง Restart all จาก Manager</p>
+            </article>
+            <article class="panel service">
+                <h2>เตรียมส่งของ</h2>
+                <p class="hint">รายการจะอยู่ในคิวรอระบบคลังและรางวัลในเกม</p>
+                <form class="form-grid" @onsubmit="QueueGrant" @onsubmit:preventDefault>
+                    <label>ตัวละคร
+                        <select @bind="recipient">
+                            <option value="0">เลือกตัวละคร</option>
+                            @foreach (PlayerCharacter character in characters)
+                            {
+                                <option value="@character.Id">@character.Name</option>
+                            }
+                        </select>
+                    </label>
+                    <label>ประเภท
+                        <select @bind="grantKind">
+                            <option value="Item">ไอเท็ม</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Exp">EXP</option>
+                        </select>
+                    </label>
+                    @if (grantKind == GrantKind.Item)
+                    {
+                        <label>รหัสไอเท็ม<input type="number" min="1" required @bind="itemId" /></label>
+                    }
+                    <label>จำนวน<input type="number" min="1" max="@int.MaxValue" required @bind="amount" /></label>
+                    <div class="actions"><button class="primary" type="submit" disabled="@(recipient == 0)">เพิ่มเข้าคิว</button></div>
+                </form>
+            </article>
+        </div>
+        <section id="activity">
+            <div class="section-title"><h2>คิวรอส่ง</h2><span class="muted">30 รายการล่าสุด</span></div>
+            <div class="panel table-scroll">
+                <table>
+                    <thead><tr><th>เวลา (UTC)</th><th>ตัวละคร</th><th>ประเภท</th><th>รหัสไอเท็ม</th><th>จำนวน</th><th>สถานะ</th></tr></thead>
+                    <tbody>
+                        @foreach (PlayerGrant grant in grants)
+                        {
+                            <tr><td>@grant.QueuedAtUtc.ToString("yyyy-MM-dd HH:mm:ss")</td><td>@grant.CharacterName</td>
+                                <td>@grant.Kind</td><td>@(grant.ItemId?.ToString() ?? "—")</td><td>@grant.Amount</td>
+                                <td><span class="badge starting">รอระบบเกม</span></td></tr>
+                        }
+                        @if (grants.Count == 0)
+                        {
+                            <tr><td colspan="6" class="muted">ยังไม่มีรายการ</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+    else if (current == Section.Parameters && parameters is { } values)
+    {
+        <section class="intro">
+            <div>
+                <p class="eyebrow">GAME PARAMETERS</p>
+                <h1>ตั้งค่าเกม</h1>
+                <p class="muted">บันทึกค่า แล้ว Restart all เพื่อใช้ค่าเซิร์ฟเวอร์ชุดใหม่</p>
+            </div>
+        </section>
+        <form class="admin-grid" @onsubmit="SaveParameters" @onsubmit:preventDefault>
+            <section class="panel service">
+                <h2>ค่าเริ่มต้นและการเชื่อมต่อ</h2>
+                <div class="form-grid">
+                    <label>HP เริ่มต้น<input type="number" min="1" max="1000000" required @bind="values.InitialHp" /></label>
+                    <label>MP เริ่มต้น<input type="number" min="0" max="1000000" required @bind="values.InitialMp" /></label>
+                    <label>จำนวน TCP ของ Login<input type="number" min="1" max="32" required @bind="values.LoginConnections" /></label>
+                    <label>จำนวน TCP ของ Lobby<input type="number" min="1" max="32" required @bind="values.LobbyConnections" /></label>
+                    <label>Timeout (วินาที)<input type="number" min="1" max="300" step="any" required @bind="values.TimeoutSeconds" /></label>
+                </div>
+            </section>
+            <section class="panel service admin-grid">
+                <h2>ตัวคูณรางวัล</h2>
+                <p class="muted">บันทึกค่าไว้ใช้เมื่อระบบดรอป ตีบวก และ EXP พร้อม</p>
+                <RateEditor Label="ทั้งเซิร์ฟเวอร์" @bind-Value="values.ServerRates" />
+                <RateEditor Label="Event" @bind-Value="values.EventRates" />
+                <RateEditor Label="บัญชี Local" @bind-Value="values.AccountRates" />
+            </section>
+            <div class="actions">
+                <button class="primary" type="submit">บันทึกการตั้งค่า</button>
+                <button type="button" @onclick="LoadParameters">โหลดค่าที่บันทึก</button>
+            </div>
+        </form>
+    }
+</main>

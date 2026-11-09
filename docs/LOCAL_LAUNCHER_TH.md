@@ -60,16 +60,20 @@
   ส่วนค่า `0` สำหรับบัญชีสมมติ local ทำให้เกมไปต่อได้โดยใช้บัญชีที่ไม่ได้ผูก OTP
 - รอบ 13:03 น. เกมส่ง `0x2EE5` แบบเข้ารหัสและรีเฟรชรายชื่อโลกได้
   เมื่อเลือกโลก เกมส่ง `0x2EEC` ขนาด 20 ไบต์ รอบนั้นยังไม่มีคำตอบสำหรับคำขอนี้
-- เพิ่ม `0x2EED` เพื่อทดลองส่งเกมต่อไปยัง `127.0.0.1:14001`
-  โดยใช้ observer ที่ส่ง greeting mode 1 เพื่อดูคำขอแรกของห้องตัวละคร
+- เกมจริงรับ `0x2EED` และเชื่อมถึง `127.0.0.1:14001` แล้ว
+  หลัง greeting mode 1 เกมส่ง `0x1771` ขนาด 49 ไบต์และรับรายการตัวละคร `0x0EFA`
 - หลังเปิดเครื่องรอบเย็น เกมที่เปิดจาก Local Launcher กลับขึ้น GameGuard 114
   ก่อนเชื่อมต่อ จึงยังต้องยืนยันการส่งต่อด้วยเกมจริง
 - รอบควบคุมผ่าน VFUN วันที่ 7 พฤศจิกายนกลับขึ้น GameGuard Error 114
   ก่อนส่งข้อมูลเกม ไม่พบ packet ในช่วงที่สังเกต จึงยังไม่มีผลตอบจริงจาก Official
   สำหรับยืนยันโครงสร้าง login ใหม่
 
-ขั้นถัดไปคือยืนยันว่า Build 55350 เชื่อมถึงพอร์ตห้องตัวละคร แล้วตรวจรูปแบบ
-character list, การสร้างตัวละคร และการเข้าโลกของ build นี้
+Build 55350 สร้าง Fighter ชื่อ Lab บันทึกตัวละคร และเข้า Waterford ได้แล้ว
+ในเกมจริงแสดง HP 100/100 และ MP 0/0 ในรอบแรก
+ฝั่งเซิร์ฟเวอร์ผ่านการทดสอบตำแหน่ง MP ที่แก้แล้ว เหลือยืนยันค่า MP บนหน้าจอเกม
+
+หน้า Select Character ของ Build 55350 ผ่าน VFUN วันที่ 8 พฤศจิกายนแสดง 0/17 ช่อง
+โปรไฟล์ `lab-official-character-lobby.json` จึงตั้ง 17 ช่องและใช้ส่วนหัวรายการ 47 ไบต์
 ดูหลักฐานสรุป `re/evidence/static/windows_official_55350_startup.json`
 
 `C9Launcher.exe` รุ่น 1.0.0.26 ที่มากับโฟลเดอร์ยังอ่าน auth URL ของ Webzen
@@ -86,9 +90,12 @@ Microsoft ระบุว่า driver ต้องสร้างให้ต�
 
 Error 114 เคยหายหลังผู้ใช้โหลดไฟล์ nProtect ใหม่ด้วยการกด GAME START จาก VFUN
 และกลับมาอีกครั้งในรอบวันที่ 7 พฤศจิกายน การเปิด VFUN เฉย ๆ ไม่ใช่ขั้นที่โหลด GameGuard
-ยังไม่มีการแก้ ปิด หรือข้าม GameGuard และยังไม่ย้าย lobby/world profile เดิมมาใช้กับ build ใหม่
+โปรไฟล์ของ Build 55350 ใช้ layout รายการตัวละครและค่าสถานะที่แยกจาก client เดิม
 
 ## ติดตั้งจาก source
+
+สำหรับเครื่องใหม่ ใช้ [ขั้นตอนย้ายเครื่อง](WINDOWS_MIGRATION_TH.md) เพื่อ build
+Server Manager และติดตั้ง Local Launcher ให้ใช้โปรไฟล์ login กับ lobby ของ Build 55350
 
 ต้องมี .NET 10 SDK และ Python สำหรับขั้น build/install; ตัวเปิดที่เผยแพร่เป็น
 self-contained ไม่ต้องใช้ SDK ในการดับเบิลคลิก ส่วน backend ยังใช้ .NET/ASP.NET Core runtime
@@ -104,14 +111,14 @@ python re/scripts/install_local_launcher.py --client-dir 'F:/C9NewClientVersion'
 
 ค่าปริยายยังเป็น observer สำหรับชุดทดสอบ login/list/handoff ให้เพิ่ม
 `--backend-config config/lab-official-login-fixture.json` และ
-`--handoff-config config/lab-handoff-probe.json` แล้วตรวจ preview ก่อน `--apply`
+`--handoff-config config/lab-official-character-lobby.json` แล้วตรวจ preview ก่อน `--apply`
 Local Launcher จะเปิดทั้งสองพอร์ตและตรวจ greeting ก่อนเริ่มเกม
 พอร์ตห้องตัวละครบันทึกข้อมูลชนิดและขนาดข้อความไว้ที่ `L9.handoff.log`
 
 ผลตรวจชุดทดลอง 7 พฤศจิกายน: build ไม่มี warning/error, validation ของ server
 ผ่าน 45 ชุด / 6,332 assertions และตัวติดตั้งผ่าน 9 ชุด Client จำลองผ่าน TCP
 ตั้งแต่ `2F04` จนได้รับ `2EED` แล้วเชื่อมถึงพอร์ต `14001` และรับ greeting mode 1
-การส่งต่อของเกมจริงยังรอทดสอบหลัง GameGuard เริ่มทำงานได้
+ผลทดสอบเกมจริงวันที่ 8 พฤศจิกายนอยู่ในส่วน Build 55350 ด้านบน
 
 เครื่องมือ `re/scripts/observe_game_frames.py` ใช้สังเกตชนิด/ขนาดข้อความของ endpoint
 ที่เลือกผ่าน tshark โดยไม่เขียน pcap หรือเก็บ packet body และรายงานเมื่อมีช่องว่างของ TCP

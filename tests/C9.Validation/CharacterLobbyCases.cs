@@ -6,13 +6,15 @@ using C9.Server;
 
 internal static partial class Validation
 {
-    private static async Task TcpCharacterLobby(int listHeaderBytes, byte slotCount)
+    private static async Task TcpCharacterLobby(int listHeaderBytes, byte slotCount,
+        WorldVitalsLayout vitalsLayout = WorldVitalsLayout.Legacy, uint hp = 100, uint mp = 100)
     {
         string store = Path.Combine(Path.GetTempPath(), $"c9-characters-{Guid.NewGuid():N}.json");
         ServerOptions config = new()
         {
             Profile = "character_lobby", Port = 0, CharacterStore = store, CharacterListHeaderBytes = listHeaderBytes,
-            CharacterSlots = slotCount, MaxPackets = 255, TimeoutSeconds = 3
+            CharacterSlots = slotCount, WorldVitals = vitalsLayout, MaxPackets = 255, TimeoutSeconds = 3,
+            InitialHp = (int)hp, InitialMp = (int)mp
         };
         byte[] name = Encoding.Unicode.GetBytes("LabFighter");
         byte[] appearance = Enumerable.Range(0, 44).Select(i => (byte)i).ToArray();
@@ -92,30 +94,54 @@ internal static partial class Validation
                     Check.Equal((ulong)slotCount, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
                     Check.Equal(1u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[16..]));
-                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
-                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
+                    Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
+                    Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
                     Check.Equal(0ul, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span[32..]));
                     Check.Bytes(name, selected.Payload.Span.Slice(44, name.Length));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[0x6E..]));
-                    Packet attributes = codec.Decode(await ReadWireAsync(stream));
-                    Check.Equal((ushort)0x0C1E, attributes.Type);
-                    Check.Equal(338, attributes.Payload.Length);
-                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
-                    Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[4..]));
-                    Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2C..]));
-                    Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2E..]));
-                    Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[336..]));
-                    Packet vitals = codec.Decode(await ReadWireAsync(stream));
-                    Check.Equal((ushort)0x0C1C, vitals.Type);
-                    Check.Equal(70, vitals.Payload.Length);
-                    Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(vitals.Payload.Span));
-                    foreach (int offset in new[] { 2, 6, 10, 14 })
-                        Check.Equal(100u, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[offset..]));
+                    if (vitalsLayout == WorldVitalsLayout.Legacy)
+                    {
+                        Packet attributes = codec.Decode(await ReadWireAsync(stream));
+                        Check.Equal((ushort)0x0C1E, attributes.Type);
+                        Check.Equal(338, attributes.Payload.Length);
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[4..]));
+                        Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2C..]));
+                        Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x2E..]));
+                        Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[336..]));
+                        Packet vitals = codec.Decode(await ReadWireAsync(stream));
+                        Check.Equal((ushort)0x0C1C, vitals.Type);
+                        Check.Equal(70, vitals.Payload.Length);
+                        Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(vitals.Payload.Span));
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[2..]));
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[6..]));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[10..]));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[14..]));
+                    }
                     Packet map = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0BC3, map.Type);
                     Check.Equal(46, map.Payload.Length);
                     Check.Equal(10u, BinaryPrimitives.ReadUInt32LittleEndian(map.Payload.Span));
                     Check.Equal((byte)0, map.Payload.Span[4]); // First sub-map; 1 was out of bounds for Waterford.
+                    if (vitalsLayout == WorldVitalsLayout.Extended)
+                    {
+                        await stream.WriteAsync(codec.Encode(new Packet(0x0BC5)));
+                        Packet attributes = codec.Decode(await ReadWireAsync(stream));
+                        Check.Equal((ushort)0x0C1E, attributes.Type);
+                        Check.Equal(354, attributes.Payload.Length);
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[8..]));
+                        Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[352..]));
+                        Packet vitals = codec.Decode(await ReadWireAsync(stream));
+                        Check.Equal((ushort)0x0C20, vitals.Type);
+                        Check.Equal(32, vitals.Payload.Length);
+                        Check.Bytes(identity, vitals.Payload.Span[..8]);
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[8..]));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[16..]));
+                        Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[20..]));
+                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[28..]));
+                        await stream.WriteAsync(codec.Encode(new Packet(0x0BC5))); // Duplicate must not emit vitals again.
+                    }
                     await stream.WriteAsync(codec.Encode(new Packet(0x177D))); // Unimplemented world request is observed.
                     await stream.WriteAsync(codec.Encode(new Packet(0x0EC4)));
                     Check.Equal((ushort)0x2EEB, codec.Decode(await ReadWireAsync(stream)).Type);
