@@ -21,16 +21,16 @@ dotnet workload install maui-windows --source https://api.nuget.org/v3/index.jso
 
 ## ย้ายข้อมูล Local
 
-คัดลอก ZIP ข้อมูล Local จากเครื่องเดิมแยกจาก Git แล้วแตกจากโฟลเดอร์โครงการ
+เซฟตัวละครทดสอบ Lab ทั้งสองรุ่นและค่าตั้ง Server Manager อยู่ใน
+`config/migration/local-state` หลัง clone ให้รันจากโฟลเดอร์โครงการ
 ก่อนเปิดเซิร์ฟเวอร์ครั้งแรก
 
 ```powershell
-Expand-Archive -LiteralPath 'D:/Transfer/C9-Local-State-2026-11-10.zip' -DestinationPath .
+.\scripts\Restore-C9LocalState.ps1
 ```
 
-ZIP เก็บไฟล์เซฟตัวละครของ client รุ่นเดิมและ Build 55350 รวมถึงค่าที่บันทึกจาก
-Server Manager และคิวส่งของถ้ามี โดยรักษาตำแหน่งใต้ `artifacts/` ให้ตรงกับที่ server อ่าน
-หากโครงการปลายทางมีไฟล์เซฟหรือค่าตั้งอยู่แล้ว ให้แตก ZIP ไปที่โฟลเดอร์ชั่วคราวและเลือกไฟล์ที่ต้องการ
+สคริปต์คัดลอก snapshot ลง `artifacts/` และเก็บไฟล์ที่มีอยู่แล้วบนเครื่องปลายทาง
+เซฟและค่าตั้งที่เปลี่ยนหลังเริ่มเล่นจะบันทึกใน `artifacts/` ตามปกติ
 Web Console จะสร้างกุญแจใหม่บนเครื่องปลายทาง
 
 ## เตรียมเกมและตัวเปิด Local

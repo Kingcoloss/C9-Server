@@ -1,0 +1,26 @@
+{
+  "LocalAccountEnabled": true,
+  "InitialHp": 100,
+  "InitialMp": 100,
+  "LoginConnections": 2,
+  "LobbyConnections": 1,
+  "TimeoutSeconds": 120,
+  "ServerRates": {
+    "Drop": 5,
+    "RareDrop": 2,
+    "Upgrade": 2,
+    "Exp": 5
+  },
+  "EventRates": {
+    "Drop": 1,
+    "RareDrop": 1,
+    "Upgrade": 1,
+    "Exp": 1
+  },
+  "AccountRates": {
+    "Drop": 1,
+    "RareDrop": 1,
+    "Upgrade": 1,
+    "Exp": 1
+  }
+}
