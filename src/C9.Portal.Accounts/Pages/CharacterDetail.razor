@@ -1,0 +1,162 @@
+@page "/characters/{Id:long}"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AccountsRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>ตัวละคร @character?.Name</PageTitle>
+
+<GameDataGate Actions="Actions">
+    @if (character is null)
+    {
+        <p class="muted small">@(loaded ? "ไม่พบตัวละครนี้" : "กำลังโหลด…")</p>
+    }
+    else
+    {
+        <header class="page-head">
+            <div>
+                <p class="eyebrow">CHARACTER</p>
+                <h1>@character.Name
+            @if (character.DeletedAt is not null) { <span class="badge bad">ถูกลบ</span> }</h1>
+                <p class="muted"><a href="@($"/accounts/{character.AccountId}")">← บัญชีเจ้าของ</a> · ID @character.Id · Slot @character.Slot · Job @character.Job
+            · Level @character.Level · สร้าง @AccountList.Local(character.CreatedAt)</p>
+            </div>
+        </header>
+
+        <div class="cards">
+            <section class="panel">
+                <h2>สถานะในเกม</h2>
+                <table>
+                    <tr><th>Map / Sub-map</th><td>@(character.MapId is { } m ? $"{m} / {character.Submap}" : "ค่าเริ่มต้นของ server")</td></tr>
+                    <tr><th>ตำแหน่ง</th><td>@(character.PosX is { } x ? $"{x:0.##}, {character.PosY:0.##}, {character.PosZ:0.##}" : "—")</td></tr>
+                    <tr><th>Exp / Gold</th><td>@character.Exp.ToString("N0") / @character.Gold.ToString("N0")</td></tr>
+                    <tr><th>เวลาเล่น</th><td>@TimeSpan.FromSeconds(character.PlaySeconds).ToString(@"d\.hh\:mm")</td></tr>
+                    <tr><th>Appearance (44 bytes)</th><td><code>@Convert.ToHexString(character.Appearance)</code></td></tr>
+                </table>
+                <p class="muted small">Exp, Gold และไอเท็มจะแก้ได้เมื่อ game server มีระบบเหล่านี้ (design เฟส 3)</p>
+            </section>
+
+            <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+                <section class="panel">
+                    <h2>แก้ไข</h2>
+                    <div class="filters">
+                        <label class="field">ชื่อใหม่ <input @bind="newName" maxlength="20" /></label>
+                        <button @onclick="RenameAsync">เปลี่ยนชื่อ</button>
+                    </div>
+                    <div class="filters">
+                        <label class="field">ย้ายไป slot <input type="number" min="0" max="16" @bind="newSlot" /></label>
+                        <button @onclick="MoveAsync">ย้าย</button>
+                    </div>
+                    <div class="filters">
+                        <label class="field">Level <input type="number" min="1" max="999" @bind="level" /></label>
+                        <label class="field">Map <input type="number" @bind="mapId" /></label>
+                        <label class="field">Sub-map <input type="number" min="0" @bind="submap" /></label>
+                    </div>
+                    <div class="filters">
+                        <label class="field">X <input type="number" step="0.01" @bind="posX" /></label>
+                        <label class="field">Y <input type="number" step="0.01" @bind="posY" /></label>
+                        <label class="field">Z <input type="number" step="0.01" @bind="posZ" /></label>
+                        <button @onclick="UpdateAsync">บันทึก level/ตำแหน่ง</button>
+                    </div>
+                    <label class="field">เหตุผล (ใช้กับทุกปุ่มในส่วนนี้) <input @bind="reason" placeholder="จำเป็น" /></label>
+                    <div class="filters">
+                        @if (character.DeletedAt is null)
+                        {
+                            <button class="danger" @onclick="DeleteAsync">ลบ (กู้คืนได้)</button>
+                        }
+                        else
+                        {
+                            <button class="primary" @onclick="RestoreAsync">กู้คืน</button>
+                        }
+                    </div>
+                    <p class="muted small">ถ้าตัวละครกำลังออนไลน์ ให้ตัดการเชื่อมต่อก่อนแก้ เพื่อไม่ให้ server บันทึกทับ</p>
+                </section>
+            </AuthorizeView>
+        </div>
+
+        <section class="panel table-scroll">
+            <h2>ไอเท็ม (@character.Items.Count)</h2>
+            <table>
+                <thead><tr><th>ที่อยู่</th><th>Slot</th><th>Item ID</th><th>จำนวน</th><th>Enchant</th><th>Serial</th></tr></thead>
+                <tbody>
+                    @foreach (CharacterItem i in character.Items.OrderBy(i => i.Location).ThenBy(i => i.Slot))
+                    {
+                        <tr><td>@i.Location</td><td>@i.Slot</td><td>@i.ItemId</td><td>@i.Quantity</td><td>+@i.Enchant</td><td class="muted small">@i.Serial</td></tr>
+                    }
+                    @if (character.Items.Count == 0) { <tr><td colspan="6" class="muted small">ยังไม่มี (รอระบบ inventory ใน server)</td></tr> }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel table-scroll">
+            <h2>Snapshot ก่อนแก้ไข</h2>
+            <table>
+                <thead><tr><th>เวลา</th><th>สาเหตุ</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (CharacterSnapshot s in snapshots)
+                    {
+                        <tr><td>@AccountList.Local(s.TakenAt)</td><td>@s.Cause</td>
+                            <td><button @onclick="() => shown = shown == s.Id ? null : s.Id">@(shown == s.Id ? "ซ่อน" : "ดู")</button></td></tr>
+                        @if (shown == s.Id) { <tr><td colspan="3"><textarea readonly>@s.Data</textarea></td></tr> }
+                    }
+                    @if (snapshots.Count == 0) { <tr><td colspan="3" class="muted small">ยังไม่มี</td></tr> }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>Export (JSON)</h2>
+            <button @onclick="ExportAsync">สร้าง JSON</button>
+            @if (exported is not null) { <textarea readonly>@exported</textarea> }
+            <p class="muted small">นำไป import ที่บัญชีอื่นได้ผ่าน API <code>POST /api/v1/accounts/{id}/characters/import</code></p>
+        </section>
+    }
+</GameDataGate>
+
+@code {
+    [Parameter] public long Id { get; set; }
+
+    private Character? character;
+    private bool loaded;
+    private IReadOnlyList<CharacterSnapshot> snapshots = [];
+    private long? shown;
+    private string? newName, reason, exported;
+    private short newSlot, level;
+    private int? mapId;
+    private short? submap;
+    private float? posX, posY, posZ;
+
+    private CharacterService Characters => (CharacterService)Services.GetService(typeof(CharacterService))!;
+
+    protected override Task OnParametersSetAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        character = await Characters.GetAsync(Id);
+        loaded = true;
+        if (character is null) return;
+        snapshots = await Characters.SnapshotsAsync(Id, 20);
+        newName = character.Name;
+        newSlot = character.Slot;
+        level = character.Level;
+        (mapId, submap, posX, posY, posZ) = (character.MapId, character.Submap, character.PosX, character.PosY, character.PosZ);
+    }
+
+    private Task RenameAsync() => Change("characters.rename", op => Characters.RenameAsync(Id, character!.Version, newName ?? "", op));
+    private Task MoveAsync() => Change("characters.move_slot", op => Characters.MoveSlotAsync(Id, character!.Version, newSlot, op));
+    private Task UpdateAsync() => Change("characters.update", op => Characters.UpdateAsync(Id, character!.Version,
+        new CharacterChanges(level, mapId, submap, posX, posY, posZ), op));
+    private Task DeleteAsync() => Change("characters.delete", op => Characters.SoftDeleteAsync(Id, character!.Version, op));
+    private Task RestoreAsync() => Change("characters.restore", op => Characters.RestoreAsync(Id, character!.Version, op));
+
+    private async Task Change(string action, Func<OperatorContext, Task<Character>> work)
+    {
+        if (character is null) return;
+        if (await Actions.RunAsync(action, $"character:{Id}", reason, work) is not null) reason = null;
+        await LoadAsync();
+    }
+
+    private async Task ExportAsync() =>
+        exported = System.Text.Json.JsonSerializer.Serialize(await Characters.ExportAsync(Id), C9.Contracts.ContractJson.Options);
+}

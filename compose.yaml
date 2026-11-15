@@ -1,0 +1,240 @@
+# C9 local server platform: game services + Admin Portal + Prometheus/Loki/Alloy/Grafana.
+# Start:  docker compose up -d --build        Portal: http://127.0.0.1:14880
+# Every published port is bound to 127.0.0.1 only. State lives in ./artifacts/docker-state.
+# Architecture, security notes and runbook: docs/SERVER_PLATFORM_ARCHITECTURE_TH.md
+name: c9
+
+x-c9-image: &c9-image
+  image: c9-platform:local
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+
+x-hardening: &hardening
+  read_only: true
+  tmpfs: ["/tmp"]
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: ["ALL"]
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options: { max-size: "20m", max-file: "5" }
+
+x-game-common: &game-common
+  <<: [*c9-image, *hardening]
+  volumes:
+    - ${C9_STATE_DIR:-./artifacts/docker-state}:/c9/state
+  depends_on:
+    c9-init: { condition: service_completed_successfully }
+
+services:
+  c9-init:
+    <<: *c9-image
+    user: "0:0"
+    entrypoint: ["/bin/sh", "/c9/app/docker/init-state.sh"]
+    volumes:
+      - ${C9_STATE_DIR:-./artifacts/docker-state}:/c9/state
+    restart: "no"
+    security_opt: ["no-new-privileges:true"]
+
+  c9-login:
+    <<: *game-common
+    command:
+      - --config
+      - /c9/app/config/lab-official-login-fixture.json
+      - --config-overlay
+      - /c9/state/portal/profiles/lab-official-login-fixture.json
+      - --host
+      - 0.0.0.0
+      - --allow-container-bind
+      - --service-id
+      - login
+      - --agent-url
+      - http://0.0.0.0:9101
+      - --agent-token-file
+      - /c9/state/secrets/agent.token
+      - --trace-dir
+      - /c9/state/trace
+      - --trace-payloads
+      - ${C9_TRACE_PAYLOADS:-redact-credentials}
+    ports:
+      - "127.0.0.1:${C9_LOGIN_PORT:-14000}:14000"
+    healthcheck:
+      test: ["CMD", "dotnet", "/c9/app/server/C9.Server.dll", "--probe", "http://127.0.0.1:9101/readyz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  c9-lobby:
+    <<: *game-common
+    command:
+      - --config
+      - /c9/app/config/lab-official-character-lobby.json
+      - --config-overlay
+      - /c9/state/portal/profiles/lab-official-character-lobby.json
+      - --character-store
+      - /c9/state/lobby/characters.local.json
+      - --host
+      - 0.0.0.0
+      - --allow-container-bind
+      - --service-id
+      - lobby
+      - --agent-url
+      - http://0.0.0.0:9102
+      - --agent-token-file
+      - /c9/state/secrets/agent.token
+      - --trace-dir
+      - /c9/state/trace
+      - --trace-payloads
+      - ${C9_TRACE_PAYLOADS:-redact-credentials}
+    environment:
+      # Game database (ADR 0002). Empty = characters stay in --character-store (JSON) exactly as before.
+      # With `--profile gamedata` the lobby stores characters in PostgreSQL (account "local"), imports the JSON
+      # store once, and never runs migrations itself (the portal does). Password file: see c9-portal.
+      C9_DB_CONNECTION: ${C9_DB_CONNECTION:-}
+      C9_DB_PASSWORD_FILE: /c9/state/secrets/db/password.txt
+    depends_on:
+      c9-init: { condition: service_completed_successfully }
+      # Only present with --profile gamedata; required: false lets the default profile start without it.
+      c9-db: { condition: service_healthy, required: false }
+    ports:
+      - "127.0.0.1:${C9_LOBBY_PORT:-14001}:14001"
+    healthcheck:
+      test: ["CMD", "dotnet", "/c9/app/server/C9.Server.dll", "--probe", "http://127.0.0.1:9102/readyz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  c9-portal:
+    <<: [*c9-image, *hardening]
+    entrypoint: ["dotnet", "/c9/app/portal/C9.Portal.dll"]
+    working_dir: /c9/app/portal
+    environment:
+      AllowedHosts: "127.0.0.1;localhost;[::1];c9-portal"
+      ASPNETCORE_HTTP_PORTS: ""
+      Portal__Url: http://0.0.0.0:14880
+      Portal__Workspace: /c9/app
+      Portal__StateDirectory: /c9/state/portal
+      Portal__AgentTokenFile: /c9/state/secrets/agent.token
+      Portal__GrafanaUrl: http://127.0.0.1:${C9_GRAFANA_PORT:-3000}/d/c9-overview
+      Portal__PrometheusUrl: http://127.0.0.1:${C9_PROMETHEUS_PORT:-9090}
+      Portal__Services__0__AgentUrl: http://c9-login:9101
+      Portal__Services__1__AgentUrl: http://c9-lobby:9102
+      # Game database for the Accounts/World modules (ADR 0002). Empty = modules show "not configured".
+      # With `--profile gamedata` set C9_DB_CONNECTION (see .env.example / Start-C9Platform.ps1 -GameData);
+      # the password comes from the file below (created by c9-init, readable by the portal and Postgres only).
+      C9_DB_CONNECTION: ${C9_DB_CONNECTION:-}
+      C9_DB_PASSWORD_FILE: /c9/state/secrets/db/password.txt
+    volumes:
+      - ${C9_STATE_DIR:-./artifacts/docker-state}:/c9/state
+    ports:
+      - "127.0.0.1:${C9_PORTAL_PORT:-14880}:14880"
+    depends_on:
+      c9-init: { condition: service_completed_successfully }
+      c9-login: { condition: service_started }
+      c9-lobby: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "dotnet", "/c9/app/server/C9.Server.dll", "--probe", "http://127.0.0.1:14880/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    <<: *hardening
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --web.listen-address=0.0.0.0:9090
+    volumes:
+      - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:${C9_PROMETHEUS_PORT:-9090}:9090"
+
+  loki:
+    image: grafana/loki:3.5.5
+    <<: *hardening
+    command: ["-config.file=/etc/loki/config.yaml"]
+    volumes:
+      - ./docker/observability/loki.yaml:/etc/loki/config.yaml:ro
+      - loki-data:/loki
+
+  alloy:
+    image: grafana/alloy:v1.10.2
+    # Runs as root to read the Docker socket; keeps default capabilities (no cap_drop) but no privilege escalation.
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    logging:
+      driver: json-file
+      options: { max-size: "20m", max-file: "5" }
+    command: ["run", "--storage.path=/var/lib/alloy/data", "--server.http.listen-addr=0.0.0.0:12345", "--disable-reporting", "/etc/alloy/config.alloy"]
+    volumes:
+      - ./docker/observability/config.alloy:/etc/alloy/config.alloy:ro
+      # Needed to read container logs. Docker socket access is powerful: see the risk register (R-09).
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - alloy-data:/var/lib/alloy
+    depends_on: [loki]
+
+  grafana:
+    image: grafana/grafana-oss:12.1.1
+    <<: *hardening
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/c9-grafana/admin-password.txt
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/c9-overview.json
+      GF_SERVER_HTTP_ADDR: 0.0.0.0
+      GF_LOG_MODE: console
+    volumes:
+      - ./docker/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/observability/grafana/dashboards:/etc/grafana/dashboards:ro
+      # Only Grafana's own secret folder (created by c9-init), never the whole state volume.
+      - ${C9_STATE_DIR:-./artifacts/docker-state}/secrets/grafana:/run/c9-grafana:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:${C9_GRAFANA_PORT:-3000}:3000"
+    depends_on:
+      c9-init: { condition: service_completed_successfully }
+      prometheus: { condition: service_started }
+      loki: { condition: service_started }
+
+  c9-db:
+    # Optional: `docker compose --profile gamedata up -d` (Account/World thread, ADR 0002).
+    image: postgres:18-alpine
+    profiles: ["gamedata"]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      POSTGRES_DB: c9
+      POSTGRES_USER: c9
+      POSTGRES_PASSWORD_FILE: /run/c9-db/password.txt
+    volumes:
+      - c9-db-data:/var/lib/postgresql
+      - ${C9_STATE_DIR:-./artifacts/docker-state}/secrets/db:/run/c9-db:ro
+    depends_on:
+      c9-init: { condition: service_completed_successfully }
+    ports:
+      - "127.0.0.1:${C9_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U c9 -d c9"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  prometheus-data:
+  loki-data:
+  alloy-data:
+  grafana-data:
+  c9-db-data:

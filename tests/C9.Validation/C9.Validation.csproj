@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" /></ItemGroup>
   <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/C9.Server/C9.Server.csproj" />
+    <!-- C9.Server references C9.GameData privately; the lobby database cases need it at run time. -->
+    <ProjectReference Include="../../src/C9.GameData/C9.GameData.csproj" />
     <ProjectReference Include="../../src/C9.Admin.Core/C9.Admin.Core.csproj" />
     <ProjectReference Include="../../src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
     <EmbeddedResource Include="../fixtures/rc6_kats.json" LogicalName="rc6_kats.json" />

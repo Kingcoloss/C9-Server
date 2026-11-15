@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>C9.AdminDesktop</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../C9.Admin.Core/C9.Admin.Core.csproj" />
+    <ProjectReference Include="../C9.ClientProfiles/C9.ClientProfiles.csproj" />
+    <AssemblyMetadata Include="C9WorkspaceRoot" Value="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../..'))" />
+  </ItemGroup>
+</Project>

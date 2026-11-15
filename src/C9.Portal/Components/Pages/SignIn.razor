@@ -1,0 +1,85 @@
+@page "/signin"
+@layout AuthLayout
+@attribute [AllowAnonymous]
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject IPortalUserStore Users
+@inject SignInThrottle Throttle
+@inject IAuditLog Audit
+@inject NavigationManager Navigation
+
+<PageTitle>เข้าสู่ระบบ · C9 Admin Portal</PageTitle>
+
+<section class="auth-card panel">
+    <div class="brand"><span class="crest">C9</span><span>ADMIN PORTAL</span></div>
+    <h1>เข้าสู่ระบบ</h1>
+    <p class="muted">ใส่ Operator key ของเครื่องนี้ (64 ตัวอักษร hex) เพื่อจัดการและดูสถานะเซิร์ฟเวอร์</p>
+    @if (message is not null)
+    {
+        <p class="alert bad" role="alert">@message</p>
+    }
+    <EditForm Model="Input" FormName="signin" OnValidSubmit="SignInAsync" method="post">
+        <DataAnnotationsValidator />
+        <label class="field">
+            <span>Operator key</span>
+            <InputText type="password" @bind-Value="Input.Key" autocomplete="current-password" spellcheck="false" />
+        </label>
+        <ValidationMessage For="() => Input.Key" />
+        <button class="primary wide" type="submit">เข้าสู่ระบบ</button>
+    </EditForm>
+    <p class="hint">
+        คีย์อยู่ในไฟล์ <code>access-key.txt</code> ในโฟลเดอร์ state ของ Portal
+        (Docker: รัน <code>scripts/docker/Get-C9PortalKey.ps1</code>) ห้ามส่งคีย์นี้ให้ผู้อื่น
+    </p>
+</section>
+
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+    [SupplyParameterFromForm] private SignInInput Input { get; set; } = default!;
+    [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
+    private string? message;
+
+    protected override void OnInitialized() => Input ??= new();
+
+    private async Task SignInAsync()
+    {
+        string address = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        if (Throttle.RetryAfter(address) is { } wait)
+        {
+            message = $"ลองผิดหลายครั้งเกินไป กรุณารอ {Math.Ceiling(wait.TotalMinutes)} นาที";
+            await WriteAuditAsync("anonymous", false, address, "throttled");
+            return;
+        }
+        PortalUser? user = await Users.ValidateAsync(new PortalCredentials(null, Input.Key ?? ""), HttpContext.RequestAborted);
+        if (user is null)
+        {
+            Throttle.Failed(address);
+            message = "คีย์ไม่ถูกต้อง";
+            await WriteAuditAsync("anonymous", false, address, "invalid_key");
+            return;
+        }
+        Throttle.Succeeded(address);
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            PortalPrincipal.Create(user, CookieAuthenticationDefaults.AuthenticationScheme),
+            new AuthenticationProperties { IsPersistent = false });
+        await WriteAuditAsync(user.Id, true, address, null);
+        Navigation.NavigateTo(SafeReturnUrl(ReturnUrl), forceLoad: true);
+    }
+
+    private Task WriteAuditAsync(string actor, bool success, string address, string? reason) =>
+        Audit.WriteAsync(new AuditEntry(Guid.NewGuid(), DateTimeOffset.UtcNow, actor, "portal.signin", "portal", success, reason, null, null, null, address),
+            HttpContext.RequestAborted);
+
+    /// <summary>Only local paths: no scheme, no protocol-relative "//" and no "/\" tricks.</summary>
+    internal static string SafeReturnUrl(string? value) =>
+        value is { Length: > 0 } url && url[0] == '/' && (url.Length == 1 || (url[1] != '/' && url[1] != '\\')) && !url.Contains("://", StringComparison.Ordinal)
+            ? url : "/";
+
+    private sealed class SignInInput
+    {
+        [Required(ErrorMessage = "กรุณาใส่คีย์")]
+        [StringLength(64, MinimumLength = 64, ErrorMessage = "คีย์ต้องยาว 64 ตัวอักษร")]
+        public string? Key { get; set; }
+    }
+}

@@ -1,0 +1,230 @@
+@page "/accounts/{Id:long}"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AccountsRead)]
+@using C9.Portal.Accounts.Api
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>บัญชี @account?.LoginName</PageTitle>
+
+<GameDataGate Actions="Actions">
+    @if (account is null)
+    {
+        <p class="muted small">@(loaded ? "ไม่พบบัญชีนี้" : "กำลังโหลด…")</p>
+    }
+    else
+    {
+        <header class="page-head">
+            <div>
+                <p class="eyebrow">GAME ACCOUNT</p>
+                <h1>@account.LoginName <span class="badge @GameDataGate.Badge(account.Status)">@account.Status</span>
+            @if (account.IsGm) { <span class="badge busy">GM</span> }</h1>
+                <p class="muted"><a href="/accounts">← บัญชีทั้งหมด</a> · สร้าง @AccountList.Local(account.CreatedAt)
+            · เข้าเกมล่าสุด @(account.LastLoginAt is { } l ? AccountList.Local(l) : "—")
+            · @(account.PasswordHash == PasswordHasher.Disabled ? "ปิด login ด้วยรหัสผ่าน" : "login ด้วยรหัสผ่าน")</p>
+            </div>
+        </header>
+
+        <section class="panel table-scroll">
+            <h2>ตัวละคร (@account.Characters.Count(c => c.DeletedAt is null)/@account.SlotCount slots)</h2>
+            <table>
+                <thead><tr><th>Slot</th><th>ชื่อ</th><th>Job</th><th>Level</th><th>Map</th><th>สร้างเมื่อ</th><th>สถานะ</th></tr></thead>
+                <tbody>
+                    @foreach (Character c in account.Characters.OrderBy(c => c.DeletedAt is not null).ThenBy(c => c.Slot))
+                    {
+                        <tr>
+                            <td>@c.Slot</td>
+                            <td><a href="@($"/characters/{c.Id}")">@c.Name</a></td>
+                            <td>@c.Job</td>
+                            <td>@c.Level</td>
+                            <td>@(c.MapId is { } m ? $"{m}/{c.Submap}" : "—")</td>
+                            <td>@AccountList.Local(c.CreatedAt)</td>
+                            <td>@if (c.DeletedAt is { } d) { <span class="badge bad">ลบ @AccountList.Local(d)</span> } else { <span class="badge ok">ใช้งาน</span> }</td>
+                        </tr>
+                    }
+                    @if (account.Characters.Count == 0)
+                    {
+                        <tr><td colspan="7" class="muted small">ยังไม่มีตัวละคร</td></tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+
+        <div class="cards">
+            <AuthorizeView Policy="@PortalPolicies.AccountsWrite" Context="auth">
+                <Authorized>
+                    <section class="panel">
+                        <h2>ข้อมูลบัญชี</h2>
+                        <label class="field">จำนวน slot (1–17) <input type="number" min="1" max="17" @bind="slotCount" /></label>
+                        <label class="field">แท็ก (คั่นด้วย ,) <input @bind="tags" /></label>
+                        <label class="field">โน้ต <textarea @bind="note"></textarea></label>
+                        @if (auth.User.IsInRole(PortalRoles.Owner) || auth.User.IsInRole(PortalRoles.Administrator))
+                        {
+                            <label class="check"><input type="checkbox" @bind="isGm" /> เป็น GM</label>
+                        }
+                        <label class="field">เหตุผล <input @bind="editReason" placeholder="จำเป็น" /></label>
+                        <button class="primary" @onclick="SaveAsync">บันทึก</button>
+                    </section>
+
+                    <section class="panel">
+                        <h2>ลงโทษ (Ban / Suspend / Mute)</h2>
+                        <label class="field">ประเภท
+                            <select @bind="sanctionKind">
+                                @foreach (SanctionKind k in Enum.GetValues<SanctionKind>()) { <option value="@k">@k</option> }
+                            </select>
+                        </label>
+                        <label class="field">สิ้นสุด (เว้นว่าง = ถาวร, Suspend ต้องมี) <input type="datetime-local" @bind="sanctionEnds" /></label>
+                        <label class="field">เหตุผล <input @bind="sanctionReason" placeholder="จำเป็น" /></label>
+                        <button class="danger" @onclick="IssueAsync">ลงโทษ</button>
+                    </section>
+
+                    <section class="panel">
+                        <h2>ตั้งรหัสผ่านใหม่</h2>
+                        <label class="field">รหัสผ่านใหม่ (8–128 ตัว) <input type="password" @bind="newPassword" autocomplete="new-password" /></label>
+                        <label class="field">เหตุผล <input @bind="passwordReason" placeholder="จำเป็น" /></label>
+                        <button @onclick="ResetPasswordAsync">ตั้งรหัสผ่าน</button>
+                    </section>
+
+                    <section class="panel">
+                        <h2>ตัวคูณเฉพาะบัญชี</h2>
+                        <div class="filters">
+                            <label class="field">Exp <input type="number" step="0.1" @bind="rateExp" /></label>
+                            <label class="field">Drop <input type="number" step="0.1" @bind="rateDrop" /></label>
+                            <label class="field">Rare <input type="number" step="0.1" @bind="rateRare" /></label>
+                            <label class="field">Upgrade <input type="number" step="0.1" @bind="rateUpgrade" /></label>
+                        </div>
+                        <label class="field">หมดอายุ (เว้นว่าง = ไม่หมด) <input type="datetime-local" @bind="rateExpires" /></label>
+                        <label class="field">เหตุผล <input @bind="rateReason" placeholder="จำเป็น" /></label>
+                        <div class="filters">
+                            <button class="primary" @onclick="() => SaveRatesAsync(false)">บันทึก</button>
+                            <button @onclick="() => SaveRatesAsync(true)">ล้างค่า</button>
+                        </div>
+                        @if (effective is not null)
+                        {
+                            <p class="muted small">ตัวคูณที่ใช้จริงตอนนี้: Exp ×@GameDataGate.Rate(effective.Rates.Exp) · Drop ×@GameDataGate.Rate(effective.Rates.Drop) · Rare ×@GameDataGate.Rate(effective.Rates.RareDrop) · Upgrade ×@GameDataGate.Rate(effective.Rates.Upgrade)</p>
+                        }
+                    </section>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+
+        <section class="panel table-scroll">
+            <h2>ประวัติการลงโทษ</h2>
+            <table>
+                <thead><tr><th>ประเภท</th><th>เหตุผล</th><th>เริ่ม</th><th>สิ้นสุด</th><th>โดย</th><th>สถานะ</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (AccountSanction s in account.Sanctions)
+                    {
+                        bool active = s.IsActiveAt(DateTimeOffset.UtcNow);
+                        <tr>
+                            <td>@s.Kind</td><td>@s.Reason</td><td>@AccountList.Local(s.StartsAt)</td>
+                            <td>@(s.EndsAt is { } e ? AccountList.Local(e) : "ถาวร")</td><td>@s.IssuedBy</td>
+                            <td>@(s.RevokedAt is { } r ? $"ยกเลิกโดย {s.RevokedBy} {AccountList.Local(r)}" : active ? "มีผล" : "หมดอายุ")</td>
+                            <td>
+                                @if (active)
+                                {
+                                    <AuthorizeView Policy="@PortalPolicies.AccountsWrite" Context="revoke">
+                                        <input @bind="revokeReason" placeholder="เหตุผลที่ยกเลิก" />
+                                        <button @onclick="() => RevokeAsync(s.Id)">ยกเลิก</button>
+                                    </AuthorizeView>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (account.Sanctions.Count == 0) { <tr><td colspan="7" class="muted small">ไม่มี</td></tr> }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel table-scroll">
+            <h2>Timeline (audit ล่าสุด)</h2>
+            <table>
+                <thead><tr><th>เวลา</th><th>ผู้ทำ</th><th>การกระทำ</th><th>เป้าหมาย</th><th>เหตุผล</th></tr></thead>
+                <tbody>
+                    @foreach (TimelineEntry t in timeline)
+                    {
+                        <tr><td>@AccountList.Local(t.At)</td><td>@t.Operator</td><td>@t.Action</td><td>@t.TargetType @t.TargetId</td><td>@t.Reason</td></tr>
+                    }
+                    @if (timeline.Count == 0) { <tr><td colspan="5" class="muted small">ยังไม่มี</td></tr> }
+                </tbody>
+            </table>
+        </section>
+    }
+</GameDataGate>
+
+@code {
+    [Parameter] public long Id { get; set; }
+
+    private Account? account;
+    private bool loaded;
+    private IReadOnlyList<TimelineEntry> timeline = [];
+    private EffectiveRates? effective;
+    private short slotCount;
+    private string? tags, note, editReason, sanctionReason, newPassword, passwordReason, revokeReason, rateReason;
+    private bool isGm;
+    private SanctionKind sanctionKind = SanctionKind.Suspend;
+    private DateTime? sanctionEnds, rateExpires;
+    private decimal rateExp = 1, rateDrop = 1, rateRare = 1, rateUpgrade = 1;
+
+    private T Svc<T>() => (T)Services.GetService(typeof(T))!;
+
+    protected override Task OnParametersSetAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        account = await Svc<AccountService>().GetAsync(Id);
+        loaded = true;
+        if (account is null) return;
+        slotCount = account.SlotCount;
+        tags = string.Join(", ", account.Tags);
+        note = account.Note;
+        isGm = account.IsGm;
+        timeline = await Svc<AccountsQueries>().TimelineAsync(Id, 50);
+        effective = await Svc<WorldService>().EffectiveRatesAsync(Id);
+        (rateExp, rateDrop, rateRare, rateUpgrade) = (effective.Account.Exp, effective.Account.Drop, effective.Account.RareDrop, effective.Account.Upgrade);
+    }
+
+    private async Task SaveAsync()
+    {
+        if (account is null) return;
+        bool admin = (await Actions.UserAsync()) is var u && (u.IsInRole(PortalRoles.Owner) || u.IsInRole(PortalRoles.Administrator));
+        List<string> tagList = (tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+        if (await Actions.RunAsync("accounts.update", $"account:{Id}", editReason, op => Svc<AccountService>().UpdateAsync(Id, account.Version,
+            new AccountChanges(admin ? isGm : null, slotCount, note ?? "", tagList), op)) is not null)
+        { editReason = null; await LoadAsync(); }
+    }
+
+    private async Task IssueAsync()
+    {
+        DateTimeOffset? ends = sanctionEnds is { } e ? new DateTimeOffset(DateTime.SpecifyKind(e, DateTimeKind.Local)) : null;
+        if (await Actions.RunAsync("accounts.sanction", $"account:{Id}", sanctionReason,
+            op => Svc<SanctionService>().IssueAsync(Id, sanctionKind, ends, op), "ลงโทษแล้ว") is not null)
+        { sanctionReason = null; await LoadAsync(); }
+    }
+
+    private async Task RevokeAsync(long sanctionId)
+    {
+        if (await Actions.RunAsync("accounts.sanction_revoke", $"account:{Id}", revokeReason,
+            async op => { await Svc<SanctionService>().RevokeAsync(Id, sanctionId, op); return true; }, "ยกเลิกแล้ว"))
+        { revokeReason = null; await LoadAsync(); }
+    }
+
+    private async Task ResetPasswordAsync()
+    {
+        string password = newPassword ?? "";
+        newPassword = null;
+        if (await Actions.RunAsync("accounts.password_reset", $"account:{Id}", passwordReason,
+            async op => { await Svc<AccountService>().ResetPasswordAsync(Id, password, op); return true; }, "ตั้งรหัสผ่านใหม่แล้ว"))
+        { passwordReason = null; await LoadAsync(); }
+    }
+
+    private async Task SaveRatesAsync(bool clear)
+    {
+        RateSet? rates = clear ? null : new RateSet(rateExp, rateDrop, rateRare, rateUpgrade);
+        DateTimeOffset? expires = rateExpires is { } e ? new DateTimeOffset(DateTime.SpecifyKind(e, DateTimeKind.Local)) : null;
+        if (await Actions.RunAsync("accounts.rates", $"account:{Id}", rateReason,
+            async op => { await Svc<WorldService>().SetAccountRatesAsync(Id, rates, expires, op); return true; }))
+        { rateReason = null; await LoadAsync(); }
+    }
+}

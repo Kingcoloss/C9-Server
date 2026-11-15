@@ -1,0 +1,144 @@
+@page "/settings"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.SettingsWrite)]
+@inherits LivePage
+@using System.ComponentModel.DataAnnotations
+@using C9.Admin
+@inject ParametersService Parameters
+@inject PortalActions Actions
+@inject GameServices Services
+
+<PageTitle>พารามิเตอร์ · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">PARAMETERS</p>
+        <h1>พารามิเตอร์เซิร์ฟเวอร์</h1>
+        <p class="muted">บันทึกเป็น <code>parameters.local.json</code> และ profile overlay ใน state ของ Portal บริการจะใช้ค่าใหม่เมื่อ Restart</p>
+    </div>
+</header>
+
+@if (Problem is not null)
+{
+    <p class="alert bad">@Problem</p>
+}
+@if (saved)
+{
+    <div class="alert ok row between" role="status">
+        <span>บันทึกแล้ว ต้อง Restart บริการเพื่อใช้ค่าใหม่ (ผู้เล่นที่เชื่อมต่ออยู่จะหลุด)</span>
+        @if (Can(PortalPolicies.ServerOperate))
+        {
+            <button class="primary small" disabled="@restarting" @onclick="RestartAllAsync">Restart ทุกบริการ</button>
+        }
+    </div>
+}
+@if (restartNotes.Count > 0)
+{
+    <ul class="notes">
+        @foreach (string note in restartNotes)
+        {
+            <li>@note</li>
+        }
+    </ul>
+}
+
+@if (form is not null)
+{
+    <EditForm Model="form" OnValidSubmit="SaveAsync" class="panel form-grid">
+        <DataAnnotationsValidator />
+        <label class="check span-2"><InputCheckbox @bind-Value="form.LocalAccountEnabled" /> เปิดบัญชี Local (ล็อกอินด้วยบัญชีทดสอบในเครื่อง)</label>
+        <label class="field"><span>HP เริ่มต้น</span><InputNumber @bind-Value="form.InitialHp" /></label>
+        <label class="field"><span>MP เริ่มต้น</span><InputNumber @bind-Value="form.InitialMp" /></label>
+        <label class="field"><span>จำนวนการเชื่อมต่อสูงสุด (Login 14000)</span><InputNumber @bind-Value="form.LoginConnections" /></label>
+        <label class="field"><span>จำนวนการเชื่อมต่อสูงสุด (Lobby 14001)</span><InputNumber @bind-Value="form.LobbyConnections" /></label>
+        <label class="field"><span>Session timeout (วินาที)</span><InputNumber @bind-Value="form.TimeoutSeconds" /></label>
+        <div class="span-2"><ValidationSummary /></div>
+        <p class="hint span-2">ตัวคูณ Drop/EXP (Server @Rates(current?.ServerRates) · Event @Rates(current?.EventRates) · Account @Rates(current?.AccountRates)) เก็บไว้ตามเดิม ยังไม่มีผลกับ gameplay จนกว่าระบบ World จะรองรับ</p>
+        <div class="actions span-2">
+            <button class="primary" type="submit" disabled="@saving">บันทึก</button>
+            <button class="quiet" type="button" @onclick="LoadAsync">ย้อนค่าที่บันทึกไว้</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private AdminParameters? current;
+    private ParametersForm? form;
+    private bool saving, saved, restarting;
+    private readonly List<string> restartNotes = [];
+
+    protected override Task LoadAsync()
+    {
+        try
+        {
+            current = Parameters.Read();
+            form = ParametersForm.From(current);
+            Problem = null;
+        }
+        catch (Exception error) when (error is IOException or InvalidDataException or System.Text.Json.JsonException or ArgumentException)
+        {
+            Problem = "อ่านพารามิเตอร์ไม่ได้: " + error.Message;
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task SaveAsync()
+    {
+        if (form is null || current is null) return;
+        saving = true;
+        try
+        {
+            current = await Actions.SaveParametersAsync(User, form.Apply(current), UiOrigin, Stopping);
+            form = ParametersForm.From(current);
+            saved = true;
+            Problem = null;
+        }
+        catch (ArgumentException error) { Problem = error.Message; }
+        finally { saving = false; }
+    }
+
+    private async Task RestartAllAsync()
+    {
+        restarting = true;
+        restartNotes.Clear();
+        foreach (GameServiceEndpoint endpoint in Services.Endpoints)
+        {
+            try
+            {
+                ControlResult result = await Actions.ControlAsync(User, endpoint.Id, ControlActions.Restart, UiOrigin, Stopping);
+                restartNotes.Add($"{endpoint.Name}: {result.Message}");
+            }
+            catch (Exception error) when (GameServices.IsUnavailable(error, Stopping))
+            {
+                restartNotes.Add($"{endpoint.Name}: {GameServices.Describe(error)}");
+            }
+        }
+        restarting = false;
+        saved = false;
+    }
+
+    private static string Rates(RateMultipliers? rates) =>
+        rates is null ? "—" : FormattableString.Invariant($"{rates.Drop}/{rates.RareDrop}/{rates.Upgrade}/{rates.Exp}");
+
+    private sealed class ParametersForm
+    {
+        public bool LocalAccountEnabled { get; set; }
+        [Range(1, 1_000_000, ErrorMessage = "HP ต้องอยู่ระหว่าง 1 ถึง 1,000,000")] public int InitialHp { get; set; }
+        [Range(0, 1_000_000, ErrorMessage = "MP ต้องอยู่ระหว่าง 0 ถึง 1,000,000")] public int InitialMp { get; set; }
+        [Range(1, 1000, ErrorMessage = "จำนวนการเชื่อมต่อ Login ต้องอยู่ระหว่าง 1 ถึง 1000")] public int LoginConnections { get; set; }
+        [Range(1, 1000, ErrorMessage = "จำนวนการเชื่อมต่อ Lobby ต้องอยู่ระหว่าง 1 ถึง 1000")] public int LobbyConnections { get; set; }
+        [Range(5, 86400, ErrorMessage = "Timeout ต้องอยู่ระหว่าง 5 ถึง 86400 วินาที")] public double TimeoutSeconds { get; set; }
+
+        public static ParametersForm From(AdminParameters value) => new()
+        {
+            LocalAccountEnabled = value.LocalAccountEnabled, InitialHp = value.InitialHp, InitialMp = value.InitialMp,
+            LoginConnections = value.LoginConnections, LobbyConnections = value.LobbyConnections, TimeoutSeconds = value.TimeoutSeconds
+        };
+
+        public AdminParameters Apply(AdminParameters value) => value with
+        {
+            LocalAccountEnabled = LocalAccountEnabled, InitialHp = InitialHp, InitialMp = InitialMp,
+            LoginConnections = LoginConnections, LobbyConnections = LobbyConnections, TimeoutSeconds = TimeoutSeconds
+        };
+    }
+}

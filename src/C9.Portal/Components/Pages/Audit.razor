@@ -1,0 +1,60 @@
+@page "/audit"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AuditRead)]
+@inherits LivePage
+@inject IAuditLog AuditLog
+
+<PageTitle>Audit log · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">AUDIT</p>
+        <h1>Audit log</h1>
+        <p class="muted">ทุกการกระทำที่เปลี่ยนสถานะ (sign-in, start/stop, ตัด session, export trace, แก้พารามิเตอร์ และโมดูล Account/World) บันทึกแบบ append-only</p>
+    </div>
+    <form class="actions" @onsubmit="LoadAsync">
+        <input @bind="action" placeholder="กรอง action เช่น service." aria-label="action" />
+        <button type="submit">ค้นหา</button>
+    </form>
+</header>
+
+@if (entries.Count == 0)
+{
+    <p class="panel empty muted">ยังไม่มีรายการ</p>
+}
+else
+{
+    <div class="panel table-wrap">
+        <table>
+            <thead><tr><th>เวลา</th><th>ผู้ทำ</th><th>Action</th><th>เป้าหมาย</th><th>ผล</th><th>รายละเอียด</th><th>ที่มา</th></tr></thead>
+            <tbody>
+                @foreach (AuditEntry entry in entries)
+                {
+                    <tr class="@(entry.Success ? "" : "bad-row")">
+                        <td class="mono small">@Clock.Full(entry.TimeUtc)</td>
+                        <td>@entry.Actor</td>
+                        <td><code>@entry.Action</code></td>
+                        <td class="mono small">@entry.Target</td>
+                        <td>@(entry.Success ? "สำเร็จ" : "ไม่สำเร็จ")</td>
+                        <td class="small">
+                            @entry.Reason @entry.Message
+                            @if (entry.Before is not null || entry.After is not null)
+                            {
+                                <details><summary>ก่อน/หลัง</summary><pre class="code">@entry.Before?.ToString()</pre><pre class="code">@entry.After?.ToString()</pre></details>
+                            }
+                        </td>
+                        <td class="mono small">@entry.RemoteAddress</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private IReadOnlyList<AuditEntry> entries = [];
+    private string action = "";
+
+    protected override async Task LoadAsync() =>
+        entries = await AuditLog.QueryAsync(new AuditQuery(Action: action.Length == 0 ? null : action, Limit: 300), Stopping);
+}

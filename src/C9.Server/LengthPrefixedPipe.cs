@@ -27,9 +27,15 @@ public static class LengthPrefixedPipe
                 }
                 if (result.IsCompleted)
                 {
+                    if (buffer.IsEmpty)
+                    {
+                        reader.AdvanceTo(buffer.End);
+                        return null;
+                    }
+                    ProtocolException incomplete = new(ProtocolError.IncompleteFrame, "Incomplete final frame");
+                    incomplete.Data[PreviewKey] = Preview(buffer);
                     reader.AdvanceTo(buffer.End);
-                    if (buffer.IsEmpty) return null;
-                    throw new ProtocolException(ProtocolError.IncompleteFrame, "Incomplete final frame");
+                    throw incomplete;
                 }
                 reader.AdvanceTo(buffer.Start, buffer.End);
             }
@@ -39,6 +45,16 @@ public static class LengthPrefixedPipe
             throw new TimeoutException("Frame read deadline exceeded");
         }
     }
+
+    /// <summary>
+    /// Key in <see cref="Exception.Data"/> holding up to <see cref="PreviewBytes"/> unconsumed bytes
+    /// when framing fails, so packet trace can keep the bytes that could not be framed.
+    /// </summary>
+    public const string PreviewKey = "c9.preview";
+    public const int PreviewBytes = 256;
+
+    private static byte[] Preview(ReadOnlySequence<byte> buffer) =>
+        buffer.Slice(0, Math.Min(buffer.Length, PreviewBytes)).ToArray();
 
     private static bool TryReadFrame(ReadOnlySequence<byte> buffer, int maximum,
         out byte[]? frame, out SequencePosition consumed)
@@ -50,7 +66,11 @@ public static class LengthPrefixedPipe
         buffer.Slice(0, 2).CopyTo(prefix);
         int size = BinaryPrimitives.ReadUInt16LittleEndian(prefix);
         if (size < Packet.HeaderSize || size > maximum)
-            throw new ProtocolException(ProtocolError.InvalidLength, "Invalid frame length");
+        {
+            ProtocolException invalid = new(ProtocolError.InvalidLength, "Invalid frame length");
+            invalid.Data[PreviewKey] = Preview(buffer);
+            throw invalid;
+        }
         if (buffer.Length < size) return false;
         frame = buffer.Slice(0, size).ToArray();
         consumed = buffer.GetPosition(size);

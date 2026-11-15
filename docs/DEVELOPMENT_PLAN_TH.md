@@ -1,5 +1,7 @@
 # แผนพัฒนา C9 Server และ Admin Portal
 
+> **อัปเดต 15 พ.ย. 2026:** เข้าเกมด้วย Client รุ่นใหม่ได้แล้ว และมี roadmap เพิ่ม (Launcher MAUI, Server เป็น Web + Docker Compose, Admin Portal/Grafana/Packet trace, Account/World Management) ดู [CURRENT_STATE_20261115_TH.md](CURRENT_STATE_20261115_TH.md)
+
 อัปเดต 7 พฤศจิกายน 2026 ตามขอบเขตที่ผู้ใช้เพิ่มเรื่องทุกแผนที่และ Admin Portal
 เอกสารนี้เป็นแผนพัฒนาปัจจุบัน ส่วนประวัติ RE และหลักฐานแต่ละเฟสอยู่ใน
 [แผน RE](../re/C9_RE_PLAN_TH.md) และ [Protocol status](PROTOCOL_STATUS.md)

@@ -1,0 +1,172 @@
+@page "/services"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.ServerRead)]
+@inherits LivePage
+@inject GameServices Agents
+@inject PortalActions Actions
+
+<PageTitle>บริการเกม · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">GAME SERVICES</p>
+        <h1>บริการเกม</h1>
+        <p class="muted">เริ่ม หยุด หรือรีสตาร์ต listener ของแต่ละบริการ (process ยังทำงานอยู่ และ reload config ตอน start/restart)</p>
+    </div>
+</header>
+
+@if (Problem is not null)
+{
+    <p class="alert bad">@Problem</p>
+}
+@if (notice is not null)
+{
+    <p class="alert @(noticeOk ? "ok" : "bad")" role="status">@notice</p>
+}
+
+@foreach (ServiceSnapshot snapshot in snapshots)
+{
+    string id = snapshot.Endpoint.Id;
+    AgentStatus? status = snapshot.Status;
+    <article class="panel service wide-card">
+        <div class="row between">
+            <div>
+                <h2>@snapshot.Endpoint.Name <StateBadge Snapshot="snapshot" /></h2>
+                <p class="muted small">
+                    @id · agent @snapshot.Endpoint.AgentUrl · เกมเชื่อมต่อที่ TCP @snapshot.Endpoint.PublicPort
+                    @if (status is not null)
+                    {
+                        <span> · bind @status.Host:@status.Port · profile @status.Profile</span>
+                    }
+                </p>
+            </div>
+            @if (Can(PortalPolicies.ServerOperate) && status is not null)
+            {
+                <div class="actions">
+                    <button disabled="@(busy is not null || status.Listener == ListenerState.Running)" @onclick="() => ControlAsync(id, ControlActions.Start)">Start</button>
+                    <button disabled="@(busy is not null)" @onclick="() => ControlAsync(id, ControlActions.Restart)">Restart</button>
+                    @if (confirmStop == id)
+                    {
+                        <button class="danger" disabled="@(busy is not null)" @onclick="() => ControlAsync(id, ControlActions.Stop)">ยืนยันหยุด (ตัดผู้เล่น @status.ActiveSessions คน)</button>
+                        <button class="quiet" @onclick="() => confirmStop = null">ยกเลิก</button>
+                    }
+                    else
+                    {
+                        <button disabled="@(busy is not null || status.Listener != ListenerState.Running)" @onclick="() => confirmStop = id">Stop</button>
+                    }
+                </div>
+            }
+        </div>
+        @if (status is null)
+        {
+            <p class="alert bad small">@snapshot.Error</p>
+            <p class="hint">ถ้ารันด้วย Docker ให้ดู <code>docker compose ps</code> และ <code>docker compose logs c9-@id</code></p>
+        }
+        else
+        {
+            <dl class="facts">
+                <div><dt>Listener</dt><dd>@status.Listener@(status.ListenerStartedUtc is { } started ? " ตั้งแต่ " + Clock.Full(started) : "")</dd></div>
+                <div><dt>Process เริ่ม</dt><dd>@Clock.Full(status.ProcessStartedUtc)</dd></div>
+                <div><dt>Boot id</dt><dd class="mono">@status.BootId</dd></div>
+                <div><dt>Sessions</dt><dd>@status.ActiveSessions / @status.MaxConnections (รวม @PortalClock.Number(status.TotalSessions))</dd></div>
+                <div><dt>Config</dt><dd class="mono small">@status.ConfigPath@(status.ConfigOverlayActive ? " (overlay จากหน้า พารามิเตอร์)" : "")</dd></div>
+                <div><dt>Trace</dt><dd>@status.Trace.PayloadPolicy · ring @PortalClock.Number(status.Trace.RingCapacity) · @(status.Trace.Persisted ? "บันทึกลงดิสก์" : "เฉพาะหน่วยความจำ")</dd></div>
+            </dl>
+            @if (status.LastError is { } error)
+            {
+                <p class="alert bad small">@error</p>
+            }
+            <div class="actions">
+                <button class="quiet small" @onclick="() => ToggleAsync(id, configs, LoadConfigAsync)">@(configs.ContainsKey(id) ? "ซ่อน" : "ดู") config ที่ใช้อยู่</button>
+                <button class="quiet small" @onclick="() => ToggleAsync(id, eventLists, LoadEventsAsync)">@(eventLists.ContainsKey(id) ? "ซ่อน" : "ดู") เหตุการณ์</button>
+                <a class="button quiet small" href="@($"/trace?service={Uri.EscapeDataString(id)}")">Packet trace</a>
+            </div>
+            @if (configs.TryGetValue(id, out string? config))
+            {
+                <pre class="code">@config</pre>
+            }
+            @if (eventLists.TryGetValue(id, out ServiceEvent[]? list))
+            {
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>เวลา</th><th>เหตุการณ์</th><th>Session</th><th>State</th><th>Packet</th><th>เหตุผล</th></tr></thead>
+                        <tbody>
+                            @foreach (ServiceEvent item in list)
+                            {
+                                <tr>
+                                    <td class="mono">@Clock.Precise(item.RecordedAtUtc)</td>
+                                    <td><code>@item.Event</code></td>
+                                    <td class="mono small">@item.SessionKey</td>
+                                    <td>@item.State</td>
+                                    <td>@(item.Type is { } t ? KnownPackets.NameOf(t) : "")</td>
+                                    <td class="small">@item.Reason</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </article>
+}
+
+@code {
+    private IReadOnlyList<ServiceSnapshot> snapshots = [];
+    private readonly Dictionary<string, string> configs = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, ServiceEvent[]> eventLists = new(StringComparer.Ordinal);
+    private string? busy, confirmStop, notice;
+    private bool noticeOk;
+
+    protected override async Task LoadAsync() => snapshots = await Agents.SnapshotAsync(Stopping);
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) Every(TimeSpan.FromSeconds(3), async () =>
+        {
+            snapshots = await Agents.SnapshotAsync(Stopping);
+            foreach (string id in eventLists.Keys.ToArray()) await LoadEventsAsync(id);
+        });
+    }
+
+    private async Task ControlAsync(string id, string action)
+    {
+        busy = id;
+        confirmStop = null;
+        try
+        {
+            ControlResult result = await Actions.ControlAsync(User, id, action, UiOrigin, Stopping);
+            notice = $"{id}: {result.Message}";
+            noticeOk = result.Success;
+        }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping))
+        {
+            notice = $"{id}: {GameServices.Describe(error)}";
+            noticeOk = false;
+        }
+        finally { busy = null; }
+        snapshots = await Agents.SnapshotAsync(Stopping);
+    }
+
+    private static async Task ToggleAsync<T>(string id, Dictionary<string, T> open, Func<string, Task> load)
+    {
+        if (!open.Remove(id)) await load(id);
+    }
+
+    private async Task LoadConfigAsync(string id)
+    {
+        try { configs[id] = PrettyJson(await Agents.Client(id).ConfigAsync(Stopping)); }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping)) { configs[id] = GameServices.Describe(error); }
+    }
+
+    private async Task LoadEventsAsync(string id)
+    {
+        try { eventLists[id] = (await Agents.Client(id).EventsAsync(100, Stopping)).OrderByDescending(e => e.RecordedAtUtc).ToArray(); }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping)) { Problem = GameServices.Describe(error); }
+    }
+
+    private static string PrettyJson(string json)
+    {
+        try { return System.Text.Json.JsonSerializer.Serialize(System.Text.Json.JsonDocument.Parse(json).RootElement, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }); }
+        catch (System.Text.Json.JsonException) { return json; }
+    }
+}

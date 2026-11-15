@@ -24,8 +24,8 @@ public sealed record AdminParameters
 
 public sealed class AdminSettings(string workspace, string stateDirectory)
 {
-    internal const string LoginConfig = "lab-official-login-fixture.json";
-    internal const string LobbyConfig = "lab-official-character-lobby.json";
+    public const string LoginConfig = "lab-official-login-fixture.json";
+    public const string LobbyConfig = "lab-official-character-lobby.json";
     private readonly string path = Path.Combine(stateDirectory, "parameters.local.json");
 
     public AdminParameters Read()
@@ -64,7 +64,8 @@ public sealed class AdminSettings(string workspace, string stateDirectory)
         }
     }
 
-    internal string PrepareConfig(string name)
+    /// <summary>Writes {state}/profiles/{name} from the base profile plus saved parameters and returns its path.</summary>
+    public string PrepareConfig(string name)
     {
         if (!File.Exists(path)) return BaseConfig(name);
         JsonObject config = BuildConfig(name, Read());

@@ -1,0 +1,11 @@
+@inject ModuleCatalog Modules
+<Router AppAssembly="typeof(App).Assembly" AdditionalAssemblies="Modules.Assemblies" NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <RedirectToSignIn />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>

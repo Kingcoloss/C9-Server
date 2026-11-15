@@ -1,0 +1,264 @@
+using System.Text;
+using C9.GameData.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace C9.GameData;
+
+/// <summary>
+/// Shared model for schemas "game" (player and world data) and "ops" (sessions, audit, commands).
+/// Every query goes through LINQ or FromSql($"...") so values are always sent as parameters (ADR 0002).
+/// </summary>
+public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbContext(options)
+{
+    public const string GameSchema = "game";
+    public const string OpsSchema = "ops";
+
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<AccountSanction> AccountSanctions => Set<AccountSanction>();
+    public DbSet<Character> Characters => Set<Character>();
+    public DbSet<CharacterItem> CharacterItems => Set<CharacterItem>();
+    public DbSet<CatalogItem> ItemCatalog => Set<CatalogItem>();
+    public DbSet<LedgerEntry> Ledger => Set<LedgerEntry>();
+    public DbSet<RatePolicy> RatePolicies => Set<RatePolicy>();
+    public DbSet<AccountRateOverride> AccountRateOverrides => Set<AccountRateOverride>();
+    public DbSet<WorldEvent> WorldEvents => Set<WorldEvent>();
+    public DbSet<Announcement> Announcements => Set<Announcement>();
+    public DbSet<WorldSetting> WorldSettings => Set<WorldSetting>();
+    public DbSet<SessionRecord> Sessions => Set<SessionRecord>();
+    public DbSet<AuditEntry> AuditLog => Set<AuditEntry>();
+    public DbSet<AdminCommand> AdminCommands => Set<AdminCommand>();
+    public DbSet<CharacterSnapshot> CharacterSnapshots => Set<CharacterSnapshot>();
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+    {
+        builder.Properties<Enum>().HaveConversion<string>().HaveMaxLength(32);
+        builder.Properties<decimal>().HavePrecision(12, 4);
+    }
+
+    protected override void OnModelCreating(ModelBuilder model)
+    {
+        model.HasPostgresExtension("citext");
+
+        model.Entity<Account>(e =>
+        {
+            e.ToTable("accounts", GameSchema);
+            e.Property(a => a.LoginName).HasColumnType("citext").HasMaxLength(32);
+            e.HasIndex(a => a.LoginName).IsUnique();
+            e.Property(a => a.PasswordHash).HasMaxLength(256);
+            e.Property(a => a.Note).HasMaxLength(2000);
+            e.Property(a => a.SlotCount).HasDefaultValue((short)17);
+            e.Property(a => a.CreatedAt).HasDefaultValueSql("now()");
+            e.ToTable(t => t.HasCheckConstraint("ck_accounts_slot_count", "slot_count BETWEEN 1 AND 17"));
+            Xmin(e);
+        });
+
+        model.Entity<AccountSanction>(e =>
+        {
+            e.ToTable("account_sanctions", GameSchema);
+            e.HasOne<Account>().WithMany(a => a.Sanctions).HasForeignKey(s => s.AccountId).OnDelete(DeleteBehavior.Restrict);
+            e.Property(s => s.Reason).HasMaxLength(500);
+            e.Property(s => s.IssuedBy).HasMaxLength(64);
+            e.Property(s => s.RevokedBy).HasMaxLength(64);
+            e.HasIndex(s => new { s.AccountId, s.StartsAt });
+        });
+
+        model.Entity<Character>(e =>
+        {
+            e.ToTable("characters", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_characters_appearance", $"length(appearance) = {Character.AppearanceBytes}");
+                t.HasCheckConstraint("ck_characters_slot", "slot BETWEEN 0 AND 16");
+                t.HasCheckConstraint("ck_characters_gold", "gold >= 0");
+                t.HasCheckConstraint("ck_characters_level", "level >= 1");
+            });
+            e.HasOne(c => c.Account).WithMany(a => a.Characters).HasForeignKey(c => c.AccountId).OnDelete(DeleteBehavior.Restrict);
+            e.Property(c => c.Name).HasColumnType("citext").HasMaxLength(Character.MaxNameLength);
+            e.Property(c => c.Level).HasDefaultValue((short)1);
+            e.Property(c => c.CreatedAt).HasDefaultValueSql("now()");
+            // Slots and names are unique among characters that are not soft-deleted.
+            e.HasIndex(c => new { c.AccountId, c.Slot }).IsUnique().HasFilter("deleted_at IS NULL");
+            e.HasIndex(c => c.Name).IsUnique().HasFilter("deleted_at IS NULL");
+            Xmin(e);
+        });
+
+        model.Entity<CharacterItem>(e =>
+        {
+            e.ToTable("character_items", GameSchema, t => t.HasCheckConstraint("ck_character_items_quantity", "quantity > 0"));
+            e.HasKey(i => i.Serial);
+            e.HasOne<Character>().WithMany(c => c.Items).HasForeignKey(i => i.CharacterId).OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(i => new { i.CharacterId, i.Location, i.Slot }).IsUnique();
+            e.HasIndex(i => i.ItemId);
+            e.Property(i => i.Options).HasColumnType("jsonb");
+            Xmin(e);
+        });
+
+        model.Entity<CatalogItem>(e =>
+        {
+            e.ToTable("item_catalog", GameSchema);
+            e.HasKey(i => i.ItemId);
+            e.Property(i => i.ItemId).ValueGeneratedNever();
+            e.Property(i => i.Raw).HasColumnType("jsonb");
+        });
+
+        model.Entity<LedgerEntry>(e =>
+        {
+            e.ToTable("ledger", GameSchema);
+            e.Property(l => l.At).HasDefaultValueSql("now()");
+            e.Property(l => l.Reason).HasMaxLength(64);
+            e.Property(l => l.Ref).HasMaxLength(200);
+            e.HasIndex(l => l.At);
+            e.HasIndex(l => new { l.CharacterId, l.At });
+            e.HasIndex(l => new { l.Reason, l.At });
+            e.HasIndex(l => l.RequestId).IsUnique();
+        });
+
+        model.Entity<RatePolicy>(e =>
+        {
+            e.ToTable("rate_policy", GameSchema);
+            e.HasKey(r => r.Scope);
+            e.Property(r => r.Scope).HasMaxLength(32);
+            e.ComplexProperty(r => r.Rates, Rates);
+            Xmin(e);
+        });
+
+        model.Entity<AccountRateOverride>(e =>
+        {
+            e.ToTable("account_rate_overrides", GameSchema);
+            e.HasKey(r => r.AccountId);
+            e.HasOne<Account>().WithOne().HasForeignKey<AccountRateOverride>(r => r.AccountId).OnDelete(DeleteBehavior.Restrict);
+            e.ComplexProperty(r => r.Rates, Rates);
+            e.Property(r => r.Note).HasMaxLength(500);
+            Xmin(e);
+        });
+
+        model.Entity<WorldEvent>(e =>
+        {
+            e.ToTable("world_events", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_world_events_window", "ends_at > starts_at");
+                t.HasCheckConstraint("ck_world_events_repeat", "repeat_every_days IS NULL OR repeat_every_days > 0");
+            });
+            e.Property(w => w.Name).HasMaxLength(100);
+            e.Property(w => w.Description).HasMaxLength(2000);
+            e.Property(w => w.CreatedBy).HasMaxLength(64);
+            e.Property(w => w.Extra).HasColumnType("jsonb");
+            e.Property(w => w.CreatedAt).HasDefaultValueSql("now()");
+            e.ComplexProperty(w => w.Rates, Rates);
+            e.HasIndex(w => new { w.StartsAt, w.EndsAt });
+            Xmin(e);
+        });
+
+        model.Entity<Announcement>(e =>
+        {
+            e.ToTable("announcements", GameSchema);
+            e.Property(a => a.Message).HasMaxLength(500);
+            e.Property(a => a.CreatedBy).HasMaxLength(64);
+            e.Property(a => a.CreatedAt).HasDefaultValueSql("now()");
+        });
+
+        model.Entity<WorldSetting>(e =>
+        {
+            e.ToTable("world_settings", GameSchema);
+            e.HasKey(s => s.Key);
+            e.Property(s => s.Key).HasMaxLength(64);
+            e.Property(s => s.Value).HasColumnType("jsonb");
+            Xmin(e);
+        });
+
+        model.Entity<SessionRecord>(e =>
+        {
+            e.ToTable("sessions", OpsSchema);
+            e.HasKey(s => s.Key);
+            e.Property(s => s.Key).HasMaxLength(96);
+            e.Property(s => s.Service).HasMaxLength(32);
+            e.Property(s => s.ClientHash).HasMaxLength(64);
+            e.Property(s => s.EndReason).HasMaxLength(200);
+            e.Property(s => s.LastState).HasMaxLength(32);
+            e.HasIndex(s => new { s.AccountId, s.StartedAt });
+            e.HasIndex(s => s.EndedAt);
+        });
+
+        model.Entity<AuditEntry>(e =>
+        {
+            e.ToTable("audit_log", OpsSchema);
+            e.Property(a => a.At).HasDefaultValueSql("now()");
+            e.Property(a => a.Operator).HasMaxLength(64);
+            e.Property(a => a.Action).HasMaxLength(64);
+            e.Property(a => a.TargetType).HasMaxLength(32);
+            e.Property(a => a.TargetId).HasMaxLength(64);
+            e.Property(a => a.Before).HasColumnType("jsonb");
+            e.Property(a => a.After).HasColumnType("jsonb");
+            e.Property(a => a.Reason).HasMaxLength(500);
+            e.HasIndex(a => a.RequestId).IsUnique();
+            e.HasIndex(a => new { a.TargetType, a.TargetId, a.At });
+            e.HasIndex(a => new { a.Operator, a.At });
+        });
+
+        model.Entity<AdminCommand>(e =>
+        {
+            e.ToTable("admin_commands", OpsSchema);
+            e.HasKey(c => c.RequestId);
+            e.Property(c => c.Operator).HasMaxLength(64);
+            e.Property(c => c.Kind).HasMaxLength(64);
+            e.Property(c => c.Payload).HasColumnType("jsonb");
+            e.Property(c => c.Result).HasColumnType("jsonb");
+            e.Property(c => c.CreatedAt).HasDefaultValueSql("now()");
+            e.HasIndex(c => new { c.Status, c.CreatedAt });
+        });
+
+        model.Entity<CharacterSnapshot>(e =>
+        {
+            e.ToTable("character_snapshots", OpsSchema);
+            e.Property(s => s.Cause).HasMaxLength(64);
+            e.Property(s => s.Data).HasColumnType("jsonb");
+            e.Property(s => s.TakenAt).HasDefaultValueSql("now()");
+            e.HasIndex(s => new { s.CharacterId, s.TakenAt });
+        });
+
+        // Player data is never hard-deleted through a parent row (soft delete only).
+        ApplySnakeCase(model);
+    }
+
+    private static void Xmin<T>(EntityTypeBuilder<T> entity) where T : class =>
+        entity.Property<uint>("Version").IsRowVersion();
+
+    private static void Rates(ComplexPropertyBuilder<RateSet> rates)
+    {
+        rates.Property(r => r.Exp).HasColumnName("rate_exp");
+        rates.Property(r => r.Drop).HasColumnName("rate_drop");
+        rates.Property(r => r.RareDrop).HasColumnName("rate_rare_drop");
+        rates.Property(r => r.Upgrade).HasColumnName("rate_upgrade");
+    }
+
+    private static void ApplySnakeCase(ModelBuilder model)
+    {
+        foreach (var entity in model.Model.GetEntityTypes())
+        {
+            foreach (var property in entity.GetProperties())
+                if (property.Name != "Version") property.SetColumnName(Snake(property.Name));
+            foreach (var key in entity.GetKeys()) key.SetName(Snake(key.GetName()!));
+            foreach (var foreignKey in entity.GetForeignKeys())
+                foreignKey.SetConstraintName(Snake(foreignKey.GetConstraintName()!));
+            foreach (var index in entity.GetIndexes())
+                index.SetDatabaseName(Snake(index.GetDatabaseName()!));
+        }
+    }
+
+    internal static string Snake(string name)
+    {
+        StringBuilder result = new(name.Length + 8);
+        for (int i = 0; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (char.IsUpper(c))
+            {
+                if (i > 0 && name[i - 1] != '_' && (char.IsLower(name[i - 1]) ||
+                    (i + 1 < name.Length && char.IsLower(name[i + 1])))) result.Append('_');
+                result.Append(char.ToLowerInvariant(c));
+            }
+            else result.Append(c);
+        }
+        return result.ToString();
+    }
+}

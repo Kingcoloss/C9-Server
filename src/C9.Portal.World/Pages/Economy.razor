@@ -1,0 +1,114 @@
+@page "/economy"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.WorldRead)]
+@using C9.Portal.World.Api
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>เศรษฐกิจ</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+    <div>
+        <p class="eyebrow">GAME WORLD</p>
+        <h1>เศรษฐกิจในเกม</h1>
+        <p class="muted">ทุกตัวเลขคำนวณจากตัวละคร ไอเท็ม และ ledger ที่บันทึกแบบเพิ่มอย่างเดียว</p>
+    </div>
+</header>
+    <section class="panel">
+        <div class="filters">
+            <label class="field">ช่วงเวลา
+                <select @bind="days">
+                    <option value="1">24 ชั่วโมง</option>
+                    <option value="7">7 วัน</option>
+                    <option value="30">30 วัน</option>
+                    <option value="90">90 วัน</option>
+                </select>
+            </label>
+            <button class="primary" @onclick="LoadAsync">แสดง</button>
+        </div>
+        @if (error is not null) { <p class="alert bad small">@error</p> }
+    </section>
+
+    @if (summary is not null)
+    {
+        @if (!summary.HasLedgerData)
+        {
+            <div class="alert warn"><strong>ยังไม่มีข้อมูลเงิน/ไอเท็มเข้าออก</strong>
+                <p class="muted small">ตัวเลขด้านล่างจะเริ่มมีเมื่อ game server บันทึก drop, ร้านค้า NPC, เควสต์ และการเทรดลง ledger (design เฟส 3)</p></div>
+        }
+
+        <section class="kpis" aria-label="ภาพรวม">
+            <div class="metric"><span>Gold ในระบบทั้งหมด</span><strong>@summary.GoldInCirculation.ToString("N0")</strong></div>
+            <div class="metric"><span>Gold เข้าระบบ (faucet)</span><strong class="ok-text">@summary.GoldFaucet.ToString("N0")</strong></div>
+            <div class="metric"><span>Gold ออกจากระบบ (sink)</span><strong class="warn-text">@summary.GoldSink.ToString("N0")</strong></div>
+            <div class="metric"><span>สุทธิ</span><strong>@((summary.GoldFaucet - summary.GoldSink).ToString("N0"))</strong></div>
+            <div class="metric"><span>ตัวละคร / บัญชี</span><strong>@summary.Characters / @summary.Accounts</strong></div>
+            <div class="metric"><span>ไอเท็มในระบบ (ชิ้น)</span><strong>@summary.ItemInstances.ToString("N0")</strong></div>
+        </section>
+
+        <section class="panel table-scroll">
+            <h2>เข้าออกตามแหล่งที่มา</h2>
+            <table>
+                <thead><tr><th>แหล่ง</th><th>ประเภท</th><th>เข้า</th><th>ออก</th><th>สุทธิ</th><th>รายการ</th></tr></thead>
+                <tbody>
+                    @foreach (FlowRow f in summary.Flows)
+                    {
+                        <tr><td>@f.Reason</td><td>@f.Asset</td><td>@f.In.ToString("N0")</td><td>@f.Out.ToString("N0")</td><td>@f.Net.ToString("N0")</td><td>@f.Entries</td></tr>
+                    }
+                    @if (summary.Flows.Count == 0) { <tr><td colspan="6" class="muted small">ไม่มีข้อมูล</td></tr> }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel table-scroll">
+            <h2>รายวัน</h2>
+            <table>
+                <thead><tr><th>วันที่ (UTC)</th><th>Gold เข้า</th><th>Gold ออก</th><th>ไอเท็มเกิด</th><th>ไอเท็มหาย</th></tr></thead>
+                <tbody>
+                    @foreach (DailyFlow d in summary.Daily)
+                    {
+                        <tr><td>@d.Day.ToString("yyyy-MM-dd")</td><td>@d.GoldIn.ToString("N0")</td><td>@d.GoldOut.ToString("N0")</td><td>@d.ItemsCreated</td><td>@d.ItemsDestroyed</td></tr>
+                    }
+                    @if (summary.Daily.Count == 0) { <tr><td colspan="5" class="muted small">ไม่มีข้อมูล</td></tr> }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel table-scroll">
+            <h2>ตัวละครที่มี Gold มากที่สุด</h2>
+            <table>
+                <thead><tr><th>#</th><th>ตัวละคร</th><th>Level</th><th>Gold</th></tr></thead>
+                <tbody>
+                    @{ int rank = 0; }
+                    @foreach (Holder h in summary.TopHolders)
+                    {
+                        rank++;
+                        <tr><td>@rank</td><td><a href="@($"/characters/{h.CharacterId}")">@h.Name</a></td><td>@h.Level</td><td>@h.Gold.ToString("N0")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        <p class="muted small">กราฟแนวโน้มดูได้ใน Grafana (PostgreSQL datasource อ่าน <code>game.ledger</code>)</p>
+    }
+</GameDataGate>
+
+@code {
+    private int days = 30;
+    private EconomySummary? summary;
+    private string? error;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        try
+        {
+            summary = await ((EconomyQueries)Services.GetService(typeof(EconomyQueries))!).SummaryAsync(now.AddDays(-days), now);
+            error = null;
+        }
+        catch (ArgumentOutOfRangeException e) { error = e.Message; }
+    }
+}

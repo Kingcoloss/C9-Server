@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Contract between the Admin Portal host and its feature modules (Accounts, World, ...). -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../C9.Contracts/C9.Contracts.csproj" />
+  </ItemGroup>
+</Project>

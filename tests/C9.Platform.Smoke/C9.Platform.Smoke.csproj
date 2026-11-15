@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- End-to-end smoke test against a RUNNING platform (docker compose up). See docs/SERVER_PLATFORM_ARCHITECTURE_TH.md §9. -->
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/C9.Protocol/C9.Protocol.csproj" />
+    <ProjectReference Include="../../src/C9.Contracts/C9.Contracts.csproj" />
+    <ProjectReference Include="../../src/C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

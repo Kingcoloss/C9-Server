@@ -1,0 +1,180 @@
+@page "/world"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.WorldRead)]
+@using C9.Contracts
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>ภาพรวมโลกเกม</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+    <div>
+        <p class="eyebrow">GAME WORLD</p>
+        <h1>ภาพรวมโลกเกม</h1>
+        <p class="muted">ตัวคูณที่ใช้จริง ผู้เล่นต่อแผนที่ โหมดปิดปรับปรุง และประกาศ</p>
+    </div>
+</header>
+
+    <div class="cards">
+        <section class="panel">
+            <h2>ตัวคูณ (Rates)</h2>
+            @if (effective is not null)
+            {
+                <table>
+                    <thead><tr><th></th><th>Exp</th><th>Drop</th><th>Rare</th><th>Upgrade</th></tr></thead>
+                    <tbody>
+                        <tr><th>Server</th><td>@GameDataGate.Rate(effective.Server.Exp)</td><td>@GameDataGate.Rate(effective.Server.Drop)</td><td>@GameDataGate.Rate(effective.Server.RareDrop)</td><td>@GameDataGate.Rate(effective.Server.Upgrade)</td></tr>
+                        @foreach (var e in effective.Events)
+                        {
+                            <tr><th>Event: @e.Name</th><td>×@GameDataGate.Rate(e.Rates.Exp)</td><td>×@GameDataGate.Rate(e.Rates.Drop)</td><td>×@GameDataGate.Rate(e.Rates.RareDrop)</td><td>×@GameDataGate.Rate(e.Rates.Upgrade)</td></tr>
+                        }
+                        <tr><th>ใช้จริงตอนนี้ (cap @GameDataGate.Rate(effective.Cap))</th><td><strong>@GameDataGate.Rate(effective.Rates.Exp)</strong></td><td><strong>@GameDataGate.Rate(effective.Rates.Drop)</strong></td>
+                            <td><strong>@GameDataGate.Rate(effective.Rates.RareDrop)</strong></td><td><strong>@GameDataGate.Rate(effective.Rates.Upgrade)</strong></td></tr>
+                    </tbody>
+                </table>
+                <p class="muted small">สูตร: min(server × event ทุกตัวที่กำลังมีผล × บัญชี, cap) · ตัวคูณเฉพาะบัญชีตั้งได้ที่หน้าบัญชี</p>
+            }
+            <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+                <div class="filters">
+                    <label class="field">Exp <input type="number" step="0.1" min="0" max="100" @bind="exp" /></label>
+                    <label class="field">Drop <input type="number" step="0.1" min="0" max="100" @bind="drop" /></label>
+                    <label class="field">Rare <input type="number" step="0.1" min="0" max="100" @bind="rare" /></label>
+                    <label class="field">Upgrade <input type="number" step="0.1" min="0" max="100" @bind="upgrade" /></label>
+                    <label class="field">Cap <input type="number" step="1" min="1" max="100" @bind="cap" /></label>
+                </div>
+                <div class="filters">
+                    <label class="field">เหตุผล <input @bind="ratesReason" placeholder="จำเป็น" /></label>
+                    <button class="primary" @onclick="SaveRatesAsync">บันทึก Server rates</button>
+                </div>
+            </AuthorizeView>
+            <p class="muted small">หมายเหตุ: game server ยังไม่มีระบบ drop/exp จึงยังไม่นำค่าไปใช้ในเกม</p>
+        </section>
+
+        <section class="panel">
+            <h2>Maintenance</h2>
+            @if (maintenance is not null)
+            {
+                <p>สถานะ: <span class="badge @(maintenance.Enabled ? "bad" : "ok")">@(maintenance.Enabled ? "ปิดปรับปรุง" : "เปิดให้เล่น")</span>
+                    @if (maintenance.Until is { } until) { <span class="muted small"> ถึง @until.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</span> }</p>
+            }
+            <AuthorizeView Policy="@PortalPolicies.ServerOperate">
+                <label class="check"><input type="checkbox" @bind="mEnabled" /> เปิดโหมดปิดปรับปรุง</label>
+                <label class="field">ข้อความถึงผู้เล่น <input @bind="mMessage" maxlength="500" /></label>
+                <label class="field">สิ้นสุดอัตโนมัติ (เว้นว่าง = จนกว่าจะปิดเอง) <input type="datetime-local" @bind="mUntil" /></label>
+                <label class="field">บัญชีที่ยังเข้าได้ (คั่นด้วย ,) <input @bind="mAllowed" placeholder="เช่น tester1, gm1" /></label>
+                <label class="field">เหตุผล <input @bind="mReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SaveMaintenanceAsync">บันทึก</button>
+            </AuthorizeView>
+            <p class="muted small">การบังคับใช้ตอน login รอระบบหลายบัญชีใน server</p>
+        </section>
+
+        <section class="panel">
+            <h2>ประกาศ</h2>
+            <ul>
+                @foreach (Announcement a in launcherNotices) { <li>@a.Message <span class="muted small">(Launcher@(a.EndsAt is { } e ? ", ถึง " + e.ToLocalTime().ToString("MM-dd HH:mm") : ""))</span></li> }
+                @foreach (Announcement a in gameNotices) { <li>@a.Message <span class="muted small">(ในเกม)</span></li> }
+                @if (launcherNotices.Count + gameNotices.Count == 0) { <li class="muted small">ไม่มีประกาศที่กำลังแสดง</li> }
+            </ul>
+            <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+                <label class="field">ช่องทาง
+                    <select @bind="aChannel">
+                        <option value="@AnnouncementChannel.Launcher">หน้า Launcher</option>
+                        <option value="@AnnouncementChannel.InGame">ในเกม (รอยืนยัน notice packet)</option>
+                    </select>
+                </label>
+                <label class="field">ข้อความ <input @bind="aMessage" maxlength="500" /></label>
+                <div class="filters">
+                    <label class="field">เริ่ม <input type="datetime-local" @bind="aStarts" /></label>
+                    <label class="field">สิ้นสุด <input type="datetime-local" @bind="aEnds" /></label>
+                </div>
+                <label class="field">เหตุผล <input @bind="aReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="AnnounceAsync">ประกาศ</button>
+            </AuthorizeView>
+        </section>
+
+        <section class="panel">
+            <h2>ผู้เล่นต่อแผนที่</h2>
+            @if (population is null)
+            {
+                <p class="muted small">ยังเชื่อมต่อ game service agents ไม่ได้</p>
+            }
+            else
+            {
+                <table>
+                    <thead><tr><th>Map</th><th>Sub-map</th><th>ผู้เล่น</th></tr></thead>
+                    <tbody>
+                        @foreach (var p in population) { <tr><td>@p.MapId</td><td>@p.Submap</td><td>@p.Players</td></tr> }
+                        @if (population.Count == 0) { <tr><td colspan="3" class="muted small">ยังไม่มีผู้เล่นในโลกเกม</td></tr> }
+                    </tbody>
+                </table>
+                <button @onclick="LoadPopulationAsync">รีเฟรช</button>
+            }
+        </section>
+    </div>
+</GameDataGate>
+
+@code {
+    private EffectiveRates? effective;
+    private MaintenanceState? maintenance;
+    private IReadOnlyList<Announcement> launcherNotices = [], gameNotices = [];
+    private IReadOnlyList<MapPopulation>? population;
+    private decimal exp = 1, drop = 1, rare = 1, upgrade = 1, cap = 100;
+    private string? ratesReason, mMessage, mAllowed, mReason, aMessage, aReason;
+    private bool mEnabled;
+    private DateTime? mUntil, aStarts, aEnds;
+    private AnnouncementChannel aChannel = AnnouncementChannel.Launcher;
+
+    private WorldService World => (WorldService)Services.GetService(typeof(WorldService))!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPopulationAsync();
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        effective = await World.EffectiveRatesAsync();
+        (exp, drop, rare, upgrade, cap) = (effective.Server.Exp, effective.Server.Drop, effective.Server.RareDrop, effective.Server.Upgrade, effective.Cap);
+        maintenance = await World.MaintenanceAsync();
+        (mEnabled, mMessage, mAllowed) = (maintenance.Enabled, maintenance.Message, string.Join(", ", maintenance.AllowedLogins));
+        mUntil = maintenance.Until?.ToLocalTime().DateTime;
+        launcherNotices = await World.ActiveAnnouncementsAsync(AnnouncementChannel.Launcher);
+        gameNotices = await World.ActiveAnnouncementsAsync(AnnouncementChannel.InGame);
+    }
+
+    private async Task LoadPopulationAsync()
+    {
+        if (Services.GetService(typeof(IGameServices)) is not IGameServices game) { population = null; return; }
+        try { population = WorldModule.Population(await game.SessionsAsync(false)); }
+        catch (HttpRequestException) { population = null; }
+    }
+
+    private static DateTimeOffset? Local(DateTime? value) =>
+        value is { } v ? new DateTimeOffset(DateTime.SpecifyKind(v, DateTimeKind.Local)) : null;
+
+    private async Task SaveRatesAsync()
+    {
+        if (await Actions.RunAsync("world.rates", "rate_policy:server", ratesReason,
+            op => World.SetServerRatesAsync(new RateSet(exp, drop, rare, upgrade), cap, op)) is not null)
+        { ratesReason = null; await LoadAsync(); }
+    }
+
+    private async Task SaveMaintenanceAsync()
+    {
+        string[] allowed = (mAllowed ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        MaintenanceState state = new(mEnabled, string.IsNullOrWhiteSpace(mMessage) ? null : mMessage, Local(mUntil), allowed);
+        if (await Actions.RunAsync("world.maintenance", "world_setting:maintenance", mReason,
+            async op => { await World.SetMaintenanceAsync(state, op); return true; }))
+        { mReason = null; await LoadAsync(); }
+    }
+
+    private async Task AnnounceAsync()
+    {
+        if (await Actions.RunAsync("world.announce", "announcement:new", aReason,
+            op => World.AnnounceAsync(aChannel, aMessage ?? "", Local(aStarts), Local(aEnds), null, op), "ประกาศแล้ว") is not null)
+        { aMessage = aReason = null; await LoadAsync(); }
+    }
+}

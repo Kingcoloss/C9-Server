@@ -128,10 +128,12 @@ internal static partial class Validation
                         await stream.WriteAsync(codec.Encode(new Packet(0x0BC5)));
                         Packet attributes = codec.Decode(await ReadWireAsync(stream));
                         Check.Equal((ushort)0x0C1E, attributes.Type);
-                        Check.Equal(354, attributes.Payload.Length);
+                        Check.Equal(398, attributes.Payload.Length);
                         Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
                         Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[8..]));
-                        Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[352..]));
+                        Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x38..]));
+                        Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x3A..]));
+                        Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[0x18C..]));
                         Packet vitals = codec.Decode(await ReadWireAsync(stream));
                         Check.Equal((ushort)0x0C20, vitals.Type);
                         Check.Equal(32, vitals.Payload.Length);

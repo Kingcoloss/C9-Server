@@ -1,0 +1,41 @@
+@* Wraps every Game Data page: shows setup guidance when the database is not configured,
+   the last action's result, and provides the shared styles (scoped CSS with ::deep). *@
+@inject IServiceProvider Services
+
+<div class="gd">
+    @if (!GameDataApi.Configured(Services))
+    {
+        <div class="alert warn">
+            <strong>ยังไม่ได้ตั้งค่าฐานข้อมูลเกม</strong>
+            <p class="small" style="margin-top:.3rem">ตั้งค่า <code>C9_DB_CONNECTION</code> และเปิด service <code>c9-db</code> (docker compose profile <code>gamedata</code>) แล้วเริ่ม Portal ใหม่</p>
+        </div>
+    }
+    else
+    {
+        @if (Actions?.Error is { } error)
+        {
+            <div class="alert bad" role="alert">@error</div>
+        }
+        else if (Actions?.Notice is { } notice)
+        {
+            <div class="alert ok" role="status">@notice</div>
+        }
+        @ChildContent
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public PortalActions? Actions { get; set; }
+
+    /// <summary>Multiplier for display: 5.0000 → 5, 1.2500 → 1.25.</summary>
+    public static string Rate(decimal value) => value.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
+
+    /// <summary>Portal badge style for an account status.</summary>
+    public static string Badge(AccountStatus status) => status switch
+    {
+        AccountStatus.Active => "ok",
+        AccountStatus.Suspended => "busy",
+        _ => "bad",
+    };
+}

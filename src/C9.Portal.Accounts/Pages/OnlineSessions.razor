@@ -1,0 +1,110 @@
+@page "/accounts/online"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AccountsRead)]
+@using C9.Contracts
+@implements IDisposable
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>ผู้เล่นออนไลน์</PageTitle>
+
+<div class="gd">
+    <header class="page-head">
+    <div>
+        <p class="eyebrow">GAME ACCOUNTS</p>
+        <h1>ผู้เล่นออนไลน์</h1>
+    </div>
+</header>
+    @if (game is null)
+    {
+        <p>ยังเชื่อมต่อ game service agents ไม่ได้</p>
+    }
+    else
+    {
+        <p class="muted small">อัปเดตอัตโนมัติทุก 5 วินาที · @sessions.Count session · ตัดการเชื่อมต่อจะถูกบันทึกใน audit log</p>
+        @if (Actions.Error is { } error) { <p role="alert" class="alert bad">@error</p> }
+        @if (Actions.Notice is { } notice) { <p role="status">@notice</p> }
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Session</th><th>Service</th><th>สถานะ</th><th>Character ID</th><th>Map</th><th>Remote</th><th>เชื่อมต่อเมื่อ</th><th>Packets in/out</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (SessionInfo s in sessions)
+                    {
+                        <tr>
+                            <td><code>@s.Key</code></td><td>@s.ServiceId</td><td>@s.State</td>
+                            <td>@(s.CharacterId?.ToString() ?? "—")</td>
+                            <td>@(s.MapId is { } m ? $"{m}/{s.Submap}" : "—")</td>
+                            <td>@s.RemoteEndpoint</td>
+                            <td>@s.ConnectedUtc.ToLocalTime().ToString("HH:mm:ss")</td>
+                            <td>@s.PacketsReceived / @s.PacketsSent</td>
+                            <td>
+                                <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+                                    <button class="danger" @onclick="() => DisconnectAsync(s.Key)">ตัดการเชื่อมต่อ</button>
+                                </AuthorizeView>
+                            </td>
+                        </tr>
+                    }
+                    @if (sessions.Count == 0) { <tr><td colspan="9">ไม่มีผู้เล่นออนไลน์</td></tr> }
+                </tbody>
+            </table>
+        </div>
+        <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+            <label class="field">เหตุผลในการตัดการเชื่อมต่อ <input @bind="reason" placeholder="จำเป็น" /></label>
+        </AuthorizeView>
+    }
+</div>
+
+@code {
+    private IGameServices? game;
+    private IReadOnlyList<SessionInfo> sessions = [];
+    private string? reason;
+    private PeriodicTimer? timer;
+    private readonly CancellationTokenSource stop = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        game = Services.GetService(typeof(IGameServices)) as IGameServices;
+        await RefreshAsync();
+        if (game is not null) _ = PollAsync();
+    }
+
+    private async Task PollAsync()
+    {
+        timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(stop.Token))
+            {
+                await RefreshAsync();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    private async Task RefreshAsync()
+    {
+        if (game is null) return;
+        try { sessions = (await game.SessionsAsync(false, stop.Token)).OrderBy(s => s.ConnectedUtc).ToArray(); }
+        catch (HttpRequestException) { sessions = []; }
+    }
+
+    private async Task DisconnectAsync(string key)
+    {
+        if (game is null) return;
+        await Actions.RunAsync("accounts.disconnect", "session:" + key, reason, async _ =>
+        {
+            if (!await game.DisconnectAsync(key, stop.Token))
+                throw new GameDataException(GameDataError.NotFound, "ไม่พบ session หรือปิดไปแล้ว");
+            return true;
+        }, "ตัดการเชื่อมต่อแล้ว");
+        await RefreshAsync();
+    }
+
+    public void Dispose()
+    {
+        stop.Cancel();
+        timer?.Dispose();
+        stop.Dispose();
+    }
+}

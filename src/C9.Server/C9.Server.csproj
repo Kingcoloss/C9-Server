@@ -2,6 +2,11 @@
   <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../C9.Protocol/C9.Protocol.csproj" />
+    <ProjectReference Include="../C9.Contracts/C9.Contracts.csproj" />
+    <!-- Character lobby store in the game database when C9_DB_CONNECTION is set (ADR 0002).
+         Private: projects that reference C9.Server (C9.Admin.Core and its desktop/web hosts) do not get EF Core/Npgsql.
+         Only GameDataCharacterStore touches C9.GameData, and it is created only when GameDatabase is set. -->
+    <ProjectReference Include="../C9.GameData/C9.GameData.csproj" PrivateAssets="all" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <EmbeddedResource Include="../../re/evidence/static/windows_map_manifest.json" LogicalName="map-manifest.json" />
   </ItemGroup>

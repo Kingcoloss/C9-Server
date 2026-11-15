@@ -1,0 +1,66 @@
+@inherits LayoutComponentBase
+@inject ModuleCatalog Modules
+@inject PortalOptions Options
+<div class="shell">
+    <aside class="sidebar">
+        <a class="brand" href="/"><span class="crest">C9</span><span>ADMIN PORTAL</span></a>
+        <nav aria-label="เมนูหลัก">
+            <p class="nav-title">เซิร์ฟเวอร์</p>
+            <NavLink href="/" Match="NavLinkMatch.All"><Icon Name="dashboard" /> ภาพรวม</NavLink>
+            <NavLink href="/services"><Icon Name="server" /> บริการเกม</NavLink>
+            <NavLink href="/sessions"><Icon Name="users" /> Sessions</NavLink>
+            <AuthorizeView Policy="@PortalPolicies.TraceRead">
+                <NavLink href="/trace"><Icon Name="trace" /> Packet trace</NavLink>
+            </AuthorizeView>
+            <AuthorizeView Policy="@PortalPolicies.SettingsWrite">
+                <NavLink href="/settings"><Icon Name="settings" /> พารามิเตอร์</NavLink>
+            </AuthorizeView>
+            <AuthorizeView Policy="@PortalPolicies.AuditRead">
+                <NavLink href="/audit"><Icon Name="shield" /> Audit log</NavLink>
+            </AuthorizeView>
+            @foreach (IPortalModule module in Modules.Modules)
+            {
+                <p class="nav-title">@module.Title</p>
+                @foreach (PortalNavItem item in module.Navigation)
+                {
+                    <AuthorizeView Policy="@item.Policy">
+                        <NavLink href="@item.Href.TrimStart('/')"><Icon Name="@item.Icon" /> @item.Title</NavLink>
+                    </AuthorizeView>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(Options.GrafanaUrl) || !string.IsNullOrWhiteSpace(Options.PrometheusUrl))
+            {
+                <p class="nav-title">Observability</p>
+                @if (!string.IsNullOrWhiteSpace(Options.GrafanaUrl))
+                {
+                    <a href="@Options.GrafanaUrl" target="_blank" rel="noopener noreferrer"><Icon Name="external" /> Grafana</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Options.PrometheusUrl))
+                {
+                    <a href="@Options.PrometheusUrl" target="_blank" rel="noopener noreferrer"><Icon Name="external" /> Prometheus</a>
+                }
+            }
+        </nav>
+        <AuthorizeView>
+            <Authorized>
+                <div class="who">
+                    <Icon Name="user" />
+                    <div>
+                        <strong>@context.User.Identity?.Name</strong>
+                        <span class="muted small">@string.Join(", ", context.User.FindAll(ClaimTypes.Role).Select(c => c.Value))</span>
+                    </div>
+                    <form method="post" action="signout">
+                        <AntiforgeryToken />
+                        <button type="submit" class="quiet small">ออก</button>
+                    </form>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+    </aside>
+    <main class="content">
+        @Body
+    </main>
+</div>
+<div id="blazor-error-ui" data-nosnippet>
+    เกิดข้อผิดพลาดที่หน้าเว็บ <a href="." class="reload">โหลดใหม่</a> <span class="dismiss" role="button" aria-label="ปิด">✕</span>
+</div>

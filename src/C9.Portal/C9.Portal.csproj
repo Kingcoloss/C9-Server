@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- C9 Server Admin Portal: Blazor Web App (interactive server) + REST /api/v1. Shared framework only. -->
+  <PropertyGroup>
+    <RootNamespace>C9.Portal</RootNamespace>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
+    <ProjectReference Include="../C9.Contracts/C9.Contracts.csproj" />
+    <ProjectReference Include="../C9.Admin.Core/C9.Admin.Core.csproj" />
+    <!-- Feature modules (tasks 3.2 / 3.3, docs/GAME_PORTAL_MODULES_TH.md); built in only when present. -->
+    <ProjectReference Include="../C9.Portal.Accounts/C9.Portal.Accounts.csproj" Condition="Exists('../C9.Portal.Accounts/C9.Portal.Accounts.csproj')" />
+    <ProjectReference Include="../C9.Portal.World/C9.Portal.World.csproj" Condition="Exists('../C9.Portal.World/C9.Portal.World.csproj')" />
+  </ItemGroup>
+  <!-- The host registers C9.GameData (ADR 0002) when C9_DB_CONNECTION is set. -->
+  <ItemGroup Condition="Exists('../C9.GameData/C9.GameData.csproj')">
+    <ProjectReference Include="../C9.GameData/C9.GameData.csproj" />
+  </ItemGroup>
+  <PropertyGroup Condition="Exists('../C9.GameData/C9.GameData.csproj')">
+    <DefineConstants>$(DefineConstants);C9_GAMEDATA</DefineConstants>
+  </PropertyGroup>
+</Project>

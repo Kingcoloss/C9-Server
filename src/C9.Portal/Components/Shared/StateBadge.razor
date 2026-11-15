@@ -1,0 +1,14 @@
+<span class="badge @Css">@Text</span>
+@code {
+    [Parameter] public ServiceSnapshot? Snapshot { get; set; }
+    [Parameter] public string? State { get; set; }
+
+    private string Text => Snapshot is { Status: null } ? "Unreachable" : (Snapshot?.Status?.Listener.ToString() ?? State ?? "—");
+    private string Css => Text.ToLowerInvariant() switch
+    {
+        "running" or "world_loading" or "character_lobby" => "ok",
+        "starting" or "stopping" or "connected" => "busy",
+        "failed" or "unreachable" => "bad",
+        _ => "idle"
+    };
+}

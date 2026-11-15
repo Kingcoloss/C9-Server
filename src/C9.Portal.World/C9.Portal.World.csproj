@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <!-- Portal module 3.3: world events, rates, maintenance, announcements and economy. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
+    <ProjectReference Include="../C9.GameData/C9.GameData.csproj" />
+    <!-- Shared Game Data helpers (GameDataApi, PortalActions, GameDataGate) live in the Accounts module. -->
+    <ProjectReference Include="../C9.Portal.Accounts/C9.Portal.Accounts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="C9.Portal.GameData.Validation" />
+  </ItemGroup>
+</Project>

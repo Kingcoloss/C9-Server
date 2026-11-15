@@ -1,0 +1,16 @@
+@page "/error"
+@attribute [AllowAnonymous]
+@using System.Diagnostics
+<PageTitle>ข้อผิดพลาด · C9 Admin Portal</PageTitle>
+<header class="page-head">
+    <div><p class="eyebrow">500</p><h1>เกิดข้อผิดพลาดภายใน</h1></div>
+</header>
+<p class="muted">รายละเอียดถูกบันทึกใน log ของ Portal (Docker: <code>docker compose logs c9-portal</code> หรือ Grafana &gt; Loki)</p>
+@if (RequestId is not null)
+{
+    <p>Request ID: <code>@RequestId</code></p>
+}
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    private string? RequestId => Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}

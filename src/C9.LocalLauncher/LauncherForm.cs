@@ -6,7 +6,10 @@ namespace C9.LocalLauncher;
 
 internal sealed class LauncherForm : Form
 {
-    private readonly string folder = AppContext.BaseDirectory;
+    private readonly string folder;
+    private readonly string configurationFolder;
+    private readonly string? projectWorkspace;
+    private bool compatibilityTest;
     private readonly Label status = new();
     private readonly Label detail = new();
     private readonly Button play = new();
@@ -15,10 +18,14 @@ internal sealed class LauncherForm : Form
     private bool busy;
     private Process? activeGame;
 
-    internal LauncherForm()
+    internal LauncherForm(string directory, string? configDirectory, string? workspace, bool compatibilityTest)
     {
-        Text = "C9 Local Launcher";
-        ClientSize = new Size(680, 520);
+        folder = Path.GetFullPath(directory);
+        configurationFolder = Path.GetFullPath(configDirectory ?? folder);
+        projectWorkspace = workspace;
+        this.compatibilityTest = compatibilityTest;
+        Text = compatibilityTest ? "C9 Local Launcher - Compatibility Test" : "C9 Local Launcher";
+        ClientSize = new Size(680, 550);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
@@ -49,7 +56,16 @@ internal sealed class LauncherForm : Form
         ConfigureButton(official, "เปิด VFUN Launcher", new Rectangle(250, 432, 244, 36), BackColor, Color.Silver);
         openFolder.Click += (_, _) => RunShell(folder);
         official.Click += (_, _) => OpenOfficial();
-        AddLabel("บัญชีทดสอบ: test  •  โหมดพัฒนา local server", new Rectangle(34, 484, 612, 24), 9, Color.Gray);
+        CheckBox trial = new() { Text = "ทดสอบ Client รุ่นใหม่ (Local)", Checked = compatibilityTest,
+            Bounds = new Rectangle(34, 478, 610, 26), ForeColor = gold };
+        trial.CheckedChanged += async (_, _) =>
+        {
+            this.compatibilityTest = trial.Checked;
+            Text = trial.Checked ? "C9 Local Launcher - Compatibility Test" : "C9 Local Launcher";
+            await CheckAsync();
+        };
+        Controls.Add(trial);
+        AddLabel("บัญชีทดสอบ: test  •  โหมดพัฒนา local server", new Rectangle(34, 514, 612, 24), 9, Color.Gray);
         Shown += async (_, _) => await CheckAsync();
     }
 
@@ -82,7 +98,8 @@ internal sealed class LauncherForm : Form
         SetBusy(true);
         try
         {
-            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder);
+            EnsureConfiguration();
+            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder, compatibilityTest);
             bool ready = await ServerReadyAsync();
             status.Text = ready ? "พร้อมเปิดเกม local" : "Client พร้อม • เซิร์ฟเวอร์ยังไม่เปิด";
             status.ForeColor = ready ? Color.LightGreen : gold;
@@ -99,7 +116,8 @@ internal sealed class LauncherForm : Form
         SetBusy(true);
         try
         {
-            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder);
+            EnsureConfiguration();
+            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder, compatibilityTest);
             if (Process.GetProcessesByName("C9").Length > 0)
                 throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
             status.Text = "กำลังเตรียมเซิร์ฟเวอร์…";
@@ -170,7 +188,16 @@ internal sealed class LauncherForm : Form
         catch (Exception error) when (error is SocketException or IOException or OperationCanceledException) { return false; }
     }
 
-    private JsonDocument ReadConfiguration() => JsonDocument.Parse(File.ReadAllBytes(Path.Combine(folder, "L9.local.json")));
+    private void EnsureConfiguration()
+    {
+        LocalConfigurationResult result = LocalLauncherConfiguration.Ensure(folder, projectWorkspace,
+            Path.Combine(configurationFolder, LocalLauncherConfiguration.FileName));
+        using JsonDocument config = ReadConfiguration();
+        LocalLauncherConfiguration.Verify(config.RootElement);
+        if (result.Created) Log("created and verified local configuration from project defaults");
+    }
+
+    private JsonDocument ReadConfiguration() => LocalLauncherConfiguration.Read(configurationFolder);
 
     private async Task EnsureBackendAsync(JsonElement config, string configKey, string host, int port, byte mode, string logName)
     {
@@ -184,7 +211,7 @@ internal sealed class LauncherForm : Form
         start.ArgumentList.Add("--config");
         start.ArgumentList.Add(settings);
         start.ArgumentList.Add("--event-log");
-        start.ArgumentList.Add(Path.Combine(folder, logName));
+        start.ArgumentList.Add(Path.Combine(configurationFolder, logName));
         using Process server = Process.Start(start) ?? throw new IOException("Cannot start local server");
         Log($"server started pid={server.Id} port={port}");
         for (int attempt = 0; attempt < 20; attempt++)
@@ -209,15 +236,14 @@ internal sealed class LauncherForm : Form
     {
         try
         {
-            using JsonDocument config = ReadConfiguration();
-            if (!config.RootElement.TryGetProperty("official_launcher", out _))
+            if (Process.GetProcessesByName("C9").Length > 0)
+                throw new InvalidOperationException("กรุณาปิดเกมก่อนเปิด VFUN Launcher");
+            string? launcher = LocalLauncherConfiguration.FindOfficialLauncher(configurationFolder);
+            if (launcher is null)
             {
                 RunShell("https://vfun.valofe.com/game/download");
                 return;
             }
-            if (Process.GetProcessesByName("C9").Length > 0)
-                throw new InvalidOperationException("กรุณาปิดเกมก่อนเปิด VFUN Launcher");
-            string launcher = RequiredPath(config.RootElement, "official_launcher", null);
             using Process? process = Process.Start(new ProcessStartInfo(launcher)
                 { WorkingDirectory = Path.GetDirectoryName(launcher)!, UseShellExecute = true });
         }
@@ -232,7 +258,7 @@ internal sealed class LauncherForm : Form
 
     private void Log(string message)
     {
-        try { File.AppendAllText(Path.Combine(folder, "L9.local.log"), $"{DateTimeOffset.UtcNow:O} {message}{Environment.NewLine}"); }
+        try { File.AppendAllText(Path.Combine(configurationFolder, "L9.local.log"), $"{DateTimeOffset.UtcNow:O} {message}{Environment.NewLine}"); }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException) { }
     }
 
@@ -241,10 +267,9 @@ internal sealed class LauncherForm : Form
         Log($"launcher error: {error.GetType().Name}: {error.Message}");
         status.Text = "ยังเปิดเกม local ไม่ได้";
         status.ForeColor = Color.Salmon;
-        detail.Text = error is InvalidDataException ? "Client มีการเปลี่ยนแปลง ต้องตรวจความเข้ากันได้ก่อนเปิด local" :
-            error is InvalidOperationException ? error.Message : "กรุณาตรวจไฟล์ติดตั้งและ L9.local.log";
+        detail.Text = error is InvalidDataException or InvalidOperationException ? error.Message : "กรุณาตรวจไฟล์ติดตั้งและ L9.local.log";
     }
 
-    internal static bool IsExpected(Exception error) => error is IOException or ArgumentException or JsonException or
+    internal static bool IsExpected(Exception error) => error is IOException or InvalidDataException or ArgumentException or JsonException or
         InvalidOperationException or KeyNotFoundException or UnauthorizedAccessException or FormatException or System.ComponentModel.Win32Exception;
 }

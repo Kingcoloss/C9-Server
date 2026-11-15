@@ -30,11 +30,36 @@ public sealed record ServerOptions
     public double TimeoutSeconds { get; init; } = 10;
     public IReadOnlyList<Packet> Greetings { get; init; } = Array.Empty<Packet>();
     public IReadOnlyList<ResponseRule> Rules { get; init; } = Array.Empty<ResponseRule>();
+    /// <summary>
+    /// Runtime-only (command line <c>--allow-container-bind</c>): permits the wildcard address
+    /// 0.0.0.0 / :: inside a container whose published ports stay on the host loopback.
+    /// Never read from JSON profiles.
+    /// </summary>
+    public bool AllowContainerBind { get; init; }
+    /// <summary>
+    /// Runtime-only (environment <c>C9_DB_CONNECTION</c>, see <see cref="WithGameDatabaseFromEnvironment"/>): when set,
+    /// the character lobby keeps characters in the game database (C9.GameData) instead of <see cref="CharacterStore"/>.
+    /// Holds the connection string without the password; the password is read from <c>C9_DB_PASSWORD_FILE</c>
+    /// when the store opens. Never read from JSON profiles.
+    /// </summary>
+    public string? GameDatabase { get; init; }
+
+    /// <summary>Applies <c>C9_DB_CONNECTION</c> to a character lobby; other profiles and an unset variable are unchanged.</summary>
+    public ServerOptions WithGameDatabaseFromEnvironment() =>
+        Profile == "character_lobby" && Environment.GetEnvironmentVariable(GameDatabaseVariable) is { Length: > 0 } connection
+            ? this with { GameDatabase = connection }
+            : this;
+
+    /// <summary>Same variable as C9.GameData and the Portal (compose.yaml, profile "gamedata").</summary>
+    public const string GameDatabaseVariable = "C9_DB_CONNECTION";
 
     public void Validate()
     {
-        if (!IPAddress.TryParse(Host, out IPAddress? address) || !IPAddress.IsLoopback(address))
-            throw new ArgumentException("Current protocol-validation host requires a numeric loopback bind address");
+        if (!IPAddress.TryParse(Host, out IPAddress? address) || !(IPAddress.IsLoopback(address) ||
+            (AllowContainerBind && (address.Equals(IPAddress.Any) || address.Equals(IPAddress.IPv6Any)))))
+            throw new ArgumentException(AllowContainerBind
+                ? "Container mode accepts only a loopback or wildcard (0.0.0.0 / ::) bind address"
+                : "Current protocol-validation host requires a numeric loopback bind address");
         if (Port is < 0 or > 65535 || Profile is not ("probe" or "fixture" or "observer" or "character_lobby"))
             throw new ArgumentException("Invalid port or profile");
         if (MaxFrame is < 20 or > 65535 || MaxConnections is < 1 or > 32)
@@ -60,7 +85,7 @@ public sealed record ServerOptions
             throw new ArgumentException("Invalid starting HP or MP");
         if (!LocalAccountEnabled && Profile is not ("character_lobby" or "fixture"))
             throw new ArgumentException("Local account access requires a login or lobby profile");
-        if (Profile != "character_lobby" && (CharacterStore is not null || CharacterListHeaderBytes != CharacterLobby.LegacyListHeaderBytes ||
+        if (Profile != "character_lobby" && (CharacterStore is not null || GameDatabase is not null || CharacterListHeaderBytes != CharacterLobby.LegacyListHeaderBytes ||
             CharacterSlots != CharacterLobby.LegacySlotCount || WorldVitals != WorldVitalsLayout.Legacy ||
             InitialHp != 100 || InitialMp != 100))
             throw new ArgumentException("Character options require the character_lobby profile");

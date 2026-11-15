@@ -1,0 +1,139 @@
+@page "/world/events"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.WorldRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>Event</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+    <div>
+        <p class="eyebrow">GAME WORLD</p>
+        <h1>Event</h1>
+        <p class="muted">ปฏิทิน event และตัวคูณที่มีผลในแต่ละช่วงเวลา</p>
+    </div>
+</header>
+    <p class="muted small">แสดง event ตั้งแต่ 30 วันก่อนถึง 90 วันข้างหน้า · event ที่ซ้อนกันจะคูณ rate กัน แล้วค่อย cap ครั้งเดียว</p>
+
+    <section class="panel table-scroll">
+        <table>
+            <thead><tr><th>ชื่อ</th><th>ช่วงเวลา</th><th>ทำซ้ำ</th><th>Exp</th><th>Drop</th><th>Rare</th><th>Upgrade</th><th>สถานะ</th><th></th></tr></thead>
+            <tbody>
+                @foreach (WorldEvent e in events)
+                {
+                    bool active = e.IsActiveAt(DateTimeOffset.UtcNow);
+                    <tr>
+                        <td>@e.Name<div class="muted small">@e.Description</div></td>
+                        <td>@Show(e.StartsAt) – @Show(e.EndsAt)</td>
+                        <td>@(e.RepeatEveryDays is { } d ? $"ทุก {d} วัน" + (e.RecurUntil is { } u ? $" ถึง {Show(u)}" : "") : "—")</td>
+                        <td>×@GameDataGate.Rate(e.Rates.Exp)</td><td>×@GameDataGate.Rate(e.Rates.Drop)</td><td>×@GameDataGate.Rate(e.Rates.RareDrop)</td><td>×@GameDataGate.Rate(e.Rates.Upgrade)</td>
+                        <td><span class="badge @(active ? "ok" : !e.Enabled ? "bad" : "idle")">@(active ? "กำลังมีผล" : e.Enabled ? "รอ/จบแล้ว" : "ปิด")</span></td>
+                        <td>
+                            <AuthorizeView Policy="@PortalPolicies.WorldWrite" Context="auth">
+                                <button @onclick="() => Edit(e)">แก้</button>
+                                <button class="danger" @onclick="() => DeleteAsync(e.Id)">ลบ</button>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                }
+                @if (events.Count == 0) { <tr><td colspan="9" class="muted small">ยังไม่มี event</td></tr> }
+            </tbody>
+        </table>
+    </section>
+
+    <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+        <section class="panel">
+            <h2>@(editing is null ? "สร้าง event" : $"แก้ event #{editing.Id}")</h2>
+            <div class="filters">
+                <label class="field">ชื่อ <input @bind="name" maxlength="100" /></label>
+                <label class="field">คำอธิบาย <input @bind="description" maxlength="2000" /></label>
+            </div>
+            <div class="filters">
+                <label class="field">เริ่ม <input type="datetime-local" @bind="starts" /></label>
+                <label class="field">สิ้นสุด <input type="datetime-local" @bind="ends" /></label>
+                <label class="field">ทำซ้ำทุก (วัน, เว้นว่าง = ครั้งเดียว) <input type="number" min="1" @bind="repeatDays" /></label>
+                <label class="field">ทำซ้ำถึง <input type="datetime-local" @bind="recurUntil" /></label>
+            </div>
+            <div class="filters">
+                <label class="field">Exp × <input type="number" step="0.1" min="0" max="100" @bind="exp" /></label>
+                <label class="field">Drop × <input type="number" step="0.1" min="0" max="100" @bind="drop" /></label>
+                <label class="field">Rare × <input type="number" step="0.1" min="0" max="100" @bind="rare" /></label>
+                <label class="field">Upgrade × <input type="number" step="0.1" min="0" max="100" @bind="upgrade" /></label>
+                <label class="check"><input type="checkbox" @bind="enabled" /> เปิดใช้</label>
+            </div>
+            <div class="filters">
+                <label class="field">เหตุผล <input @bind="reason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SaveAsync">@(editing is null ? "สร้าง" : "บันทึก")</button>
+                @if (editing is not null) { <button @onclick="Reset">ยกเลิก</button> }
+            </div>
+        </section>
+    </AuthorizeView>
+</GameDataGate>
+
+@code {
+    private IReadOnlyList<WorldEvent> events = [];
+    private WorldEvent? editing;
+    private string? name, description, reason;
+    private DateTime? starts, ends, recurUntil;
+    private int? repeatDays;
+    private decimal exp = 2, drop = 1, rare = 1, upgrade = 1;
+    private bool enabled = true;
+
+    private WorldService World => (WorldService)Services.GetService(typeof(WorldService))!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Reset();
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        events = await World.EventsAsync(now.AddDays(-30), now.AddDays(90));
+    }
+
+    private static string Show(DateTimeOffset value) => value.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+    private static DateTimeOffset? Offset(DateTime? value) => value is { } v ? new DateTimeOffset(DateTime.SpecifyKind(v, DateTimeKind.Local)) : null;
+
+    private void Edit(WorldEvent e)
+    {
+        editing = e;
+        (name, description, repeatDays, enabled) = (e.Name, e.Description, e.RepeatEveryDays, e.Enabled);
+        (starts, ends, recurUntil) = (e.StartsAt.ToLocalTime().DateTime, e.EndsAt.ToLocalTime().DateTime, e.RecurUntil?.ToLocalTime().DateTime);
+        (exp, drop, rare, upgrade) = (e.Rates.Exp, e.Rates.Drop, e.Rates.RareDrop, e.Rates.Upgrade);
+    }
+
+    private void Reset()
+    {
+        editing = null;
+        name = description = null;
+        DateTime now = DateTime.Now;
+        starts = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0).AddHours(1);
+        ends = starts.Value.AddHours(2);
+        recurUntil = null;
+        repeatDays = null;
+        (exp, drop, rare, upgrade, enabled) = (2, 1, 1, 1, true);
+    }
+
+    private async Task SaveAsync()
+    {
+        if (Offset(starts) is not { } start || Offset(ends) is not { } end) return;
+        WorldEventInput input = new(name ?? "", description, start, end, new RateSet(exp, drop, rare, upgrade), repeatDays, Offset(recurUntil), enabled);
+        WorldEvent? saved = editing is null
+            ? await Actions.RunAsync("world.event_create", "world_event:new", reason, op => World.CreateEventAsync(input, op), "สร้าง event แล้ว")
+            : await Actions.RunAsync("world.event_update", $"world_event:{editing.Id}", reason, op => World.UpdateEventAsync(editing.Id, editing.Version, input, op));
+        if (saved is not null) { reason = null; Reset(); }
+        await LoadAsync();
+    }
+
+    private async Task DeleteAsync(long id)
+    {
+        if (await Actions.RunAsync("world.event_delete", $"world_event:{id}", reason,
+            async op => { await World.DeleteEventAsync(id, op); return true; }, "ลบแล้ว"))
+            reason = null;
+        await LoadAsync();
+    }
+}

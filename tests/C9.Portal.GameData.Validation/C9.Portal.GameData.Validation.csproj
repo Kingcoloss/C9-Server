@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- API + RBAC validation for the Accounts and World portal modules on a real Kestrel host (no test packages).
+       Needs C9_DB_ADMIN_CONNECTION; without it only the "not configured" cases run. -->
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../../src/C9.Portal.Accounts/C9.Portal.Accounts.csproj" />
+    <ProjectReference Include="../../src/C9.Portal.World/C9.Portal.World.csproj" />
+  </ItemGroup>
+</Project>

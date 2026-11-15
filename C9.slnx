@@ -2,12 +2,25 @@
   <Folder Name="/src/">
     <Project Path="src/C9.Admin/C9.Admin.csproj" />
     <Project Path="src/C9.Admin.Core/C9.Admin.Core.csproj" />
+    <Project Path="src/C9.AdminDesktop.WinForms/C9.AdminDesktop.WinForms.csproj" />
     <Project Path="src/C9.Protocol/C9.Protocol.csproj" />
     <Project Path="src/C9.Server/C9.Server.csproj" />
+    <Project Path="src/C9.Contracts/C9.Contracts.csproj" />
+    <Project Path="src/C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
+    <Project Path="src/C9.Portal/C9.Portal.csproj" />
     <Project Path="src/C9.LocalLauncher/C9.LocalLauncher.csproj" />
     <Project Path="src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
+    <Project Path="src/C9.GameData/C9.GameData.csproj" />
+    <Project Path="src/C9.Portal.Accounts/C9.Portal.Accounts.csproj" />
+    <Project Path="src/C9.Portal.World/C9.Portal.World.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/C9.Validation/C9.Validation.csproj" />
+    <Project Path="tests/C9.GameData.Validation/C9.GameData.Validation.csproj" />
+    <Project Path="tests/C9.Portal.GameData.Validation/C9.Portal.GameData.Validation.csproj" />
+    <Project Path="tests/C9.Platform.Smoke/C9.Platform.Smoke.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/C9.GameData.Design/C9.GameData.Design.csproj" />
   </Folder>
 </Solution>

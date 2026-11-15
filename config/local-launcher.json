@@ -1,0 +1,15 @@
+{
+  "client_directory": "C:/VFUN/C9-GL",
+  "host": "127.0.0.1",
+  "port": 14000,
+  "backend_config": "config/lab-official-login-fixture.json",
+  "handoff_backend_config": "config/lab-official-character-lobby.json",
+  "backend_candidates": [
+    "artifacts/release/{runtime}/server/game/C9.Server.dll",
+    "artifacts/admin-desktop/{runtime}/game/C9.Server.dll",
+    "artifacts/admin-console/game/C9.Server.dll",
+    "artifacts/server/C9.Server.dll",
+    "src/C9.Server/bin/Release/net10.0/C9.Server.dll"
+  ],
+  "official_launcher": "C:/VFUN/VLauncher/VFUNLauncher.exe"
+}

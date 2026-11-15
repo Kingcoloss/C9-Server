@@ -1,0 +1,46 @@
+@page "/reference/modules"
+@attribute [Authorize(Policy = PortalPolicies.ServerRead)]
+@inject ModuleCatalog Catalog
+
+<PageTitle>Modules · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">REFERENCE</p>
+        <h1>Modules และ API</h1>
+        <p class="muted">โมดูลที่ Portal โหลดอยู่ และจุดเริ่มต้นของ REST API (รายละเอียดใน <code>docs/SERVER_PLATFORM_ARCHITECTURE_TH.md</code>)</p>
+    </div>
+</header>
+
+<div class="panel table-wrap">
+    <table>
+        <thead><tr><th>Id</th><th>ชื่อ</th><th>Assembly</th><th>API</th><th>หน้า</th></tr></thead>
+        <tbody>
+            @foreach (IPortalModule module in Catalog.Modules)
+            {
+                <tr>
+                    <td class="mono">@module.Id</td>
+                    <td>@module.Title</td>
+                    <td class="mono small">@module.GetType().Assembly.GetName().Name</td>
+                    <td class="mono small">/api/v1/@module.Id/*</td>
+                    <td class="small">@string.Join(", ", module.Navigation.Select(n => n.Href))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<section class="panel">
+    <h2>Core API (/api/v1)</h2>
+    <p class="muted small">ใช้ cookie ของหน้าเว็บ หรือ <code>Authorization: Bearer &lt;operator key&gt;</code> สำหรับสคริปต์</p>
+    <pre class="code">GET  /api/v1/me
+GET  /api/v1/services                      GET /api/v1/services/{id}
+POST /api/v1/services/{id}/control         {"action":"start|stop|restart"}
+GET  /api/v1/services/{id}/events?limit=   GET /api/v1/services/{id}/config
+GET  /api/v1/sessions?include_closed=true  POST /api/v1/sessions/{key}/disconnect
+GET  /api/v1/trace/sessions?service=       GET /api/v1/trace/frames?service=|session=&amp;dir=&amp;type=&amp;errors_only=&amp;after_id=&amp;before_id=&amp;limit=
+GET  /api/v1/trace/sessions/{key}/export?format=jsonl|pcap|pcap-decoded
+GET  /api/v1/packet-types                  GET /api/v1/tools/wireshark/c9.lua
+GET  /api/v1/settings/parameters           PUT /api/v1/settings/parameters
+GET  /api/v1/audit?action=&amp;limit=</pre>
+</section>

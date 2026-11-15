@@ -1,11 +1,45 @@
 # ตัวเปิด local สำหรับ Official Client รุ่น 52893 และ 55350
 
-อัปเดต 7 พฤศจิกายน 2026
+อัปเดต 14 พฤศจิกายน 2026
 
 ใช้ `C9LocalLauncher.exe` ที่สร้างจากโครงการนี้เปิดเข้า local lab และใช้
 **VFUN Launcher** ของ VALOFE สำหรับช่องทาง Official ตัวเปิด local ไม่แก้
 `C9.exe`, `C9Launcher.exe`, `C9Patcher.exe`, `C9Server.ini` หรือ `VerCli.C9`
 และไม่ใช้ awesomium.dll/icudt.dll จาก launcher เก่า ไฟล์ที่ผู้ใช้คัดลอกไว้ยังคงอยู่
+
+## ตั้งค่า Local อัตโนมัติจากโปรเจกต์
+
+Launcher รุ่นนี้สร้าง `L9.local.json` ข้างตัวเปิดเมื่อยังไม่มี โดยใช้ค่าจาก
+`config/local-launcher.json` ใน workspace ของโครงการ ค่าปริยายเป็น login
+`127.0.0.1:14000` และ handoff `127.0.0.1:14001` สำหรับโปรไฟล์ Build 55350
+เลือก backend ที่ build/publish แล้วตามลำดับ `backend_candidates`
+และตรวจ path ของ backend, dotnet รวมถึง host/port/profile ของทั้งสองบริการก่อนเขียน
+
+ไฟล์ที่มีอยู่แล้วจะถูกตรวจและเก็บไว้ หาก JSON ผิดหรือ paths หายจะรายงานข้อผิดพลาด
+โดยไม่เขียนทับ อ้างอิง workspace จากตำแหน่งของโปรแกรมหรือ path ที่ฝังตอน build
+หากย้าย workspace หลัง build ให้สร้าง config ใหม่ด้วย `--workspace` ที่ตรงกับเครื่อง
+
+```powershell
+# สร้างและตรวจ config ข้าง Launcher ในโฟลเดอร์เกม
+.\L9.exe --configure --workspace 'C:\MyProjects\C9-Server' --client-dir 'C:\VFUN\C9-GL'
+
+# ตรวจ config และ SHA-256 ของ C9.exe โดยไม่เปิดเกมหรือเริ่ม backend
+.\L9.exe --check --client-dir 'C:\VFUN\C9-GL'
+```
+
+ใช้ `--output '<folder>/L9.local.json'` เพื่อเตรียมไฟล์ในตำแหน่งอื่นก่อนคัดลอกไปข้าง
+Launcher; `--check` ใช้ option นี้ได้เช่นกัน ผล `--configure` ยืนยันเฉพาะ configuration
+ส่วน `--check` ตรวจ Client build เพิ่มและคืน exit code 2 หากยังไม่มี compatibility profile
+
+การชี้ Local ใช้ launch arguments เฉพาะตอนกดเปิดเกม Local ปุ่มเปิด VFUN ใช้ตัวเปิด
+Official แยก และยังใช้ได้เมื่อ config Local หาย/เสียหรือ Client hash เปลี่ยน
+ไม่มีการเขียน `C9.exe`, Official launcher, `C9Server.ini` หรือ `VerCli.C9`
+
+ผลตรวจเครื่อง Windows x64 วันที่ 14 พฤศจิกายน: สร้างและตรวจ config สำเร็จที่
+`artifacts/local-launcher-config/L9.local.json` แต่ `C9.exe` ปัจจุบันเป็น SHA-256
+`b4580ed4f8fa6670501577918ad61a3318d72b119bb83caaeab5aab5f31d3bb7`
+ซึ่งต่างจาก Client ที่มี profile จึงยังไม่ยืนยัน Local gameplay ของไฟล์เกมรุ่นนี้
+และไม่เพิ่ม hash เข้ารายการรองรับโดยไม่มีหลักฐาน protocol
 
 ## สิ่งที่ทำได้และผลทดสอบจริง
 

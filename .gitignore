@@ -32,6 +32,8 @@
 # .NET outputs for all source and validation projects.
 /src/**/[Bb]in/
 /src/**/[Oo]bj/
+/app/**/[Bb]in/
+/app/**/[Oo]bj/
 /tests/**/[Bb]in/
 /tests/**/[Oo]bj/
 /artifacts/

@@ -1,0 +1,113 @@
+@page "/sessions"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.ServerRead)]
+@inherits LivePage
+@inject GameServices Services
+@inject PortalActions Actions
+
+<PageTitle>Sessions · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">SESSIONS</p>
+        <h1>Sessions</h1>
+        <p class="muted">การเชื่อมต่อ TCP ของ client แต่ละครั้ง (login 14000 และ lobby/world 14001) อัปเดตทุก 2 วินาที</p>
+    </div>
+    <div class="actions">
+        <label class="check"><input type="checkbox" @bind="includeClosed" @bind:after="RefreshAsync" /> แสดงที่ปิดแล้ว</label>
+        <select @bind="service" @bind:after="RefreshAsync" aria-label="บริการ">
+            <option value="">ทุกบริการ</option>
+            @foreach (GameServiceEndpoint endpoint in Services.Endpoints)
+            {
+                <option value="@endpoint.Id">@endpoint.Name</option>
+            }
+        </select>
+    </div>
+</header>
+
+@if (Problem is not null)
+{
+    <p class="alert bad">@Problem</p>
+}
+@if (notice is not null)
+{
+    <p class="alert ok" role="status">@notice</p>
+}
+
+@if (sessions.Count == 0)
+{
+    <p class="panel empty muted">ยังไม่มี session@(includeClosed ? "" : " ที่เชื่อมต่ออยู่") เปิดเกมผ่าน Launcher แล้วล็อกอินเพื่อดูข้อมูลที่นี่</p>
+}
+else
+{
+    <div class="table-wrap panel">
+        <table>
+            <thead>
+                <tr><th>Session</th><th>บริการ</th><th>Remote</th><th>เชื่อมต่อ</th><th>State</th><th>Character / Map</th><th>Packets รับ/ส่ง</th><th>Bytes รับ/ส่ง</th><th>ล่าสุด</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (SessionInfo session in sessions)
+                {
+                    bool live = session.ClosedUtc is null;
+                    <tr class="@(live ? "" : "closed-row") @(session.LastError is not null ? "bad-row" : "")">
+                        <td class="mono small">@session.Key</td>
+                        <td>@session.ServiceId</td>
+                        <td class="mono small">@session.RemoteEndpoint</td>
+                        <td class="mono">@Clock.Time(session.ConnectedUtc)<br /><span class="muted small">@(live ? PortalClock.Since(session.ConnectedUtc) : "ปิด " + Clock.Time(session.ClosedUtc))</span></td>
+                        <td><StateBadge State="@(live ? session.State : "closed")" /></td>
+                        <td class="small">@(session.CharacterId is { } c ? c.ToString(CultureInfo.InvariantCulture) : "—")@(session.MapId is { } m ? $" · map {m}/{session.Submap}" : "")</td>
+                        <td class="mono">@session.PacketsReceived / @session.PacketsSent</td>
+                        <td class="mono small">@PortalClock.Bytes(session.BytesReceived) / @PortalClock.Bytes(session.BytesSent)</td>
+                        <td class="small">@Clock.Time(session.LastActivityUtc)@if (session.CloseReason is { } reason){<br /><span class="muted">@reason</span>}@if (session.LastError is { } error){<br /><span class="bad-text">@error</span>}</td>
+                        <td class="actions nowrap">
+                            @if (Can(PortalPolicies.TraceRead))
+                            {
+                                <a class="button quiet small" href="@($"/trace?session={Uri.EscapeDataString(session.Key)}")">Trace</a>
+                            }
+                            @if (live && Can(PortalPolicies.ServerOperate))
+                            {
+                                @if (confirm == session.Key)
+                                {
+                                    <button class="danger small" @onclick="() => DisconnectAsync(session.Key)">ยืนยันตัด</button>
+                                }
+                                else
+                                {
+                                    <button class="quiet small" @onclick="() => confirm = session.Key">ตัดการเชื่อมต่อ</button>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private IReadOnlyList<SessionInfo> sessions = [];
+    private bool includeClosed;
+    private string service = "";
+    private string? confirm, notice;
+
+    protected override Task LoadAsync() => RefreshAsync();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) Every(TimeSpan.FromSeconds(2), RefreshAsync);
+    }
+
+    private async Task RefreshAsync()
+    {
+        IReadOnlyList<SessionInfo> all = await Services.SessionsAsync(includeClosed, Stopping);
+        sessions = service.Length == 0 ? all : all.Where(s => s.ServiceId == service).ToArray();
+        Problem = null;
+    }
+
+    private async Task DisconnectAsync(string key)
+    {
+        confirm = null;
+        bool done = await Actions.DisconnectAsync(User, key, UiOrigin, Stopping);
+        notice = done ? $"ตัดการเชื่อมต่อ {key} แล้ว" : $"{key} ไม่ได้เชื่อมต่ออยู่แล้ว";
+        await RefreshAsync();
+    }
+}

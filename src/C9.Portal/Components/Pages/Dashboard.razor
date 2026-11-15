@@ -1,0 +1,141 @@
+@page "/"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.ServerRead)]
+@inherits LivePage
+@inject GameServices Services
+@inject PortalBus Bus
+@inject PortalOptions Options
+
+<PageTitle>ภาพรวม · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">SERVER OVERVIEW</p>
+        <h1>ภาพรวมเซิร์ฟเวอร์</h1>
+        <p class="muted">อัปเดตทุก 3 วินาที · เวลา @Clock.ZoneLabel</p>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Options.GrafanaUrl))
+    {
+        <a class="button" href="@Options.GrafanaUrl" target="_blank" rel="noopener noreferrer"><Icon Name="external" /> เปิด Grafana dashboard</a>
+    }
+</header>
+
+@if (Problem is not null)
+{
+    <p class="alert bad">@Problem</p>
+}
+@if (snapshots.Any(s => s.Status?.Trace.PayloadPolicy == TracePayloadPolicies.Full))
+{
+    <p class="alert warn">มีบริการที่บันทึก packet แบบ <b>full</b> (รวมข้อมูลล็อกอิน) ใช้เฉพาะตอนพัฒนาเท่านั้น</p>
+}
+
+<section class="kpis">
+    <div class="metric"><span>บริการที่ทำงาน</span><strong>@snapshots.Count(s => s.Status?.Listener == ListenerState.Running) / @snapshots.Count</strong></div>
+    <div class="metric"><span>Sessions ที่เชื่อมต่อ</span><strong>@PortalClock.Number(snapshots.Sum(s => (long)(s.Status?.ActiveSessions ?? 0)))</strong></div>
+    <div class="metric"><span>อยู่ในโลกเกม</span><strong>@PortalClock.Number(sessions.Count(s => s.State == "world_loading" || s.MapId is not null))</strong></div>
+    <div class="metric"><span>Packets รับ / ส่ง</span><strong>@PortalClock.Number(snapshots.Sum(s => s.Status?.PacketsReceived ?? 0)) / @PortalClock.Number(snapshots.Sum(s => s.Status?.PacketsSent ?? 0))</strong></div>
+    <div class="metric"><span>Session errors</span><strong class="@(snapshots.Sum(s => s.Status?.SessionErrors ?? 0) > 0 ? "warn-text" : "")">@PortalClock.Number(snapshots.Sum(s => s.Status?.SessionErrors ?? 0))</strong></div>
+</section>
+
+<section class="cards">
+    @foreach (ServiceSnapshot snapshot in snapshots)
+    {
+        AgentStatus? status = snapshot.Status;
+        bool linked = Bus.Links.TryGetValue(snapshot.Endpoint.Id, out LiveLink? link) && link.Connected;
+        <article class="panel service">
+            <div class="row between">
+                <div>
+                    <h2>@snapshot.Endpoint.Name</h2>
+                    <p class="muted small">@snapshot.Endpoint.Id · TCP @snapshot.Endpoint.PublicPort @(snapshot.Endpoint.Description is { } d ? " · " + d : "")</p>
+                </div>
+                <StateBadge Snapshot="snapshot" />
+            </div>
+            @if (status is null)
+            {
+                <p class="alert bad small">@snapshot.Error</p>
+            }
+            else
+            {
+                <dl class="facts">
+                    <div><dt>Sessions</dt><dd>@status.ActiveSessions / @status.MaxConnections</dd></div>
+                    <div><dt>ทั้งหมด</dt><dd>@PortalClock.Number(status.TotalSessions)</dd></div>
+                    <div><dt>Uptime</dt><dd>@PortalClock.Since(status.ListenerStartedUtc ?? status.ProcessStartedUtc)</dd></div>
+                    <div><dt>รับ</dt><dd>@PortalClock.Number(status.PacketsReceived) · @PortalClock.Bytes(status.BytesReceived)</dd></div>
+                    <div><dt>ส่ง</dt><dd>@PortalClock.Number(status.PacketsSent) · @PortalClock.Bytes(status.BytesSent)</dd></div>
+                    <div><dt>Errors</dt><dd>@status.SessionErrors</dd></div>
+                    <div><dt>Trace</dt><dd>@status.Trace.PayloadPolicy · @PortalClock.Number(status.Trace.FramesCaptured) frames@(status.Trace.FramesDropped > 0 ? $" ({status.Trace.FramesDropped} dropped)" : "")</dd></div>
+                    <div><dt>Live stream</dt><dd class="@(linked ? "ok-text" : "warn-text")">@(linked ? "เชื่อมต่อ" : "ไม่ได้เชื่อมต่อ")</dd></div>
+                    <div><dt>Memory</dt><dd>@PortalClock.Bytes(status.WorkingSetBytes)</dd></div>
+                    <div><dt>Version</dt><dd>@status.Version</dd></div>
+                </dl>
+                @if (status.LastError is { } error)
+                {
+                    <p class="alert bad small">ล่าสุด: @error</p>
+                }
+            }
+        </article>
+    }
+</section>
+
+<section class="panel">
+    <div class="row between">
+        <h2>เหตุการณ์ล่าสุด</h2>
+        <a href="/services" class="muted small">ดูทั้งหมดในหน้าบริการ</a>
+    </div>
+    @if (events.Count == 0)
+    {
+        <p class="muted">ยังไม่มีเหตุการณ์</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>เวลา</th><th>บริการ</th><th>เหตุการณ์</th><th>Session</th><th>รายละเอียด</th></tr></thead>
+                <tbody>
+                    @foreach ((string service, ServiceEvent item) in events)
+                    {
+                        <tr class="@(item.Event.Contains("error", StringComparison.Ordinal) || item.Event.Contains("failed", StringComparison.Ordinal) ? "bad-row" : "")">
+                            <td class="mono">@Clock.Time(item.RecordedAtUtc)</td>
+                            <td>@service</td>
+                            <td><code>@item.Event</code></td>
+                            <td class="mono small">@item.SessionKey</td>
+                            <td class="small">@Describe(item)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private IReadOnlyList<ServiceSnapshot> snapshots = [];
+    private IReadOnlyList<SessionInfo> sessions = [];
+    private List<(string Service, ServiceEvent Event)> events = [];
+
+    protected override Task LoadAsync() => RefreshAsync();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) Every(TimeSpan.FromSeconds(3), RefreshAsync);
+    }
+
+    private async Task RefreshAsync()
+    {
+        snapshots = await Services.SnapshotAsync(Stopping);
+        sessions = await Services.SessionsAsync(false, Stopping);
+        List<(string, ServiceEvent)> merged = [];
+        foreach (AgentClient client in Services.Clients)
+        {
+            if (snapshots.FirstOrDefault(s => s.Endpoint.Id == client.Endpoint.Id) is not { Reachable: true }) continue;
+            try { merged.AddRange((await client.EventsAsync(20, Stopping)).Select(e => (client.Endpoint.Id, e))); }
+            catch (Exception error) when (GameServices.IsUnavailable(error, Stopping)) { }
+        }
+        events = merged.OrderByDescending(e => e.Item2.RecordedAtUtc).Take(20).ToList();
+        Problem = null;
+    }
+
+    private static string Describe(ServiceEvent item) =>
+        string.Join(" · ", new[] { item.Remote, item.State, item.Reason, item.Type is { } t ? KnownPackets.NameOf(t) : null, item.Host is { } h ? $"{h}:{item.Port}" : null }
+            .Where(s => !string.IsNullOrEmpty(s)));
+}

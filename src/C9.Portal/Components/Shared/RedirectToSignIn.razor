@@ -1,0 +1,11 @@
+@inject NavigationManager Navigation
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState? state = AuthState is null ? null : await AuthState;
+        if (state?.User.Identity?.IsAuthenticated == true) Navigation.NavigateTo("/denied", forceLoad: true);
+        else Navigation.NavigateTo("/signin?ReturnUrl=" + Uri.EscapeDataString(Navigation.ToBaseRelativePath(Navigation.Uri) is { Length: > 0 } path ? "/" + path : "/"), forceLoad: true);
+    }
+}

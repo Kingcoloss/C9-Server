@@ -19,6 +19,30 @@ dotnet workload install maui-windows --source https://api.nuget.org/v3/index.jso
 ถ้าจะทดสอบ backend อย่างเดียว ใช้สองคำสั่ง `dotnet build` และ `C9.Validation.dll`
 ได้ก่อนติดตั้ง MAUI workload
 
+## สร้าง Release แยก Server และ Client
+
+สคริปต์ `Build-C9Release.ps1` สร้าง Desktop Manager และ game backend ใน `server/`
+และสร้าง Local Launcher แบบ single-file ใน `client/` โดยเลือก target และสถาปัตยกรรมได้:
+
+```powershell
+.\scripts\Build-C9Release.ps1 -Target All -RuntimeIdentifier win-x64
+.\scripts\Build-C9Release.ps1 -Target Server -RuntimeIdentifier win-x64 -Launch
+.\scripts\Build-C9Release.ps1 -Target Client -RuntimeIdentifier win-x64 -NoZip
+```
+
+ผลอยู่ใน `artifacts/release/<RID>/server/` และ `client/` พร้อม ZIP แยกแต่ละ target
+เว้นแต่ใช้ `-NoZip` หากมี release เดิม สคริปต์เก็บไว้ใน `.previous/` ก่อนแทนที่
+ส่วนไฟล์ที่ publish ไม่สำเร็จจะค้างใน `.staging-*` เพื่อใช้ตรวจสาเหตุ
+
+Manager ยังต้องเปิดจาก workspace ที่มี `C9.slnx` และ `config/` และใช้ `dotnet.exe`
+ในการเปิด backend; ZIP จึงยังไม่ใช่ชุดติดตั้ง server อิสระ สำหรับ Client ให้ใช้
+installer ด้านล่างโดยเพิ่ม `--ui-dir artifacts/release/win-x64/client` และเปลี่ยน
+`--backend` ให้ชี้ `artifacts/release/win-x64/server/game/C9.Server.dll` หากใช้
+server release ชุดนี้ Launcher ต้องติดตั้งข้าง `C9.exe` และจะสร้าง `L9.local.json`
+เมื่อยังไม่มีจาก `config/local-launcher.json` ใน workspace ที่ build โปรแกรมนี้
+ใช้ `L9.exe --configure --workspace '<C9-Server>' --client-dir '<game folder>'`
+เพื่อสร้างและตรวจ config ได้โดยไม่เปิดเกม ดู [คู่มือ Launcher](LOCAL_LAUNCHER_TH.md)
+
 ## ย้ายข้อมูล Local
 
 เซฟตัวละครทดสอบ Lab ทั้งสองรุ่นและค่าตั้ง Server Manager อยู่ใน

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <!-- Portal module 3.2: game accounts and characters. Discovered by C9.Portal as C9.Portal.*.dll. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
+    <ProjectReference Include="../C9.GameData/C9.GameData.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="C9.Portal.GameData.Validation" />
+  </ItemGroup>
+</Project>

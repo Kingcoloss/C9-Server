@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Executable validation in the same style as tests/C9.Validation (no test-framework packages).
+       Offline cases always run; database cases need C9_DB_ADMIN_CONNECTION (a role that may CREATE DATABASE). -->
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../../src/C9.GameData/C9.GameData.csproj" />
+    <EmbeddedResource Include="../../config/migration/local-state/official-55350-characters.json" LogicalName="legacy-characters.json" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,32 @@
+@page "/reference/packets"
+@attribute [Authorize(Policy = PortalPolicies.TraceRead)]
+
+<PageTitle>Packet catalog · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">REFERENCE</p>
+        <h1>Packet catalog</h1>
+        <p class="muted">ชนิด packet ที่ยืนยันแล้วในโปรเจกต์นี้ (ชื่อตั้งขึ้นเพื่ออธิบาย ไม่ใช่ชื่อภายในของ client) ใช้กรองในหน้า Packet trace ได้</p>
+    </div>
+</header>
+
+<div class="panel table-wrap">
+    <table>
+        <thead><tr><th>Type</th><th>ทศนิยม</th><th>ชื่อ</th><th>ทิศทาง</th><th>คำอธิบาย</th><th>ข้อมูลอ่อนไหว</th><th></th></tr></thead>
+        <tbody>
+            @foreach (PacketTypeInfo info in KnownPackets.All)
+            {
+                <tr>
+                    <td class="mono">@info.Hex</td>
+                    <td class="mono">@info.Type</td>
+                    <td>@info.Name</td>
+                    <td>@(info.Direction == TraceDirections.Inbound ? "C→S" : "S→C")</td>
+                    <td class="small">@info.Description</td>
+                    <td>@(info.Sensitive ? "ใช่ (ซ่อนไบต์)" : "")</td>
+                    <td><a class="small" href="@($"/trace?type={info.Hex}")">trace</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

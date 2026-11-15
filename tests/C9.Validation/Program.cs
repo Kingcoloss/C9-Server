@@ -90,7 +90,12 @@ internal static partial class Validation
             ("World map catalog and destinations", Sync(WorldMapDestinations)),
             ("Launcher installed version validation", Sync(LauncherVersion)),
             ("Official Client local launch arguments", Sync(LocalLauncherArguments)),
+            ("Local launcher configuration bootstrap and preservation", Sync(LocalConfigurationBootstrap)),
+            ("Launcher user settings persist game folder and mode", Sync(LauncherSettingsPersistence)),
+            ("Public launcher works independently from local configuration", Sync(PublicLauncherIndependent)),
             ("Concurrent metadata file logging", Sync(MetadataFileLogging)),
+            ("Agent token file and container bind policy", Sync(AgentTokenAndContainerBind)),
+            ("Packet trace payload policies and type parsing", Sync(TracePayloadPolicy)),
             ("Pipe fragmentation and coalescing", PipeBoundaries),
             ("Pipe EOF and invalid lengths", PipeErrors),
             ("Pipe read timeout", PipeTimeout),
@@ -113,6 +118,7 @@ internal static partial class Validation
             ("TCP greeting observer accepts interleaved packets without replies", TcpObserver),
             ("TCP legacy character creation persists across server restarts", () => TcpCharacterLobby(42, 3)),
             ("TCP build 55350 lobby sends configured world vitals after load", () => TcpCharacterLobby(47, 17, WorldVitalsLayout.Extended, 163, 77)),
+            ("Lobby characters in the game database (C9_DB_ADMIN_CONNECTION)", GameDataLobby),
             ("TCP suspended local account cannot enter or reconnect", TcpSuspendedLocalAccount),
             ("TCP coalescing and reconnect isolation", TcpReconnect),
             ("TCP rejects wrong session state", TcpWrongState),
@@ -123,7 +129,9 @@ internal static partial class Validation
             ("TCP packet limit", TcpPacketLimit),
             ("TCP graceful shutdown during partial frame", TcpShutdown),
             ("TCP probe profile stays passive", TcpProbe),
-            ("TCP launcher update HTTP contract", LauncherHttp)
+            ("TCP launcher update HTTP contract", LauncherHttp),
+            ("TCP agent trace, redaction, persistence, pcap and listener control", TcpAgentTraceAndControl),
+            ("TCP agent HTTP API, token and live stream", TcpAgentHttpApi)
         ];
         var selected = offline ? cases.Where(c => !c.Name.StartsWith("TCP ", StringComparison.Ordinal)).ToArray() : cases;
         int passed = 0;

@@ -1,0 +1,42 @@
+@if (Bytes is null)
+{
+    <p class="muted small">@(Missing ?? "ไม่มีข้อมูลไบต์")</p>
+}
+else if (Bytes.Length == 0)
+{
+    <p class="muted small">0 bytes</p>
+}
+else
+{
+    <pre class="hex" aria-label="@Label">@Render()</pre>
+}
+@code {
+    [Parameter] public byte[]? Bytes { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? Missing { get; set; }
+    [Parameter] public int Limit { get; set; } = 4096;
+
+    private string Render()
+    {
+        System.Text.StringBuilder text = new();
+        int length = Math.Min(Bytes!.Length, Limit);
+        for (int offset = 0; offset < length; offset += 16)
+        {
+            text.Append(offset.ToString("X4", CultureInfo.InvariantCulture)).Append("  ");
+            for (int i = 0; i < 16; i++)
+            {
+                if (i == 8) text.Append(' ');
+                text.Append(offset + i < length ? Bytes[offset + i].ToString("X2", CultureInfo.InvariantCulture) + " " : "   ");
+            }
+            text.Append(' ');
+            for (int i = 0; i < 16 && offset + i < length; i++)
+            {
+                byte value = Bytes[offset + i];
+                text.Append(value is >= 0x20 and < 0x7F ? (char)value : '.');
+            }
+            text.Append('\n');
+        }
+        if (Bytes.Length > length) text.Append(CultureInfo.InvariantCulture, $"… {Bytes.Length - length} more bytes (download the export for all bytes)\n");
+        return text.ToString();
+    }
+}

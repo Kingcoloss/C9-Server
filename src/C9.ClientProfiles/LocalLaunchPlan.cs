@@ -8,16 +8,19 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
 {
     public const string Official52893 = "704687c39a293db92999c8a1ef5f22d9e147d743a94d3decb3de0a35af69dd63";
     public const string OfficialUpdated20261106 = "9c6816ab93a6de55e93a9c98cb3837879f0d8e9682e94932d122cf7995845529";
-    public string DisplayName => ClientHash == Official52893 ? "52893" : "55350";
+    public const string Observed20261114 = "b4580ed4f8fa6670501577918ad61a3318d72b119bb83caaeab5aab5f31d3bb7";
+    public bool CompatibilityTest => ClientHash == Observed20261114;
+    public string DisplayName => CompatibilityTest ? "2026-11-14 (compatibility test)" : ClientHash == Official52893 ? "52893" : "55350";
 
-    public static LocalLaunchPlan Create(string directory, string host, int port, string clientHash)
+    public static LocalLaunchPlan Create(string directory, string host, int port, string clientHash, bool compatibilityTest = false)
     {
         if (!IPAddress.TryParse(host, out IPAddress? address) || !IPAddress.IsLoopback(address) ||
             address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
             throw new ArgumentException("Local launcher requires a numeric IPv4 loopback address");
         if (port is < 1 or > 65535) throw new ArgumentException("Invalid local server port");
         if (!clientHash.Equals(Official52893, StringComparison.OrdinalIgnoreCase) &&
-            !clientHash.Equals(OfficialUpdated20261106, StringComparison.OrdinalIgnoreCase))
+            !clientHash.Equals(OfficialUpdated20261106, StringComparison.OrdinalIgnoreCase) &&
+            !(compatibilityTest && clientHash.Equals(Observed20261114, StringComparison.OrdinalIgnoreCase)))
             throw new InvalidDataException("The updated Client needs a compatibility profile before local launch");
         string folder = Path.GetFullPath(directory);
         // The ordinary argument reader (007E9480) requires three comma fields.
@@ -30,26 +33,22 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
         // Normal VFUN launch of signed build 55350 was observed with eleven
         // colon fields, empty fields 1/7 and EN at 10; there are no comma or
         // pipe fields. Reuse that structure with synthetic lab values only.
-        string arguments = clientHash.Equals(OfficialUpdated20261106, StringComparison.OrdinalIgnoreCase)
+        // The current signed Client is a bounded, explicit experiment until its trace is verified.
+        string arguments = !clientHash.Equals(Official52893, StringComparison.OrdinalIgnoreCase)
             ? $"fromVLauncher::VALOFE:AAAAAAAAAAAAAAAAAAAAAA%3D%3D:c9-gl:0000000000001:test::{endpoint}:{port}:EN"
             : $"{endpoint},{port},test|1|local|0|-1:0:0:lab:0:lab:0:0:{endpoint}:{port}";
         return new(Path.Combine(folder, "C9.exe"), folder, arguments, clientHash.ToLowerInvariant());
     }
 
-    public static LocalLaunchPlan Read(string directory)
+    public static LocalLaunchPlan Read(string directory, string? configurationDirectory = null, bool compatibilityTest = false)
     {
         string folder = Path.GetFullPath(directory);
-        using JsonDocument config = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(folder, "L9.local.json")));
+        using JsonDocument config = LocalLauncherConfiguration.Read(configurationDirectory ?? folder);
         JsonElement root = config.RootElement;
-        if (root.ValueKind != JsonValueKind.Object ||
-            root.EnumerateObject().Any(p => p.Name is not ("host" or "port" or
-                "backend_assembly" or "backend_config" or "handoff_backend_config" or "dotnet_path" or "official_launcher")) ||
-            !root.TryGetProperty("host", out _) || !root.TryGetProperty("port", out _))
-            throw new InvalidDataException("Invalid local launcher configuration");
         string host = root.GetProperty("host").GetString() ?? "";
         int port = root.GetProperty("port").GetInt32();
         using FileStream game = File.OpenRead(Path.Combine(folder, "C9.exe"));
         string hash = Convert.ToHexString(SHA256.HashData(game)).ToLowerInvariant();
-        return Create(folder, host, port, hash);
+        return Create(folder, host, port, hash, compatibilityTest);
     }
 }

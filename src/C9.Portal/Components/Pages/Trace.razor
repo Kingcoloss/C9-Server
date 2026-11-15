@@ -1,0 +1,389 @@
+@page "/trace"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.TraceRead)]
+@inherits LivePage
+@using System.Collections.Concurrent
+@using C9.Server
+@inject GameServices Services
+@inject PortalBus Bus
+
+<PageTitle>Packet trace · C9 Admin Portal</PageTitle>
+
+<header class="page-head">
+    <div>
+        <p class="eyebrow">PACKET TRACE</p>
+        <h1>Packet trace</h1>
+        <p class="muted">ทุก frame ระหว่าง client กับ server (ไบต์ตามสาย + payload ที่ถอดรหัสแล้ว) เลือก session เพื่อไล่หาจุดที่ผิดพลาด</p>
+    </div>
+    <div class="actions">
+        <a class="button quiet small" href="api/v1/tools/wireshark/c9.lua" download data-enhance-nav="false"><Icon Name="download" /> Wireshark dissector</a>
+    </div>
+</header>
+
+@if (Problem is not null)
+{
+    <p class="alert bad">@Problem</p>
+}
+@if (status?.Trace.PayloadPolicy == TracePayloadPolicies.Full)
+{
+    <p class="alert warn">บริการนี้บันทึก payload แบบ <b>full</b> รวมข้อมูลล็อกอิน ใช้เฉพาะตอนพัฒนา แล้วเปลี่ยนกลับเป็น redact-credentials</p>
+}
+else if (status is not null && !status.Trace.Enabled)
+{
+    <p class="alert warn">บริการนี้ปิด packet trace อยู่</p>
+}
+
+<div class="trace-layout">
+    <aside class="panel trace-sessions">
+        <label class="field">
+            <span>บริการ</span>
+            <select @bind="service" @bind:after="ServiceChangedAsync">
+                @foreach (GameServiceEndpoint endpoint in Services.Endpoints)
+                {
+                    <option value="@endpoint.Id">@endpoint.Name (@endpoint.PublicPort)</option>
+                }
+            </select>
+        </label>
+        <button class="list-item @(sessionKey is null ? "active" : "")" @onclick="() => SelectSessionAsync(null)">
+            <strong>ทุก session (ล่าสุด)</strong>
+            <span class="muted small">frames ใน ring buffer ของบริการนี้</span>
+        </button>
+        @foreach (TraceSessionSummary item in traceSessions)
+        {
+            <button class="list-item @(sessionKey == item.Key ? "active" : "")" @onclick="() => SelectSessionAsync(item.Key)">
+                <strong class="mono small">#@SessionNumber(item.Key) · @Clock.Time(item.StartedUtc)</strong>
+                <span class="small">
+                    @(item.Live ? "● live" : "ปิดแล้ว") · @item.Frames frames
+                    @if (item.Errors > 0)
+                    {
+                        <b class="bad-text"> · @item.Errors error</b>
+                    }
+                </span>
+                <span class="muted small">@item.RemoteEndpoint · @(item.LastState ?? "—")@(item.CloseReason is { } r ? " · " + r : "")</span>
+            </button>
+        }
+        @if (traceSessions.Count == 0)
+        {
+            <p class="muted small">ยังไม่มี session ที่ถูกบันทึก</p>
+        }
+    </aside>
+
+    <section class="trace-main">
+        <form class="panel filters" @onsubmit="ReloadAsync">
+            <label class="field">
+                <span>ทิศทาง</span>
+                <select @bind="direction">
+                    <option value="">ทั้งสองทาง</option>
+                    <option value="@TraceDirections.Inbound">Client → Server (c2s)</option>
+                    <option value="@TraceDirections.Outbound">Server → Client (s2c)</option>
+                </select>
+            </label>
+            <label class="field grow">
+                <span>Packet type (คั่นด้วย , เช่น 0x2F04, LoginAck, 3003)</span>
+                <input @bind="typesText" list="packet-names" placeholder="ทุกชนิด" spellcheck="false" />
+                <datalist id="packet-names">
+                    @foreach (PacketTypeInfo info in KnownPackets.All)
+                    {
+                        <option value="@info.Name">@info.Hex @info.Description</option>
+                    }
+                </datalist>
+            </label>
+            <label class="check"><input type="checkbox" @bind="errorsOnly" /> เฉพาะ error</label>
+            <button class="primary" type="submit">กรอง</button>
+            <label class="check"><input type="checkbox" @bind="live" /> Live tail</label>
+        </form>
+        @if (filterProblem is not null)
+        {
+            <p class="alert bad small">@filterProblem</p>
+        }
+
+        <div class="row between trace-toolbar">
+            <p class="muted small">
+                แสดง @frames.Count frames@(sessionKey is null ? "" : " ของ " + sessionKey)
+                @if (frames.Count > 0)
+                {
+                    <span> · @Clock.Precise(frames[0].TimeUtc) ถึง @Clock.Precise(frames[^1].TimeUtc) (@Clock.ZoneLabel)</span>
+                }
+            </p>
+            <div class="actions">
+                @if (olderAvailable)
+                {
+                    <button class="quiet small" @onclick="LoadOlderAsync">โหลดเก่ากว่านี้</button>
+                }
+                @if (sessionKey is not null && Can(PortalPolicies.TraceExport))
+                {
+                    string key = Uri.EscapeDataString(sessionKey);
+                    <a class="button quiet small" href="@($"api/v1/trace/sessions/{key}/export?format=pcap")" download data-enhance-nav="false"><Icon Name="download" /> pcap (wire)</a>
+                    <a class="button quiet small" href="@($"api/v1/trace/sessions/{key}/export?format=pcap-decoded")" download data-enhance-nav="false"><Icon Name="download" /> pcap (decoded)</a>
+                    <a class="button quiet small" href="@($"api/v1/trace/sessions/{key}/export?format=jsonl")" download data-enhance-nav="false"><Icon Name="download" /> JSONL</a>
+                }
+            </div>
+        </div>
+
+        <div class="trace-split">
+            <div class="panel table-wrap frames">
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>เวลา</th><th>ทาง</th><th>Type</th><th>ชื่อ</th><th>Payload</th><th>Seq</th><th>State</th><th>หมายเหตุ</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TraceFrame frame in frames)
+                        {
+                            <tr class="clickable @(frame.Error is not null ? "bad-row" : "") @(selected?.Id == frame.Id ? "selected" : "") @(frame.Direction == TraceDirections.Inbound ? "c2s" : "s2c")"
+                                @onclick="() => selected = frame" tabindex="0" @onkeydown="e => Pick(e, frame)">
+                                <td class="mono small">@frame.Id</td>
+                                <td class="mono small">@Clock.Precise(frame.TimeUtc)</td>
+                                <td>@(frame.Direction == TraceDirections.Inbound ? "C→S" : "S→C")</td>
+                                <td class="mono">@PortalClock.Type(frame.Type)</td>
+                                <td>@(frame.Type is { } t ? KnownPackets.NameOf(t) : "")</td>
+                                <td class="mono small">@(frame.PayloadLength?.ToString(CultureInfo.InvariantCulture) ?? "—") / @frame.WireLength</td>
+                                <td class="mono small">@frame.Sequence</td>
+                                <td class="small">@frame.State</td>
+                                <td class="small">
+                                    @if (frame.Error is { } error)
+                                    {
+                                        <span class="bad-text">@error</span>
+                                    }
+                                    @if (frame.Redacted)
+                                    {
+                                        <span class="badge idle">redacted</span>
+                                    }
+                                    @if (sessionKey is null)
+                                    {
+                                        <span class="muted"> #@SessionNumber(frame.Session)</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (frames.Count == 0)
+                {
+                    <p class="muted empty">ไม่มี frame ตามตัวกรองนี้@(live ? " (กำลังรอ frame ใหม่)" : "")</p>
+                }
+            </div>
+
+            <aside class="panel frame-detail">
+                @if (selected is null)
+                {
+                    <p class="muted small">เลือก frame ในตารางเพื่อดูรายละเอียดและ hex dump (คลิก หรือกด Tab แล้ว Enter)</p>
+                }
+                else
+                {
+                    PacketTypeInfo? info = selected.Type is { } st ? KnownPackets.Find(st) : null;
+                    <h2>#@selected.Id @(info?.Name ?? (selected.Type is null ? "Framing error" : PortalClock.Type(selected.Type)))</h2>
+                    @if (info is not null)
+                    {
+                        <p class="muted small">@info.Description</p>
+                    }
+                    <div class="detail-grid">
+                    <div>
+                    <dl class="facts compact">
+                        <div><dt>Session</dt><dd class="mono small">@selected.Session</dd></div>
+                        <div><dt>เวลา</dt><dd class="mono">@Clock.Full(selected.TimeUtc).@selected.TimeUtc.ToString("fff", CultureInfo.InvariantCulture)</dd></div>
+                        <div><dt>ทิศทาง</dt><dd>@(selected.Direction == TraceDirections.Inbound ? "Client → Server" : "Server → Client") · @selected.Transport</dd></div>
+                        <div><dt>Stream offset</dt><dd class="mono">@selected.StreamOffset</dd></div>
+                        <div><dt>Wire / payload</dt><dd class="mono">@selected.WireLength / @(selected.PayloadLength?.ToString(CultureInfo.InvariantCulture) ?? "—") bytes</dd></div>
+                        <div><dt>Flag / seq / checksum</dt><dd class="mono">@(selected.Flag is { } f ? $"0x{f:X2}" : "—") / @(selected.Sequence?.ToString(CultureInfo.InvariantCulture) ?? "—") / @(selected.Checksum is { } c ? $"0x{c:X8}" : "—")</dd></div>
+                        <div><dt>Cipher</dt><dd class="mono">frames @(selected.CipherFrames?.ToString(CultureInfo.InvariantCulture) ?? "—") · selector @(selected.Selector?.ToString(CultureInfo.InvariantCulture) ?? "—")</dd></div>
+                        <div><dt>State</dt><dd>@selected.State</dd></div>
+                        @if (selected.PayloadSha256 is { } hash)
+                        {
+                            <div><dt>Payload SHA-256</dt><dd class="mono small break">@hash</dd></div>
+                        }
+                    </dl>
+                    @if (selected.Error is { } detailError)
+                    {
+                        <p class="alert bad small">@detailError</p>
+                    }
+                    @if (selected.Redacted)
+                    {
+                        <p class="alert warn small">ไบต์ของ frame นี้ถูกซ่อนตามนโยบาย redact-credentials (ข้อมูลล็อกอิน) เหลือเพียงความยาวและ SHA-256</p>
+                    }
+                    </div>
+                    <div>
+                    @if (!canBytes)
+                    {
+                        <p class="muted small">บทบาทนี้ดูได้เฉพาะ header (ต้องมีสิทธิ์ trace.export เพื่อดูไบต์)</p>
+                    }
+                    else
+                    {
+                        <h3>Payload (ถอดรหัสแล้ว)</h3>
+                        <HexDump Bytes="Decode(selected.Payload)" Label="payload" Missing="ไม่มี payload" />
+                        <h3>Wire (ไบต์ตามสาย)</h3>
+                        <HexDump Bytes="Decode(selected.Wire)" Label="wire" Missing="ไม่มีไบต์ตามสาย" />
+                    }
+                    </div>
+                    </div>
+                }
+            </aside>
+        </div>
+    </section>
+</div>
+
+@code {
+    private const int PageSize = 500;
+    private const int MaxFrames = 5000;
+    [SupplyParameterFromQuery(Name = "session")] public string? SessionParameter { get; set; }
+    [SupplyParameterFromQuery(Name = "service")] public string? ServiceParameter { get; set; }
+
+    private readonly List<TraceFrame> frames = [];
+    private readonly ConcurrentQueue<LiveFrame> incoming = new();
+    private IReadOnlyList<TraceSessionSummary> traceSessions = [];
+    private AgentStatus? status;
+    private string service = "";
+    private string? sessionKey;
+    private string direction = "";
+    private string typesText = "";
+    private bool errorsOnly, olderAvailable, canBytes;
+    private bool live = true;
+    private string? filterProblem;
+    private TraceFrame? selected;
+    private TraceQuery applied = new();
+    private DateTimeOffset nextSessionRefresh;
+
+    protected override async Task LoadAsync()
+    {
+        canBytes = Api.PortalApi.CanSeeBytes(User);
+        if (SessionParameter is { Length: > 0 } key && SessionKeys.TryParse(key, out string owner, out _, out _) && Services.Endpoints.Any(e => e.Id == owner))
+        {
+            service = owner;
+            sessionKey = key;
+        }
+        else service = Services.Endpoints.FirstOrDefault(e => e.Id == ServiceParameter)?.Id ?? Services.Endpoints[0].Id;
+        await LoadSessionsAsync();
+        await ReloadAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+        Background(async token =>
+        {
+            await foreach (LiveMessage message in Bus.SubscribeAllAsync(token))
+                if (message is LiveFrame frame && live) incoming.Enqueue(frame);
+        });
+        Every(TimeSpan.FromMilliseconds(400), async () =>
+        {
+            DrainLive();
+            if (DateTimeOffset.UtcNow >= nextSessionRefresh) await LoadSessionsAsync();
+        });
+    }
+
+    private void DrainLive()
+    {
+        long last = frames.Count > 0 ? frames[^1].Id : long.MinValue;
+        while (incoming.TryDequeue(out LiveFrame? item))
+        {
+            if (!live || item.ServiceId != service || item.Frame.Id <= last || !TraceRing.Matches(item.Frame, applied with { AfterId = null, BeforeId = null, SinceUtc = null })) continue;
+            frames.Add(Visible(item.Frame));
+            last = item.Frame.Id;
+        }
+        if (frames.Count > MaxFrames)
+        {
+            frames.RemoveRange(0, frames.Count - MaxFrames);
+            olderAvailable = true;
+        }
+    }
+
+    private TraceFrame Visible(TraceFrame frame) => canBytes ? frame : frame with { Wire = null, Payload = null };
+
+    private async Task LoadSessionsAsync()
+    {
+        nextSessionRefresh = DateTimeOffset.UtcNow.AddSeconds(4);
+        try
+        {
+            AgentClient client = Services.Client(service);
+            status = await client.StatusAsync(Stopping);
+            traceSessions = await client.TraceSessionsAsync(300, Stopping);
+            Problem = null;
+        }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping))
+        {
+            status = null;
+            Problem = $"{service}: {GameServices.Describe(error)}";
+        }
+    }
+
+    private async Task ServiceChangedAsync()
+    {
+        sessionKey = null;
+        await LoadSessionsAsync();
+        await ReloadAsync();
+    }
+
+    private async Task SelectSessionAsync(string? key)
+    {
+        sessionKey = key;
+        await ReloadAsync();
+    }
+
+    private bool TryBuildQuery(out TraceQuery query)
+    {
+        query = new TraceQuery();
+        List<ushort> types = [];
+        foreach (string part in typesText.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            if (!AgentHost.TryParseType(part, out ushort type))
+            {
+                filterProblem = $"ไม่รู้จัก packet type '{part}' (ใช้ 0x2F04, เลขฐานสิบ หรือชื่อในรายการ)";
+                return false;
+            }
+            types.Add(type);
+        }
+        filterProblem = null;
+        query = new TraceQuery
+        {
+            Session = sessionKey, Direction = direction.Length == 0 ? null : direction,
+            Types = types.Count > 0 ? types : null, ErrorsOnly = errorsOnly, Limit = PageSize
+        };
+        return true;
+    }
+
+    private async Task ReloadAsync()
+    {
+        if (!TryBuildQuery(out TraceQuery query)) return;
+        applied = query;
+        selected = null;
+        incoming.Clear();
+        try
+        {
+            TracePage page = await Services.Client(service).TraceFramesAsync(query, Stopping);
+            frames.Clear();
+            frames.AddRange(page.Frames.Select(Visible));
+            olderAvailable = page.Truncated;
+            Problem = null;
+        }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping))
+        {
+            frames.Clear();
+            Problem = $"{service}: {GameServices.Describe(error)}";
+        }
+    }
+
+    private async Task LoadOlderAsync()
+    {
+        if (frames.Count == 0) return;
+        try
+        {
+            TracePage page = await Services.Client(service).TraceFramesAsync(applied with { BeforeId = frames[0].Id }, Stopping);
+            frames.InsertRange(0, page.Frames.Select(Visible));
+            olderAvailable = page.Truncated;
+        }
+        catch (Exception error) when (GameServices.IsUnavailable(error, Stopping)) { Problem = GameServices.Describe(error); }
+    }
+
+    private void Pick(KeyboardEventArgs e, TraceFrame frame)
+    {
+        if (e.Key is "Enter" or " ") selected = frame;
+    }
+
+    private static byte[]? Decode(string? base64)
+    {
+        if (base64 is null) return null;
+        try { return Convert.FromBase64String(base64); }
+        catch (FormatException) { return null; }
+    }
+
+    private static string SessionNumber(string key) => SessionKeys.TryParse(key, out _, out _, out long number) ? number.ToString(CultureInfo.InvariantCulture) : key;
+}

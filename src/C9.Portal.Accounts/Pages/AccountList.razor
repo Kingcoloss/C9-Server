@@ -1,0 +1,121 @@
+@page "/accounts"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AccountsRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+@inject NavigationManager Navigation
+
+<PageTitle>บัญชีผู้เล่น</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+    <div>
+        <p class="eyebrow">GAME ACCOUNTS</p>
+        <h1>บัญชีผู้เล่น</h1>
+        <p class="muted">ค้นหาบัญชีเกมและตัวละครทั้งหมดในบัญชี ทุกการแก้ไขต้องระบุเหตุผลและถูกบันทึกใน audit log</p>
+    </div>
+</header>
+
+    <section class="panel">
+        <div class="filters">
+            <label class="field grow">ค้นหา (ชื่อบัญชีหรือชื่อตัวละคร)
+                <input @bind="text" @bind:event="oninput" @onkeydown="SearchOnEnter" placeholder="เช่น Lab" />
+            </label>
+            <label class="field">สถานะ
+                <select @bind="status">
+                    <option value="">ทั้งหมด</option>
+                    @foreach (AccountStatus s in Enum.GetValues<AccountStatus>())
+                    {
+                        <option value="@s">@s</option>
+                    }
+                </select>
+            </label>
+            <label class="field">แท็ก <input @bind="tag" placeholder="เช่น tester" /></label>
+            <label class="field">เรียง
+                <select @bind="sort">
+                    <option value="@AccountSort.LoginName">ชื่อบัญชี</option>
+                    <option value="@AccountSort.CreatedAt">วันที่สร้าง</option>
+                    <option value="@AccountSort.LastLoginAt">เข้าเกมล่าสุด</option>
+                </select>
+            </label>
+            <label class="check"><input type="checkbox" @bind="descending" /> มากไปน้อย</label>
+            <button class="primary" @onclick="() => LoadAsync(0)">ค้นหา</button>
+        </div>
+    </section>
+
+    @if (results is not null)
+    {
+        <section class="panel table-scroll">
+            <table>
+                <thead><tr><th>บัญชี</th><th>สถานะ</th><th>ตัวละคร</th><th>Slot</th><th>แท็ก</th><th>สร้างเมื่อ</th><th>เข้าล่าสุด</th></tr></thead>
+                <tbody>
+                    @foreach (AccountSummary a in results.Items)
+                    {
+                        <tr>
+                            <td><a href="@($"/accounts/{a.Id}")">@a.LoginName</a> @if (a.IsGm) { <span class="badge busy">GM</span> }</td>
+                            <td><span class="badge @GameDataGate.Badge(a.Status)">@a.Status</span></td>
+                            <td>@a.CharacterCount</td>
+                            <td>@a.SlotCount</td>
+                            <td>@string.Join(", ", a.Tags)</td>
+                            <td>@Local(a.CreatedAt)</td>
+                            <td>@(a.LastLoginAt is { } l ? Local(l) : "—")</td>
+                        </tr>
+                    }
+                    @if (results.Items.Count == 0)
+                    {
+                        <tr><td colspan="7" class="muted small">ไม่พบบัญชี</td></tr>
+                    }
+                </tbody>
+            </table>
+            <div class="filters">
+                <span class="muted small">@(results.Total == 0 ? 0 : results.Skip + 1)–@(results.Skip + results.Items.Count) จาก @results.Total</span>
+                <button disabled="@(results.Skip == 0)" @onclick="() => LoadAsync(Math.Max(0, results.Skip - PageSize))">ก่อนหน้า</button>
+                <button disabled="@(results.Skip + results.Items.Count >= results.Total)" @onclick="() => LoadAsync(results.Skip + PageSize)">ถัดไป</button>
+            </div>
+        </section>
+    }
+
+    <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+        <section class="panel">
+            <h2>สร้างบัญชี</h2>
+            <div class="filters">
+                <label class="field">ชื่อบัญชี (3–32 ตัว: a-z 0-9 _ . -) <input @bind="newLogin" autocomplete="off" /></label>
+                <label class="field">รหัสผ่าน (8–128 ตัว, เว้นว่าง = ปิดการ login ด้วยรหัสผ่าน) <input type="password" @bind="newPassword" autocomplete="new-password" /></label>
+                <label class="field">เหตุผล <input @bind="newReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="CreateAsync">สร้าง</button>
+            </div>
+        </section>
+    </AuthorizeView>
+</GameDataGate>
+
+@code {
+    private const int PageSize = 50;
+    private string? text, tag, newLogin, newPassword, newReason;
+    private AccountStatus? status;
+    private AccountSort sort = AccountSort.LoginName;
+    private bool descending;
+    private Page<AccountSummary>? results;
+
+    protected override Task OnInitializedAsync() => LoadAsync(0);
+
+    private async Task LoadAsync(int skip)
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        AccountService accounts = (AccountService)Services.GetService(typeof(AccountService))!;
+        results = await accounts.SearchAsync(new AccountQuery(text, status, tag, sort, descending, skip, PageSize));
+    }
+
+    private Task SearchOnEnter(KeyboardEventArgs e) => e.Key == "Enter" ? LoadAsync(0) : Task.CompletedTask;
+
+    private async Task CreateAsync()
+    {
+        AccountService accounts = (AccountService)Services.GetService(typeof(AccountService))!;
+        string? password = string.IsNullOrEmpty(newPassword) ? null : newPassword;
+        Account? created = await Actions.RunAsync("accounts.create", "account:" + newLogin, newReason,
+            op => accounts.CreateAsync(newLogin ?? "", password, op), "สร้างบัญชีแล้ว");
+        newPassword = null;
+        if (created is not null) Navigation.NavigateTo($"/accounts/{created.Id}");
+    }
+
+    internal static string Local(DateTimeOffset value) => value.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+}

@@ -6,9 +6,9 @@ using C9.Protocol;
 
 namespace C9.Server;
 
-public sealed class TcpGameServer(ServerOptions options, IServerEvents events) : IAsyncDisposable
+public sealed class TcpGameServer(ServerOptions options, IServerEvents events, ServiceRuntime? runtime = null) : IAsyncDisposable
 {
-    private sealed record Session(TcpClient Client, TaskCompletionSource Completion);
+    private sealed record Session(TcpClient Client, TaskCompletionSource Completion, SessionContext Context);
     private readonly ConcurrentDictionary<long, Session> sessions = new();
     private readonly SemaphoreSlim slots = new(options.MaxConnections, options.MaxConnections);
     private readonly SessionProcessor processor = new(options, events);
@@ -50,14 +50,17 @@ public sealed class TcpGameServer(ServerOptions options, IServerEvents events) :
                 client.NoDelay = true;
                 if (!slots.Wait(0))
                 {
-                    events.Emit(new ServerEvent("connection_limit"));
+                    events.Emit(new ServerEvent("connection_limit") { Remote = runtime is null ? null : client.Client.RemoteEndPoint?.ToString() });
+                    runtime?.ConnectionRejected();
                     client.Dispose();
                     continue;
                 }
-                long id = Interlocked.Increment(ref sessionNumber);
+                SessionContext context = runtime?.CreateSession(client.Client.RemoteEndPoint?.ToString(), Port)
+                    ?? SessionContext.Legacy(Interlocked.Increment(ref sessionNumber));
+                long id = context.Number;
                 TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
-                sessions[id] = new Session(client, completion);
-                _ = HandleSessionAsync(id, client, completion, cancellationToken);
+                sessions[id] = new Session(client, completion, context);
+                _ = HandleSessionAsync(context, client, completion, cancellationToken);
             }
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { }
@@ -65,9 +68,10 @@ public sealed class TcpGameServer(ServerOptions options, IServerEvents events) :
         catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested) { }
     }
 
-    private async Task HandleSessionAsync(long id, TcpClient client, TaskCompletionSource completion,
+    private async Task HandleSessionAsync(SessionContext context, TcpClient client, TaskCompletionSource completion,
         CancellationToken cancellationToken)
     {
+        long id = context.Number;
         PipeReader? reader = null;
         PipeWriter? writer = null;
         try
@@ -76,11 +80,13 @@ public sealed class TcpGameServer(ServerOptions options, IServerEvents events) :
             reader = PipeReader.Create(stream, new StreamPipeReaderOptions(bufferSize: 4096,
                 minimumReadSize: 512, leaveOpen: true));
             writer = PipeWriter.Create(stream, new StreamPipeWriterOptions(leaveOpen: true));
-            await processor.RunAsync(id, reader, writer, cancellationToken);
+            await processor.RunAsync(context, reader, writer, cancellationToken);
         }
         catch (SocketException)
-        { events.Emit(new ServerEvent("session_error") { Session = id, Reason = "ConnectionError" }); }
+        { events.Emit(new ServerEvent("session_error") { Session = id, SessionKey = context.Keyed ? context.Key : null, Reason = "ConnectionError" }); }
         catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested) { }
+        catch (ObjectDisposedException)
+        { events.Emit(new ServerEvent("session_error") { Session = id, SessionKey = context.Keyed ? context.Key : null, Reason = "Disconnected" }); }
         finally
         {
             // Close the transport before completing adapters, so cleanup cannot
@@ -100,6 +106,15 @@ public sealed class TcpGameServer(ServerOptions options, IServerEvents events) :
                 completion.TrySetResult();
             }
         }
+    }
+
+    /// <summary>Closes one connection; its session ends with a connection error.</summary>
+    public bool Disconnect(long number)
+    {
+        if (!sessions.TryGetValue(number, out Session? session)) return false;
+        session.Context.MarkDisconnectRequested();
+        session.Client.Dispose();
+        return true;
     }
 
     public async Task StopAsync(CancellationToken cancellationToken = default)

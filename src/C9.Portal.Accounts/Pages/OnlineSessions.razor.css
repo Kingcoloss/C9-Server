@@ -1,0 +1,2 @@
+/* Layout only; colours, tables, buttons and alerts come from the Portal's portal.css. */
+.gd { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
