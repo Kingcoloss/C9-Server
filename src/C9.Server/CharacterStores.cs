@@ -25,6 +25,9 @@ internal interface ICharacterStore
 
     /// <summary>Creates a character, or returns the same one again for a retried identical request.</summary>
     ValueTask<LobbyCharacter> AddAsync(byte slot, ushort job, string name, byte[] appearance, CancellationToken token);
+
+    /// <summary>Total of each stat (class base + spent points), or null when the store has no stat system (JSON).</summary>
+    ValueTask<IReadOnlyDictionary<string, int>?> StatsAsync(ulong characterId, CancellationToken token);
 }
 
 internal static class CharacterStores
@@ -63,6 +66,9 @@ internal sealed class JsonCharacterStore : ICharacterStore
     }
 
     public long? AccountId => null;
+
+    public ValueTask<IReadOnlyDictionary<string, int>?> StatsAsync(ulong characterId, CancellationToken token) =>
+        ValueTask.FromResult<IReadOnlyDictionary<string, int>?>(null);
 
     public ValueTask<IReadOnlyList<LobbyCharacter>> LoadAsync(CancellationToken token)
     {
@@ -152,6 +158,16 @@ internal sealed class GameDataCharacterStore(ServerOptions options, string conne
         { throw new ProtocolException(ProtocolError.InvalidPacket, "Character name or slot is already in use"); }
         catch (GameDataException error)
         { throw new ProtocolException(ProtocolError.InvalidPacket, "Character rejected by the game database: " + error.Message); }
+        catch (Exception error) when (Unavailable(error)) { throw NotReady(error); }
+    }
+
+    public async ValueTask<IReadOnlyDictionary<string, int>?> StatsAsync(ulong characterId, CancellationToken token)
+    {
+        try
+        {
+            CharacterStatSheet? sheet = await Service<StatService>().ForCharacterAsync((long)characterId, token);
+            return sheet?.Stats.ToDictionary(s => s.Key, s => s.Total);
+        }
         catch (Exception error) when (Unavailable(error)) { throw NotReady(error); }
     }
 

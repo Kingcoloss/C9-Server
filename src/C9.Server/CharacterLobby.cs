@@ -18,6 +18,13 @@ internal sealed class CharacterLobby
     internal const int ListEntryBytes = 136;
     private readonly uint initialHp;
     private readonly uint initialMp;
+    // Stat totals of the selected character (class base + spent points); null with the JSON store.
+    private IReadOnlyDictionary<string, int>? stats;
+    /// <summary>
+    /// C9_STAT_PROBE=1 fills every unmapped DWORD of the two 0x0C1E attribute blocks with a marker (block A 100+i,
+    /// block B 300+i for DWORD i) so the in-game Status window shows which field is which. Lab use only.
+    /// </summary>
+    internal static readonly bool StatProbe = Environment.GetEnvironmentVariable("C9_STAT_PROBE") == "1";
     private static readonly UnicodeEncoding NameEncoding = new(false, false, true);
 
     // Indexed by the asset job code. The 0BBB request sends the template instead.
@@ -47,6 +54,10 @@ internal sealed class CharacterLobby
     public long? AccountId => store.AccountId;
 
     private static byte Template(LobbyCharacter character) => TemplateIds[character.Job];
+
+    // HP must stay above zero: the client marks a local player spawned with HP <= 0 as dead (see SelectAsync).
+    private uint MaxHp => stats is not null && stats.TryGetValue("max_hp", out int hp) && hp > 0 ? (uint)hp : initialHp;
+    private uint MaxMp => stats is not null && stats.TryGetValue("max_mp", out int mp) && mp >= 0 ? (uint)mp : initialMp;
 
     public async ValueTask<Packet> ListAsync(CancellationToken token = default)
     {
@@ -134,6 +145,7 @@ internal sealed class CharacterLobby
     private async ValueTask<Packet> SelectAsync(ulong id, CancellationToken token)
     {
         LobbyCharacter character = await FindAsync(id, token);
+        stats = await store.StatsAsync(id, token);
         {
             // 00A397F8 reads through decoded offset 0x1D20. Its two fixed
             // copies populate Player +0x10 (80 bytes) and +0x60 (168 bytes).
@@ -154,8 +166,8 @@ internal sealed class CharacterLobby
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(12), character.Job);
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(16), 1);
             // 009EC510 reads Player +0x20/+0x24, not +0x28/+0x2C.
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), initialHp);
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), MaxHp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), MaxMp);
             // Current HP/MP for the local actor. 00C9BFEB -> 00882AF0 -> 00882B50 copies
             // Player +0x28 (payload +32) into actor HP (+0x844) and Player +0x2C (payload +36)
             // into actor +0x85C when the local player is created, then 00C9BFF2 marks the actor
@@ -163,8 +175,8 @@ internal sealed class CharacterLobby
             // 00823090 drops every movement/jump command, so keyboard walking and Space stay dead
             // while mouse click-move (MOUSE_RUN, 00824054) still works. 0x0C20 refreshes HP later
             // but never clears the flag. Verified in C9.DMP 2026-11-16: flag 1, HP field 0 at spawn.
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(32), initialHp);
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(36), initialMp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(32), MaxHp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(36), MaxMp);
             NameEncoding.GetBytes(character.Name, payload.AsSpan(44, NameBytes)); // 009D31E0 / 009A7A50.
             // Existing diagnostic progression fields; their full semantics
             // remain unresolved. The actor's class is the DWORD at +12 above.
@@ -179,8 +191,8 @@ internal sealed class CharacterLobby
         // 0C1E -> 00A3FBC3: two 168-byte attribute blocks, then a WORD
         // count of 8-byte entries. 00A41070/00A410A0 copy the fixed blocks.
         byte[] payload = new byte[338];
-        BinaryPrimitives.WriteUInt32LittleEndian(payload, initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(4), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload, MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(4), MaxMp);
         // 009EC5D0 scales both signed WORD factors by 0.001 before use.
         // Keep their diagnostic value at 1.0; exact attribute names pending.
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x2C), 1000);
@@ -195,10 +207,10 @@ internal sealed class CharacterLobby
         // in the decoded packet. Leave those fields zero for the new character.
         byte[] payload = new byte[70];
         BinaryPrimitives.WriteUInt16LittleEndian(payload, 1);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(2), initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(6), initialMp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(10), initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(14), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(2), MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(6), MaxMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(10), MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(14), MaxMp);
         return new Packet(0x0C1C, payload);
     }
 
@@ -215,8 +227,16 @@ internal sealed class CharacterLobby
         // character standing but unable to walk, so both factors are 1.0.
         // HP/MP are applied by the 0C20 vitals packet, not here.
         byte[] payload = new byte[398];
-        BinaryPrimitives.WriteUInt32LittleEndian(payload, initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload, MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), MaxMp);
+        if (StatProbe)
+        {
+            for (int i = 0; i < 48; i++)
+            {
+                BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0x0C + i * 4), 100 + i);
+                BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0xCC + i * 4), 300 + i);
+            }
+        }
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x38), 1000);
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x3A), 1000);
         return new Packet(0x0C1E, payload);
@@ -228,10 +248,10 @@ internal sealed class CharacterLobby
         // applying current HP/MP and their maxima to the local player.
         byte[] payload = new byte[32];
         BinaryPrimitives.WriteUInt64LittleEndian(payload, characterId);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(16), initialMp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(20), initialHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(16), MaxMp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(20), MaxHp);
+        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), MaxMp);
         // Current-client packet registration marks 0C20 as plain, like 0BC6.
         return new Packet(0x0C20, payload, flag: 0);
     }

@@ -128,11 +128,19 @@ internal static partial class Validation
                 Packet details = await lobby.ReceiveAsync();
                 Check.Equal((ushort)0x0EFC, details.Type);
                 Check.Bytes(identity, details.Payload.Span[..8]);
+                // Stat system: Lab2 (job 9 = Hunter) enters with the Hunter base Max HP/MP plus spent points.
+                StatService stats = portal.GetRequiredService<StatService>();
+                await stats.SetClassBaseAsync(1, new Dictionary<string, int> { ["max_hp"] = 240, ["max_mp"] = 80 }, op with { RequestId = Guid.NewGuid() });
+                await stats.UpdateDefinitionsAsync([new("max_hp", "Maximum HP", true, 5)], op with { RequestId = Guid.NewGuid() });
+                await stats.SpendAsync(local.Id, (long)lab2Id, new Dictionary<string, int> { ["max_hp"] = 2 }, op with { RequestId = Guid.NewGuid() });
                 await lobby.SendAsync(new Packet(0x0BBF, identity));
                 Packet selected = await lobby.ReceiveAsync();
                 Check.Equal((ushort)0x0BC0, selected.Type);
                 Check.Equal(lab2Id, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
                 Check.Equal(9u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
+                Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
+                Check.Equal(80u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
+                Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[32..]));
                 Check.Equal<ulong?>(lab2Id, lobby.Session.Snapshot().CharacterId);
                 Check.Equal<long?>(local.Id, lobby.Session.Snapshot().AccountId);
             }

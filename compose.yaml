@@ -102,6 +102,8 @@ services:
       # With C9_AUTH_URL the lobby serves only the account c9-auth resolves from the 0x1771 handoff.
       C9_AUTH_URL: ${C9_AUTH_URL:-}
       C9_AUTH_TOKEN_FILE: /c9/state/secrets/agent.token
+      # 1 = fill the 0x0C1E attribute blocks with marker numbers to map the in-game Status window (lab only).
+      C9_STAT_PROBE: ${C9_STAT_PROBE:-}
     depends_on:
       c9-init: { condition: service_completed_successfully }
       # Only present with --profile gamedata; required: false lets the default profile start without it.
