@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- c9-auth: player register/login and one-time game tickets for the L9 launcher (docs/LAUNCHER_ACCOUNTS_TH.md). -->
+  <PropertyGroup>
+    <RootNamespace>C9.AuthService</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../C9.Contracts/C9.Contracts.csproj" />
+    <ProjectReference Include="../C9.GameData/C9.GameData.csproj" />
+  </ItemGroup>
+</Project>

@@ -90,13 +90,15 @@ internal static partial class Validation
                     await stream.WriteAsync(codec.Encode(new Packet(0x0BBF, identity)));
                     Packet selected = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0BC0, selected.Type);
-                    Check.Equal(7444, selected.Payload.Length);
+                    Check.Equal(0x83C6, selected.Payload.Length); // current-client reader 008824D0 end
                     Check.Equal((ulong)slotCount, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
                     Check.Equal(1u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[16..]));
                     Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
                     Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
-                    Check.Equal(0ul, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span[32..]));
+                    // Current HP/MP (Player +0x28/+0x2C): zero marks the local actor dead and blocks keyboard movement.
+                    Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[32..]));
+                    Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[36..]));
                     Check.Bytes(name, selected.Payload.Span.Slice(44, name.Length));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[0x6E..]));
                     if (vitalsLayout == WorldVitalsLayout.Legacy)
@@ -123,9 +125,9 @@ internal static partial class Validation
                     Check.Equal(46, map.Payload.Length);
                     Check.Equal(10u, BinaryPrimitives.ReadUInt32LittleEndian(map.Payload.Span));
                     Check.Equal((byte)0, map.Payload.Span[4]); // First sub-map; 1 was out of bounds for Waterford.
+                    await stream.WriteAsync(codec.Encode(new Packet(0x0BC5)));
                     if (vitalsLayout == WorldVitalsLayout.Extended)
                     {
-                        await stream.WriteAsync(codec.Encode(new Packet(0x0BC5)));
                         Packet attributes = codec.Decode(await ReadWireAsync(stream));
                         Check.Equal((ushort)0x0C1E, attributes.Type);
                         Check.Equal(398, attributes.Payload.Length);
@@ -142,8 +144,12 @@ internal static partial class Validation
                         Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[16..]));
                         Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[20..]));
                         Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(vitals.Payload.Span[28..]));
-                        await stream.WriteAsync(codec.Encode(new Packet(0x0BC5))); // Duplicate must not emit vitals again.
                     }
+                    Packet started = codec.Decode(await ReadWireAsync(stream));
+                    Check.Equal((ushort)0x0BC6, started.Type);
+                    Check.Equal((byte)0, started.Flag);
+                    Check.Bytes(identity, started.Payload.Span);
+                    await stream.WriteAsync(codec.Encode(new Packet(0x0BC5))); // No duplicate vitals or acknowledgement.
                     await stream.WriteAsync(codec.Encode(new Packet(0x177D))); // Unimplemented world request is observed.
                     await stream.WriteAsync(codec.Encode(new Packet(0x0EC4)));
                     Check.Equal((ushort)0x2EEB, codec.Decode(await ReadWireAsync(stream)).Type);

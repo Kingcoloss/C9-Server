@@ -15,6 +15,10 @@ public sealed record LauncherUserSettings
 
     [JsonPropertyName("game_directory")] public string? GameDirectory { get; init; }
     [JsonPropertyName("compatibility_test")] public bool CompatibilityTest { get; init; }
+    /// <summary>c9-auth base URL; null means <see cref="LauncherAuthClient.DefaultUrl"/>.</summary>
+    [JsonPropertyName("auth_url")] public string? AuthUrl { get; init; }
+    /// <summary>Last login name, pre-filled on the next start. Passwords and tokens are never saved.</summary>
+    [JsonPropertyName("last_login")] public string? LastLogin { get; init; }
 
     public static string DefaultStorageDirectory => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C9Local", "L9");

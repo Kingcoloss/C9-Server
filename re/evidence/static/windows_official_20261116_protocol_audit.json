@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "client_file_sha256": "b4580ed4f8fa6670501577918ad61a3318d72b119bb83caaeab5aab5f31d3bb7",
+  "catalog": "re/evidence/static/windows_official_20261116_packet_catalog.json",
+  "current_registered_ids": 2177,
+  "ref2014_registered_ids": 1304,
+  "shared_ids": 1290,
+  "current_only_ids": 887,
+  "ref_only_ids": 14,
+  "shared_encryption_policy_differences": [
+    "272A",
+    "272B",
+    "272C",
+    "272D",
+    "2733",
+    "2734",
+    "2736",
+    "2737",
+    "2741",
+    "2742",
+    "2748",
+    "2749",
+    "274A",
+    "274E",
+    "2754"
+  ],
+  "verified_findings": [
+    {
+      "id": "0BC0",
+      "server_payload_bytes": 7444,
+      "current_reader_minimum_payload_bytes": 33734,
+      "decoded_last_fixed_copy": {
+        "reader_va": "008824D0",
+        "source_offset": 32563,
+        "dword_count": 296,
+        "exclusive_end": 33747
+      },
+      "evidence": "artifacts/research/20261116/world-control/selection_stage.c",
+      "status": "blocking layout mismatch; minimum proven, complete constructor/fields still require review"
+    },
+    {
+      "id": "0C20",
+      "registered_encrypted": 0,
+      "server_flag_after_correction": 0
+    },
+    {
+      "id": "EAFE",
+      "reader_va": "008E0F70",
+      "owner": "C9NetworkGuildBattle",
+      "ref_sender_va": "006A3A90",
+      "status": "conditional guild battle; not a generic keyboard enable packet"
+    },
+    {
+      "reader_va": "007FCF20",
+      "default_float_va": "00FC272C",
+      "default_float_value": 1.0,
+      "status": "Non-1 action+118 returns default 1.0, not 0.0; previous keyboard gate hypothesis disproved"
+    },
+    {
+      "ids": [
+        "2744",
+        "2745",
+        "2746",
+        "2747",
+        "2748",
+        "2749",
+        "274A",
+        "274B"
+      ],
+      "current_dispatch_va": "0089B880",
+      "owner": "C9Network2ndPassword",
+      "ref2014_has_ids": true,
+      "status": "Map each build independently; shared ids do not prove identical semantics"
+    },
+    {
+      "id": "2EE9",
+      "current_reader_va": "008E64F0",
+      "callee_va": "00C51640",
+      "reads_body": false,
+      "stage_character_state_offset": "238",
+      "stage_character_state_value": 7,
+      "status": "Ack observed; subsequent reconnect transition not yet proven"
+    }
+  ]
+}

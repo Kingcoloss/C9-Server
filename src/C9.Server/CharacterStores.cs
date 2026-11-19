@@ -29,8 +29,8 @@ internal interface ICharacterStore
 
 internal static class CharacterStores
 {
-    public static ICharacterStore Open(ServerOptions options, IServerEvents? events = null) =>
-        options.GameDatabase is { } connection ? new GameDataCharacterStore(options, connection, events) : new JsonCharacterStore(options);
+    public static ICharacterStore Open(ServerOptions options, IServerEvents? events = null, long? accountId = null) =>
+        options.GameDatabase is { } connection ? new GameDataCharacterStore(options, connection, events, accountId) : new JsonCharacterStore(options);
 
     internal static bool ValidName(string? name) => name is { Length: > 0 and <= 20 } &&
         name.EnumerateRunes().All(r => Rune.IsLetterOrDigit(r) || r.Value == '_');
@@ -112,8 +112,10 @@ internal sealed class JsonCharacterStore : ICharacterStore
 /// applied the migrations every lobby request fails with "game database is not ready" and is retried
 /// on the next request. On the first successful start the JSON characters are imported once (same slots),
 /// and only when the account has no characters at all, so characters deleted in the Portal never come back.
+/// With a launcher account (<c>fixedAccount</c>, resolved by c9-auth) the store serves that account only and neither
+/// creates "local" nor imports the JSON characters.
 /// </summary>
-internal sealed class GameDataCharacterStore(ServerOptions options, string connection, IServerEvents? events) : ICharacterStore
+internal sealed class GameDataCharacterStore(ServerOptions options, string connection, IServerEvents? events, long? fixedAccount = null) : ICharacterStore
 {
     private const string Operator = "c9-lobby";
     private static readonly ConcurrentDictionary<string, Lazy<ServiceProvider>> Providers = new();
@@ -171,6 +173,11 @@ internal sealed class GameDataCharacterStore(ServerOptions options, string conne
                     throw new ProtocolException(ProtocolError.InvalidPacket,
                         "Game database is not ready: the schema is not current (the Portal applies migrations at start-up)");
                 }
+            }
+            if (fixedAccount is { } launcherAccount)
+            {
+                Interlocked.Exchange(ref account, launcherAccount);
+                return launcherAccount;
             }
             OperatorContext context = new(Operator, "Character lobby uses the game database", Guid.NewGuid());
             AccountService accounts = Service<AccountService>();

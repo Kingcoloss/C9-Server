@@ -24,7 +24,7 @@ public sealed record ConfigSource(string BasePath, string? OverlayPath = null, s
             options = options with { CharacterStore = Path.GetFullPath(CharacterStoreOverride) };
         else if (options.CharacterStore is { } store)
             options = options with { CharacterStore = Path.GetFullPath(store, Path.GetDirectoryName(path)!) };
-        options = options.WithGameDatabaseFromEnvironment();
+        options = options.WithGameDatabaseFromEnvironment().WithLauncherAuthFromEnvironment();
         options.Validate();
         return new(options, path, overlay);
     }

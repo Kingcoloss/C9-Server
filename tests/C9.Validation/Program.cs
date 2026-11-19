@@ -92,6 +92,15 @@ internal static partial class Validation
             ("Official Client local launch arguments", Sync(LocalLauncherArguments)),
             ("Local launcher configuration bootstrap and preservation", Sync(LocalConfigurationBootstrap)),
             ("Launcher user settings persist game folder and mode", Sync(LauncherSettingsPersistence)),
+            ("Launcher login identity in launch arguments", Sync(LauncherIdentityArguments)),
+            ("Launcher account server URL policy", Sync(LauncherAuthUrlPolicy)),
+            ("Launcher account client register/login/ticket", LauncherAuthClientFlow),
+            ("c9-auth one-time tickets and session expiry", Sync(LauncherTicketStore)),
+            ("Launcher ticket and account in the official 0x2F04 / 2EE2 / 1771", Sync(LauncherLoginPacketLayout)),
+            ("c9-auth game handoff keys", Sync(LauncherHandoffStore)),
+            ("Mandatory launcher login in c9-login and c9-lobby", LauncherMandatoryLogin),
+            ("Launcher handoff in the official 0x2EE8 (return to character select)", Sync(LauncherReturnPacketLayout)),
+            ("Return to character select keeps the launcher login and resends the server list", LauncherReturnToCharacterSelect),
             ("Public launcher works independently from local configuration", Sync(PublicLauncherIndependent)),
             ("Concurrent metadata file logging", Sync(MetadataFileLogging)),
             ("Agent token file and container bind policy", Sync(AgentTokenAndContainerBind)),
@@ -100,6 +109,8 @@ internal static partial class Validation
             ("Pipe EOF and invalid lengths", PipeErrors),
             ("Pipe read timeout", PipeTimeout),
             ("Memory session encrypted fixture", MemoryFixture),
+            ("Memory legacy world-load acknowledgement and duplicate handling", () => MemoryWorldStartup(WorldVitalsLayout.Legacy)),
+            ("Memory extended world-load acknowledgement and duplicate handling", () => MemoryWorldStartup(WorldVitalsLayout.Extended)),
             ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),
             ("Memory official-build fixture rejects wrong size and state", MemoryOfficialLoginInvalid),
             ("Stream pipe adapters encrypted fixture", StreamAdapterFixture),
@@ -365,7 +376,7 @@ internal static partial class Validation
         using CancellationTokenSource timeout = new(TimeSpan.FromSeconds(3));
         byte[] prefix = new byte[2]; await stream.ReadExactlyAsync(prefix, timeout.Token);
         int size = BinaryPrimitives.ReadUInt16LittleEndian(prefix);
-        Check.True(size is >= 13 and <= 8192);
+        Check.True(size is >= 13 and <= ushort.MaxValue);
         byte[] frame = new byte[size]; prefix.CopyTo(frame, 0);
         await stream.ReadExactlyAsync(frame.AsMemory(2), timeout.Token);
         return frame;
@@ -374,7 +385,7 @@ internal static partial class Validation
     private static async Task<(TcpClient Client, ConnectionCodec Codec)> ConnectAsync(TcpGameServer server, byte greetingMode = 0)
     {
         TcpClient client = new(); await client.ConnectAsync(IPAddress.Loopback, server.Port);
-        ConnectionCodec codec = new();
+        ConnectionCodec codec = new(ushort.MaxValue);
         Packet greeting = codec.Decode(await ReadWireAsync(client.GetStream()));
         Check.Equal((ushort)4, greeting.Type); Check.Bytes(new byte[] { greetingMode }, greeting.Payload.Span);
         return (client, codec);

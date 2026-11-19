@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "date_local": "2026-11-15",
+  "timezone": "Asia/Bangkok",
+  "client_profile_sha256": "b4580ed4f8fa6670501577918ad61a3318d72b119bb83caaeab5aab5f31d3bb7",
+  "dump": {
+    "path": "artifacts/claude-sync/world/C9.DMP",
+    "bytes": 1499734585,
+    "header_timestamp_utc": "2026-11-15T15:42:04Z",
+    "module_base": "0x00400000",
+    "module_image_sha256": "ed582d134eb463321adf3bd4edda756fd7c4f30ca5ee56bde054ed20a5013e55",
+    "player_pointer_global": "0x017A00C8",
+    "player_address": "0x05F58AF0",
+    "move_factor_offset": "0x58C",
+    "action_factor_offset": "0x58E",
+    "raw_factors": [
+      1000,
+      1000
+    ]
+  },
+  "docker_stdout": {
+    "path": "artifacts/claude-sync/world/docker-server.log",
+    "sha256": "f7468aac0e42240c978d264323e07f94d52b9000f6238f6d97a41b14732c4a2c",
+    "encoding": "utf-16",
+    "parsed_json_events": 514,
+    "world_session": "lobby-af6f01-9",
+    "world_states": [
+      "character_lobby",
+      "world_loading"
+    ],
+    "world_outbound_types": {
+      "0x0004": 1,
+      "0x0EFA": 1,
+      "0x0EFC": 1,
+      "0x0BC0": 1,
+      "0x0BC3": 1,
+      "0x0C1E": 1,
+      "0x0C20": 1,
+      "0x2EEB": 1
+    },
+    "world_errors": []
+  },
+  "reference_server": {
+    "sha256": "567d2f38066a908d0276f3d44fbdb808ae5748b2adde57446d44d3cfac9ffb51",
+    "load_end_handler_va": "0x006A3A90",
+    "request": "0x0BC5",
+    "reply": "0x0BC6",
+    "reply_flag": 0,
+    "reply_payload": "little-endian uint64 player object id",
+    "wire_length": 21
+  },
+  "client_reader": {
+    "class": "C9NetworkMap",
+    "dispatcher_va": "0x008EF110",
+    "object_id_decoded_offsets": [
+      "0x0D",
+      "0x11"
+    ],
+    "entity_action_event": 10,
+    "local_actor_event": "0x118"
+  },
+  "interpretation": {
+    "verified": "Action-start acknowledgement is missing from the observed server flow. Speed factors reached the client.",
+    "hypothesis": "Missing world-start acknowledgement may block keyboard action initialization. Requires a new in-game test.",
+    "navigation": "User identified changing coordinates as automatic navigation, not keyboard movement.",
+    "npc": "NPC runtime is not implemented in this server. The current client NPC initialization/spawn path has not been fully recovered."
+  },
+  "checks": {
+    "isolated_production_factory_wire_cipher_and_syntax": "passed, 14 assertions",
+    "full_server_validation": "not run: NU1801/NU1101 fetching Npgsql from nuget.org",
+    "docker_rebuild": "not run: Docker API named-pipe access denied",
+    "keyboard_and_npcs_in_game": "not re-tested after this source change"
+  },
+  "artifacts_directory": "artifacts/claude-sync/world/analysis-2242"
+}

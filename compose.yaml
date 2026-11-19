@@ -57,6 +57,11 @@ services:
       - /c9/state/trace
       - --trace-payloads
       - ${C9_TRACE_PAYLOADS:-redact-credentials}
+    environment:
+      # Mandatory L9 login (docs/LAUNCHER_ACCOUNTS_TH.md). Empty = the lab fixture accepts any 0x2F04 as before.
+      # Start-C9Platform.ps1 -GameData sets it to http://c9-auth:14890 (c9-auth runs with --profile gamedata).
+      C9_AUTH_URL: ${C9_AUTH_URL:-}
+      C9_AUTH_TOKEN_FILE: /c9/state/secrets/agent.token
     ports:
       - "127.0.0.1:${C9_LOGIN_PORT:-14000}:14000"
     healthcheck:
@@ -94,6 +99,9 @@ services:
       # store once, and never runs migrations itself (the portal does). Password file: see c9-portal.
       C9_DB_CONNECTION: ${C9_DB_CONNECTION:-}
       C9_DB_PASSWORD_FILE: /c9/state/secrets/db/password.txt
+      # With C9_AUTH_URL the lobby serves only the account c9-auth resolves from the 0x1771 handoff.
+      C9_AUTH_URL: ${C9_AUTH_URL:-}
+      C9_AUTH_TOKEN_FILE: /c9/state/secrets/agent.token
     depends_on:
       c9-init: { condition: service_completed_successfully }
       # Only present with --profile gamedata; required: false lets the default profile start without it.
@@ -137,6 +145,36 @@ services:
       c9-lobby: { condition: service_started }
     healthcheck:
       test: ["CMD", "dotnet", "/c9/app/server/C9.Server.dll", "--probe", "http://127.0.0.1:14880/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  c9-auth:
+    # Player accounts for the L9 launcher (register / login / one-time game tickets), docs/LAUNCHER_ACCOUNTS_TH.md.
+    # Needs the game database, so it runs with `--profile gamedata`. Separate from the Admin Portal (operators only).
+    <<: [*c9-image, *hardening]
+    profiles: ["gamedata"]
+    entrypoint: ["dotnet", "/c9/app/auth/C9.AuthService.dll"]
+    working_dir: /c9/app/auth
+    environment:
+      ASPNETCORE_HTTP_PORTS: ""
+      Auth__Url: http://0.0.0.0:14890
+      Auth__AllowRegistration: ${C9_AUTH_ALLOW_REGISTRATION:-true}
+      # The login service presents this token when it redeems a ticket (internal endpoint).
+      Auth__InternalTokenFile: /c9/state/secrets/agent.token
+      C9_DB_CONNECTION: ${C9_DB_CONNECTION:-}
+      C9_DB_PASSWORD_FILE: /c9/state/secrets/db/password.txt
+    volumes:
+      - ${C9_STATE_DIR:-./artifacts/docker-state}:/c9/state
+    ports:
+      - "127.0.0.1:${C9_AUTH_PORT:-14890}:14890"
+    depends_on:
+      c9-init: { condition: service_completed_successfully }
+      # The portal applies the database migrations on start-up.
+      c9-portal: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "dotnet", "/c9/app/server/C9.Server.dll", "--probe", "http://127.0.0.1:14890/healthz"]
       interval: 15s
       timeout: 5s
       retries: 3

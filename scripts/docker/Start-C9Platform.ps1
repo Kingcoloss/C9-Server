@@ -32,6 +32,8 @@ try {
     if ($GameData) {
         $compose += @('--profile', 'gamedata')
         $env:C9_DB_CONNECTION = 'Host=c9-db;Port=5432;Database=c9;Username=c9;Gss Encryption Mode=Disable'
+        # Mandatory L9 login: c9-login redeems the launcher ticket and c9-lobby resolves the account (c9-auth).
+        $env:C9_AUTH_URL = 'http://c9-auth:14890'
     }
     docker @compose up -d --no-build
     if ($LASTEXITCODE -ne 0) { throw 'docker compose up failed' }

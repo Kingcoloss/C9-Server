@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="../C9.Contracts/C9.Contracts.csproj" />
     <EmbeddedResource Include="../../config/local-launcher.json" LogicalName="local-launcher.json" />
   </ItemGroup>
 </Project>

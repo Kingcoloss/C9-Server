@@ -7,6 +7,7 @@
     <ProjectReference Include="../../src/C9.GameData/C9.GameData.csproj" />
     <ProjectReference Include="../../src/C9.Admin.Core/C9.Admin.Core.csproj" />
     <ProjectReference Include="../../src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
+    <ProjectReference Include="../../src/C9.AuthService/C9.AuthService.csproj" />
     <EmbeddedResource Include="../fixtures/rc6_kats.json" LogicalName="rc6_kats.json" />
     <EmbeddedResource Include="../fixtures/python_port_vectors.json" LogicalName="python_port_vectors.json" />
     <EmbeddedResource Include="../../config/lab-fixture.json" LogicalName="lab-fixture.json" />

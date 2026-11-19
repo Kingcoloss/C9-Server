@@ -62,7 +62,18 @@
       "payload_length": 28,
       "next_state": "server_list_sent",
       "replies": [
-        { "type": 12009, "flag": 1, "payload_hex": "" }
+        { "type": 12009, "flag": 1, "payload_hex": "" },
+        { "type": 12023, "flag": 0, "payload_hex": "00000000" },
+        { "type": 12006, "flag": 0, "payload_hex": "0100010000004300390020004c006f00630061006c0000000000000000000000000000000000000000000000000000000000000001" }
+      ]
+    },
+    {
+      "state": "server_list_sent",
+      "request_type": 12022,
+      "payload_length": 4,
+      "next_state": "server_list_sent",
+      "replies": [
+        { "type": 12023, "flag": 0, "payload_hex": "00000000" }
       ]
     }
   ]

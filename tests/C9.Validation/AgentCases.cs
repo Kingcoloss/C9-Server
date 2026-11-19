@@ -267,7 +267,14 @@ internal static partial class Validation
         TraceFrame failedEncrypted = Capture(TracePayloadPolicies.RedactCredentials, null, encrypted);
         Check.True(failedEncrypted.Redacted && Convert.FromBase64String(failedEncrypted.Wire!).Length == TraceOptions.RedactedFailurePrefix);
         Check.Throws<ArgumentException>(() => new TraceOptions { PayloadPolicy = "everything" }.Validate());
-        Check.True(KnownPackets.IsSensitive(0x2F04) && KnownPackets.IsSensitive(0x2EE1) && !KnownPackets.IsSensitive(0x2EE5));
+        Check.True(KnownPackets.IsSensitive(0x2F04) && KnownPackets.IsSensitive(0x2EE1) &&
+            KnownPackets.IsSensitive(0x2EE2) && KnownPackets.IsSensitive(0x2EE8) && !KnownPackets.IsSensitive(0x2EE5));
+        // The launcher handoff key (2EE2 reply, 2EE8 return request) is a bearer credential for the lobby: never traced.
+        foreach (Packet handoff in new[] { new Packet(0x2EE2, new byte[20], flag: 0), new Packet(0x2EE8, new byte[28]) })
+        {
+            TraceFrame hidden = Capture(TracePayloadPolicies.RedactCredentials, handoff, handoff.ToDecodedBytes());
+            Check.True(hidden.Redacted && hidden.Wire is null && hidden.Payload is null && hidden.PayloadSha256 is null);
+        }
         Check.Equal("WorldListAck", KnownPackets.NameOf(0x2EE6));
         Check.True(AgentHost.TryParseType("0x2ee5", out ushort hex) && hex == 0x2EE5);
         Check.True(AgentHost.TryParseType("12006", out ushort dec) && dec == 0x2EE6);

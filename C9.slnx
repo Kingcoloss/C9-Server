@@ -8,6 +8,7 @@
     <Project Path="src/C9.Contracts/C9.Contracts.csproj" />
     <Project Path="src/C9.Portal.Abstractions/C9.Portal.Abstractions.csproj" />
     <Project Path="src/C9.Portal/C9.Portal.csproj" />
+    <Project Path="src/C9.AuthService/C9.AuthService.csproj" />
     <Project Path="src/C9.LocalLauncher/C9.LocalLauncher.csproj" />
     <Project Path="src/C9.ClientProfiles/C9.ClientProfiles.csproj" />
     <Project Path="src/C9.GameData/C9.GameData.csproj" />

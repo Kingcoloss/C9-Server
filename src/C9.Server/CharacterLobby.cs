@@ -12,6 +12,8 @@ internal sealed class CharacterLobby
     private const int NameBytes = 42;
     internal const int AppearanceBytes = 44;
     internal const int LegacyListHeaderBytes = 42;
+    // Current-client 0x0BC0 reader 008824D0 copies fixed blocks through decoded payload 0x83C6.
+    public const int SelectAckBytes = 0x83C6;
     internal const int ExtendedListHeaderBytes = 47;
     internal const int ListEntryBytes = 136;
     private readonly uint initialHp;
@@ -31,13 +33,14 @@ internal sealed class CharacterLobby
     private readonly int listHeaderBytes;
     private readonly byte slotCount;
 
-    public CharacterLobby(ServerOptions options, IServerEvents? events = null)
+    /// <param name="accountId">Game database account resolved from the launcher handoff; null = the lab account "local".</param>
+    public CharacterLobby(ServerOptions options, IServerEvents? events = null, long? accountId = null)
     {
         listHeaderBytes = options.CharacterListHeaderBytes;
         slotCount = checked((byte)options.CharacterSlots);
         initialHp = checked((uint)options.InitialHp);
         initialMp = checked((uint)options.InitialMp);
-        store = CharacterStores.Open(options, events);
+        store = CharacterStores.Open(options, events, accountId);
     }
 
     /// <summary>Game database account of the lobby (null with the JSON store); known after the first list.</summary>
@@ -134,7 +137,15 @@ internal sealed class CharacterLobby
         {
             // 00A397F8 reads through decoded offset 0x1D20. Its two fixed
             // copies populate Player +0x10 (80 bytes) and +0x60 (168 bytes).
-            byte[] payload = new byte[0x1D14];
+            // Select-ack full size. Current-client reader FUN_008824D0 copies fixed blocks
+            // from the decoded payload up to offset 0x83C6 (33,734 bytes) into the player object
+            // (_DAT_017a00c8 +0x1e48, +0x29d8, +0x31f0, +0x3a08 ... up to +0x83d3) with NO length
+            // guard. A short 0x1D14 (7,444) packet makes the client copy out-of-bounds memory into
+            // those player state blocks (skills/action/item), which can corrupt keyboard/control
+            // state while server-driven navigation still works. Zero-fill the full span so the
+            // client copies defined zeros (empty state) instead of garbage. Experiment: verify
+            // in-game whether this restores keyboard movement (dump + trace).
+            byte[] payload = new byte[SelectAckBytes];
             BinaryPrimitives.WriteUInt64LittleEndian(payload, character.Id);
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), (uint)character.Id);
             // 00DA5130 -> 00DA5150 -> 00499F20 reads Player +0x14.
@@ -145,6 +156,15 @@ internal sealed class CharacterLobby
             // 009EC510 reads Player +0x20/+0x24, not +0x28/+0x2C.
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), initialHp);
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
+            // Current HP/MP for the local actor. 00C9BFEB -> 00882AF0 -> 00882B50 copies
+            // Player +0x28 (payload +32) into actor HP (+0x844) and Player +0x2C (payload +36)
+            // into actor +0x85C when the local player is created, then 00C9BFF2 marks the actor
+            // dead (actor +0x790) if that HP is <= 0. While the flag is set the input mask builder
+            // 00823090 drops every movement/jump command, so keyboard walking and Space stay dead
+            // while mouse click-move (MOUSE_RUN, 00824054) still works. 0x0C20 refreshes HP later
+            // but never clears the flag. Verified in C9.DMP 2026-11-16: flag 1, HP field 0 at spawn.
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(32), initialHp);
+            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(36), initialMp);
             NameEncoding.GetBytes(character.Name, payload.AsSpan(44, NameBytes)); // 009D31E0 / 009A7A50.
             // Existing diagnostic progression fields; their full semantics
             // remain unresolved. The actor's class is the DWORD at +12 above.
@@ -212,7 +232,8 @@ internal sealed class CharacterLobby
         BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(16), initialMp);
         BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(20), initialHp);
         BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), initialMp);
-        return new Packet(0x0C20, payload);
+        // Current-client packet registration marks 0C20 as plain, like 0BC6.
+        return new Packet(0x0C20, payload, flag: 0);
     }
 
     private static Packet Created(LobbyCharacter character)

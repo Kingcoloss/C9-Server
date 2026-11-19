@@ -24,7 +24,11 @@ public sealed record ServerOptions
     public int InitialMapId { get; init; } = 10;
     public int InitialSubmap { get; init; }
     public MapPosition? InitialPosition { get; init; }
-    public int MaxFrame { get; init; } = 8192;
+    public int MaxFrame { get; init; } = DefaultMaxFrame;
+    // Large enough for the 33,734-byte 0x0BC0 select acknowledgement of the current client.
+    public const int DefaultMaxFrame = 40960;
+    // Encoded wire size of 0x0BC0: length/flag prefix, RC6-padded body, trailing checksum byte.
+    internal static int SelectAckFrameBytes => 3 + (Packet.HeaderSize - 3 + CharacterLobby.SelectAckBytes + 15) / 16 * 16 + 1;
     public int MaxConnections { get; init; } = 4;
     public int MaxPackets { get; init; } = 64;
     public double TimeoutSeconds { get; init; } = 10;
@@ -53,6 +57,30 @@ public sealed record ServerOptions
     /// <summary>Same variable as C9.GameData and the Portal (compose.yaml, profile "gamedata").</summary>
     public const string GameDatabaseVariable = "C9_DB_CONNECTION";
 
+    /// <summary>
+    /// Runtime-only (environment <c>C9_AUTH_URL</c> and <c>C9_AUTH_TOKEN_FILE</c>): when set, login only accepts a
+    /// 0x2F04 that carries a valid L9 ticket and the lobby only serves the account c9-auth resolved for the handoff
+    /// (docs/LAUNCHER_ACCOUNTS_TH.md). Never read from JSON profiles.
+    /// </summary>
+    public Uri? LauncherAuth { get; init; }
+    /// <summary>File with the bearer token for c9-auth's internal endpoints (the shared agent token).</summary>
+    public string? LauncherAuthTokenFile { get; init; }
+    public const string LauncherAuthVariable = "C9_AUTH_URL";
+    public const string LauncherAuthTokenVariable = "C9_AUTH_TOKEN_FILE";
+
+    /// <summary>Applies <c>C9_AUTH_URL</c>/<c>C9_AUTH_TOKEN_FILE</c> to login and lobby profiles; unset leaves options unchanged.</summary>
+    public ServerOptions WithLauncherAuthFromEnvironment()
+    {
+        if (Profile is not ("fixture" or "character_lobby") ||
+            Environment.GetEnvironmentVariable(LauncherAuthVariable) is not { Length: > 0 } url) return this;
+        if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? address) || address.Scheme is not ("http" or "https") ||
+            !string.IsNullOrEmpty(address.UserInfo))
+            throw new ArgumentException(LauncherAuthVariable + " must be an absolute http(s) URL without credentials");
+        string tokenFile = Environment.GetEnvironmentVariable(LauncherAuthTokenVariable) is { Length: > 0 } file ? file
+            : throw new ArgumentException(LauncherAuthTokenVariable + " is required when " + LauncherAuthVariable + " is set");
+        return this with { LauncherAuth = address, LauncherAuthTokenFile = tokenFile };
+    }
+
     public void Validate()
     {
         if (!IPAddress.TryParse(Host, out IPAddress? address) || !(IPAddress.IsLoopback(address) ||
@@ -73,8 +101,8 @@ public sealed record ServerOptions
             Greetings[0].Payload.Length != 1 || Greetings[0].Payload.Span[0] > 1))
             throw new ArgumentException("Observer requires one plain type-4 mode-0/1 greeting and no response rules");
         if (Profile == "character_lobby" && (string.IsNullOrWhiteSpace(CharacterStore) ||
-            Greetings.Count != 0 || Rules.Count != 0 || MaxFrame < 7460))
-            throw new ArgumentException("Character lobby requires a store path, a frame limit of at least 7460 and no fixture rules or greetings");
+            Greetings.Count != 0 || Rules.Count != 0 || MaxFrame < SelectAckFrameBytes))
+            throw new ArgumentException($"Character lobby requires a store path, a frame limit of at least {SelectAckFrameBytes} and no fixture rules or greetings");
         if (CharacterListHeaderBytes is not (CharacterLobby.LegacyListHeaderBytes or CharacterLobby.ExtendedListHeaderBytes))
             throw new ArgumentException("Unsupported character list header size");
         if (CharacterSlots is < 1 or > byte.MaxValue)
@@ -147,7 +175,7 @@ public sealed record ServerOptions
         return new ServerOptions
         {
             Host = GetString(root, "host", "127.0.0.1"), Port = GetInt(root, "port", 14000),
-            Profile = GetString(root, "profile", "probe"), MaxFrame = GetInt(root, "max_frame", 8192),
+            Profile = GetString(root, "profile", "probe"), MaxFrame = GetInt(root, "max_frame", DefaultMaxFrame),
             CharacterStore = root.TryGetProperty("character_store", out JsonElement store) ? store.GetString() : null,
             CharacterListHeaderBytes = GetInt(root, "character_list_header_bytes", CharacterLobby.LegacyListHeaderBytes),
             CharacterSlots = GetInt(root, "character_slots", CharacterLobby.LegacySlotCount),

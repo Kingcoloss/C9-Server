@@ -1,5 +1,20 @@
 # Current State ล่าสุด (15 พฤศจิกายน 2026) และ Roadmap รอบถัดไป
 
+## อัปเดตล่าสุด 16 พ.ย. 2026 — ตรวจ protocol ก่อนพัฒนาต่อ
+
+ผู้ใช้เสนอให้ตรวจ packet/flow ให้ sync กับ client ก่อน implement เพื่อลดการแก้วนและค่าใช้จ่าย ใช้ [PROTOCOL_BASELINE_TH.md](PROTOCOL_BASELINE_TH.md) เป็นแผนและสถานะล่าสุด แยก registration inventory ทั้งหมดออกจากการถอดความหมายเฉพาะ flow ที่จำเป็น
+
+- Inventory current client **2,177 IDs**, Ref 2014 **1,304**, ร่วมกัน **1,290**, เฉพาะ current **887**, เฉพาะ Ref **14**; ID ร่วมแต่ encryption policy ต่างกัน **15** จึงห้ามคัดลอก body/handler ตาม opcode เพียงอย่างเดียว
+- **พบข้อผิดที่ยืนยันแล้ว:** server ส่ง `0x0BC0` payload **7,444 bytes** จาก layout เก่า แต่ current reader `008CB980 -> 008824D0` อ่าน fixed blocks ถึง decoded exclusive end `0x83D3` หรือ payload ขั้นต่ำ **33,734 bytes** ต้องตรวจ constructor/fields/counts และ frame limit ก่อนปรับ ไม่ใช่เติมศูนย์แล้วถือว่าจบ ยังไม่ยืนยันว่าเป็นสาเหตุเดียวของ Keyboard/NPC
+- ยกเลิกสมมติฐานว่า `actor+360 -> +118 != 1` ทำให้ความเร็ว 0: getter `007FCF20` คืน default **1.0** กรณีนี้; `EAFE` เป็น conditional Guild Battle message จึงไม่เพิ่มเป็น startup ทั่วไป
+- ถอด workaround `BCE -> BC6` ซ้ำแล้ว; คง `BC5 -> BC6` ครั้งเดียว แก้ `C20` เป็น plain ตาม registration ปัจจุบัน และตรวจการสลับ plain/encrypted ด้วย offline integration test แล้ว
+- Register/Login จริงและ Quit Game ผู้ใช้ทดสอบผ่านแล้วตามหัวข้อ 10/11; **return-to-character ยังไม่ผ่าน** ส่วน 2nd Password และ NPC ยังไม่ได้ implement ห้ามอ้างว่า Ref ไม่มี second-password IDs เพราะพบ `2744..274B` แล้ว
+- Build รอบนี้: **0 warnings/errors**; Offline **46/46, 6,329 assertions**, ข้าม 19 รายการและ DB integration ไม่รันเพราะไม่มี connection env; full TCP suite ของ session นี้ติด Windows socket **10013** จึงไม่นับว่า full pass Docker API อ่านตรงไม่ได้ ใช้ trace export ที่มีอยู่ ไม่มี deployment ในรอบนี้
+- หลักฐาน versioned: `re/evidence/static/windows_official_20261116_{packet_catalog,protocol_audit}.json`; decompile/assembly อยู่ `artifacts/research/20261116/world-control/` ใช้ dump `artifacts/claude-sync/C9.DMP` เวลา 17:50 ไม่สลับกับ dump เก่าใน `world/`
+- เทียบ code bytes ของ project Ghidra เก่ากับ image ล่าสุด: `8824D0` 1,376 bytes, `8CB980` 4,688 bytes, dispatcher `89B880` 128 bytes และ `8E0F70` 416 bytes ตรงกัน; ข้อมูล mutable ใน image มี hash ต่างกันได้
+
+ลำดับถัดไป: **contract เลือกตัวละคร/เข้าเมือง → Keyboard/NPC → return/reconnect → 2nd Password → cipher rotation** แต่ละ flow ต้องมี reader/sender, field layout, message order, success/error และ reference fixture ก่อน implement อ่านรายละเอียดเก่าด้านล่างเป็นประวัติ และใช้ส่วนนี้เมื่อมีข้อสรุปขัดกัน
+
 อัปเดตวันที่ 15 พฤศจิกายน 2026 (Asia/Bangkok) เอกสารนี้เป็นสถานะล่าสุดที่ใช้เริ่มงานต่อ
 ส่วนรายละเอียดการตรวจโค้ดและ Release scripts เมื่อวันที่ 14 อยู่ใน
 [CURRENT_STATE_20261114_TH.md](CURRENT_STATE_20261114_TH.md) และแผนระยะยาว P0–P7
@@ -114,3 +129,33 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
   packet ในโลกที่ยังไม่ตอบมี handler เดิม 8/10 (ไม่มี 0xF74F, 0xEEB3); reply ที่ควรทำก่อน: 0x0BC6, 0x0EFE, 0xED1E
 - Cipher: C2S selector = (checksum + typeHash[type]) mod N, S2C ไม่บวก typeHash; ±16 ใน trace มาจาก 32-bit overflow (2^32 mod 80 = 16)
 - DB เดิม SQL Server 2008 R2 9 ฐาน + API 297 stored procedure (เทียบกับ EF Core GameData แล้ว); ยังไม่ได้อ่านตาราง/คอลัมน์จาก .mdf (รอผู้ใช้ตัดสินใจเรื่อง license SQL Server)
+
+## 9. World startup / Keyboard — ผลตรวจรอบ 23:00 น. (15 พ.ย. 2026)
+
+- ผู้ใช้ rebuild แล้ว: ระบบนำทางเดินได้ แต่ Keyboard ยังเดินไม่ได้และไม่มี NPC.
+  Dump รอบ 22:42 ยืนยันว่า player speed factors เป็น 1000/1000 จริง
+- อ่าน Docker stdout ที่ผู้ใช้ export แล้ว: session `lobby-af6f01-9` ค้าง `world_loading`
+  และไม่มี 0x0BC6 ทั้งที่ได้รับ 0x0BC5. Ref Server และ Ghidra ของ Client ปัจจุบันยืนยันว่า
+  0x0BC6 เป็น plain 21-byte action-start acknowledgement พร้อม object ID 64 บิต
+- **แก้ source แล้ว ยังไม่ deploy/ยืนยันในเกม:** เพิ่ม acknowledgement, state `world_ready`,
+  รองรับ duplicate/load/return flow, trace label และ Portal badge; เพิ่ม memory integration tests
+- Isolated wire/cipher/syntax check ผ่าน 14 assertions. Full Validation ยังติด NuGet/Npgsql restore;
+  Docker API ของ session ถูกปฏิเสธสิทธิ์. รายละเอียด/หลักฐาน/คำสั่งทดสอบ:
+  [WORLD_MOVEMENT_TH.md §6](WORLD_MOVEMENT_TH.md#6-ตรวจ-dump-และ-docker-stdout-รอบใหม่--15-พย-2026-เวลา-2300-น)
+- ยังไม่สรุปว่า Keyboard หายจนกว่าจะทดสอบ Client จริง. NPC world/entity initialization ยังต้องทำต่อ
+- พบ login error เพิ่มหลัง reconnect: 0x26AC (9900), 40 ไบต์ ใน `server_list_sent` ยังไม่มี fixture rule;
+  ไม่ใช่ error ใน lobby ระหว่างนำทาง และยังไม่แก้ในรอบนี้
+
+## 10. Exit hang + 2nd Password (อัปเดต 16 พ.ย. 2026 เช้า โดย thread exit/2nd-password)
+- Exit hang "Transmiting to Server": client ส่ง `0x17D4` (logout) แต่ server ไม่ตอบ → ค้าง. Fix = ตอบ `0x17D5`
+  (client เรียก PostQuitMessage). C9.Validation **62/62**. ยังไม่ rebuild. รายละเอียด: [EXIT_AND_2ND_PASSWORD_TH.md](EXIT_AND_2ND_PASSWORD_TH.md)
+- 2nd Password: RE/ออกแบบ (ref 2014 ไม่มี; อยู่ใน login flow — ประสานกับ thread launcher login)
+
+## 11. Launcher Register/Login + ผูกบัญชี (อัปเดต 16 พ.ย. 2026 ~17:00 น. โดย thread launcher login)
+- **เสร็จ ผู้ใช้ยืนยันในเกมแล้ว (ยังไม่ commit):** L9 สมัคร/Login ผ่าน `c9-auth` (127.0.0.1:14890) และเปิดเกมได้เฉพาะเมื่อ login ผ่าน (เอาปุ่ม Local Lab ออก)
+- c9-login อ่าน ticket จาก 0x2F04 (UTF-16LE ที่ +0x000, `c9-gl:<บัญชี 13 หลัก>` ที่ +0x200) → redeem กับ c9-auth → ตอบ 0x2EE2 = [account][handoff key][1];
+  ไม่มี ticket = ปิดการเชื่อมต่อ. c9-lobby อ่าน account+key ที่ client ส่งกลับใน 0x1771 → โหลดตัวละครของบัญชีนั้นจาก game DB (ไม่ใช่ `local`)
+- เปิดด้วย env `C9_AUTH_URL` (ตั้งอัตโนมัติใน `Start-C9Platform.ps1 -GameData`). Build 0 warning, C9.Validation **65/65**. trace กลับเป็น `redact-credentials` แล้ว
+- งานค้าง: กด "กลับหน้าเลือกตัวละคร" ในเมือง (0x0EC4 → 0x2EEB → 0x2EE8 → 0x2EE9) เกมค้าง (มีตั้งแต่ก่อนเพิ่ม login); ยังไม่ตรวจ ban ตอน handoff
+- รายละเอียด/layout/ความปลอดภัย: [LAUNCHER_ACCOUNTS_TH.md](LAUNCHER_ACCOUNTS_TH.md)
+- 19 พ.ย. ~10:30Z ปุ่ม "กลับหน้าเลือกตัวละคร": login ตรวจ handoff ใน 0x2EE8 ([key@0][account@8]) กับ c9-auth (fail closed) แล้วตอบ 2EE9 + 2EF7 + 2EE6 ตาม rule ใหม่ใน fixture base + overlay; 0x2EE2/0x2EE8 ไม่เก็บใน trace. แก้แล้ว ยังไม่ build/deploy/ทดสอบในเกม รายละเอียด docs/LAUNCHER_ACCOUNTS_TH.md ข้อ 8.3

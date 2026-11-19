@@ -17,7 +17,8 @@ COPY src/ src/
 RUN --mount=type=secret,id=build_ca,required=false \
     if [ -s /run/secrets/build_ca ]; then export SSL_CERT_FILE=/run/secrets/build_ca; fi \
  && dotnet publish src/C9.Server/C9.Server.csproj -c Release -o /out/server \
- && dotnet publish src/C9.Portal/C9.Portal.csproj -c Release -o /out/portal
+ && dotnet publish src/C9.Portal/C9.Portal.csproj -c Release -o /out/portal \
+ && dotnet publish src/C9.AuthService/C9.AuthService.csproj -c Release -o /out/auth
 
 FROM ${DOTNET_RUNTIME} AS runtime
 LABEL org.opencontainers.image.title="c9-platform" \
@@ -29,6 +30,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
 WORKDIR /c9/app
 COPY --from=build /out/server/ /c9/app/server/
 COPY --from=build /out/portal/ /c9/app/portal/
+COPY --from=build /out/auth/ /c9/app/auth/
 COPY --chmod=0644 config/lab-official-login-fixture.json config/lab-official-character-lobby.json /c9/app/config/
 COPY --chmod=0755 docker/init-state.sh /c9/app/docker/init-state.sh
 # sed: tolerate a Windows checkout that converted the script to CRLF.

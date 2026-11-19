@@ -51,13 +51,14 @@ public sealed class LocalLauncherRuntime
     }
 
     /// <param name="progress">Receives intermediate steps (server start, UAC prompt).</param>
-    public async Task<LauncherStatus> StartGameAsync(string gameDirectory, bool compatibilityTest, IProgress<LauncherStatus>? progress = null)
+    public async Task<LauncherStatus> StartGameAsync(string gameDirectory, bool compatibilityTest, IProgress<LauncherStatus>? progress = null,
+        LaunchIdentity? identity = null)
     {
         if (activeGame is not null)
             return new(LauncherTone.Warning, "เกมกำลังทำงานอยู่", "ปิดเกมเดิมก่อนเปิดใหม่");
         try
         {
-            LocalLaunchPlan plan = Prepare(gameDirectory, compatibilityTest);
+            LocalLaunchPlan plan = Prepare(gameDirectory, compatibilityTest, identity);
             if (ClientRunning())
                 throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
             progress?.Report(new(LauncherTone.Neutral, "กำลังเตรียมเซิร์ฟเวอร์…", "เริ่ม login และ character lobby ในเครื่อง"));
@@ -75,7 +76,8 @@ public sealed class LocalLauncherRuntime
                     "C9.exe ต้องใช้สิทธิ์ Administrator กรุณากด Yes ในหน้าต่าง UAC"));
             Process game = StartClient(plan);
             activeGame = game;
-            Log($"started pid={game.Id} client={plan.ClientHash} endpoint=loopback elevated_launcher={IsElevated} compatibility_test={plan.CompatibilityTest}");
+            // The ticket itself is never logged; it is single-use and expires within two minutes.
+            Log($"started pid={game.Id} client={plan.ClientHash} endpoint=loopback elevated_launcher={IsElevated} compatibility_test={plan.CompatibilityTest} login={identity?.Login ?? "(local lab)"}");
             _ = MonitorGameAsync(game);
             return new(LauncherTone.Good, "กำลังเริ่มเกม…", "รอเกมเตรียมระบบ หากเกมปิดตัวลง สามารถเปิดจากหน้านี้อีกครั้งได้",
                 plan.DisplayName, plan.ClientHash);
@@ -114,7 +116,7 @@ public sealed class LocalLauncherRuntime
         catch (Exception error) when (IsExpected(error)) { return Failure(error); }
     }
 
-    private LocalLaunchPlan Prepare(string gameDirectory, bool compatibilityTest)
+    private LocalLaunchPlan Prepare(string gameDirectory, bool compatibilityTest, LaunchIdentity? identity = null)
     {
         string? problem = LauncherUserSettings.ValidateGameDirectory(gameDirectory);
         if (problem is not null) throw new DirectoryNotFoundException(problem);
@@ -123,7 +125,7 @@ public sealed class LocalLauncherRuntime
             Path.Combine(ConfigurationDirectory, LocalLauncherConfiguration.FileName));
         using (JsonDocument config = ReadConfiguration()) LocalLauncherConfiguration.Verify(config.RootElement);
         if (result.Created) Log("created and verified local configuration from project defaults");
-        return LocalLaunchPlan.Read(folder, ConfigurationDirectory, compatibilityTest);
+        return LocalLaunchPlan.Read(folder, ConfigurationDirectory, compatibilityTest, identity);
     }
 
     private static Process StartClient(LocalLaunchPlan plan)

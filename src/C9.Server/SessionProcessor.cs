@@ -7,12 +7,14 @@ using C9.Protocol;
 namespace C9.Server;
 
 // The same session runtime is used by TCP and socket-free validation.
-public sealed class SessionProcessor(ServerOptions options, IServerEvents events)
+public sealed class SessionProcessor(ServerOptions options, IServerEvents events, ILauncherAuthority? authority = null)
 {
     private static readonly Meter Metrics = new("C9.Server", "0.1.0");
     private static readonly Counter<long> Received = Metrics.CreateCounter<long>("c9.packets.received");
     private readonly CharacterLobby? characterLobby = options.Profile == "character_lobby"
         ? new CharacterLobby(options, events) : null;
+    // Set with C9_AUTH_URL: login requires an L9 ticket and the lobby serves the account behind the handoff.
+    private readonly ILauncherAuthority? launcherAuthority = authority ?? HttpLauncherAuthority.FromOptions(options);
 
     public Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default) =>
         RunAsync(SessionContext.Legacy(id), reader, writer, cancellationToken);
@@ -22,7 +24,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
         ConnectionCodec codec = new(options.MaxFrame, discoverReceiveSelector: true);
         string state = options.Profile == "observer" ? "observing" : "connected";
         ulong selectedCharacterId = 0;
-        bool worldVitalsSent = false;
+        CharacterLobby? lobby = characterLobby;
         long inboundOffset = 0, outboundOffset = 0;
         string? closeReason = null;
         Dictionary<(string, ushort), ResponseRule> rules = options.Rules.ToDictionary(r => (r.State, r.RequestType));
@@ -108,49 +110,73 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                 if (options.Profile is "probe" or "observer") continue;
                 if (state == "connected" && !options.LocalAccountEnabled)
                     throw new ProtocolException(ProtocolError.InvalidPacket, "Local account is disabled");
-                if (characterLobby is not null)
+                if (lobby is not null)
                 {
                     if (state == "connected" && packet.Type == 0x1771 && packet.Payload.Length == 49)
                     {
-                        await SendAsync(await characterLobby.ListAsync(cancellationToken));
-                        ChangeState("character_lobby", accountId: characterLobby.AccountId);
+                        if (launcherAuthority is not null)
+                        {
+                            // The client echoes the 2EE2 account number and handoff key (see LauncherLoginPacket).
+                            if (!LauncherLoginPacket.TryReadLobbyIdentity(packet.Payload.Span, out long account, out ulong key))
+                                throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher login required: 1771 has no account handoff");
+                            TicketOwner owner = await launcherAuthority.ResolveHandoffAsync(account, key, cancellationToken)
+                                ?? throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher handoff rejected");
+                            if (owner.AccountId != account)
+                                throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher handoff belongs to another account");
+                            if (options.GameDatabase is not null) lobby = new CharacterLobby(options, events, owner.AccountId);
+                            events.Emit(Event("launcher_identity") with { State = state, Reason = $"account {owner.AccountId}" });
+                        }
+                        await SendAsync(await lobby.ListAsync(cancellationToken));
+                        ChangeState("character_lobby", accountId: lobby.AccountId);
                     }
                     else if (state == "character_lobby" && packet.Type == 0x0BBB)
                     {
-                        await SendAsync(await characterLobby.CreateAsync(packet.Payload.Span, cancellationToken));
+                        await SendAsync(await lobby.CreateAsync(packet.Payload.Span, cancellationToken));
                     }
                     else if (state == "character_lobby" && packet.Type == 0x0EFB)
                     {
-                        await SendAsync(await characterLobby.DetailsAsync(packet.Payload.Span, cancellationToken));
+                        await SendAsync(await lobby.DetailsAsync(packet.Payload.Span, cancellationToken));
                     }
                     else if (state == "character_lobby" && packet.Type == 0x0BBF)
                     {
-                        await SendAsync(await characterLobby.SelectAsync(packet.Payload.Span, cancellationToken));
+                        await SendAsync(await lobby.SelectAsync(packet.Payload.Span, cancellationToken));
                         selectedCharacterId = BinaryPrimitives.ReadUInt64LittleEndian(packet.Payload.Span);
                         if (options.WorldVitals == WorldVitalsLayout.Legacy)
                         {
-                            await SendAsync(characterLobby.InitialAttributes());
-                            await SendAsync(characterLobby.InitialVitals());
+                            await SendAsync(lobby.InitialAttributes());
+                            await SendAsync(lobby.InitialVitals());
                         }
                         await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition));
                         ChangeState("world_loading", selectedCharacterId, options.InitialMapId, options.InitialSubmap);
                     }
-                    else if (state == "world_loading" && options.WorldVitals == WorldVitalsLayout.Extended &&
-                        packet.Type == 0x0BC5 && packet.Payload.IsEmpty && !worldVitalsSent)
+                    else if (state == "world_loading" && packet.Type == 0x0BC5 && packet.Payload.IsEmpty)
                     {
-                        await SendAsync(characterLobby.ExtendedAttributes());
-                        await SendAsync(characterLobby.ExtendedVitals(selectedCharacterId));
-                        worldVitalsSent = true;
-                        events.Emit(Event("world_vitals_sent") with { State = state });
+                        if (options.WorldVitals == WorldVitalsLayout.Extended)
+                        {
+                            await SendAsync(lobby.ExtendedAttributes());
+                            await SendAsync(lobby.ExtendedVitals(selectedCharacterId));
+                            events.Emit(Event("world_vitals_sent") with { State = state });
+                        }
+                        await SendAsync(WorldStartupPackets.ActionStarted(selectedCharacterId));
+                        ChangeState("world_ready");
                     }
-                    else if (state is "character_lobby" or "world_loading" &&
+                    else if (state is "character_lobby" or "world_loading" or "world_ready" &&
                         ((packet.Type == 0x0EC4 && packet.Payload.IsEmpty) ||
                          (packet.Type == 0x2EEA && packet.Payload.Length == 16)))
                     {
                         // Client 00A62D76 reconnects to login and requests 2EE8.
                         await SendAsync(new Packet(0x2EEB));
                     }
-                    else if (state == "world_loading")
+                    else if ((state is "world_loading" or "world_ready") && packet.Type == 0x17D4)
+                    {
+                        // Client 00A47CB0 calls PostQuitMessage(0) the moment it receives a
+                        // 0x17D5, so the in-world exit request (0x17D4) must be acknowledged or
+                        // the client waits forever at "Transmitting to Server". The client does
+                        // not read the ack payload.
+                        await SendAsync(new Packet(0x17D5));
+                        events.Emit(Event("logout_ack") with { State = state });
+                    }
+                    else if (state is "world_loading" or "world_ready")
                     {
                         // Observe the next world requests without inventing replies.
                         // Gameplay handlers are added only after verifying their readers.
@@ -163,6 +189,42 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                 }
                 if (!rules.TryGetValue((state, packet.Type), out ResponseRule? rule))
                     throw new ProtocolException(ProtocolError.InvalidPacket, "No fixture rule for session state/type");
+                if (launcherAuthority is not null && state == "connected" && packet.Type == 0x2F04)
+                {
+                    // Login is mandatory: the 0x2F04 must carry the one-time ticket L9 got from c9-auth.
+                    if (!LauncherLoginPacket.TryParse(packet.Payload.Span, out string ticket, out long account))
+                        throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher login required: 2F04 has no ticket");
+                    LauncherHandoff handoff = await launcherAuthority.RedeemTicketAsync(ticket, cancellationToken)
+                        ?? throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher ticket rejected (unknown, reused or expired)");
+                    if (handoff.AccountId != account)
+                        throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher ticket belongs to another account");
+                    await SendAsync(new Packet(0x2EE2, LauncherLoginPacket.LoginReply(handoff.AccountId, handoff.Key), 0));
+                    events.Emit(Event("launcher_login") with { State = state, Reason = $"account {handoff.AccountId}" });
+                    ChangeState(rule.NextState, accountId: handoff.AccountId);
+                    continue;
+                }
+                if (launcherAuthority is not null && state == "connected" && packet.Type == 0x2EE8)
+                {
+                    // Return to character select (lobby 0x2EEB -> login reconnect): the 0x2EE8 must carry the
+                    // c9-auth handoff from this login's 0x2EE2, so the mandatory launcher login also holds here.
+                    if (!LauncherLoginPacket.TryReadReturnIdentity(packet.Payload.Span, out long account, out ulong key))
+                    {
+                        events.Emit(Event("launcher_return_rejected") with { State = state, Reason = "no handoff" });
+                        throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher login required: 2EE8 has no handoff");
+                    }
+                    TicketOwner? owner = await launcherAuthority.ResolveHandoffAsync(account, key, cancellationToken);
+                    if (owner is null || owner.AccountId != account)
+                    {
+                        events.Emit(Event("launcher_return_rejected") with { State = state, Reason = $"account {account}" });
+                        throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher handoff rejected (unknown, expired or another account)");
+                    }
+                    // Replies come from the rule: 2EE9, then 2EF7 and the server list (2EE6), because the client's
+                    // server-select stage does not resend 2EF6/2EE5 after a reconnect (docs/LAUNCHER_ACCOUNTS_TH.md section 8).
+                    foreach (Packet reply in rule.Replies) await SendAsync(reply);
+                    events.Emit(Event("launcher_return") with { State = state, Reason = $"account {account}" });
+                    ChangeState(rule.NextState, accountId: account);
+                    continue;
+                }
                 if (packet.Payload.Length != rule.PayloadLength)
                     throw new ProtocolException(ProtocolError.InvalidLength, "Fixture request payload length mismatch");
                 foreach (Packet reply in rule.Replies) await SendAsync(reply);

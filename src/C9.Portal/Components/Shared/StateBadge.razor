@@ -6,7 +6,7 @@
     private string Text => Snapshot is { Status: null } ? "Unreachable" : (Snapshot?.Status?.Listener.ToString() ?? State ?? "—");
     private string Css => Text.ToLowerInvariant() switch
     {
-        "running" or "world_loading" or "character_lobby" => "ok",
+        "running" or "world_loading" or "world_ready" or "character_lobby" => "ok",
         "starting" or "stopping" or "connected" => "busy",
         "failed" or "unreachable" => "bad",
         _ => "idle"

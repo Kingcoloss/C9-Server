@@ -176,7 +176,7 @@ internal static partial class Validation
         private readonly Pipe input = new();
         private readonly Pipe output = new();
         private readonly CancellationTokenSource lifetime = new();
-        private readonly ConnectionCodec client = new();
+        private readonly ConnectionCodec client = new(ushort.MaxValue);
         public SessionContext Session { get; }
         public Task Completion { get; }
 
@@ -205,7 +205,7 @@ internal static partial class Validation
 
         public async Task<Packet> ReceiveAsync()
         {
-            byte[]? wire = await LengthPrefixedPipe.ReadFrameAsync(output.Reader, 8192, TimeSpan.FromSeconds(10));
+            byte[]? wire = await LengthPrefixedPipe.ReadFrameAsync(output.Reader, ushort.MaxValue, TimeSpan.FromSeconds(10));
             Check.True(wire is not null, "Expected a reply frame");
             return client.Decode(wire!);
         }

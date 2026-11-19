@@ -12,7 +12,8 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
     public bool CompatibilityTest => ClientHash == Observed20261114;
     public string DisplayName => CompatibilityTest ? "2026-11-14 (compatibility test)" : ClientHash == Official52893 ? "52893" : "55350";
 
-    public static LocalLaunchPlan Create(string directory, string host, int port, string clientHash, bool compatibilityTest = false)
+    public static LocalLaunchPlan Create(string directory, string host, int port, string clientHash, bool compatibilityTest = false,
+        LaunchIdentity? identity = null)
     {
         if (!IPAddress.TryParse(host, out IPAddress? address) || !IPAddress.IsLoopback(address) ||
             address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
@@ -34,13 +35,22 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
         // colon fields, empty fields 1/7 and EN at 10; there are no comma or
         // pipe fields. Reuse that structure with synthetic lab values only.
         // The current signed Client is a bounded, explicit experiment until its trace is verified.
+        // With a launcher login (docs/LAUNCHER_ACCOUNTS_TH.md) field 3 carries the one-time c9-auth ticket,
+        // field 5 the account number and field 6 the login name; without one the synthetic lab values stay.
+        string ticket = Uri.EscapeDataString(Convert.ToBase64String(identity?.Ticket ?? new byte[16]));
+        string account = (identity?.AccountId ?? 1).ToString("D13", System.Globalization.CultureInfo.InvariantCulture);
+        string login = identity?.Login ?? "test";
+        if (identity is not null && (identity.Ticket.Length != 16 || identity.AccountId is < 1 or > 9_999_999_999_999 ||
+            login.Length is < 3 or > 32 || !login.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '.' or '-')))
+            throw new ArgumentException("Invalid launcher identity");
         string arguments = !clientHash.Equals(Official52893, StringComparison.OrdinalIgnoreCase)
-            ? $"fromVLauncher::VALOFE:AAAAAAAAAAAAAAAAAAAAAA%3D%3D:c9-gl:0000000000001:test::{endpoint}:{port}:EN"
+            ? $"fromVLauncher::VALOFE:{ticket}:c9-gl:{account}:{login}::{endpoint}:{port}:EN"
             : $"{endpoint},{port},test|1|local|0|-1:0:0:lab:0:lab:0:0:{endpoint}:{port}";
         return new(Path.Combine(folder, "C9.exe"), folder, arguments, clientHash.ToLowerInvariant());
     }
 
-    public static LocalLaunchPlan Read(string directory, string? configurationDirectory = null, bool compatibilityTest = false)
+    public static LocalLaunchPlan Read(string directory, string? configurationDirectory = null, bool compatibilityTest = false,
+        LaunchIdentity? identity = null)
     {
         string folder = Path.GetFullPath(directory);
         using JsonDocument config = LocalLauncherConfiguration.Read(configurationDirectory ?? folder);
@@ -49,6 +59,6 @@ public sealed record LocalLaunchPlan(string Executable, string Directory, string
         int port = root.GetProperty("port").GetInt32();
         using FileStream game = File.OpenRead(Path.Combine(folder, "C9.exe"));
         string hash = Convert.ToHexString(SHA256.HashData(game)).ToLowerInvariant();
-        return Create(folder, host, port, hash, compatibilityTest);
+        return Create(folder, host, port, hash, compatibilityTest, identity);
     }
 }
