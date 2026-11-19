@@ -307,6 +307,43 @@ internal static partial class Validation
         Check.Equal("unreachable", failed.ErrorCode);
     }
 
+    private static async Task LauncherStatClientFlow()
+    {
+        const string sheet = """{"character_id":11,"name":"Lab","class_name":"Fighter","level":3,"earned_points":15,"spent_points":2,"available_points":13,"stats":[{"key":"strength","name":"Strength","upgradable":true,"per_point":1,"base":10,"points":2,"total":12}]}""";
+        string? body = null;
+        StubHandler handler = new(request => (body = request.Content?.ReadAsStringAsync().Result, request.RequestUri!.AbsolutePath) switch
+        {
+            (_, LauncherAuthRoutes.CharacterStats) => JsonReply(HttpStatusCode.OK, $$"""{"characters":[{{sheet}}]}"""),
+            (_, "/launcher/v1/characters/11/stats") => JsonReply(HttpStatusCode.OK, sheet),
+            _ => JsonReply(HttpStatusCode.BadRequest, """{"code":"invalid","message":"point ไม่พอหรือจำนวนไม่ถูกต้อง"}"""),
+        });
+        using LauncherAuthClient client = new(LauncherAuthClient.DefaultUrl, handler);
+        AuthResult<LauncherStatSheets> sheets = await client.StatsAsync("tok");
+        Check.True(sheets.Ok);
+        Check.Equal(HttpMethod.Get, handler.Requests[^1].Method);
+        Check.Equal("Bearer tok", handler.Requests[^1].Headers.Authorization!.ToString());
+        LauncherCharacterStats first = sheets.Value!.Characters.Single();
+        Check.Equal(13, first.AvailablePoints);
+        Check.Equal(12, first.Stats.Single().Total);
+        Guid request = Guid.NewGuid();
+        AuthResult<LauncherCharacterStats> spent = await client.SpendStatsAsync("tok", 11,
+            new LauncherStatSpend(request, new Dictionary<string, int> { ["strength"] = 1 }));
+        Check.True(spent.Ok);
+        Check.Equal(HttpMethod.Post, handler.Requests[^1].Method);
+        Check.True(body!.Contains($"\"request_id\":\"{request}\"") && body.Contains("\"add\":{\"strength\":1}"), body);
+        AuthResult<LauncherCharacterStats> refused = await client.SpendStatsAsync("tok", 12,
+            new LauncherStatSpend(Guid.NewGuid(), new Dictionary<string, int> { ["strength"] = 99 }));
+        Check.Equal("invalid", refused.ErrorCode);
+
+        ManualClock clock = new(new DateTimeOffset(2026, 11, 19, 0, 0, 0, TimeSpan.Zero));
+        LauncherSessionStore store = new(clock);
+        LauncherSession session = store.CreateSession("player", 7);
+        Check.Equal(new TicketOwner("player", 7), store.FindSession(session.SessionToken));
+        Check.Equal<TicketOwner?>(null, store.FindSession("not-a-session"));
+        clock.Now += LauncherSessionStore.SessionLifetime;
+        Check.Equal<TicketOwner?>(null, store.FindSession(session.SessionToken));
+    }
+
     private static void LauncherTicketStore()
     {
         ManualClock clock = new(new DateTimeOffset(2026, 11, 16, 0, 0, 0, TimeSpan.Zero));

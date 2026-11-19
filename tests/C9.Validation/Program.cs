@@ -95,6 +95,7 @@ internal static partial class Validation
             ("Launcher login identity in launch arguments", Sync(LauncherIdentityArguments)),
             ("Launcher account server URL policy", Sync(LauncherAuthUrlPolicy)),
             ("Launcher account client register/login/ticket", LauncherAuthClientFlow),
+            ("Launcher stat window client and session lookup", LauncherStatClientFlow),
             ("c9-auth one-time tickets and session expiry", Sync(LauncherTicketStore)),
             ("Launcher ticket and account in the official 0x2F04 / 2EE2 / 1771", Sync(LauncherLoginPacketLayout)),
             ("c9-auth game handoff keys", Sync(LauncherHandoffStore)),

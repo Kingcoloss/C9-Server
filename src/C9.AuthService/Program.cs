@@ -96,6 +96,43 @@ app.MapPost(LauncherAuthRoutes.Logout, (HttpContext http, LauncherSessionStore s
     return Results.NoContent();
 });
 
+// Stat window of the launcher: players see and spend the stat upgrade points of their own characters only.
+app.MapGet(LauncherAuthRoutes.CharacterStats, async (HttpContext http, IServiceProvider services, LauncherSessionStore store,
+    CancellationToken token) =>
+{
+    if (services.GetService<StatService>() is not { } stats) return Disabled();
+    if (Bearer(http) is not { } session || store.FindSession(session) is not { } owner) return SessionExpired();
+    var sheets = await stats.ForAccountAsync(owner.AccountId, token);
+    return Results.Json(new LauncherStatSheets(sheets.Select(StatSheet).ToArray()));
+}).RequireRateLimiting("tickets");
+
+app.MapPost(LauncherAuthRoutes.SpendStatsPattern, async (long id, LauncherStatSpend body, HttpContext http, IServiceProvider services,
+    LauncherSessionStore store, CancellationToken token) =>
+{
+    if (services.GetService<StatService>() is not { } stats) return Disabled();
+    if (Bearer(http) is not { } session || store.FindSession(session) is not { } owner) return SessionExpired();
+    if (body?.Add is null || body.Add.Count == 0 || body.Add.Count > StatKeys.All.Count || body.RequestId == Guid.Empty)
+        return Error(StatusCodes.Status400BadRequest, "invalid", "ข้อมูลการอัป status ไม่ถูกต้อง");
+    try
+    {
+        var sheet = await stats.SpendAsync(owner.AccountId, id, body.Add,
+            new OperatorContext($"launcher:{owner.Login}", "stat upgrade from L9", body.RequestId), token);
+        log.LogInformation("auth.stats spend login={Login} account={Account} character={Character} points={Points}",
+            owner.Login, owner.AccountId, id, body.Add.Values.Sum());
+        return Results.Json(StatSheet(sheet));
+    }
+    catch (GameDataException error)
+    {
+        return error.Code switch
+        {
+            GameDataError.NotFound => Error(StatusCodes.Status404NotFound, "not_found", "ไม่พบตัวละครหรือ status นี้"),
+            GameDataError.Forbidden => Error(StatusCodes.Status403Forbidden, "not_upgradable", "status นี้ยังไม่เปิดให้อัป"),
+            GameDataError.Conflict => Error(StatusCodes.Status409Conflict, "conflict", "ข้อมูลเปลี่ยนระหว่างบันทึก กรุณาโหลดใหม่"),
+            _ => Error(StatusCodes.Status400BadRequest, "invalid", "point ไม่พอหรือจำนวนไม่ถูกต้อง"),
+        };
+    }
+}).RequireRateLimiting("tickets");
+
 // Called by the login service (C9.Server) when C9.exe presents a ticket. Protected by the shared agent token.
 app.MapPost(LauncherAuthRoutes.ConsumeTicket, (TicketConsumeRequest body, HttpContext http, LauncherSessionStore store) =>
 {
@@ -131,6 +168,13 @@ IResult Disabled() => Error(StatusCodes.Status503ServiceUnavailable, "accounts_d
     "ระบบบัญชียังไม่ได้เปิด (เริ่ม platform ด้วย -GameData)");
 
 static IResult Error(int status, string code, string message) => Results.Json(new LauncherAuthError(code, message), statusCode: status);
+
+static IResult SessionExpired() =>
+    Error(StatusCodes.Status401Unauthorized, "session_expired", "หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่");
+
+static LauncherCharacterStats StatSheet(CharacterStatSheet s) => new(s.CharacterId, s.Name, s.Class.Name, s.Level,
+    s.EarnedPoints, s.SpentPoints, s.AvailablePoints,
+    s.Stats.Select(l => new LauncherStatLine(l.Key, l.Name, l.Upgradable, l.PerPoint, l.Base, l.Points, l.Total)).ToArray());
 
 static IResult? Problem(LauncherCredentials? body) =>
     body is null || string.IsNullOrWhiteSpace(body.Login) || string.IsNullOrEmpty(body.Password) || body.Login.Length > 64 || body.Password.Length > 128

@@ -63,6 +63,19 @@ public sealed class LauncherPage : ContentPage
     private Button submitAccount = null!;
     private Button switchMode = null!;
 
+    // Character stats (c9-auth). Pending points stay local until "บันทึก"; one request id per pending batch
+    // makes a retry after a timeout apply only once (the server is idempotent on it).
+    private LauncherStatSheets? statSheets;
+    private long? statCharacterId;
+    private readonly Dictionary<string, int> pendingPoints = new(StringComparer.Ordinal);
+    private Guid pendingRequest = Guid.NewGuid();
+    private readonly Picker characterPicker = new() { FontSize = 14, TextColor = TextTone, BackgroundColor = Field, TitleColor = Subtle, Title = "เลือกตัวละคร" };
+    private readonly Label statPoints = new() { FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Gold, LineBreakMode = LineBreakMode.WordWrap };
+    private readonly Label statMessage = new() { FontSize = 13, LineBreakMode = LineBreakMode.WordWrap, IsVisible = false };
+    private readonly VerticalStackLayout statRows = new() { Spacing = 2 };
+    private Border? statCard;
+    private Button saveStats = null!;
+
     public LauncherPage(LauncherStartup startup)
     {
         this.startup = startup;
@@ -93,6 +106,7 @@ public sealed class LauncherPage : ContentPage
         primaryColumn.Children.Add(BuildAccountCard());
         primaryColumn.Children.Add(BuildStatusCard());
         primaryColumn.Children.Add(BuildActionsCard());
+        primaryColumn.Children.Add(BuildStatsCard());
         settingsColumn.Children.Add(BuildDirectoryCard());
         settingsColumn.Children.Add(BuildModeCard());
         settingsColumn.Children.Add(BuildToolsCard());
@@ -217,6 +231,13 @@ public sealed class LauncherPage : ContentPage
             signedInName.Text = current.Login;
             accountCaption.Text = $"เข้าสู่ระบบแล้ว • บัญชีเลขที่ {current.AccountId} • หมดอายุ {current.ExpiresAt.ToLocalTime():HH:mm}";
         }
+        else
+        {
+            statSheets = null;
+            statCharacterId = null;
+            ClearPending();
+        }
+        if (statCard is not null) statCard.IsVisible = signedIn;
         UpdateButtons();
     }
 
@@ -274,6 +295,7 @@ public sealed class LauncherPage : ContentPage
             SetBusy(false);
             UpdateAccountView();
         }
+        if (session is not null) await LoadStatsAsync();
     }
 
     private async Task SignOutAsync()
@@ -335,6 +357,191 @@ public sealed class LauncherPage : ContentPage
                 : "กดเปิดเกมแล้ว Windows จะถามสิทธิ์ Administrator (UAC) ให้กด Yes เพราะ C9.exe ต้องใช้สิทธิ์นี้",
         };
         return MakeCard("เริ่มเล่น", new VerticalStackLayout { Spacing = 12, Children = { actions, hint } });
+    }
+
+    private View BuildStatsCard()
+    {
+        saveStats = MakeButton("บันทึก", Gold, Ink);
+        Button clear = MakeButton("ล้างที่ยังไม่บันทึก", Muted, TextTone);
+        Button reload = MakeButton("โหลดใหม่", Muted, TextTone);
+        saveStats.Clicked += async (_, _) => await SaveStatsAsync();
+        clear.Clicked += (_, _) => { ClearPending(); RenderStats(); };
+        reload.Clicked += async (_, _) => await LoadStatsAsync();
+        characterPicker.SelectedIndexChanged += (_, _) =>
+        {
+            if (statSheets is null || characterPicker.SelectedIndex < 0) return;
+            long id = statSheets.Characters[characterPicker.SelectedIndex].CharacterId;
+            if (id == statCharacterId) return;
+            statCharacterId = id;
+            ClearPending();
+            RenderStats();
+        };
+        lockWhileBusy.AddRange([clear, reload, characterPicker]);
+        Label note = new()
+        {
+            Text = "ได้ point เมื่อ level ถึงตามตารางของเซิร์ฟเวอร์ ค่าที่บันทึกแล้วมีผลเมื่อเข้าโลกครั้งถัดไป " +
+                   "(กลับหน้าเลือกตัวละครแล้วเข้าใหม่) และยังคืน point ไม่ได้",
+            FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap,
+        };
+        statCard = MakeCard("Status ตัวละคร", new VerticalStackLayout
+        {
+            Spacing = 10,
+            Children = { FieldFrame(characterPicker), statPoints, statRows, statMessage, Wrap(saveStats, clear, reload), note },
+        });
+        statCard.IsVisible = session is not null;
+        return statCard;
+    }
+
+    private LauncherCharacterStats? SelectedSheet() =>
+        statSheets?.Characters.FirstOrDefault(c => c.CharacterId == statCharacterId);
+
+    private int PendingTotal => pendingPoints.Values.Sum();
+
+    private void ClearPending()
+    {
+        pendingPoints.Clear();
+        pendingRequest = Guid.NewGuid();
+    }
+
+    private void ChangePending(LauncherCharacterStats sheet, string key, int delta)
+    {
+        if (busy) return;
+        int next = pendingPoints.GetValueOrDefault(key) + delta;
+        if (next < 0 || (delta > 0 && PendingTotal + delta > sheet.AvailablePoints)) return;
+        if (next == 0) pendingPoints.Remove(key); else pendingPoints[key] = next;
+        pendingRequest = Guid.NewGuid();
+        statMessage.IsVisible = false;
+        RenderStats();
+    }
+
+    private void ShowStatMessage(string text, bool error)
+    {
+        statMessage.Text = (error ? "✕  " : "✓  ") + text;
+        statMessage.TextColor = error ? Bad : Good;
+        statMessage.IsVisible = true;
+    }
+
+    private void RenderStats()
+    {
+        statRows.Children.Clear();
+        LauncherCharacterStats? sheet = SelectedSheet();
+        if (sheet is null)
+        {
+            statPoints.Text = statSheets is { Characters.Count: 0 } ? "บัญชีนี้ยังไม่มีตัวละคร สร้างตัวละครในเกมก่อน" : "";
+            UpdateButtons();
+            return;
+        }
+        int left = sheet.AvailablePoints - PendingTotal;
+        statPoints.Text = $"Point เหลือ {left} จาก {sheet.AvailablePoints}  •  Lv {sheet.Level} {sheet.ClassName}  •  " +
+                          $"ได้รับทั้งหมด {sheet.EarnedPoints} ใช้ไปแล้ว {sheet.SpentPoints}";
+        foreach (LauncherStatLine line in sheet.Stats) statRows.Children.Add(StatRow(sheet, line, left));
+        UpdateButtons();
+    }
+
+    private View StatRow(LauncherCharacterStats sheet, LauncherStatLine line, int left)
+    {
+        int add = pendingPoints.GetValueOrDefault(line.Key);
+        Grid row = new()
+        {
+            ColumnDefinitions =
+            {
+                new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto),
+                new ColumnDefinition(new GridLength(40)), new ColumnDefinition(new GridLength(40)),
+            },
+            ColumnSpacing = 8, Padding = new Thickness(0, 2),
+        };
+        string gain = line.PerPoint == 1 ? "" : $"  •  1 point = +{line.PerPoint}";
+        row.Add(new VerticalStackLayout
+        {
+            Spacing = 0,
+            Children =
+            {
+                new Label { Text = line.Name, FontSize = 14, TextColor = TextTone, LineBreakMode = LineBreakMode.TailTruncation },
+                new Label { Text = $"base {line.Base} + {line.Points} point{gain}", FontSize = 11, TextColor = Subtle },
+            },
+        }, 0, 0);
+        row.Add(new Label
+        {
+            Text = add == 0 ? $"{line.Total}" : $"{line.Total} → {line.Total + (long)add * line.PerPoint}  (+{add})",
+            FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = add == 0 ? TextTone : Good,
+            VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.End,
+        }, 1, 0);
+        if (line.Upgradable)
+        {
+            Button minus = MakeButton("−", Muted, TextTone);
+            Button plus = MakeButton("+", Gold, Ink);
+            minus.Padding = plus.Padding = new Thickness(0);
+            minus.IsEnabled = !busy && add > 0;
+            plus.IsEnabled = !busy && left > 0;
+            minus.Clicked += (_, _) => ChangePending(sheet, line.Key, -1);
+            plus.Clicked += (_, _) => ChangePending(sheet, line.Key, +1);
+            row.Add(minus, 2, 0);
+            row.Add(plus, 3, 0);
+        }
+        return row;
+    }
+
+    private async Task LoadStatsAsync()
+    {
+        if (busy || session is not { } current) return;
+        SetBusy(true);
+        try
+        {
+            using LauncherAuthClient? client = CreateAuthClient();
+            if (client is null) return;
+            AuthResult<LauncherStatSheets> result = await client.StatsAsync(current.SessionToken);
+            if (!result.Ok)
+            {
+                if (result.ErrorCode is "session_expired") { session = null; UpdateAccountView(); }
+                ShowStatMessage(result.ErrorMessage ?? "โหลด status ไม่สำเร็จ", error: true);
+                return;
+            }
+            statSheets = result.Value!;
+            if (statSheets.Characters.All(c => c.CharacterId != statCharacterId))
+                statCharacterId = statSheets.Characters.FirstOrDefault()?.CharacterId;
+            ClearPending();
+            characterPicker.ItemsSource = statSheets.Characters.Select(c => $"{c.Name}  •  {c.ClassName} Lv {c.Level}").ToList();
+            characterPicker.SelectedIndex = statSheets.Characters.ToList().FindIndex(c => c.CharacterId == statCharacterId);
+            statMessage.IsVisible = false;
+        }
+        finally
+        {
+            SetBusy(false);
+            RenderStats();
+        }
+    }
+
+    private async Task SaveStatsAsync()
+    {
+        if (busy || session is not { } current || SelectedSheet() is not { } sheet || PendingTotal == 0) return;
+        SetBusy(true);
+        try
+        {
+            using LauncherAuthClient? client = CreateAuthClient();
+            if (client is null) return;
+            LauncherStatSpend spend = new(pendingRequest, new Dictionary<string, int>(pendingPoints));
+            AuthResult<LauncherCharacterStats> result = await client.SpendStatsAsync(current.SessionToken, sheet.CharacterId, spend);
+            if (!result.Ok)
+            {
+                if (result.ErrorCode is "session_expired") { session = null; UpdateAccountView(); }
+                // Keep the pending points and request id so pressing "บันทึก" again cannot apply them twice.
+                ShowStatMessage(result.ErrorMessage ?? "บันทึก status ไม่สำเร็จ", error: true);
+                runtime.Log($"stats spend failed character={sheet.CharacterId} code={result.ErrorCode}");
+                return;
+            }
+            statSheets = statSheets! with
+            {
+                Characters = statSheets.Characters.Select(c => c.CharacterId == sheet.CharacterId ? result.Value! : c).ToList()
+            };
+            runtime.Log($"stats spend ok character={sheet.CharacterId} points={PendingTotal}");
+            ClearPending();
+            ShowStatMessage("บันทึกแล้ว ค่าใหม่มีผลเมื่อเข้าโลกครั้งถัดไป", error: false);
+        }
+        finally
+        {
+            SetBusy(false);
+            RenderStats();
+        }
     }
 
     private View BuildDirectoryCard()
@@ -603,5 +810,10 @@ public sealed class LauncherPage : ContentPage
         play.Text = runtime.GameRunning ? "เกมกำลังทำงาน" : "▶  เปิดเกม Local";
         check.IsEnabled = !busy;
         foreach (View view in lockWhileBusy) view.IsEnabled = !busy;
+        if (saveStats is not null)
+        {
+            saveStats.IsEnabled = !busy && PendingTotal > 0;
+            saveStats.Text = PendingTotal > 0 ? $"บันทึก (ใช้ {PendingTotal} point)" : "บันทึก";
+        }
     }
 }

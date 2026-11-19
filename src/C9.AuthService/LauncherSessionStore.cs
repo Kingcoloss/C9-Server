@@ -37,6 +37,14 @@ public sealed class LauncherSessionStore(TimeProvider clock)
 
     public bool RevokeSession(string token) => sessions.TryRemove(Digest(token), out _);
 
+    /// <summary>Owner of a live session, or null when the session is unknown or expired.</summary>
+    public TicketOwner? FindSession(string sessionToken)
+    {
+        if (!sessions.TryGetValue(Digest(sessionToken), out Entry? session)) return null;
+        if (session.ExpiresAt <= clock.GetUtcNow()) { sessions.TryRemove(Digest(sessionToken), out _); return null; }
+        return new(session.Login, session.AccountId);
+    }
+
     /// <summary>Issues a single-use ticket for a live session, or null when the session is unknown or expired.</summary>
     public LauncherTicket? IssueTicket(string sessionToken)
     {

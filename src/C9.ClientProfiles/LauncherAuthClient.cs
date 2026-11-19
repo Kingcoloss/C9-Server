@@ -63,9 +63,18 @@ public sealed class LauncherAuthClient : IDisposable
     public async Task LogoutAsync(string sessionToken, CancellationToken token = default) =>
         await SendAsync<LauncherAuthError>(LauncherAuthRoutes.Logout, null, sessionToken, token);
 
-    private async Task<AuthResult<T>> SendAsync<T>(string route, object? body, string? bearer, CancellationToken token) where T : class
+    public Task<AuthResult<LauncherStatSheets>> StatsAsync(string sessionToken, CancellationToken token = default) =>
+        SendAsync<LauncherStatSheets>(LauncherAuthRoutes.CharacterStats, null, sessionToken, token, HttpMethod.Get);
+
+    /// <summary>Spends points; reuse the same <see cref="LauncherStatSpend.RequestId"/> when retrying one click.</summary>
+    public Task<AuthResult<LauncherCharacterStats>> SpendStatsAsync(string sessionToken, long characterId, LauncherStatSpend spend,
+        CancellationToken token = default) =>
+        SendAsync<LauncherCharacterStats>(LauncherAuthRoutes.SpendStats(characterId), spend, sessionToken, token);
+
+    private async Task<AuthResult<T>> SendAsync<T>(string route, object? body, string? bearer, CancellationToken token,
+        HttpMethod? method = null) where T : class
     {
-        using HttpRequestMessage request = new(HttpMethod.Post, route)
+        using HttpRequestMessage request = new(method ?? HttpMethod.Post, route)
             { Content = body is null ? null : JsonContent.Create(body) };
         if (bearer is not null) request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearer);
         try

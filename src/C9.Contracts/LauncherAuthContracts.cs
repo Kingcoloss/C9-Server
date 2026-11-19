@@ -14,6 +14,11 @@ public static class LauncherAuthRoutes
     public const string Logout = "/launcher/v1/logout";
     public const string ConsumeTicket = "/internal/v1/tickets/consume";
     public const string ResolveHandoff = "/internal/v1/handoffs/resolve";
+    /// <summary>GET: stat sheets of the signed-in account's characters.</summary>
+    public const string CharacterStats = "/launcher/v1/characters/stats";
+    /// <summary>POST <see cref="LauncherStatSpend"/>: spend stat upgrade points of one character.</summary>
+    public const string SpendStatsPattern = "/launcher/v1/characters/{id:long}/stats";
+    public static string SpendStats(long characterId) => $"/launcher/v1/characters/{characterId}/stats";
     public const int DefaultPort = 14890;
     public const int TicketBytes = 16;
 }
@@ -54,6 +59,37 @@ public sealed record TicketRedemption(
 public sealed record HandoffResolveRequest(
     [property: JsonPropertyName("account_id")] long AccountId,
     [property: JsonPropertyName("handoff_key")] string HandoffKey);
+
+/// <summary>One stat of a character: class base + spent points × per-point gain = total.</summary>
+public sealed record LauncherStatLine(
+    [property: JsonPropertyName("key")] string Key,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("upgradable")] bool Upgradable,
+    [property: JsonPropertyName("per_point")] int PerPoint,
+    [property: JsonPropertyName("base")] int Base,
+    [property: JsonPropertyName("points")] int Points,
+    [property: JsonPropertyName("total")] int Total);
+
+public sealed record LauncherCharacterStats(
+    [property: JsonPropertyName("character_id")] long CharacterId,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("class_name")] string ClassName,
+    [property: JsonPropertyName("level")] int Level,
+    [property: JsonPropertyName("earned_points")] int EarnedPoints,
+    [property: JsonPropertyName("spent_points")] int SpentPoints,
+    [property: JsonPropertyName("available_points")] int AvailablePoints,
+    [property: JsonPropertyName("stats")] IReadOnlyList<LauncherStatLine> Stats);
+
+public sealed record LauncherStatSheets(
+    [property: JsonPropertyName("characters")] IReadOnlyList<LauncherCharacterStats> Characters);
+
+/// <summary>
+/// Points to add per stat key. <see cref="RequestId"/> makes a retry (for example after a timeout) apply only once;
+/// changes take effect the next time the character enters the world.
+/// </summary>
+public sealed record LauncherStatSpend(
+    [property: JsonPropertyName("request_id")] Guid RequestId,
+    [property: JsonPropertyName("add")] IReadOnlyDictionary<string, int> Add);
 
 /// <summary>Error body: <see cref="Code"/> is stable for programs, <see cref="Message"/> is Thai text for people.</summary>
 public sealed record LauncherAuthError(
