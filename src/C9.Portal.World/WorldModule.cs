@@ -48,6 +48,7 @@ public sealed class WorldModule : IPortalModule
         new("ภาพรวมโลกเกม", "/world", "globe", PortalPolicies.WorldRead),
         new("Event", "/world/events", "calendar", PortalPolicies.WorldRead),
         new("เศรษฐกิจ", "/economy", "coins", PortalPolicies.WorldRead),
+        new("Status ตัวละคร", "/world/stats", "list", PortalPolicies.WorldRead),
     ];
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration) =>

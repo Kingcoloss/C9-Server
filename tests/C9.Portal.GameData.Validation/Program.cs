@@ -270,6 +270,11 @@ try
         True(events.Contains("สร้าง event"), "events page");
         string economy = await Html("/economy", "ReadOnly");
         True(economy.Contains("1,500") && economy.Contains("npc_shop_buy"), "economy page shows ledger data");
+        string statsPage = await Html("/world/stats", "ContentEditor");
+        True(statsPage.Contains("Strength") && statsPage.Contains("Lv 95") && statsPage.Contains("บันทึกตาราง point"), "stats page with level table and editor");
+        string statsRo = await Html("/world/stats", "ReadOnly");
+        True(statsRo.Contains("Strength") && !statsRo.Contains("บันทึกตาราง point"), "ReadOnly sees stats without editor");
+        True((await h.Page("/world/stats", "Player")).Status == 403, "stats page policy enforced");
     });
 }
 finally

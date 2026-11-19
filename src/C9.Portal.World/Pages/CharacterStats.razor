@@ -1,0 +1,172 @@
+@page "/world/stats"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.WorldRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>Status ตัวละคร</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+        <div>
+            <p class="eyebrow">GAME WORLD</p>
+            <h1>Status ตัวละคร</h1>
+            <p class="muted">ค่า base ต่ออาชีพ, point ที่ได้ต่อ level และ status ที่ผู้เล่นใช้ point อัปได้ใน Launcher</p>
+        </div>
+    </header>
+    <p class="muted small">ผู้เล่นได้ point รวม = ผลรวมของตารางตั้งแต่ level 1 ถึง level ปัจจุบัน · ค่าใหม่มีผลเมื่อตัวละครเข้าโลกครั้งถัดไป ·
+        หน่วยของ status ย่อย (เช่น Critical) เป็นค่าดิบที่ส่งให้ Client</p>
+
+    <section class="panel table-scroll">
+        <h2>ค่า base ต่ออาชีพ</h2>
+        <div class="filters">
+            <label class="field">อาชีพ
+                <select @bind="classCode" @bind:after="SelectClass">
+                    @foreach (StatClass c in StatService.Classes) { <option value="@c.Code">@c.Name</option> }
+                </select>
+            </label>
+        </div>
+        <table>
+            <thead><tr><th>Status</th><th>ค่า base</th><th>อัปได้</th><th>1 point = +</th></tr></thead>
+            <tbody>
+                @foreach (StatDefinition stat in stats)
+                {
+                    <tr>
+                        <td><input @bind="names[stat.Key]" maxlength="64" /><div class="muted small">@stat.Key</div></td>
+                        <td><input type="number" min="0" max="@StatService.MaxStatValue" @bind="bases[stat.Key]" /></td>
+                        <td><input type="checkbox" @bind="upgradable[stat.Key]" /></td>
+                        <td><input type="number" min="1" max="@StatService.MaxPerPoint" @bind="perPoint[stat.Key]" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+            <div class="filters">
+                <label class="field">เหตุผล <input @bind="reason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SaveBaseAsync">บันทึกค่า base ของ @ClassName</button>
+                <button @onclick="SaveDefinitionsAsync">บันทึกชื่อ/อัปได้/ค่าต่อ point (ทุกอาชีพ)</button>
+            </div>
+        </AuthorizeView>
+    </section>
+
+    <section class="panel">
+        <h2>Point ต่อ level (level 1 ถึง @levels.Count)</h2>
+        <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+            <div class="filters">
+                <label class="field">Max level <input type="number" min="1" max="@StatService.MaxLevel" @bind="maxLevel" /></label>
+                <button @onclick="ResizeLevels">ปรับจำนวน level</button>
+                <label class="field">ตั้งแต่ level <input type="number" min="1" @bind="fillFrom" /></label>
+                <label class="field">ถึง level <input type="number" min="1" @bind="fillTo" /></label>
+                <label class="field">point <input type="number" min="0" max="@StatService.MaxPointsPerLevel" @bind="fillPoints" /></label>
+                <button @onclick="FillLevels">ใส่ค่าช่วงนี้</button>
+            </div>
+        </AuthorizeView>
+        <p class="muted small">รวมทั้งหมด @levels.Sum() point เมื่อถึง level @levels.Count</p>
+        <div class="filters">
+            @for (int i = 0; i < levels.Count; i++)
+            {
+                int index = i;
+                <label class="field" style="width:5.5rem">Lv @(index + 1)
+                    <input type="number" min="0" max="@StatService.MaxPointsPerLevel" value="@levels[index]"
+                           @onchange="e => SetLevel(index, e.Value)" />
+                </label>
+            }
+        </div>
+        <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+            <div class="filters">
+                <label class="field">เหตุผล <input @bind="levelReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SaveLevelsAsync">บันทึกตาราง point</button>
+            </div>
+        </AuthorizeView>
+    </section>
+</GameDataGate>
+
+@code {
+    private IReadOnlyList<StatDefinition> stats = [];
+    private IReadOnlyList<ClassStatBase> allBases = [];
+    private readonly Dictionary<string, string> names = new();
+    private readonly Dictionary<string, bool> upgradable = new();
+    private readonly Dictionary<string, int> perPoint = new();
+    private readonly Dictionary<string, int> bases = new();
+    private List<int> levels = [];
+    private short classCode;
+    private int maxLevel = 95, fillFrom = 1, fillTo = 95, fillPoints = 5;
+    private string? reason, levelReason;
+
+    private StatService Stats => (StatService)Services.GetService(typeof(StatService))!;
+    private string ClassName => StatService.Classes.First(c => c.Code == classCode).Name;
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        StatConfiguration config = await Stats.ConfigurationAsync();
+        (stats, allBases) = (config.Stats, config.Bases);
+        foreach (StatDefinition s in stats) (names[s.Key], upgradable[s.Key], perPoint[s.Key]) = (s.Name, s.Upgradable, s.PerPoint);
+        levels = config.Levels.Select(l => l.Points).ToList();
+        maxLevel = fillTo = levels.Count;
+        SelectClass();
+    }
+
+    private void SelectClass()
+    {
+        foreach (StatDefinition s in stats)
+            bases[s.Key] = allBases.FirstOrDefault(b => b.ClassCode == classCode && b.StatKey == s.Key)?.Value ?? 0;
+    }
+
+    private void SetLevel(int index, object? value)
+    {
+        if (int.TryParse(value?.ToString(), out int points)) levels[index] = points;
+    }
+
+    private void ResizeLevels()
+    {
+        int target = Math.Clamp(maxLevel, 1, StatService.MaxLevel);
+        int fill = levels.Count > 0 ? levels[^1] : 0;
+        while (levels.Count < target) levels.Add(fill);
+        if (levels.Count > target) levels.RemoveRange(target, levels.Count - target);
+        maxLevel = levels.Count;
+    }
+
+    private void FillLevels()
+    {
+        for (int level = Math.Max(1, fillFrom); level <= Math.Min(fillTo, levels.Count); level++) levels[level - 1] = fillPoints;
+    }
+
+    private async Task SaveBaseAsync()
+    {
+        short code = classCode;
+        Dictionary<string, int> values = new(bases);
+        if (await Actions.RunAsync("stats.class_base", $"stat_class:{code}", reason,
+            op => Stats.SetClassBaseAsync(code, values, op), $"บันทึกค่า base ของ {ClassName} แล้ว") is not null)
+            reason = null;
+        await LoadAsync();
+        classCode = code;
+        SelectClass();
+    }
+
+    private async Task SaveDefinitionsAsync()
+    {
+        StatDefinitionChange[] changes = stats.Select(s => new StatDefinitionChange(s.Key, names[s.Key], upgradable[s.Key], perPoint[s.Key])).ToArray();
+        short code = classCode;
+        if (await Actions.RunAsync("stats.definitions", "stat_definitions:all", reason,
+            op => Stats.UpdateDefinitionsAsync(changes, op), "บันทึกการตั้งค่า status แล้ว") is not null)
+            reason = null;
+        await LoadAsync();
+        classCode = code;
+        SelectClass();
+    }
+
+    private async Task SaveLevelsAsync()
+    {
+        int[] table = levels.ToArray();
+        if (await Actions.RunAsync("stats.level_points", "stat_point_levels:all", levelReason,
+            op => Stats.SetLevelPointsAsync(table, op), "บันทึกตาราง point แล้ว") is not null)
+            levelReason = null;
+        short code = classCode;
+        await LoadAsync();
+        classCode = code;
+        SelectClass();
+    }
+}

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("C9.GameData.Design")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad56e1b94663c9574fcc3c394798f9bbe0fbab55")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+722c682d10c03a46899e3f45aad41e3e43c47b05")]
 [assembly: System.Reflection.AssemblyProductAttribute("C9.GameData.Design")]
 [assembly: System.Reflection.AssemblyTitleAttribute("C9.GameData.Design")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
