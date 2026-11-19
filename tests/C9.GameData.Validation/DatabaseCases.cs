@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 internal static partial class GameDataValidation
 {
-    private const int DatabaseCaseCount = 11;
+    private const int DatabaseCaseCount = 13;
 
     private static IEnumerable<(string, Func<Task>)> DatabaseCases(Harness h)
     {
@@ -204,6 +204,75 @@ internal static partial class GameDataValidation
             Check.Equal((short)25, copy.Job);
             Check.True(copy.Appearance.AsSpan().SequenceEqual(Appearance));
             await Check.Fails(GameDataError.Invalid, () => h.Characters.ImportAsync(target.Id, 3, data with { SchemaVersion = 2 }, Harness.Op()));
+        });
+
+        yield return ("stat defaults, base per class and per-level points", async () =>
+        {
+            StatConfiguration config = await h.Stats.ConfigurationAsync();
+            Check.Equal(StatKeys.All.Count, config.Stats.Count);
+            Check.Equal(95, config.Levels.Count);
+            Check.True(config.Levels.All(l => l.Points == 5));
+            Check.Equal(StatService.Classes.Count * StatKeys.All.Count, config.Bases.Count);
+            Account account = await h.Accounts.CreateAsync("stats1", "password-9", Harness.Op());
+            Character fighter = await h.Characters.CreateAsync(account.Id, 0, 1, "Statter", Appearance);
+            await h.Stats.SetClassBaseAsync(0, new Dictionary<string, int> { ["strength"] = 25, ["max_hp"] = 150 }, Harness.Op("tune fighter"));
+            await Check.Fails(GameDataError.NotFound, () => h.Stats.SetClassBaseAsync(0, new Dictionary<string, int> { ["luck"] = 1 }, Harness.Op()));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SetClassBaseAsync(0, new Dictionary<string, int> { ["strength"] = -1 }, Harness.Op()));
+            CharacterStatSheet sheet = (await h.Stats.ForCharacterAsync(fighter.Id))!;
+            Check.Equal("Fighter", sheet.Class.Name);
+            Check.Equal(25, sheet.Total("strength"));
+            Check.Equal(150, sheet.Total("max_hp"));
+            Check.Equal(5, sheet.EarnedPoints);
+            Check.Equal(5, sheet.AvailablePoints);
+            await h.Characters.UpdateAsync(fighter.Id, fighter.Version, new CharacterChanges(Level: 10), Harness.Op("level up"));
+            Check.Equal(50, (await h.Stats.ForCharacterAsync(fighter.Id))!.EarnedPoints);
+            await h.Stats.SetLevelPointsAsync([0, .. Enumerable.Repeat(3, 98)], Harness.Op("new table"));
+            Check.Equal(27, (await h.Stats.ForCharacterAsync(fighter.Id))!.EarnedPoints);
+            Check.Equal(99, (await h.Stats.ConfigurationAsync()).Levels.Count);
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SetLevelPointsAsync([], Harness.Op()));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SetLevelPointsAsync([1, -2], Harness.Op()));
+            await h.Stats.UpdateDefinitionsAsync([new("max_hp", "Maximum HP", true, 10)], Harness.Op("hp per point"));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.UpdateDefinitionsAsync([new("max_hp", "Maximum HP", true, 0)], Harness.Op()));
+            await using GameDbContext db = h.Db();
+            Check.True(await db.AuditLog.AnyAsync(a => a.Action == "stats.class_base" && a.TargetId == "0"));
+        });
+
+        yield return ("spending stat points is bounded, owner-only and idempotent", async () =>
+        {
+            Account owner = await h.Accounts.CreateAsync("stats2", "password-9", Harness.Op());
+            Account other = await h.Accounts.CreateAsync("stats3", "password-9", Harness.Op());
+            Character c = await h.Characters.CreateAsync(owner.Id, 0, 25, "Spender", Appearance);
+            await h.Characters.UpdateAsync(c.Id, c.Version, new CharacterChanges(Level: 4), Harness.Op("level up"));
+            CharacterStatSheet start = (await h.Stats.ForCharacterAsync(c.Id))!;
+            Check.Equal("Shaman", start.Class.Name);
+            int available = start.AvailablePoints;
+            Check.True(available >= 4, "level 4 earns points");
+            OperatorContext op = Harness.Op("launcher spend");
+            CharacterStatSheet spent = await h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["max_hp"] = 2, ["wisdom"] = 1 }, op);
+            CharacterStatSheet retried = await h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["max_hp"] = 2, ["wisdom"] = 1 }, op);
+            Check.Equal(available - 3, spent.AvailablePoints);
+            Check.Equal(spent.AvailablePoints, retried.AvailablePoints);
+            Check.Equal(start.Total("max_hp") + 2 * 10, spent.Total("max_hp"));
+            Check.Equal(start.Total("wisdom") + 1, spent.Total("wisdom"));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["strength"] = spent.AvailablePoints + 1 }, Harness.Op()));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["strength"] = -1 }, Harness.Op()));
+            await Check.Fails(GameDataError.NotFound, () => h.Stats.SpendAsync(other.Id, c.Id, new Dictionary<string, int> { ["strength"] = 1 }, Harness.Op()));
+            await Check.Fails(GameDataError.NotFound, () => h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["luck"] = 1 }, Harness.Op()));
+            await h.Stats.UpdateDefinitionsAsync([new("evasion", "Evasion", false, 1)], Harness.Op("lock evasion"));
+            await Check.Fails(GameDataError.Forbidden, () => h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["evasion"] = 1 }, Harness.Op()));
+            // Two launchers spending everything at once: the advisory lock lets exactly one of them win.
+            int rest = spent.AvailablePoints;
+            Task<CharacterStatSheet>[] racing = Enumerable.Range(0, 2).Select(_ =>
+                h.Stats.SpendAsync(owner.Id, c.Id, new Dictionary<string, int> { ["strength"] = rest }, Harness.Op("race"))).ToArray();
+            int won = 0;
+            foreach (Task<CharacterStatSheet> attempt in racing)
+            {
+                try { await attempt; won++; }
+                catch (GameDataException error) when (error.Code == GameDataError.Invalid) { }
+            }
+            Check.Equal(1, won);
+            Check.Equal(0, (await h.Stats.ForCharacterAsync(c.Id))!.AvailablePoints);
+            Check.Equal(1, (await h.Stats.ForAccountAsync(owner.Id)).Count);
         });
     }
 }

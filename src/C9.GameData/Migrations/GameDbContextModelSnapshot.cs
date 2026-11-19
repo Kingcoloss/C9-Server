@@ -656,6 +656,960 @@ namespace C9.GameData.Migrations
                     b.ToTable("character_snapshots", "ops");
                 });
 
+            modelBuilder.Entity("C9.GameData.Entities.CharacterStat", b =>
+                {
+                    b.Property<long>("CharacterId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("character_id");
+
+                    b.Property<string>("StatKey")
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("stat_key");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer")
+                        .HasColumnName("points");
+
+                    b.HasKey("CharacterId", "StatKey")
+                        .HasName("pk_character_stats");
+
+                    b.HasIndex("StatKey")
+                        .HasDatabaseName("ix_character_stats_stat_key");
+
+                    b.ToTable("character_stats", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_character_stats_points", "points >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ClassStatBase", b =>
+                {
+                    b.Property<short>("ClassCode")
+                        .HasColumnType("smallint")
+                        .HasColumnName("class_code");
+
+                    b.Property<string>("StatKey")
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("stat_key");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer")
+                        .HasColumnName("value");
+
+                    b.HasKey("ClassCode", "StatKey")
+                        .HasName("pk_class_stat_bases");
+
+                    b.HasIndex("StatKey")
+                        .HasDatabaseName("ix_class_stat_bases_stat_key");
+
+                    b.ToTable("class_stat_bases", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_class_stat_bases_value", "value >= 0");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "strength",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "intelligence",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "health",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "wisdom",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "max_hp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "max_mp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "physical_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "magic_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "physical_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "magic_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "critical_rate",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "critical_damage",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "critical_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "accuracy",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "evasion",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "attack_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "move_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "cast_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "concentration",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "guard_limit",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "guard_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "piercing",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "fire_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "water_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "earth_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "air_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "fire_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "water_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "earth_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "strength",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "intelligence",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "health",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "wisdom",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "max_hp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "max_mp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "physical_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "magic_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "physical_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "magic_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "critical_rate",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "critical_damage",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "critical_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "accuracy",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "evasion",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "attack_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "move_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "cast_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "concentration",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "guard_limit",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "guard_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "piercing",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "fire_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "water_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "earth_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "air_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "fire_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "water_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "earth_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "strength",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "intelligence",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "health",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "wisdom",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "max_hp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "max_mp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "physical_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "magic_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "physical_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "magic_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "critical_rate",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "critical_damage",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "critical_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "accuracy",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "evasion",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "attack_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "move_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "cast_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "concentration",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "guard_limit",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "guard_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "piercing",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "fire_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "water_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "earth_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "air_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "fire_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "water_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "earth_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "strength",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "intelligence",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "health",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "wisdom",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "max_hp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "max_mp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "physical_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "magic_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "physical_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "magic_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "critical_rate",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "critical_damage",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "critical_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "accuracy",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "evasion",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "attack_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "move_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "cast_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "concentration",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "guard_limit",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "guard_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "piercing",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "fire_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "water_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "earth_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "air_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "fire_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "water_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "earth_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "strength",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "intelligence",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "health",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "wisdom",
+                            Value = 10
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "max_hp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "max_mp",
+                            Value = 100
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "physical_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "magic_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "physical_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "magic_defense",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "critical_rate",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "critical_damage",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "critical_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "accuracy",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "evasion",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "attack_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "move_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "cast_speed",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "concentration",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "guard_limit",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "guard_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "piercing",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "fire_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "water_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "earth_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "air_attack",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "fire_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "water_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "earth_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "air_resistance",
+                            Value = 0
+                        });
+                });
+
             modelBuilder.Entity("C9.GameData.Entities.LedgerEntry", b =>
                 {
                     b.Property<long>("Id")
@@ -852,6 +1806,780 @@ namespace C9.GameData.Migrations
                     b.ToTable("sessions", "ops");
                 });
 
+            modelBuilder.Entity("C9.GameData.Entities.StatDefinition", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("key");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("PerPoint")
+                        .HasColumnType("integer")
+                        .HasColumnName("per_point");
+
+                    b.Property<short>("Sort")
+                        .HasColumnType("smallint")
+                        .HasColumnName("sort");
+
+                    b.Property<bool>("Upgradable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("upgradable");
+
+                    b.HasKey("Key")
+                        .HasName("pk_stat_definitions");
+
+                    b.ToTable("stat_definitions", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_stat_definitions_per_point", "per_point > 0");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Key = "strength",
+                            Name = "Strength",
+                            PerPoint = 1,
+                            Sort = (short)0,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "intelligence",
+                            Name = "Intelligence",
+                            PerPoint = 1,
+                            Sort = (short)1,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "health",
+                            Name = "Health",
+                            PerPoint = 1,
+                            Sort = (short)2,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "wisdom",
+                            Name = "Wisdom",
+                            PerPoint = 1,
+                            Sort = (short)3,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "max_hp",
+                            Name = "Maximum HP",
+                            PerPoint = 1,
+                            Sort = (short)4,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "max_mp",
+                            Name = "Maximum MP",
+                            PerPoint = 1,
+                            Sort = (short)5,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "physical_attack",
+                            Name = "Physical Attack",
+                            PerPoint = 1,
+                            Sort = (short)6,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "magic_attack",
+                            Name = "Magic Attack",
+                            PerPoint = 1,
+                            Sort = (short)7,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "physical_defense",
+                            Name = "Physical Defense",
+                            PerPoint = 1,
+                            Sort = (short)8,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "magic_defense",
+                            Name = "Magic Defense",
+                            PerPoint = 1,
+                            Sort = (short)9,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "critical_rate",
+                            Name = "Critical Rate",
+                            PerPoint = 1,
+                            Sort = (short)10,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "critical_damage",
+                            Name = "Critical Damage",
+                            PerPoint = 1,
+                            Sort = (short)11,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "critical_resistance",
+                            Name = "Critical Resistance",
+                            PerPoint = 1,
+                            Sort = (short)12,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "accuracy",
+                            Name = "Accuracy",
+                            PerPoint = 1,
+                            Sort = (short)13,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "evasion",
+                            Name = "Evasion",
+                            PerPoint = 1,
+                            Sort = (short)14,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "attack_speed",
+                            Name = "Attack Speed",
+                            PerPoint = 1,
+                            Sort = (short)15,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "move_speed",
+                            Name = "Movement Speed",
+                            PerPoint = 1,
+                            Sort = (short)16,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "cast_speed",
+                            Name = "Casting Speed",
+                            PerPoint = 1,
+                            Sort = (short)17,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "concentration",
+                            Name = "Concentration Rate",
+                            PerPoint = 1,
+                            Sort = (short)18,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "guard_limit",
+                            Name = "Guard Limit",
+                            PerPoint = 1,
+                            Sort = (short)19,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "guard_recovery",
+                            Name = "Guard Limit Recovery",
+                            PerPoint = 1,
+                            Sort = (short)20,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "piercing",
+                            Name = "Piercing Chance",
+                            PerPoint = 1,
+                            Sort = (short)21,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "fire_attack",
+                            Name = "Fire Attack",
+                            PerPoint = 1,
+                            Sort = (short)22,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "water_attack",
+                            Name = "Water Attack",
+                            PerPoint = 1,
+                            Sort = (short)23,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "earth_attack",
+                            Name = "Earth Attack",
+                            PerPoint = 1,
+                            Sort = (short)24,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "air_attack",
+                            Name = "Air Attack",
+                            PerPoint = 1,
+                            Sort = (short)25,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "fire_resistance",
+                            Name = "Fire Resistance",
+                            PerPoint = 1,
+                            Sort = (short)26,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "water_resistance",
+                            Name = "Water Resistance",
+                            PerPoint = 1,
+                            Sort = (short)27,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "earth_resistance",
+                            Name = "Earth Resistance",
+                            PerPoint = 1,
+                            Sort = (short)28,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "air_resistance",
+                            Name = "Air Resistance",
+                            PerPoint = 1,
+                            Sort = (short)29,
+                            Upgradable = true
+                        });
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.StatPointLevel", b =>
+                {
+                    b.Property<short>("Level")
+                        .HasColumnType("smallint")
+                        .HasColumnName("level");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer")
+                        .HasColumnName("points");
+
+                    b.HasKey("Level")
+                        .HasName("pk_stat_point_levels");
+
+                    b.ToTable("stat_point_levels", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_stat_point_levels_level", "level BETWEEN 1 AND 999");
+
+                            t.HasCheckConstraint("ck_stat_point_levels_points", "points >= 0");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Level = (short)1,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)2,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)3,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)4,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)5,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)6,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)7,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)8,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)9,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)10,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)11,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)12,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)13,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)14,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)15,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)16,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)17,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)18,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)19,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)20,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)21,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)22,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)23,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)24,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)25,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)26,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)27,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)28,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)29,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)30,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)31,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)32,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)33,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)34,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)35,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)36,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)37,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)38,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)39,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)40,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)41,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)42,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)43,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)44,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)45,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)46,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)47,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)48,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)49,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)50,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)51,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)52,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)53,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)54,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)55,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)56,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)57,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)58,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)59,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)60,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)61,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)62,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)63,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)64,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)65,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)66,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)67,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)68,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)69,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)70,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)71,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)72,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)73,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)74,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)75,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)76,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)77,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)78,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)79,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)80,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)81,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)82,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)83,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)84,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)85,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)86,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)87,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)88,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)89,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)90,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)91,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)92,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)93,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)94,
+                            Points = 5
+                        },
+                        new
+                        {
+                            Level = (short)95,
+                            Points = 5
+                        });
+                });
+
             modelBuilder.Entity("C9.GameData.Entities.WorldEvent", b =>
                 {
                     b.Property<long>("Id")
@@ -1022,6 +2750,33 @@ namespace C9.GameData.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_character_items_characters_character_id");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.CharacterStat", b =>
+                {
+                    b.HasOne("C9.GameData.Entities.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_stats_characters_character_id");
+
+                    b.HasOne("C9.GameData.Entities.StatDefinition", null)
+                        .WithMany()
+                        .HasForeignKey("StatKey")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_stats_stat_definitions_stat_key");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ClassStatBase", b =>
+                {
+                    b.HasOne("C9.GameData.Entities.StatDefinition", null)
+                        .WithMany()
+                        .HasForeignKey("StatKey")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_class_stat_bases_stat_definitions_stat_key");
                 });
 
             modelBuilder.Entity("C9.GameData.Entities.Account", b =>

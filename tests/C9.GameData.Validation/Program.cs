@@ -49,6 +49,7 @@ internal sealed record Harness(ServiceProvider Services, ManualClock Clock)
     public CharacterService Characters => Services.GetRequiredService<CharacterService>();
     public WorldService World => Services.GetRequiredService<WorldService>();
     public LegacyImporter Importer => Services.GetRequiredService<LegacyImporter>();
+    public StatService Stats => Services.GetRequiredService<StatService>();
     public GameDbContext Db() => Services.GetRequiredService<IDbContextFactory<GameDbContext>>().CreateDbContext();
     public static OperatorContext Op(string reason = "validation") => new("validation", reason, Guid.NewGuid());
 }

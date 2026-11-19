@@ -81,5 +81,20 @@ internal static partial class GameDataValidation
                 !CharacterService.ValidName("x'; DROP") && !CharacterService.ValidName(new string('a', 21)));
             return Task.CompletedTask;
         });
+
+        yield return ("stat keys are unique and every job has a base class", () =>
+        {
+            Check.Equal(StatKeys.All.Count, StatKeys.All.Select(s => s.Key).Distinct().Count());
+            Check.True(StatKeys.All.All(s => s.Key.Length <= StatKeys.MaxKeyLength && s.DefaultBase >= 0));
+            Check.Equal((short)0, StatService.ClassOf(1));
+            Check.Equal((short)0, StatService.ClassOf(8));
+            Check.Equal((short)1, StatService.ClassOf(9));
+            Check.Equal((short)3, StatService.ClassOf(17));
+            Check.Equal((short)2, StatService.ClassOf(25));
+            Check.Equal((short)4, StatService.ClassOf(40));
+            Check.Throws<GameDataException>(() => StatService.ClassOf(0));
+            Check.Throws<GameDataException>(() => StatService.ClassOf(41));
+            return Task.CompletedTask;
+        });
     }
 }

@@ -462,3 +462,653 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE TABLE game.stat_definitions (
+        key character varying(32) NOT NULL,
+        name character varying(64) NOT NULL,
+        sort smallint NOT NULL,
+        upgradable boolean NOT NULL,
+        per_point integer NOT NULL,
+        CONSTRAINT pk_stat_definitions PRIMARY KEY (key),
+        CONSTRAINT ck_stat_definitions_per_point CHECK (per_point > 0)
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE TABLE game.stat_point_levels (
+        level smallint NOT NULL,
+        points integer NOT NULL,
+        CONSTRAINT pk_stat_point_levels PRIMARY KEY (level),
+        CONSTRAINT ck_stat_point_levels_level CHECK (level BETWEEN 1 AND 999),
+        CONSTRAINT ck_stat_point_levels_points CHECK (points >= 0)
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE TABLE game.character_stats (
+        character_id bigint NOT NULL,
+        stat_key character varying(32) NOT NULL,
+        points integer NOT NULL,
+        CONSTRAINT pk_character_stats PRIMARY KEY (character_id, stat_key),
+        CONSTRAINT ck_character_stats_points CHECK (points >= 0),
+        CONSTRAINT fk_character_stats_characters_character_id FOREIGN KEY (character_id) REFERENCES game.characters (id) ON DELETE RESTRICT,
+        CONSTRAINT fk_character_stats_stat_definitions_stat_key FOREIGN KEY (stat_key) REFERENCES game.stat_definitions (key) ON DELETE RESTRICT
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE TABLE game.class_stat_bases (
+        class_code smallint NOT NULL,
+        stat_key character varying(32) NOT NULL,
+        value integer NOT NULL,
+        CONSTRAINT pk_class_stat_bases PRIMARY KEY (class_code, stat_key),
+        CONSTRAINT ck_class_stat_bases_value CHECK (value >= 0),
+        CONSTRAINT fk_class_stat_bases_stat_definitions_stat_key FOREIGN KEY (stat_key) REFERENCES game.stat_definitions (key) ON DELETE RESTRICT
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('accuracy', 'Accuracy', 1, 13, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('air_attack', 'Air Attack', 1, 25, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('air_resistance', 'Air Resistance', 1, 29, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('attack_speed', 'Attack Speed', 1, 15, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('cast_speed', 'Casting Speed', 1, 17, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('concentration', 'Concentration Rate', 1, 18, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('critical_damage', 'Critical Damage', 1, 11, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('critical_rate', 'Critical Rate', 1, 10, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('critical_resistance', 'Critical Resistance', 1, 12, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('earth_attack', 'Earth Attack', 1, 24, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('earth_resistance', 'Earth Resistance', 1, 28, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('evasion', 'Evasion', 1, 14, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('fire_attack', 'Fire Attack', 1, 22, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('fire_resistance', 'Fire Resistance', 1, 26, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('guard_limit', 'Guard Limit', 1, 19, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('guard_recovery', 'Guard Limit Recovery', 1, 20, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('health', 'Health', 1, 2, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('intelligence', 'Intelligence', 1, 1, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('magic_attack', 'Magic Attack', 1, 7, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('magic_defense', 'Magic Defense', 1, 9, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('max_hp', 'Maximum HP', 1, 4, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('max_mp', 'Maximum MP', 1, 5, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('move_speed', 'Movement Speed', 1, 16, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('physical_attack', 'Physical Attack', 1, 6, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('physical_defense', 'Physical Defense', 1, 8, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('piercing', 'Piercing Chance', 1, 21, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('strength', 'Strength', 1, 0, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('water_attack', 'Water Attack', 1, 23, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('water_resistance', 'Water Resistance', 1, 27, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('wisdom', 'Wisdom', 1, 3, TRUE);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (1, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (2, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (3, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (4, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (5, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (6, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (7, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (8, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (9, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (10, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (11, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (12, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (13, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (14, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (15, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (16, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (17, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (18, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (19, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (20, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (21, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (22, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (23, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (24, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (25, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (26, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (27, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (28, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (29, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (30, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (31, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (32, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (33, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (34, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (35, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (36, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (37, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (38, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (39, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (40, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (41, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (42, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (43, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (44, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (45, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (46, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (47, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (48, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (49, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (50, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (51, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (52, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (53, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (54, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (55, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (56, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (57, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (58, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (59, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (60, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (61, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (62, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (63, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (64, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (65, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (66, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (67, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (68, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (69, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (70, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (71, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (72, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (73, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (74, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (75, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (76, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (77, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (78, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (79, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (80, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (81, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (82, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (83, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (84, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (85, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (86, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (87, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (88, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (89, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (90, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (91, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (92, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (93, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (94, 5);
+    INSERT INTO game.stat_point_levels (level, points)
+    VALUES (95, 5);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'accuracy', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'air_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'air_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'attack_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'cast_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'concentration', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'critical_damage', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'critical_rate', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'critical_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'earth_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'earth_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'evasion', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'fire_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'fire_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'guard_limit', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'guard_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'health', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'intelligence', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'magic_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'magic_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'max_hp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'max_mp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'move_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'physical_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'physical_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'piercing', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'strength', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'water_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'water_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'wisdom', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'accuracy', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'air_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'air_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'attack_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'cast_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'concentration', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'critical_damage', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'critical_rate', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'critical_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'earth_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'earth_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'evasion', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'fire_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'fire_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'guard_limit', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'guard_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'health', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'intelligence', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'magic_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'magic_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'max_hp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'max_mp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'move_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'physical_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'physical_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'piercing', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'strength', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'water_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'water_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'wisdom', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'accuracy', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'air_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'air_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'attack_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'cast_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'concentration', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'critical_damage', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'critical_rate', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'critical_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'earth_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'earth_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'evasion', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'fire_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'fire_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'guard_limit', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'guard_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'health', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'intelligence', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'magic_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'magic_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'max_hp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'max_mp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'move_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'physical_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'physical_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'piercing', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'strength', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'water_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'water_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'wisdom', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'accuracy', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'air_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'air_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'attack_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'cast_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'concentration', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'critical_damage', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'critical_rate', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'critical_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'earth_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'earth_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'evasion', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'fire_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'fire_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'guard_limit', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'guard_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'health', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'intelligence', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'magic_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'magic_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'max_hp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'max_mp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'move_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'physical_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'physical_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'piercing', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'strength', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'water_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'water_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'wisdom', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'accuracy', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'air_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'air_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'attack_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'cast_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'concentration', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'critical_damage', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'critical_rate', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'critical_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'earth_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'earth_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'evasion', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'fire_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'fire_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'guard_limit', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'guard_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'health', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'intelligence', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'magic_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'magic_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'max_hp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'max_mp', 100);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'move_speed', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'physical_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'physical_defense', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'piercing', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'strength', 10);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'water_attack', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'water_resistance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'wisdom', 10);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE INDEX ix_character_stats_stat_key ON game.character_stats (stat_key);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    CREATE INDEX ix_class_stat_bases_stat_key ON game.class_stat_bases (stat_key);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261119162447_StatUpgradePoints') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261119162447_StatUpgradePoints', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+

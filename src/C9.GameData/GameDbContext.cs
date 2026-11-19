@@ -1,5 +1,6 @@
 using System.Text;
 using C9.GameData.Entities;
+using C9.GameData.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -29,6 +30,10 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
     public DbSet<AuditEntry> AuditLog => Set<AuditEntry>();
     public DbSet<AdminCommand> AdminCommands => Set<AdminCommand>();
     public DbSet<CharacterSnapshot> CharacterSnapshots => Set<CharacterSnapshot>();
+    public DbSet<StatDefinition> StatDefinitions => Set<StatDefinition>();
+    public DbSet<ClassStatBase> ClassStatBases => Set<ClassStatBase>();
+    public DbSet<StatPointLevel> StatPointLevels => Set<StatPointLevel>();
+    public DbSet<CharacterStat> CharacterStats => Set<CharacterStat>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder builder)
     {
@@ -214,6 +219,45 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.Property(s => s.Data).HasColumnType("jsonb");
             e.Property(s => s.TakenAt).HasDefaultValueSql("now()");
             e.HasIndex(s => new { s.CharacterId, s.TakenAt });
+        });
+
+        model.Entity<StatDefinition>(e =>
+        {
+            e.ToTable("stat_definitions", GameSchema, t => t.HasCheckConstraint("ck_stat_definitions_per_point", "per_point > 0"));
+            e.HasKey(s => s.Key);
+            e.Property(s => s.Key).HasMaxLength(StatKeys.MaxKeyLength);
+            e.Property(s => s.Name).HasMaxLength(64);
+            e.HasData(StatKeys.All.Select((s, i) => new StatDefinition { Key = s.Key, Name = s.Name, Sort = (short)i }));
+        });
+
+        model.Entity<ClassStatBase>(e =>
+        {
+            e.ToTable("class_stat_bases", GameSchema, t => t.HasCheckConstraint("ck_class_stat_bases_value", "value >= 0"));
+            e.HasKey(b => new { b.ClassCode, b.StatKey });
+            e.HasOne<StatDefinition>().WithMany().HasForeignKey(b => b.StatKey).OnDelete(DeleteBehavior.Restrict);
+            e.HasData(StatService.Classes.SelectMany(c => StatKeys.All.Select(s =>
+                new ClassStatBase { ClassCode = c.Code, StatKey = s.Key, Value = s.DefaultBase })));
+        });
+
+        model.Entity<StatPointLevel>(e =>
+        {
+            e.ToTable("stat_point_levels", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_stat_point_levels_level", $"level BETWEEN 1 AND {StatService.MaxLevel}");
+                t.HasCheckConstraint("ck_stat_point_levels_points", "points >= 0");
+            });
+            e.HasKey(l => l.Level);
+            e.Property(l => l.Level).ValueGeneratedNever();
+            // Default: 5 points on every level up to 95, the level cap of the current patch.
+            e.HasData(Enumerable.Range(1, 95).Select(level => new StatPointLevel { Level = (short)level, Points = 5 }));
+        });
+
+        model.Entity<CharacterStat>(e =>
+        {
+            e.ToTable("character_stats", GameSchema, t => t.HasCheckConstraint("ck_character_stats_points", "points >= 0"));
+            e.HasKey(s => new { s.CharacterId, s.StatKey });
+            e.HasOne<Character>().WithMany().HasForeignKey(s => s.CharacterId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<StatDefinition>().WithMany().HasForeignKey(s => s.StatKey).OnDelete(DeleteBehavior.Restrict);
         });
 
         // Player data is never hard-deleted through a parent row (soft delete only).
