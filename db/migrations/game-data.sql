@@ -2721,3 +2721,56 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    ALTER TABLE game.item_catalog ALTER COLUMN category TYPE character varying(32);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    ALTER TABLE game.item_catalog ADD admin_only boolean NOT NULL DEFAULT FALSE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    ALTER TABLE game.item_catalog ADD tags text[] NOT NULL;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    ALTER TABLE game.item_catalog ADD use_level smallint;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    CREATE INDEX ix_item_catalog_category ON game.item_catalog (category);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    CREATE INDEX ix_item_catalog_rarity ON game.item_catalog (rarity);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261120180109_ItemCatalogProperties', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+

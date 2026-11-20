@@ -452,8 +452,13 @@ namespace C9.GameData.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("item_id");
 
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admin_only");
+
                     b.Property<string>("Category")
-                        .HasColumnType("text")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("category");
 
                     b.Property<string>("DescriptionEn")
@@ -489,8 +494,23 @@ namespace C9.GameData.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("raw");
 
+                    b.PrimitiveCollection<List<string>>("Tags")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("tags");
+
+                    b.Property<short?>("UseLevel")
+                        .HasColumnType("smallint")
+                        .HasColumnName("use_level");
+
                     b.HasKey("ItemId")
                         .HasName("pk_item_catalog");
+
+                    b.HasIndex("Category")
+                        .HasDatabaseName("ix_item_catalog_category");
+
+                    b.HasIndex("Rarity")
+                        .HasDatabaseName("ix_item_catalog_rarity");
 
                     b.ToTable("item_catalog", "game");
                 });

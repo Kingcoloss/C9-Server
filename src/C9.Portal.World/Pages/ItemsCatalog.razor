@@ -19,12 +19,34 @@
     <section class="panel">
         <div class="filters">
             <label class="field">ค้นหา <input @bind="query" @bind:event="oninput" @onkeyup="SearchOnEnter" placeholder="เช่น 20332 หรือ Recycler" /></label>
+            <label class="field">หมวด
+                <select @bind="tag" @bind:after="() => SearchAsync(0)">
+                    <option value="">ทุกหมวด</option>
+                    @foreach ((string t, int count) in tagCounts) { <option value="@t">@ItemLabels.Tag(t) (@count.ToString("N0"))</option> }
+                </select>
+            </label>
+            <label class="field">Grade
+                <select @bind="grade" @bind:after="() => SearchAsync(0)">
+                    <option value="0">ทุก Grade</option>
+                    @for (int g = 1; g <= 7; g++) { int value = g; <option value="@value">@ItemLabels.Grades[value]</option> }
+                </select>
+            </label>
+            <label class="field" style="width:6.5rem">Level ตั้งแต่ <input type="number" min="1" max="999" @bind="minLevel" @bind:after="() => SearchAsync(0)" /></label>
+            <label class="field" style="width:6.5rem">ถึง <input type="number" min="1" max="999" @bind="maxLevel" @bind:after="() => SearchAsync(0)" /></label>
+            <label class="field">Super Admin
+                <select @bind="admin" @bind:after="() => SearchAsync(0)">
+                    <option value="">ทั้งหมด</option>
+                    <option value="only">เฉพาะ item Super Admin</option>
+                    <option value="none">ไม่รวม item Super Admin</option>
+                </select>
+            </label>
             <button class="primary" @onclick="() => SearchAsync(0)">ค้นหา</button>
             <span class="muted small">พบ @results.Total.ToString("N0") รายการ</span>
         </div>
+        <p class="muted small">หมวดมาจากข้อมูลในไฟล์เกม · Grade และ Level สวมใส่มาจากป้ายในชื่อภายในของเกม จึงมีเฉพาะบาง item (ที่เหลือแสดง "ไม่ทราบ") · item Super Admin = item ทดสอบ/GM ส่งได้เฉพาะ Owner</p>
         <div class="table-scroll">
             <table>
-                <thead><tr><th></th><th>ID</th><th>ชื่อ (EN)</th><th>ชื่อ (KO)</th><th>คำอธิบาย</th></tr></thead>
+                <thead><tr><th></th><th>ID</th><th>ชื่อ (EN)</th><th>ชื่อ (KO)</th><th>หมวด</th><th>Grade</th><th>Lv</th><th>คำอธิบาย</th></tr></thead>
                 <tbody>
                     @foreach (CatalogItem item in results.Items)
                     {
@@ -38,10 +60,15 @@
                             <td><code>@item.ItemId</code></td>
                             <td>@(item.NameEn ?? "—")</td>
                             <td>@(item.NameKo ?? "—")</td>
+                            <td class="small">
+                                @foreach (string t in item.Tags) { <span class="badge @(t == "admin" ? "bad" : "idle")" style="margin:0 .2rem .2rem 0">@ItemLabels.Tag(t)</span> }
+                            </td>
+                            <td class="small">@ItemLabels.Grade(item.Rarity)</td>
+                            <td class="small">@(item.UseLevel?.ToString() ?? "—")</td>
                             <td class="muted small">@Short(item.DescriptionEn)</td>
                         </tr>
                     }
-                    @if (results.Items.Count == 0) { <tr><td colspan="5" class="muted small">ไม่พบ item (ถ้า catalog ยังว่าง ให้ import จากไฟล์ด้านล่าง)</td></tr> }
+                    @if (results.Items.Count == 0) { <tr><td colspan="8" class="muted small">ไม่พบ item (ถ้า catalog ยังว่าง ให้ import จากไฟล์ด้านล่าง)</td></tr> }
                 </tbody>
             </table>
         </div>
@@ -80,19 +107,26 @@
     private Page<CatalogItem> results = new([], 0, 0, PageSize);
     private ItemCatalogFolder.Summary source = new(false, null, 0, 0);
     private string? query, reason;
+    private string tag = "", admin = "";
+    private short grade;
+    private short? minLevel, maxLevel;
+    private IReadOnlyList<(string Tag, int Count)> tagCounts = [];
 
     private ItemService Items => (ItemService)Services.GetService(typeof(ItemService))!;
 
     protected override async Task OnInitializedAsync()
     {
         source = Folder.Describe();
+        if (GameDataApi.Configured(Services)) tagCounts = await Items.CatalogTagsAsync();
         await SearchAsync(0);
     }
 
     private async Task SearchAsync(int skip)
     {
         if (!GameDataApi.Configured(Services)) return;
-        results = await Items.SearchCatalogAsync(query, skip, PageSize);
+        CatalogFilter filter = new(query, tag.Length == 0 ? null : tag, grade == 0 ? null : grade, minLevel, maxLevel,
+            admin switch { "only" => true, "none" => false, _ => null });
+        results = await Items.SearchCatalogAsync(filter, skip, PageSize);
     }
 
     private async Task SearchOnEnter(KeyboardEventArgs e)
@@ -114,6 +148,7 @@
         if (result is not null)
         {
             reason = null;
+            tagCounts = await Items.CatalogTagsAsync();
             await SearchAsync(0);
         }
     }

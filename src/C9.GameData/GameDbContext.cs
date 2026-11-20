@@ -128,6 +128,9 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.Property(i => i.NameKo).HasMaxLength(200);
             e.Property(i => i.DescriptionEn).HasMaxLength(4000);
             e.Property(i => i.Icon).HasMaxLength(128);
+            e.Property(i => i.Category).HasMaxLength(32);
+            e.HasIndex(i => i.Category);
+            e.HasIndex(i => i.Rarity);
         });
 
         model.Entity<LedgerEntry>(e =>

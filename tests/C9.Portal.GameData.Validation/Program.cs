@@ -251,6 +251,8 @@ try
         True(sent.Body.GetProperty("rows").GetInt32() == 2, "bundle expanded to two deliveries");
         Status(201, await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { character }, bundle_id = bundleId, message = "Welcome", reason = "event" }, "GM", key), "idempotent retry");
         Status(404, await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { "NoSuchHero" }, items = new[] { new { item_id = 20332, quantity = 1 } }, reason = "x" }, "GM"), "unknown recipient");
+        var recipientsFound = await h.Get($"/api/v1/items/recipients?q={Uri.EscapeDataString(character[..2])}", "ReadOnly");
+        True(recipientsFound.Body.EnumerateArray().Any(r => r.GetProperty("name").GetString() == character && r.GetProperty("account_login").GetString() is { Length: > 0 }), "recipient search shows the account");
         var list = await h.Get("/api/v1/items/deliveries?status=Pending", "ReadOnly");
         True(list.Body.GetProperty("total").GetInt32() == 2, "two pending deliveries");
         Status(200, await h.Post($"/api/v1/items/deliveries/{key}/cancel", new { reason = "mistake" }, "GM"), "cancel batch");
@@ -327,10 +329,11 @@ try
         True((await h.Page("/world/stats", "Player")).Status == 403, "stats page policy enforced");
         string catalog = await Html("/items", "ReadOnly");
         True(catalog.Contains("Skill Recycler") && catalog.Contains("/api/v1/items/icons/icon_gp_skillrecycle.png") && !catalog.Contains("นำเข้า catalog</button>"), "catalog page with icons, no import for ReadOnly");
+        True(catalog.Contains("ทุกหมวด") && catalog.Contains("Legendary") && catalog.Contains("เฉพาะ item Super Admin"), "catalog filters");
         string catalogEditor = await Html("/items", "ContentEditor");
         True(catalogEditor.Contains("นำเข้า catalog"), "catalog import for ContentEditor");
         string manage = await Html("/items/manage", "GM");
-        True(manage.Contains("ส่ง item") && manage.Contains("Starter") && manage.Contains("ยกเลิก"), "manage page with send form, bundles and history");
+        True(manage.Contains("ส่ง item") && manage.Contains("Starter") && manage.Contains("ยกเลิก") && manage.Contains("ค้นหาตัวละครหรือบัญชี"), "manage page with send form, recipient search, bundles and history");
         string manageRo = await Html("/items/manage", "ReadOnly");
         True(!manageRo.Contains("ส่ง item</h2>") && manageRo.Contains("Starter"), "ReadOnly sees bundles without the send form");
     });

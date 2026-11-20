@@ -112,6 +112,21 @@ class ExportCases(unittest.TestCase):
             self.assertEqual((first['id'], first['name_en'], first['name_ko'], first['icon']), (7380, None, '스카라브의 뿔', None))
             self.assertEqual((second['id'], second['name_en'], second['icon']), (20332, 'Skill Recycler', 'icon_gp_skillrecycle'))
             self.assertTrue((out / 'icons/icon_gp_skillrecycle.png').read_bytes().startswith(b'\x89PNG'))
+            # The synthetic record's category bytes are 04 06 1B FF: material / middle 27 (unknown skill books).
+            self.assertEqual(second['tags'], ['material', 'skill'])
+            self.assertEqual((second['grade'], second['use_level'], second['admin_only']), (None, None, False))
+
+    def test_classify_tags_grade_level_admin(self):
+        armor = {'internal': '[위치][방어구][레전더리][82]불굴의 투구', 'large': 0, 'middle': 0, 'small': 255, 'service': 7}
+        self.assertEqual(exporter.classify(38304, armor, 'Helm'), (['equipment', 'armor', 'head'], 7, 82, False))
+        ore = {'internal': '[재료]광석', 'large': 6, 'middle': 8, 'small': 255, 'service': 7}
+        self.assertEqual(exporter.classify(1, ore, 'Armor Ore [Magic]: Lv. 57'), (['material', 'ore', 'craft_material'], 3, None, False))
+        book = {'internal': '[스킬북][유료]', 'large': 10, 'middle': 0, 'small': 0, 'service': 7}
+        self.assertEqual(exporter.classify(2, book, 'Book')[0], ['skill_book', 'skill', 'cash'])
+        self.assertTrue(exporter.classify(11610, None, 'Ring')[3])
+        test_potion = {'internal': '[테스트]물약', 'large': 1, 'middle': 0, 'small': 255, 'service': 7}
+        self.assertTrue(exporter.classify(5, test_potion, 'Test: Potion')[3])
+        self.assertEqual(exporter.classify(6, None, None), ([], None, None, False))
 
 
 if __name__ == '__main__':

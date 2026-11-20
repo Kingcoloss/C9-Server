@@ -43,9 +43,35 @@
             <div class="filters">
                 @if (!(target == DeliveryTarget.Account && allAccounts))
                 {
-                    <label class="field" style="flex:1">ผู้รับ (บรรทัดละคน หรือคั่นด้วย , )
-                        <textarea rows="4" @bind="recipients" placeholder="Lab&#10;Lab2"></textarea>
-                    </label>
+                    <div class="field" style="flex:1">
+                        <label class="field">ค้นหาตัวละครหรือบัญชี
+                            <input @bind="recipientQuery" @bind:event="oninput" @bind:after="SearchRecipientsAsync" placeholder="พิมพ์ชื่ออย่างน้อย 2 ตัว" autocomplete="off" />
+                        </label>
+                        @if (hits.Count > 0)
+                        {
+                            <ul class="panel small" style="list-style:none;margin:.2rem 0;padding:.3rem;max-height:14rem;overflow:auto">
+                                @foreach (RecipientView hit in hits)
+                                {
+                                    bool usable = hit.Kind == DeliveryTarget.Account ? target == DeliveryTarget.Account : true;
+                                    <li>
+                                        <button disabled="@(!usable)" style="width:100%;text-align:left" @onclick="() => AddRecipient(hit)">
+                                            @if (hit.Kind == DeliveryTarget.Character)
+                                            {
+                                                <span>ตัวละคร <strong>@hit.Name</strong> (Lv @hit.Level) · บัญชี <strong>@hit.AccountLogin</strong></span>
+                                            }
+                                            else
+                                            {
+                                                <span>บัญชี <strong>@hit.AccountLogin</strong></span>
+                                            }
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        <label class="field">ผู้รับ (บรรทัดละคน หรือคั่นด้วย , )
+                            <textarea rows="4" @bind="recipients" placeholder="Lab&#10;Lab2"></textarea>
+                        </label>
+                    </div>
                 }
                 <label class="field" style="flex:1">item เพิ่มเติม (บรรทัดละ "ID x จำนวน")
                     <textarea rows="4" @bind="sendLines" @bind:after="Preview" placeholder="20332 x 1&#10;9603 x 5"></textarea>
@@ -171,6 +197,22 @@
     private ItemBundle? editing;
 
     private ItemService Items => (ItemService)Services.GetService(typeof(ItemService))!;
+    private string? recipientQuery;
+    private IReadOnlyList<RecipientView> hits = [];
+
+    private async Task SearchRecipientsAsync()
+    {
+        hits = recipientQuery is { Length: >= 2 } q ? await Items.FindRecipientsAsync(q, 15) : [];
+    }
+
+    /// <summary>A character adds its name (character target) or its account login (account target); an account adds its login.</summary>
+    private void AddRecipient(RecipientView hit)
+    {
+        string name = target == DeliveryTarget.Account ? hit.AccountLogin : hit.Name;
+        List<string> current = ItemLines.Names(recipients).ToList();
+        if (!current.Contains(name, StringComparer.OrdinalIgnoreCase)) current.Add(name);
+        recipients = string.Join(Environment.NewLine, current);
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -216,8 +258,9 @@
     {
         (IReadOnlyList<ItemLine> lines, IReadOnlyList<string> errors) = ItemLines.Parse(sendLines);
         if (errors.Count > 0) { await Actions.RunAsync<bool>("items.send", "item_delivery:new", sendReason, _ => throw new GameDataException(GameDataError.Invalid, "อ่านบรรทัด item ไม่ได้: " + string.Join(" | ", errors))); return; }
+        bool owner = (await Actions.UserAsync()).IsInRole(PortalRoles.Owner);
         DeliveryRequest request = new(target, ItemLines.Names(recipients), target == DeliveryTarget.Account && allAccounts,
-            bundleId == 0 ? null : bundleId, lines, message);
+            bundleId == 0 ? null : bundleId, lines, message, AllowAdminItems: owner);
         DeliveryResult? result = await Actions.RunAsync("items.send", "item_delivery:new", sendReason, op => Items.SendAsync(request, op), "ส่งแล้ว");
         if (result is not null)
         {

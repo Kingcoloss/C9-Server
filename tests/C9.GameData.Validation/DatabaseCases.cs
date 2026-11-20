@@ -297,16 +297,24 @@ internal static partial class GameDataValidation
         {
             CatalogImportRow[] rows =
             [
-                new(20332, "Skill Recycler", "스킬 리사이클러", "A token.", "icon_gp_skillrecycle"),
-                new(9603, "Aura of Strength: 1 min", null, null, "icon_ip_02_001"),
-                new(7380, null, "스카라브의 뿔", null, "../../etc/passwd"),
+                new(20332, "Skill Recycler", "스킬 리사이클러", "A token.", "icon_gp_skillrecycle", ["material", "skill", "event"]),
+                new(9603, "Aura of Strength: 1 min", null, null, "icon_ip_02_001", ["buff"], Grade: 4, UseLevel: 30),
+                new(7380, null, "스카라브의 뿔", null, "../../etc/passwd", ["quest", "Bad Tag!"], Grade: 9),
+                new(11610, "Test Ring", null, null, null, ["equipment", "accessory", "ring", "admin"], AdminOnly: true),
             ];
             OperatorContext op = Harness.Op("import catalog");
             CatalogImportResult first = await h.Items.ImportCatalogAsync(rows, op);
-            Check.Equal(new CatalogImportResult(3, 0, 0), first);
-            Check.Equal(new CatalogImportResult(0, 0, 3), await h.Items.ImportCatalogAsync(rows, op)); // retry of the same request
-            CatalogImportResult again = await h.Items.ImportCatalogAsync([.. rows[..2], rows[2] with { NameEn = "Scarab Horn" }], Harness.Op("re-export"));
-            Check.Equal(new CatalogImportResult(0, 1, 2), again);
+            Check.Equal(new CatalogImportResult(4, 0, 0), first);
+            Check.Equal(new CatalogImportResult(0, 0, 4), await h.Items.ImportCatalogAsync(rows, op)); // retry of the same request
+            CatalogImportResult again = await h.Items.ImportCatalogAsync([.. rows[..2], rows[2] with { NameEn = "Scarab Horn" }, rows[3]], Harness.Op("re-export"));
+            Check.Equal(new CatalogImportResult(0, 1, 3), again);
+            CatalogItem scarab = (await h.Items.GetCatalogAsync(7380))!;
+            Check.True(scarab.Tags.SequenceEqual(["quest"]) && scarab.Category == "quest" && scarab.Rarity is null, "bad tag and grade dropped");
+            Check.Equal(3, (await h.Items.SearchCatalogAsync(new CatalogFilter(AdminOnly: false))).Total);
+            Check.Equal(11610, (await h.Items.SearchCatalogAsync(new CatalogFilter(AdminOnly: true))).Items.Single().ItemId);
+            Check.Equal(9603, (await h.Items.SearchCatalogAsync(new CatalogFilter(Tag: "buff", Grade: 4, MinLevel: 20, MaxLevel: 40))).Items.Single().ItemId);
+            Check.Equal(0, (await h.Items.SearchCatalogAsync(new CatalogFilter(Tag: "buff", MinLevel: 31))).Total);
+            Check.True((await h.Items.CatalogTagsAsync()).Any(t => t.Tag == "admin" && t.Count == 1), "tag counts");
             Check.Equal<string?>(null, (await h.Items.GetCatalogAsync(7380))!.Icon); // unsafe icon key dropped
             Check.Equal(1, (await h.Items.SearchCatalogAsync("recycl")).Total);
             Check.Equal(1, (await h.Items.SearchCatalogAsync("스카라브")).Total);
@@ -343,10 +351,16 @@ internal static partial class GameDataValidation
             DeliveryResult account = await h.Items.SendAsync(new(DeliveryTarget.Account, ["gift2"], false, null, [new(20332, 2)], null), Harness.Op("account"));
             Check.Equal(1, account.Rows);
             DeliveryResult everyone = await h.Items.SendAsync(new(DeliveryTarget.Account, [], true, null, [new(9603, 1)], "Maintenance gift"), Harness.Op("all"));
+            await Check.Fails(GameDataError.Forbidden, () => h.Items.SendAsync(new(DeliveryTarget.Character, ["Giftee"], false, null, [new(11610, 1)], null), Harness.Op("god ring")));
+            Check.Equal(1, (await h.Items.SendAsync(new(DeliveryTarget.Character, ["Giftee"], false, null, [new(11610, 1)], null, AllowAdminItems: true), Harness.Op("owner"))).Rows);
+            IReadOnlyList<RecipientView> found = await h.Items.FindRecipientsAsync("gift");
+            Check.True(found.Any(r => r.Kind == DeliveryTarget.Character && r.Name == "Giftee" && r.AccountLogin == "gift1"), "character hit shows its account");
+            Check.True(found.Any(r => r.Kind == DeliveryTarget.Account && r.AccountLogin == "gift2"), "account hit");
+            Check.Equal(0, (await h.Items.FindRecipientsAsync("%")).Count);
             Check.True(everyone.Recipients >= 2, "every active account");
 
             Page<DeliveryView> pending = await h.Items.DeliveriesAsync(DeliveryStatus.Pending, recipient: "Giftee");
-            Check.Equal(3, pending.Total); // two from the bundle send, one from the batch
+            Check.Equal(4, pending.Total); // two from the bundle send, one from the batch, one GM ring sent by an Owner
             Check.True(pending.Items.All(d => d.CharacterName == "Giftee" && d.AccountLogin == "gift1" && d.ItemName is not null));
             Check.Equal(2, await h.Items.CancelBatchAsync(single.RequestId, Harness.Op("wrong recipient")));
             await Check.Fails(GameDataError.NotFound, () => h.Items.CancelBatchAsync(single.RequestId, Harness.Op()));

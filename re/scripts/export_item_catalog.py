@@ -124,9 +124,15 @@ _SMALL = re.compile(rb'(?=[\x03-\xc8]\x00\x00\x00)')
 
 
 def icon_map(c9d, known_ids, window=2000):
-    """{item id: icon file (lower case)}. A record head is [id][length][internal name] with a Korean or bracketed
-    name; the icon of a head with a known item id is the first .dds string before the next head (any id, so that
-    records of other tables bound the search) and at most ``window`` bytes away."""
+    """{item id: icon file (lower case)}; see item_records."""
+    return {item: record['icon'] for item, record in item_records(c9d, known_ids, window).items()}
+
+
+def item_records(c9d, known_ids, window=2000):
+    """{item id: {icon, internal, service, large, middle, small}}. A record head is [id][length][internal name] with a
+    Korean or bracketed name; the icon of a head with a known item id is the first .dds string before the next head
+    (any id, so that records of other tables bound the search) and at most ``window`` bytes away. The four bytes after
+    the internal name are C9DataInfo's service type and large/middle/small category (255 = none)."""
     heads = []
     for match in _SMALL.finditer(c9d, 4):
         start = match.start() - 4
@@ -142,18 +148,79 @@ def icon_map(c9d, known_ids, window=2000):
             continue
         name = c9d[start + 8:end - 2].decode('utf-16le')
         if name.startswith('[') or any(0xac00 <= ord(c) <= 0xd7a3 for c in name):
-            heads.append((start, item))
+            heads.append((start, item, name, end))
     icons = [(m.start(), m.group(1).decode('ascii').lower()) for m in _DDS.finditer(c9d)]
     starts = [h[0] for h in heads]
     result = {}
-    for index, (start, item) in enumerate(heads):
+    for index, (start, item, name, end_of_name) in enumerate(heads):
         if item in result or item not in known_ids:
             continue
         end = min(starts[index + 1] if index + 1 < len(heads) else len(c9d), start + window)
         k = bisect.bisect_left(icons, (start, ''))
         if k < len(icons) and icons[k][0] < end:
-            result[item] = icons[k][1]
+            service, large, middle, small = c9d[end_of_name:end_of_name + 4]
+            result[item] = {'icon': icons[k][1], 'internal': name, 'service': service,
+                            'large': large, 'middle': middle, 'small': small}
     return result
+
+
+# Large categories (C9DataInfo m_eLargeCategory) named after the items they hold; equipment middle categories are the slot.
+LARGE = {0: 'equipment', 1: 'consumable', 2: 'throwable', 3: 'usable', 4: 'quest', 5: 'decoration', 6: 'material',
+         7: 'enhancement', 9: 'buff', 10: 'skill_book', 11: 'test', 12: 'skill_reset', 13: 'holy_statue', 14: 'rune',
+         15: 'charm', 16: 'attendant', 22: 'artifact'}
+EQUIP_SLOT = {0: ('armor', 'head'), 1: ('armor', 'shoulders'), 2: ('armor', 'chest'), 3: ('armor', 'legs'),
+              4: ('armor', 'hands'), 5: ('armor', 'feet'), 6: ('accessory', 'belt'), 7: ('accessory', 'bracelet'),
+              8: ('accessory', 'ring'), 9: ('accessory', 'earring'), 10: ('accessory', 'necklace'), 18: ('wing',),
+              19: ('accessory', 'brooch')}
+CONSUMABLE = {0: 'potion', 1: 'food', 2: 'exp_book'}
+MATERIAL = {3: 'ingredient', 4: 'herb', 5: 'cloth', 6: 'wood', 7: 'metal', 8: 'ore', 9: 'enhance_stone', 10: 'enhance_stone',
+            11: 'enhance_stone', 12: 'enhance_stone', 13: 'gem', 16: 'ammo', 17: 'spellstone', 18: 'spellstone',
+            20: 'recipe', 25: 'growth_stone', 26: 'growth_stone', 27: 'skill'}
+CRAFT = {3, 4, 5, 6, 7, 8, 13, 20}
+GRADE_TAGS = {'낡은': 1, '일반': 2, '매직': 3, '레어': 4, '마스터': 5, '유니크': 5, '에픽': 6, '레전더리': 7, '레전드': 7, '전설': 7}
+GRADE_NAMES = {'Old': 1, 'Common': 2, 'Magic': 3, 'Rare': 4, 'Master': 5, 'Epic': 6, 'Legendary': 7}
+# Operator items listed in the Ref Server GM notes (GM/Item support.txt) besides the Client's own GM/test items.
+GM_ITEMS = {11610, 12034, 3922, 3997, 3999, 3831, 5894, 5895, 20239, 20240, 3987, 13337, 3382}
+_TEST = re.compile(r'테스트|운영자|\[Test\]|^Test[: ]|\bGM\b|\(GM\)', re.I)
+
+
+def classify(item, record, name):
+    """(tags, grade, use level, admin only) from the category bytes and tags in the internal (Korean) name.
+    Grade (1 Old … 7 Legendary, the Client's FINDITEM_GRADE order) and use level come from name tags only, so many
+    items have none; a full C9DataInfoItem decode is not done yet."""
+    tags = []
+    internal = record.get('internal', '') if record else ''
+    if record:
+        large, middle = record['large'], record['middle']
+        if large in LARGE:
+            tags.append(LARGE[large])
+        if large == 0:
+            tags.extend(EQUIP_SLOT.get(middle, ('weapon',) if 11 <= middle <= 17 else ()))
+        elif large == 1 and middle in CONSUMABLE:
+            tags.append(CONSUMABLE[middle])
+        elif large == 6:
+            if middle in MATERIAL:
+                tags.append(MATERIAL[middle])
+            if middle in CRAFT:
+                tags.append('craft_material')
+        elif large in (10, 12):
+            tags.append('skill')
+    if '[유료]' in internal or '[캐시]' in internal:
+        tags.append('cash')
+    if '[이벤트]' in internal or (name or '').startswith('[Event]'):
+        tags.append('event')
+    admin = item in GM_ITEMS or bool(_TEST.search(internal) or _TEST.search(name or '')) or (record or {}).get('large') == 11
+    if admin:
+        tags.append('admin')
+    grade = next((v for k, v in GRADE_TAGS.items() if f'[{k}]' in internal), None)
+    if grade is None:
+        found = re.search(r'\[(Old|Common|Magic|Rare|Master|Epic|Legendary)\]', name or '')
+        grade = GRADE_NAMES[found.group(1)] if found else None
+    level = None
+    if record and record['large'] == 0:
+        found = re.search(r'\[(\d{1,2})\]', internal) or re.search(r'Lv\. ?(\d{1,2})', name or '')
+        level = int(found.group(1)) if found else None
+    return list(dict.fromkeys(tags)), grade, level, admin
 
 
 def dds_rgba(data):
@@ -194,7 +261,8 @@ def export(game, out):
     data = Archive(game / 'GameData/GameData.cfs')
     korean = item_names(data.read('GameData.c9t'))
     ids = set(english) | set(korean)
-    icons = icon_map(data.read('GameData.c9d'), ids)
+    records = item_records(data.read('GameData.c9d'), ids)
+    icons = {item: record['icon'] for item, record in records.items()}
     where = {}
     for archive in sorted((game / 'Ui_Icon').rglob('*.cfs')):
         opened = Archive(archive)
@@ -214,18 +282,28 @@ def export(game, out):
         (out / 'icons' / f'{key}.png').write_bytes(png(*image))
         written.add(icon)
         exported[icon] = key
-    items = [{
-        'id': item,
-        'name_en': english.get(item, (None, None))[0] or None,
-        'name_ko': korean.get(item, (None, None))[0] or None,
-        'description_en': english.get(item, (None, None))[1] or None,
-        'icon': exported.get(icons.get(item)),
-    } for item in sorted(ids)]
+    items = []
+    for item in sorted(ids):
+        name_en = english.get(item, (None, None))[0] or None
+        tags, grade, level, admin = classify(item, records.get(item), name_en)
+        items.append({
+            'id': item,
+            'name_en': name_en,
+            'name_ko': korean.get(item, (None, None))[0] or None,
+            'description_en': english.get(item, (None, None))[1] or None,
+            'icon': exported.get(icons.get(item)),
+            'tags': tags,
+            'grade': grade,
+            'use_level': level,
+            'admin_only': admin,
+        })
     report = {
         'schema': SCHEMA_VERSION,
         'exported_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
         'counts': {'items': len(items), 'english': len(english), 'korean': len(korean),
-                   'with_icon_record': len(icons), 'icons_written': len(written), 'icons_unsupported': unsupported},
+                   'with_icon_record': len(icons), 'icons_written': len(written), 'icons_unsupported': unsupported,
+                   'with_grade': sum(1 for i in items if i['grade']), 'with_use_level': sum(1 for i in items if i['use_level']),
+                   'admin_only': sum(1 for i in items if i['admin_only'])},
         'items': items,
     }
     (out / 'items.json').write_text(json.dumps(report, ensure_ascii=False), encoding='utf-8')

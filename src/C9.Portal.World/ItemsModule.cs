@@ -48,12 +48,19 @@ public sealed record ItemCatalogFolder(string Path)
             throw new InvalidDataException("items.json is not catalog schema 1");
         List<CatalogImportRow> rows = new(items.GetArrayLength());
         foreach (JsonElement item in items.EnumerateArray())
-            rows.Add(new(item.GetProperty("id").GetInt32(), Text(item, "name_en"), Text(item, "name_ko"), Text(item, "description_en"), Text(item, "icon")));
+            rows.Add(new(item.GetProperty("id").GetInt32(), Text(item, "name_en"), Text(item, "name_ko"), Text(item, "description_en"), Text(item, "icon"),
+                item.TryGetProperty("tags", out JsonElement tags) && tags.ValueKind == JsonValueKind.Array
+                    ? tags.EnumerateArray().Where(t => t.ValueKind == JsonValueKind.String).Select(t => t.GetString()!).ToArray() : [],
+                Short(item, "grade"), Short(item, "use_level"),
+                item.TryGetProperty("admin_only", out JsonElement admin) && admin.ValueKind == JsonValueKind.True));
         return (rows, root.TryGetProperty("exported_at", out JsonElement at) ? at.GetString() : null);
     }
 
     private static string? Text(JsonElement item, string name) =>
         item.TryGetProperty(name, out JsonElement value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+
+    private static short? Short(JsonElement item, string name) =>
+        item.TryGetProperty(name, out JsonElement value) && value.ValueKind == JsonValueKind.Number && value.TryGetInt16(out short number) ? number : null;
 }
 
 /// <summary>Parses "itemId x quantity" lines (also "itemId quantity", "itemId*quantity" or just "itemId" for 1).</summary>
@@ -93,6 +100,29 @@ public sealed record SendRequest(DeliveryTarget Target, IReadOnlyList<string>? R
     public DeliveryRequest Input() => new(Target, Recipients ?? [], AllAccounts, BundleId, Items ?? [], Message);
 }
 
+/// <summary>Thai labels for catalog tags and grades (Client FINDITEM_GRADE order).</summary>
+public static class ItemLabels
+{
+    public static readonly IReadOnlyDictionary<string, string> Tags = new Dictionary<string, string>
+    {
+        ["equipment"] = "สวมใส่", ["armor"] = "ชุดเกราะ", ["weapon"] = "อาวุธ", ["accessory"] = "เครื่องประดับ", ["wing"] = "ปีก",
+        ["head"] = "หัว", ["shoulders"] = "ไหล่", ["chest"] = "ตัว", ["legs"] = "ขา", ["hands"] = "มือ", ["feet"] = "เท้า",
+        ["belt"] = "เข็มขัด", ["bracelet"] = "กำไล", ["ring"] = "แหวน", ["earring"] = "ต่างหู", ["necklace"] = "สร้อยคอ", ["brooch"] = "เข็มกลัด",
+        ["consumable"] = "ของใช้สิ้นเปลือง", ["potion"] = "ยา", ["food"] = "อาหาร", ["exp_book"] = "หนังสือ EXP", ["throwable"] = "ของขว้าง",
+        ["usable"] = "ใช้ได้/กล่อง", ["quest"] = "เควส", ["decoration"] = "ของตกแต่ง", ["material"] = "วัตถุดิบ", ["craft_material"] = "วัตถุดิบคราฟ",
+        ["ingredient"] = "วัตถุดิบอาหาร", ["herb"] = "สมุนไพร", ["cloth"] = "ผ้า/หนัง", ["wood"] = "ไม้", ["metal"] = "โลหะ", ["ore"] = "แร่",
+        ["enhance_stone"] = "หินตีบวก", ["gem"] = "อัญมณี", ["ammo"] = "กระสุน", ["spellstone"] = "Spellstone", ["recipe"] = "สูตรคราฟ",
+        ["growth_stone"] = "หินเติบโต", ["enhancement"] = "ตีบวก", ["buff"] = "บัฟ", ["skill_book"] = "สกิลบุ๊ค", ["skill"] = "สกิล",
+        ["skill_reset"] = "รีเซ็ตสกิล", ["holy_statue"] = "รูปปั้นศักดิ์สิทธิ์", ["rune"] = "รูน", ["charm"] = "เครื่องราง", ["attendant"] = "ผู้ติดตาม",
+        ["artifact"] = "โบราณวัตถุ", ["test"] = "ทดสอบ", ["cash"] = "Cash", ["event"] = "อีเวนต์", ["admin"] = "Super Admin",
+    };
+
+    public static readonly IReadOnlyList<string> Grades = ["", "Old", "Common", "Magic", "Rare", "Master", "Epic", "Legendary"];
+
+    public static string Tag(string tag) => Tags.GetValueOrDefault(tag, tag);
+    public static string Grade(short? grade) => grade is >= 1 and <= 7 ? Grades[grade.Value] : "ไม่ทราบ";
+}
+
 /// <summary>Items: catalog with icons (from the Client), item bundles and sending items to characters or accounts.</summary>
 public sealed class ItemsModule : IPortalModule
 {
@@ -128,9 +158,10 @@ public sealed class ItemsModule : IPortalModule
             return File.Exists(path) ? Results.File(path, "image/png", enableRangeProcessing: false) : Results.NotFound();
         });
 
-        read.MapGet("/catalog", async (HttpContext http, string? q, int? skip, int? take) =>
+        read.MapGet("/catalog", async (HttpContext http, string? q, string? tag, short? grade, short? minLevel, short? maxLevel, bool? admin,
+            int? skip, int? take) =>
             Configured(http.RequestServices)
-                ? Json(await Svc(http).SearchCatalogAsync(q, skip ?? 0, take ?? 50, http.RequestAborted))
+                ? Json(await Svc(http).SearchCatalogAsync(new CatalogFilter(q, tag, grade, minLevel, maxLevel, admin), skip ?? 0, take ?? 50, http.RequestAborted))
                 : NotConfigured());
 
         read.MapGet("/catalog/source", (ItemCatalogFolder folder) => Json(folder.Describe()));
@@ -175,9 +206,14 @@ public sealed class ItemsModule : IPortalModule
         deliveriesWrite.MapPost("/deliveries", async (HttpContext http) =>
         {
             SendRequest? body = await Body<SendRequest>(http);
+            bool owner = http.User.IsInRole(PortalRoles.Owner);
             return await Write(http, "items.send", "item_delivery:new", body,
-                (op, s) => s.GetRequiredService<ItemService>().SendAsync(body!.Input(), op, http.RequestAborted), status: StatusCodes.Status201Created);
+                (op, s) => s.GetRequiredService<ItemService>().SendAsync(body!.Input() with { AllowAdminItems = owner }, op, http.RequestAborted),
+                status: StatusCodes.Status201Created);
         });
+
+        deliveriesRead.MapGet("/recipients", async (HttpContext http, string? q) =>
+            Configured(http.RequestServices) ? Json(await Svc(http).FindRecipientsAsync(q, 20, http.RequestAborted)) : NotConfigured());
 
         deliveriesWrite.MapPost("/deliveries/{batch:guid}/cancel", async (HttpContext http, Guid batch) =>
         {

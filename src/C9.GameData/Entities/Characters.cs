@@ -53,8 +53,9 @@ public sealed class CharacterItem
 }
 
 /// <summary>
-/// Reference data exported from the Client (re/scripts/export_item_catalog.py → items.json): names, description and
-/// icon. Category, rarity and stack size are not decoded yet.
+/// Reference data exported from the Client (re/scripts/export_item_catalog.py → items.json): names, description, icon,
+/// category tags (from the Client's large/middle category), grade and use level (from the item's internal name tags,
+/// so often unknown) and whether it is a GM/test item. Stack size is not decoded yet.
 /// </summary>
 public sealed class CatalogItem
 {
@@ -64,7 +65,14 @@ public sealed class CatalogItem
     public string? DescriptionEn { get; set; }
     /// <summary>Icon file key (PNG name without extension in the catalog's icons folder); null when the Client has none.</summary>
     public string? Icon { get; set; }
+    /// <summary>Category tags, first = main category (equipment, consumable, material, skill_book …) plus cash/event/admin.</summary>
+    public List<string> Tags { get; set; } = [];
+    public short? UseLevel { get; set; }
+    /// <summary>GM/test item ("God mode"): only an Owner may send it.</summary>
+    public bool AdminOnly { get; set; }
+    /// <summary>Main category tag (first of <see cref="Tags"/>).</summary>
     public string? Category { get; set; }
+    /// <summary>Grade: 1 Old, 2 Common, 3 Magic, 4 Rare, 5 Master, 6 Epic, 7 Legendary (Client FINDITEM_GRADE order).</summary>
     public short? Rarity { get; set; }
     public int? MaxStack { get; set; }
     public string Raw { get; set; } = "{}";

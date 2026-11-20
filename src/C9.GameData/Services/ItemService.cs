@@ -3,7 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace C9.GameData.Services;
 
-public sealed record CatalogImportRow(int Id, string? NameEn, string? NameKo, string? DescriptionEn, string? Icon);
+public sealed record CatalogImportRow(int Id, string? NameEn, string? NameKo, string? DescriptionEn, string? Icon,
+    IReadOnlyList<string>? Tags = null, short? Grade = null, short? UseLevel = null, bool AdminOnly = false);
+
+/// <summary>Catalog filters: tag (category), grade, use-level range and GM/test items (null = both).</summary>
+public sealed record CatalogFilter(string? Text = null, string? Tag = null, short? Grade = null, short? MinLevel = null,
+    short? MaxLevel = null, bool? AdminOnly = null);
 
 public sealed record CatalogImportResult(int Added, int Updated, int Unchanged);
 
@@ -15,9 +20,12 @@ public sealed record ItemLine(int ItemId, int Quantity);
 /// Contents are a bundle and/or item lines.
 /// </summary>
 public sealed record DeliveryRequest(DeliveryTarget Target, IReadOnlyList<string> Recipients, bool AllAccounts,
-    long? BundleId, IReadOnlyList<ItemLine> Items, string? Message);
+    long? BundleId, IReadOnlyList<ItemLine> Items, string? Message, bool AllowAdminItems = false);
 
 public sealed record DeliveryResult(Guid BatchId, int Recipients, int Rows);
+
+/// <summary>A search hit for the send form: a character (with its account) or an account.</summary>
+public sealed record RecipientView(DeliveryTarget Kind, string Name, long AccountId, string AccountLogin, long? CharacterId, short? Level);
 
 /// <summary>A delivery row with the names an operator needs to read it.</summary>
 public sealed record DeliveryView(long Id, Guid BatchId, DeliveryTarget Target, long AccountId, string AccountLogin,
@@ -32,13 +40,21 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
     public const int MaxRecipients = 5_000;
     public const int MaxRows = 100_000;
 
-    public async Task<Page<CatalogItem>> SearchCatalogAsync(string? text, int skip = 0, int take = 50, CancellationToken token = default)
+    public Task<Page<CatalogItem>> SearchCatalogAsync(string? text, int skip = 0, int take = 50, CancellationToken token = default) =>
+        SearchCatalogAsync(new CatalogFilter(text), skip, take, token);
+
+    public async Task<Page<CatalogItem>> SearchCatalogAsync(CatalogFilter filter, int skip = 0, int take = 50, CancellationToken token = default)
     {
         await using GameDbContext db = await factory.CreateDbContextAsync(token);
         IQueryable<CatalogItem> items = db.ItemCatalog.AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(text))
+        if (!string.IsNullOrWhiteSpace(filter.Tag)) items = items.Where(i => i.Tags.Contains(filter.Tag.Trim()));
+        if (filter.Grade is { } grade) items = items.Where(i => i.Rarity == grade);
+        if (filter.MinLevel is { } min) items = items.Where(i => i.UseLevel >= min);
+        if (filter.MaxLevel is { } max) items = items.Where(i => i.UseLevel <= max);
+        if (filter.AdminOnly is { } admin) items = items.Where(i => i.AdminOnly == admin);
+        if (!string.IsNullOrWhiteSpace(filter.Text))
         {
-            string trimmed = text.Trim();
+            string trimmed = filter.Text.Trim();
             if (int.TryParse(trimmed, out int id)) items = items.Where(i => i.ItemId == id);
             else
             {
@@ -57,7 +73,16 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         return await db.ItemCatalog.AsNoTracking().FirstOrDefaultAsync(i => i.ItemId == id, token);
     }
 
-    /// <summary>Adds or updates catalog rows (names, description, icon); never deletes. Audited once per import.</summary>
+    /// <summary>Tag counts for the catalog filter (most common first).</summary>
+    public async Task<IReadOnlyList<(string Tag, int Count)>> CatalogTagsAsync(CancellationToken token = default)
+    {
+        await using GameDbContext db = await factory.CreateDbContextAsync(token);
+        var tags = await db.ItemCatalog.AsNoTracking().SelectMany(i => i.Tags).GroupBy(t => t)
+            .Select(g => new { g.Key, Count = g.Count() }).OrderByDescending(g => g.Count).ToListAsync(token);
+        return tags.Select(t => (t.Key, t.Count)).ToArray();
+    }
+
+    /// <summary>Adds or updates catalog rows (names, description, icon, tags, grade, level, GM flag); never deletes. Audited once per import.</summary>
     public async Task<CatalogImportResult> ImportCatalogAsync(IReadOnlyList<CatalogImportRow> rows, OperatorContext context, CancellationToken token = default)
     {
         context.Validate();
@@ -73,14 +98,23 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         {
             string? name = Clip(row.NameEn, 200), korean = Clip(row.NameKo, 200), description = Clip(row.DescriptionEn, 4000), icon = Clip(row.Icon, 128);
             if (icon is not null && !ValidIcon(icon)) icon = null;
+            List<string> tags = (row.Tags ?? []).Where(ValidTag).Distinct().Take(16).ToList();
+            short? grade = row.Grade is >= 1 and <= 7 ? row.Grade : null;
+            short? level = row.UseLevel is >= 1 and <= StatService.MaxLevel ? row.UseLevel : null;
             if (!existing.TryGetValue(row.Id, out CatalogItem? item))
             {
-                db.ItemCatalog.Add(new CatalogItem { ItemId = row.Id, NameEn = name, NameKo = korean, DescriptionEn = description, Icon = icon });
+                db.ItemCatalog.Add(new CatalogItem
+                {
+                    ItemId = row.Id, NameEn = name, NameKo = korean, DescriptionEn = description, Icon = icon,
+                    Tags = tags, Category = tags.FirstOrDefault(), Rarity = grade, UseLevel = level, AdminOnly = row.AdminOnly
+                });
                 added++;
             }
-            else if (item.NameEn != name || item.NameKo != korean || item.DescriptionEn != description || item.Icon != icon)
+            else if (item.NameEn != name || item.NameKo != korean || item.DescriptionEn != description || item.Icon != icon ||
+                     !item.Tags.SequenceEqual(tags) || item.Rarity != grade || item.UseLevel != level || item.AdminOnly != row.AdminOnly)
             {
                 (item.NameEn, item.NameKo, item.DescriptionEn, item.Icon) = (name, korean, description, icon);
+                (item.Tags, item.Category, item.Rarity, item.UseLevel, item.AdminOnly) = (tags, tags.FirstOrDefault(), grade, level, row.AdminOnly);
                 updated++;
             }
         }
@@ -90,6 +124,9 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         await transaction.CommitAsync(token);
         return new(added, updated, rows.Count - added - updated);
     }
+
+    /// <summary>Tags are short lower-case keys (letters, digits, '_').</summary>
+    public static bool ValidTag(string tag) => tag.Length is > 0 and <= 32 && tag.All(c => c is (>= 'a' and <= 'z') or (>= '0' and <= '9') or '_');
 
     /// <summary>Icon keys become file names under the catalog's icons folder: lower-case letters, digits, '_', '-', '.' only.</summary>
     public static bool ValidIcon(string icon) =>
@@ -168,6 +205,12 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         lines.AddRange(request.Items ?? []);
         if (lines.Count == 0) throw new GameDataException(GameDataError.Invalid, "Choose a bundle or at least one item");
         await ValidateLinesAsync(db, lines, token, MaxLines * 2);
+        if (!request.AllowAdminItems)
+        {
+            int[] ids = lines.Select(l => l.ItemId).Distinct().ToArray();
+            if (await db.ItemCatalog.AnyAsync(i => ids.Contains(i.ItemId) && i.AdminOnly, token))
+                throw new GameDataException(GameDataError.Forbidden, "GM/test items can only be sent by an Owner");
+        }
         string? message = Clip(request.Message?.Trim(), 200);
 
         List<(long Account, long? Character)> recipients;
@@ -216,6 +259,25 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         await Audited.SaveAsync(db, token);
         await transaction.CommitAsync(token);
         return new(context.RequestId, recipients.Count, recipients.Count * lines.Count);
+    }
+
+    /// <summary>Characters (not deleted) and accounts whose name contains <paramref name="text"/> (input is escaped, data only).</summary>
+    public async Task<IReadOnlyList<RecipientView>> FindRecipientsAsync(string? text, int take = 20, CancellationToken token = default)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return [];
+        take = Math.Clamp(take, 1, 50);
+        string pattern = "%" + AccountService.EscapeLike(text.Trim()) + "%";
+        await using GameDbContext db = await factory.CreateDbContextAsync(token);
+        var characters = await db.Characters.AsNoTracking()
+            .Where(c => c.DeletedAt == null && EF.Functions.ILike(c.Name, pattern, "\\"))
+            .OrderBy(c => c.Name).Take(take)
+            .Select(c => new { c.Id, c.Name, c.Level, c.AccountId, Login = c.Account!.LoginName }).ToListAsync(token);
+        var accounts = await db.Accounts.AsNoTracking()
+            .Where(a => a.LoginName != AccountService.LocalAccount && EF.Functions.ILike(a.LoginName, pattern, "\\"))
+            .OrderBy(a => a.LoginName).Take(take).Select(a => new { a.Id, a.LoginName }).ToListAsync(token);
+        return characters.Select(c => new RecipientView(DeliveryTarget.Character, c.Name, c.AccountId, c.Login, c.Id, c.Level))
+            .Concat(accounts.Select(a => new RecipientView(DeliveryTarget.Account, a.LoginName, a.Id, a.LoginName, null, null)))
+            .Take(take).ToArray();
     }
 
     public async Task<Page<DeliveryView>> DeliveriesAsync(DeliveryStatus? status = null, Guid? batchId = null, string? recipient = null,
