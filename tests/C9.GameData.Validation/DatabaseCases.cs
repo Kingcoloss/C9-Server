@@ -213,6 +213,10 @@ internal static partial class GameDataValidation
             Check.Equal(95, config.Levels.Count);
             Check.True(config.Levels.All(l => l.Points == 5));
             Check.Equal(StatService.Classes.Count * StatKeys.All.Count, config.Bases.Count);
+            // Client class table values replaced the placeholder 10 (migration StatClientClassBase).
+            Check.Equal(9, config.Bases.Single(b => b.ClassCode == 1 && b.StatKey == "wisdom").Value);
+            Check.Equal(1, config.Bases.Single(b => b.ClassCode == 0 && b.StatKey == "wisdom").Value);
+            Check.Equal(5, config.Bases.Single(b => b.ClassCode == 2 && b.StatKey == "strength").Value);
             Account account = await h.Accounts.CreateAsync("stats1", "password-9", Harness.Op());
             Character fighter = await h.Characters.CreateAsync(account.Id, 0, 1, "Statter", Appearance);
             await h.Stats.SetClassBaseAsync(0, new Dictionary<string, int> { ["strength"] = 25, ["max_hp"] = 150 }, Harness.Op("tune fighter"));
@@ -244,7 +248,7 @@ internal static partial class GameDataValidation
             Character c = await h.Characters.CreateAsync(owner.Id, 0, 25, "Spender", Appearance);
             await h.Characters.UpdateAsync(c.Id, c.Version, new CharacterChanges(Level: 4), Harness.Op("level up"));
             CharacterStatSheet start = (await h.Stats.ForCharacterAsync(c.Id))!;
-            Check.Equal("Shaman", start.Class.Name);
+            Check.Equal("Valcan", start.Class.Name);
             int available = start.AvailablePoints;
             Check.True(available >= 4, "level 4 earns points");
             OperatorContext op = Harness.Op("launcher spend");

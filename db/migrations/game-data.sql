@@ -1301,3 +1301,78 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120125157_StatClientClassBase') THEN
+
+    UPDATE game.class_stat_bases AS b SET value = v.value
+    FROM (VALUES
+        (0, 'strength', 10), (0, 'intelligence', 5), (0, 'health', 9), (0, 'wisdom', 1),
+        (1, 'strength', 6), (1, 'intelligence', 5), (1, 'health', 5), (1, 'wisdom', 9),
+        (2, 'strength', 5), (2, 'intelligence', 1), (2, 'health', 4), (2, 'wisdom', 2),
+        (3, 'strength', 8), (3, 'intelligence', 7), (3, 'health', 7), (3, 'wisdom', 3),
+        (4, 'strength', 8), (4, 'intelligence', 4), (4, 'health', 5), (4, 'wisdom', 8)
+    ) AS v(class_code, stat_key, value)
+    WHERE b.class_code = v.class_code AND b.stat_key = v.stat_key AND b.value = 10;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120125157_StatClientClassBase') THEN
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('hp_recovery', 'HP Recovery', 1, 31, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('mp_recovery', 'MP Recovery', 1, 32, TRUE);
+    INSERT INTO game.stat_definitions (key, name, per_point, sort, upgradable)
+    VALUES ('valiance', 'Valiance', 1, 30, TRUE);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120125157_StatClientClassBase') THEN
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'hp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'mp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (0, 'valiance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'hp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'mp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (1, 'valiance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'hp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'mp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (2, 'valiance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'hp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'mp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (3, 'valiance', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'hp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'mp_recovery', 0);
+    INSERT INTO game.class_stat_bases (class_code, stat_key, value)
+    VALUES (4, 'valiance', 0);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120125157_StatClientClassBase') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261120125157_StatClientClassBase', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+

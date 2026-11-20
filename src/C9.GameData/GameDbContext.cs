@@ -260,7 +260,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.HasKey(b => new { b.ClassCode, b.StatKey });
             e.HasOne<StatDefinition>().WithMany().HasForeignKey(b => b.StatKey).OnDelete(DeleteBehavior.Restrict);
             e.HasData(StatService.Classes.SelectMany(c => StatKeys.All.Select(s =>
-                new ClassStatBase { ClassCode = c.Code, StatKey = s.Key, Value = s.DefaultBase })));
+                new ClassStatBase { ClassCode = c.Code, StatKey = s.Key, Value = StatKeys.DefaultBase(c.Code, s) })));
         });
 
         model.Entity<StatPointLevel>(e =>

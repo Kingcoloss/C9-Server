@@ -133,6 +133,9 @@ internal static partial class Validation
                         Check.Equal(398, attributes.Payload.Length);
                         Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
                         Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[8..]));
+                        // Block A = C9CharacterStatus: m_nMaxHP (int64) at +0x0C, m_nMaxMP at +0x14 (C9.pdb PS_CharacterStatus_Ack).
+                        Check.Equal((long)hp, BinaryPrimitives.ReadInt64LittleEndian(attributes.Payload.Span[0x0C..]));
+                        Check.Equal((int)mp, BinaryPrimitives.ReadInt32LittleEndian(attributes.Payload.Span[0x14..]));
                         Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x38..]));
                         Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(attributes.Payload.Span[0x3A..]));
                         Check.Equal((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(attributes.Payload.Span[0x18C..]));

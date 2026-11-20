@@ -92,6 +92,9 @@ internal static partial class GameDataValidation
             Check.Equal((short)3, StatService.ClassOf(17));
             Check.Equal((short)2, StatService.ClassOf(25));
             Check.Equal((short)4, StatService.ClassOf(40));
+            Check.Equal("Hunter", StatService.Classes[StatService.ClassOf(17)].Name);
+            Check.Equal("Valcan", StatService.Classes[StatService.ClassOf(25)].Name);
+            Check.Equal(StatService.Classes.Count, StatKeys.ClientClassBase.Count);
             Check.Throws<GameDataException>(() => StatService.ClassOf(0));
             Check.Throws<GameDataException>(() => StatService.ClassOf(41));
             return Task.CompletedTask;

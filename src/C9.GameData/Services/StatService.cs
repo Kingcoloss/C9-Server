@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 namespace C9.GameData.Services;
 
 /// <summary>
-/// Stat keys the server knows. Names follow the Client's own option texts ("Strength is increased." etc. in
-/// ENG_GameData.c9t). Which packet field carries each stat is decided in C9.Server, not here.
+/// Stat keys the server knows. Names follow the Client's own texts (ENG_GameData.c9t, C9GAMESTR_CHARACTER_STATUS_*);
+/// most keys are fields of the Client's C9CharacterStatus (C9.pdb, packet 0x0C1E PS_CharacterStatus_Ack). Which packet
+/// field carries each stat is decided in C9.Server, not here. Health is the Client's CON.
 /// </summary>
 public static class StatKeys
 {
@@ -44,7 +45,34 @@ public static class StatKeys
         new("water_resistance", "Water Resistance", 0),
         new("earth_resistance", "Earth Resistance", 0),
         new("air_resistance", "Air Resistance", 0),
+        new("valiance", "Valiance", 0),
+        new("hp_recovery", "HP Recovery", 0),
+        new("mp_recovery", "MP Recovery", 0),
     ];
+
+    /// <summary>
+    /// Level-1 Strength/Intelligence/Health(CON)/Wisdom of the novice class of each line, from the Client's class table
+    /// (GameData.c9d C9DataInfoClass m_iStr/m_iInt/m_iCon/m_iWis; docs/CHARACTER_STATS_TH.md).
+    /// </summary>
+    public static readonly IReadOnlyDictionary<short, (int Strength, int Intelligence, int Health, int Wisdom)> ClientClassBase =
+        new Dictionary<short, (int, int, int, int)>
+        {
+            [0] = (10, 5, 9, 1), [1] = (6, 5, 5, 9), [2] = (5, 1, 4, 2), [3] = (8, 7, 7, 3), [4] = (8, 4, 5, 8),
+        };
+
+    /// <summary>Default base value of a stat for a class (Client class table for the four primary stats).</summary>
+    public static int DefaultBase(short classCode, Info stat)
+    {
+        if (!ClientClassBase.TryGetValue(classCode, out var primary)) return stat.DefaultBase;
+        return stat.Key switch
+        {
+            "strength" => primary.Strength,
+            "intelligence" => primary.Intelligence,
+            "health" => primary.Health,
+            "wisdom" => primary.Wisdom,
+            _ => stat.DefaultBase,
+        };
+    }
 
     public const int MaxKeyLength = 32;
 }
@@ -76,14 +104,17 @@ public sealed class StatService(IDbContextFactory<GameDbContext> factory, TimePr
     public const int MaxStatValue = 100_000_000;
     public const int MaxPerPoint = 1_000_000;
 
-    /// <summary>Base classes in Client template order (CharacterLobby.TemplateIds templates 0..4).</summary>
+    /// <summary>
+    /// Class lines by the key of their novice class in the Client class table (= CharacterLobby.TemplateIds template):
+    /// 0 Fighter, 1 Shaman, 2 Valcan, 3 Hunter, 4 WitchBlade. Elite and advanced classes of a line share its row.
+    /// </summary>
     public static readonly IReadOnlyList<StatClass> Classes =
     [
-        new(0, "Fighter"), new(1, "Hunter"), new(2, "Shaman"), new(3, "WitchBlade"), new(4, "Mistic")
+        new(0, "Fighter"), new(1, "Shaman"), new(2, "Valcan"), new(3, "Hunter"), new(4, "WitchBlade")
     ];
 
-    // Job codes come in blocks of eight per base class; CharacterLobby.TemplateIds maps the
-    // first job of each block to templates 0, 1, 3, 2, 4 (C9.Validation checks this stays in sync).
+    // Job codes come in blocks of eight per line; CharacterLobby.TemplateIds maps the first job of each
+    // block to templates 0, 1, 3, 2, 4 (novice class keys), e.g. jobs 17-24 = templates 3, 8, 28-33 = Hunter line.
     private static readonly short[] ClassOfJobBlock = [0, 1, 3, 2, 4];
 
     /// <summary>Base class of an asset job code (1..40).</summary>

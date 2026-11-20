@@ -128,7 +128,7 @@ internal static partial class Validation
                 Packet details = await lobby.ReceiveAsync();
                 Check.Equal((ushort)0x0EFC, details.Type);
                 Check.Bytes(identity, details.Payload.Span[..8]);
-                // Stat system: Lab2 (job 9 = Hunter) enters with the Hunter base Max HP/MP plus spent points.
+                // Stat system: Lab2 (job 9 = Shaman line) enters with the Shaman base Max HP/MP plus spent points.
                 StatService stats = portal.GetRequiredService<StatService>();
                 await stats.SetClassBaseAsync(1, new Dictionary<string, int> { ["max_hp"] = 240, ["max_mp"] = 80 }, op with { RequestId = Guid.NewGuid() });
                 await stats.UpdateDefinitionsAsync([new("max_hp", "Maximum HP", true, 5)], op with { RequestId = Guid.NewGuid() });
@@ -141,6 +141,14 @@ internal static partial class Validation
                 Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
                 Check.Equal(80u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
                 Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[32..]));
+                Check.Equal((ushort)0x0BC3, (await lobby.ReceiveAsync()).Type);
+                await lobby.SendAsync(new Packet(0x0BC5));
+                Packet status = await lobby.ReceiveAsync();
+                Check.Equal((ushort)0x0C1E, status.Type);
+                Check.Equal(250L, BinaryPrimitives.ReadInt64LittleEndian(status.Payload.Span[0x0C..])); // m_nMaxHP
+                Check.Equal(80, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x14..])); // m_nMaxMP
+                Check.Equal(6, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x18..])); // m_nSTR, Client Shaman base
+                Check.Equal(9, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x24..])); // m_nWIS
                 Check.Equal<ulong?>(lab2Id, lobby.Session.Snapshot().CharacterId);
                 Check.Equal<long?>(local.Id, lobby.Session.Snapshot().AccountId);
             }

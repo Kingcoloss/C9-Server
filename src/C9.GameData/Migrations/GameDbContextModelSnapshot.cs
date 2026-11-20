@@ -787,19 +787,19 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)0,
                             StatKey = "intelligence",
-                            Value = 10
+                            Value = 5
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "health",
-                            Value = 10
+                            Value = 9
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "wisdom",
-                            Value = 10
+                            Value = 1
                         },
                         new
                         {
@@ -955,31 +955,49 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)0,
                             StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "valiance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "hp_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)0,
+                            StatKey = "mp_recovery",
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "strength",
-                            Value = 10
+                            Value = 6
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "intelligence",
-                            Value = 10
+                            Value = 5
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "health",
-                            Value = 10
+                            Value = 5
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "wisdom",
-                            Value = 10
+                            Value = 9
                         },
                         new
                         {
@@ -1135,31 +1153,49 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)1,
                             StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "valiance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "hp_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)1,
+                            StatKey = "mp_recovery",
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "strength",
-                            Value = 10
+                            Value = 5
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "intelligence",
-                            Value = 10
+                            Value = 1
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "health",
-                            Value = 10
+                            Value = 4
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "wisdom",
-                            Value = 10
+                            Value = 2
                         },
                         new
                         {
@@ -1315,31 +1351,49 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)2,
                             StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "valiance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "hp_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)2,
+                            StatKey = "mp_recovery",
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "strength",
-                            Value = 10
+                            Value = 8
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "intelligence",
-                            Value = 10
+                            Value = 7
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "health",
-                            Value = 10
+                            Value = 7
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "wisdom",
-                            Value = 10
+                            Value = 3
                         },
                         new
                         {
@@ -1495,31 +1549,49 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)3,
                             StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "valiance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "hp_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)3,
+                            StatKey = "mp_recovery",
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "strength",
-                            Value = 10
+                            Value = 8
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "intelligence",
-                            Value = 10
+                            Value = 4
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "health",
-                            Value = 10
+                            Value = 5
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "wisdom",
-                            Value = 10
+                            Value = 8
                         },
                         new
                         {
@@ -1675,6 +1747,24 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)4,
                             StatKey = "air_resistance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "valiance",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "hp_recovery",
+                            Value = 0
+                        },
+                        new
+                        {
+                            ClassCode = (short)4,
+                            StatKey = "mp_recovery",
                             Value = 0
                         });
                 });
@@ -2349,6 +2439,30 @@ namespace C9.GameData.Migrations
                             Name = "Air Resistance",
                             PerPoint = 1,
                             Sort = (short)29,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "valiance",
+                            Name = "Valiance",
+                            PerPoint = 1,
+                            Sort = (short)30,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "hp_recovery",
+                            Name = "HP Recovery",
+                            PerPoint = 1,
+                            Sort = (short)31,
+                            Upgradable = true
+                        },
+                        new
+                        {
+                            Key = "mp_recovery",
+                            Name = "MP Recovery",
+                            PerPoint = 1,
+                            Sort = (short)32,
                             Upgradable = true
                         });
                 });
