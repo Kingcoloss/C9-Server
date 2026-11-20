@@ -34,7 +34,7 @@ public sealed class TcpGameServer(ServerOptions options, IServerEvents events, S
         events.Emit(new ServerEvent("listening")
         {
             Host = options.Host, Port = Port, Profile = options.Profile,
-            ClientCompatibility = "unverified", CipherEpochLimit = InitialCipherDirection.FrameLimit, Runtime = "dotnet"
+            ClientCompatibility = "unverified", Runtime = "dotnet"
         });
         acceptLoop = AcceptLoopAsync(lifetime.Token);
         return Task.CompletedTask;

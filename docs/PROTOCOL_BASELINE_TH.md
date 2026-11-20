@@ -38,7 +38,7 @@ Catalog ทั้งหมด: `re/evidence/static/windows_official_20261116_pac
 | เลือก server | `2EEC` 20 → `2EED` 26 | มี endpoint handoff; ต้องแยกจาก reconnect |
 | รายการ/สร้าง/รายละเอียดตัวละคร | `0EFA`; `0BBB` 90 → `0BBC` 113; `0EFB` 8 → `0EFC` 53 | ต้องรวมเข้าตาราง field ของ build ปัจจุบัน ไม่ถือว่า list ผ่านแล้ว select จะถูกด้วย |
 | **เลือกตัวละคร** | `0BBF` 8 → `0BC0` **33,734** (`0x83C6`, frame 33,748; `max_frame` ≥ 33,748) | แก้แล้ว 19 พ.ย.: ขยายตาม reader `008824D0` และเขียน HP/MP ปัจจุบันที่ payload 32/36 (เดิมเป็น 0 ⇒ client ตั้ง flag ตาย) ยืนยันในเกมแล้ว; field inventory/equip/skill ที่เหลือยังเป็นศูนย์และยังไม่ถอด |
-| เข้า map | `0BC3` 46; request `0E4B` 5 (map u32 + mode u8) | server ส่ง map entry แล้ว แต่ยังไม่ได้ตอบ map roster; `0E4C` reader มี count u16 และ entry 80 bytes ต้องตรวจ semantics/flag/limit ให้ครบ |
+| เข้า map | `0BC3` 46; request `0E4B` 5 (map u32 + mode u8) | branch Sprint 1 (20 พ.ย.) ตอบ `0E4C` enc 7 B `{u32 map echo, u8 kind, u16 count=0}` ตาม case `0xE4C` ใน `008EF110` (entry 80 B อ่านด้วย `008F2F30`); การ echo kind ยังเป็นการอนุมาน รอทดสอบในเกม |
 | โหลดเสร็จ | `0BC5` 0 → `0BC6` 8 plain | ส่งครั้งเดียว; ถอดการส่ง BC6 ซ้ำหลัง BCE เพราะไม่ได้แก้ Keyboard |
 | Attributes / vitals | `0C1E` 398; `0C20` 32 plain | factors 1000/1000, multiplier 1.0 ยืนยันใน dump; แก้ flag C20 แล้ว ยังไม่ยืนยันว่าแก้ Keyboard |
 | Keyboard / movement | `0BCE` 46 C→S (ท่า `Move_Front`/`JUMP_UP`/`WAIT`) | **ใช้ได้แล้ว 19 พ.ย. 22:23 น.** (W/A/S/D + Space): สาเหตุคือ HP ปัจจุบันใน `0BC0` payload 32 = 0 ⇒ actor +0x790 (ตาย) = 1 ⇒ `00823090` ตัดคำสั่งเดิน/กระโดด; ดู `WORLD_MOVEMENT_TH.md` ส่วนบนสุด. server ยังไม่เก็บ/broadcast `0BCE` |
@@ -46,7 +46,7 @@ Catalog ทั้งหมด: `re/evidence/static/windows_official_20261116_pac
 | กลับหน้าเลือกตัวละคร | `0EC4` 0 → `2EEB`; reconnect `2EE8` 28 → `2EE9` 0 | trace จบที่ ack แล้วค้าง; reader `008E64F0` เรียก `00C51640` ตั้ง StageCharacter+238 = 7 ต้องไล่ transition ถัดไปและ account binding |
 | Quit Game | `17D4` 16 → `17D5` 0 | ผู้ใช้ยืนยันว่าออกเกมได้แล้ว แยกจาก return-to-character flow |
 | 2nd Password | dispatcher `0089B880`; sender `2744/2746/2748/274A`, reply `2745/2747/2749/274B` | มีทั้ง client และ ID ใน Ref; ยังต้องยืนยัน operation, error/lockout และ challenge field ก่อนทำ persistence/handler |
-| Cipher epoch | แยก send/receive; guard 256 encrypted frames | ยังไม่รู้ rotation contract; ห้ามถอด guard หรือเพิ่ม max_packets เพื่อกลบปัญหา |
+| Cipher epoch | แยก send/receive; rekey ทุก N frame จากตาราง plaintext 128 B | **ถอดครบ 20 พ.ย.** (client `b4580ed4`): `00D04940/00D049D0` นับ frame, ครบ threshold ⇒ `00D0A880` hash ตาราง (เลือก 1 ใน 9 hash) ⇒ `00D0A480` เลือก 1 ใน 16 cipher ของ Crypto++ (N = 8/32/256 ตาม cipher). implement ใน `CipherDirection`/`CipherEpoch` ผ่าน vector Crypto++ และ stream 26,000 frame; ถอด guard แล้วและ `max_packets` เป็น 1,000,000 เพราะ contract ยืนยันแล้ว (ยังรอทดสอบเล่นเกิน 5 นาทีในเกม) |
 
 ## เหตุผลที่ต้องเริ่มจาก 0BC0
 

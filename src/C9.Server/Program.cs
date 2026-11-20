@@ -108,7 +108,7 @@ try
         Console.WriteLine(JsonSerializer.Serialize(new
         {
             @event = "runtime_check", status = "passed", runtime = "dotnet", profile = options.Profile,
-            cipher_epoch_limit = InitialCipherDirection.FrameLimit, python_required = false, client_files_required = false
+            cipher_epochs = "rotating", python_required = false, client_files_required = false
         }));
         return 0;
     }

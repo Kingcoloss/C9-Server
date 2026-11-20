@@ -4,9 +4,10 @@ using System.Numerics;
 namespace C9.Protocol;
 
 // RC6-32/20 for the recovered legacy wire protocol, with independent KATs.
-public sealed class Rc6Cipher
+public sealed class Rc6Cipher : ILegacyBlockCipher
 {
     public const int BlockSize = 16;
+    int ILegacyBlockCipher.BlockSize => BlockSize;
     private readonly uint[] schedule = new uint[44];
 
     public Rc6Cipher(ReadOnlySpan<byte> key)

@@ -32,6 +32,8 @@ public sealed record ServerOptions
     // Encoded wire size of 0x0BC0: length/flag prefix, RC6-padded body, trailing checksum byte.
     internal static int SelectAckFrameBytes => 3 + (Packet.HeaderSize - 3 + CharacterLobby.SelectAckBytes + 15) / 16 * 16 + 1;
     public int MaxConnections { get; init; } = 4;
+    // Inbound packets per session; a resource guard only, since cipher epochs now rotate.
+    public const int MaxPacketsLimit = 1_000_000;
     public int MaxPackets { get; init; } = 64;
     public double TimeoutSeconds { get; init; } = 10;
     public IReadOnlyList<Packet> Greetings { get; init; } = Array.Empty<Packet>();
@@ -94,7 +96,7 @@ public sealed record ServerOptions
             throw new ArgumentException("Invalid port or profile");
         if (MaxFrame is < 20 or > 65535 || MaxConnections is < 1 or > 32)
             throw new ArgumentException("Invalid frame or connection limit");
-        if (MaxPackets is < 1 or > 255 || !double.IsFinite(TimeoutSeconds) || TimeoutSeconds <= 0 || TimeoutSeconds > 300)
+        if (MaxPackets is < 1 or > MaxPacketsLimit || !double.IsFinite(TimeoutSeconds) || TimeoutSeconds <= 0 || TimeoutSeconds > 300)
             throw new ArgumentException("Invalid packet or timeout limit");
         if (Profile == "probe" && (Greetings.Count > 0 || Rules.Count > 0))
             throw new ArgumentException("Passive probe cannot send greetings or replies");
@@ -132,9 +134,6 @@ public sealed record ServerOptions
             throw new ArgumentException("Duplicate state/type rule");
         if (Greetings.Count > 3 || Rules.Any(r => r.Replies.Count > 3))
             throw new ArgumentException("At most three greeting/reply packets are supported");
-        // Preserve the reference server's conservative budget for the initial epoch.
-        if (Profile != "character_lobby" && 3 * MaxPackets + Greetings.Count > 255)
-            throw new ArgumentException("Reply budget can exceed initial cipher epoch");
         foreach (ResponseRule rule in Rules)
         {
             if (string.IsNullOrWhiteSpace(rule.State) || string.IsNullOrWhiteSpace(rule.NextState) ||

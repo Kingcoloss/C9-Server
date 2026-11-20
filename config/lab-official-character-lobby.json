@@ -4,7 +4,7 @@
   "host": "127.0.0.1",
   "port": 14001,
   "max_connections": 1,
-  "max_packets": 255,
+  "max_packets": 1000000,
   "timeout_seconds": 120,
   "character_store": "../artifacts/official-55350-characters.local.json",
   "character_list_header_bytes": 47,

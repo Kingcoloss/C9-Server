@@ -83,7 +83,9 @@ internal static partial class Validation
             ("All 80 twisters match Python vectors", Sync(TwisterVectors)),
             ("Wire bytes and state tables match Python", Sync(WireVectors)),
             ("Codec error handling and atomic state", Sync(CodecErrors)),
-            ("Initial epoch boundary", Sync(EpochBoundary)),
+            ("Cipher epoch hashes, ciphers and rekey selection (Crypto++ vectors)", Sync(CipherEpochKnownAnswers)),
+            ("Cipher epoch streams match the Crypto++ model byte for byte", Sync(CipherEpochStreams)),
+            ("Codec rekeys after the 256th frame in both directions", Sync(CipherEpochCodecRotation)),
             ("Opaque server list schema", Sync(ServerListSchema)),
             ("Configuration validation", Sync(Configuration)),
             ("Admin parameters and pending grants persist safely", Sync(AdminWorkspaceStorage)),
@@ -114,6 +116,8 @@ internal static partial class Validation
             ("Memory extended world-load acknowledgement and duplicate handling", () => MemoryWorldStartup(WorldVitalsLayout.Extended)),
             ("NPC spawn 0x0BE3/0x0BE4 layout and per-map catalog", Sync(NpcSpawnPacketLayout)),
             ("Memory lobby announces town NPCs once after world load", MemoryNpcSpawn),
+            ("World session reply contracts (0EFE/ED1E/11A2/0EB2/0E4C/F750)", Sync(WorldSessionReplyContracts)),
+            ("Memory world-entry replies follow the client trace order", MemoryWorldSessionReplies),
             ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),
             ("Memory official-build fixture rejects wrong size and state", MemoryOfficialLoginInvalid),
             ("Stream pipe adapters encrypted fixture", StreamAdapterFixture),
@@ -292,14 +296,6 @@ internal static partial class Validation
         byte[] invalid = new ConnectionCodec().Encode(new Packet(0x2EE5)); invalid[^1] = 16;
         Check.Throws<ProtocolException>(() => new ConnectionCodec().Decode(invalid));
         Check.Throws<ProtocolException>(() => Packet.FromDecoded(plain.AsSpan(0, plain.Length - 1)));
-    }
-
-    private static void EpochBoundary()
-    {
-        ConnectionCodec sender = new(), receiver = new();
-        for (uint i = 0; i < 256; i++) Check.Equal(i, receiver.Decode(sender.Encode(new Packet(0x2EE5))).Sequence);
-        Check.Throws<UnsupportedCipherEpochException>(() => sender.Encode(new Packet(0x2EE5)));
-        Check.Throws<UnsupportedCipherEpochException>(() => receiver.Decode(new ConnectionCodec().Encode(new Packet(0x2EE5))));
     }
 
     private static void ServerListSchema()
