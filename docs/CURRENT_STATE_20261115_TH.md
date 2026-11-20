@@ -159,3 +159,10 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
 - งานค้าง: กด "กลับหน้าเลือกตัวละคร" ในเมือง (0x0EC4 → 0x2EEB → 0x2EE8 → 0x2EE9) เกมค้าง (มีตั้งแต่ก่อนเพิ่ม login); ยังไม่ตรวจ ban ตอน handoff
 - รายละเอียด/layout/ความปลอดภัย: [LAUNCHER_ACCOUNTS_TH.md](LAUNCHER_ACCOUNTS_TH.md)
 - 19 พ.ย. ~10:30Z ปุ่ม "กลับหน้าเลือกตัวละคร": login ตรวจ handoff ใน 0x2EE8 ([key@0][account@8]) กับ c9-auth (fail closed) แล้วตอบ 2EE9 + 2EF7 + 2EE6 ตาม rule ใหม่ใน fixture base + overlay; 0x2EE2/0x2EE8 ไม่เก็บใน trace. แก้แล้ว ยังไม่ build/deploy/ทดสอบในเกม รายละเอียด docs/LAUNCHER_ACCOUNTS_TH.md ข้อ 8.3
+
+## 12. Base status ต่ออาชีพ + Status upgrade point (อัปเดต 20 พ.ย. 2026 โดย thread base status)
+- **เสร็จและ deploy แล้ว รอทดสอบในเกม:** 30 status (4 ตัวหลัก Strength/Intelligence/Health/Wisdom + ค่าย่อย), ค่า base ต่ออาชีพ, point ต่อ level (ค่าเริ่มต้น 5 ทุก level 1–95),
+  ผู้เล่นใช้ point ในการ์ด "Status ตัวละคร" ของ L9 หลัง login, ผู้ดูแลตั้งค่าใน Portal `/world/stats`; lobby ส่ง Max HP/MP จากระบบนี้ตอนเข้าโลก
+- ค่า base ตอนนี้เป็น placeholder (ตัวหลัก 10, Max HP/MP 100, อื่น 0) ค่าต้นฉบับอยู่ใน `GameData.c9d` ยังถอดไม่ได้; status อื่นนอกจาก HP/MP ยังไม่ส่งเข้าเกมจนกว่าจะได้ layout ของ 0x0C1E จาก probe (`C9_STAT_PROBE=1` เปิดอยู่ใน deploy นี้)
+- งานอยู่บน worktree branch `claude/project-thread-wk3q2i` (ยังไม่รวมเข้า main checkout/p-server); test: GameData 20/20, Validation 68/68, Portal 11/11
+- รายละเอียด/วิธีรวม migration กับเธรด 2nd password: [CHARACTER_STATS_TH.md](CHARACTER_STATS_TH.md)
