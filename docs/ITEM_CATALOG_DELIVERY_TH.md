@@ -94,3 +94,23 @@
 2) Portal → Items Catalog → ใส่เหตุผล → "นำเข้า catalog" 3) Items management → สร้าง bundle / ส่งของ
 
 ยังไม่ทำ: ขั้น C–F (ของยังไม่เข้าเกมจริง รายการค้างสถานะ "รอส่งเข้าเกม"), คุณสมบัติ item (ประเภท/stack/อาชีพ), starter items
+
+## 6. อัปเดต 21 พ.ย. 2026 — ตามผลทดสอบของผู้ใช้ (ข้อ 6, 7.1)
+
+- **C9.pdb** (มากับเกม) มีชนิดข้อมูลของ packet 1,941 ตัวพร้อมชื่อฟิลด์ (`C9PacketDeclare<PS_..., id, encrypted>`) รวมถึง
+  `PS_InventoryInfo_Ack` 0x0BC1, `PS_ItemAdd_Ack` 0x0CFB, Gift Box = `PS_Mail_Ex_*` (Count 0x0EB1/0x0EB2, List 0x0EA0,
+  Open 0x0E9B/0x0E9C, Content 0x0E9D/0x0E9E, Delete 0x0E99/0x0E9A, OpenFail 0x0EB3) และ `PSDBItemProperty` (264 ไบต์ต่อ item)
+  ใช้เป็นแผนที่ของขั้น C/E (รายละเอียดฟิลด์ดูข้อ 7 เมื่อเริ่มทำ)
+- **หมวด item (หลายหมวดต่อ item):** 4 ไบต์หลังชื่อภายในใน record ของ `GameData.c9d` = service type, large, middle, small category
+  (ตรงกับ `C9DataInfo` ใน PDB) ตั้งชื่อหมวดจากตัวอย่าง item: 0 สวมใส่ (middle 0–5 หัว/ไหล่/ตัว/ขา/มือ/เท้า, 6–10/19 เครื่องประดับ, 11–17 อาวุธ, 18 ปีก),
+  1 ของใช้ (ยา/อาหาร/หนังสือ EXP), 2 ของขว้าง, 3 ใช้ได้/กล่อง, 4 เควส, 5 ของตกแต่ง, 6 วัตถุดิบ (แร่, ผ้า, ไม้, สมุนไพร, สูตรคราฟ, อัญมณี, Spellstone ฯลฯ
+  + ป้าย `craft_material`), 7 ตีบวก, 9 บัฟ, 10 สกิลบุ๊ค, 12 รีเซ็ตสกิล, 13 รูปปั้นศักดิ์สิทธิ์, 14 รูน, 15 เครื่องราง, 16 ผู้ติดตาม, 22 โบราณวัตถุ;
+  เพิ่มป้าย `cash` (`[유료]`), `event`, `admin`
+- **Grade** (ชื่อจาก Client `C9GAMESTR_FINDITEM_GRADE1–7`: Old, Common, Magic, Rare, Master, Epic, Legendary) และ **Level สวมใส่** ได้จากป้ายในชื่อภายใน
+  (`[레어]`, `[82]`) เท่านั้น: 6,417 / 6,566 item; ตำแหน่งจริงใน c9d แตกต่างตามชนิด item (ส่วนหัวมี bitmap ความยาวต่างกัน) ยังถอดไม่ครบ
+- **item Super Admin:** item ทดสอบ/GM (`테스트`, `운영자`, `Test:`, GM) + รายการ GM ของ Ref Server = 239 item ส่งได้เฉพาะ role Owner
+- โค้ด: `export_item_catalog.py` (`item_records`, `classify`) + test 15/15; migration `ItemCatalogProperties` (tags text[], use_level, admin_only, index category/rarity);
+  `ItemService.SearchCatalogAsync(CatalogFilter)`, `CatalogTagsAsync`, `FindRecipientsAsync`; หน้า `/items` มีตัวกรอง หมวด/Grade/Level/Super Admin,
+  `/items/manage` มีช่องค้นหาตัวละคร (แสดง "ตัวละคร X (Lv) · บัญชี Y") และบัญชี; API `GET /api/v1/items/recipients?q=`
+- ต้องกด "นำเข้า catalog" อีกครั้งหลัง deploy เพื่อเติมหมวด/grade/level (export ไฟล์ใหม่ลง `artifacts/docker-state/item-catalog` แล้ว 21 พ.ย.)
+- ทดสอบ: GameData 22/22 (208 assertions), Portal 12/12 (137), C9.Validation 78/78, Python 15/15
