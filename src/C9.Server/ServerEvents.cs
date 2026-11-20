@@ -20,7 +20,6 @@ public sealed record ServerEvent(string Event)
     public int? Port { get; init; }
     public string? Profile { get; init; }
     public string? ClientCompatibility { get; init; }
-    public int? CipherEpochLimit { get; init; }
     public string? Runtime { get; init; }
     public string? Remote { get; init; }
     public ulong? CharacterId { get; init; }

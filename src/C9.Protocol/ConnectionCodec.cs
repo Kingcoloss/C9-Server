@@ -10,8 +10,8 @@ public sealed class ConnectionCodec
     public uint SendSequence { get; private set; }
     public uint ReceiveSequence { get; private set; }
     public int? LastReceiveSelector { get; private set; }
-    public InitialCipherDirection SendCipher { get; } = new();
-    public InitialCipherDirection ReceiveCipher { get; } = new();
+    public CipherDirection SendCipher { get; } = new();
+    public CipherDirection ReceiveCipher { get; } = new();
 
     public ConnectionCodec(int maxFrame = 8192, bool discoverReceiveSelector = false)
     {
@@ -30,21 +30,19 @@ public sealed class ConnectionCodec
             return plain;
         }
         int bodyLength = 10 + packet.Payload.Length;
-        int wireLength = 3 + (bodyLength + 15) / 16 * 16 + 1;
+        int wireLength = 3 + SendCipher.EncryptedLength(bodyLength);
         if (wireLength > MaxFrame || wireLength > ushort.MaxValue)
             throw new ProtocolException(ProtocolError.InvalidLength, "Encoded frame exceeds configured maximum");
-        SendCipher.CheckEpoch();
         byte[] raw = new Packet(packet.Type, packet.Payload.Span, packet.Flag, SendSequence).ToDecodedBytes();
         uint checksum = Checksum.ComputeDecoded(raw);
         BinaryPrimitives.WriteUInt32LittleEndian(raw.AsSpan(5), checksum);
         uint selector = unchecked(checksum + selectorAdjustment) % 80;
         PacketTwister.Apply(raw.AsSpan(13), selector);
-        byte[] encrypted = SendCipher.Encrypt(raw.AsSpan(3));
+        byte[] encrypted = SendCipher.Seal(raw.AsSpan(3));
         byte[] wire = new byte[wireLength];
         BinaryPrimitives.WriteUInt16LittleEndian(wire, (ushort)wireLength);
         wire[2] = packet.Flag;
         encrypted.CopyTo(wire.AsSpan(3));
-        SendCipher.Commit(raw.AsSpan(3));
         SendSequence = unchecked(SendSequence + 1);
         return wire;
     }
@@ -84,6 +82,8 @@ public sealed class ConnectionCodec
         if (matched is null) throw new ProtocolException(ProtocolError.ChecksumMismatch, "Checksum mismatch");
         matched.CopyTo(raw.AsSpan(13));
         Packet packet = Packet.FromDecoded(raw);
+        // The client commits right after decrypting; committing after validation is equivalent
+        // because any failure above ends the session.
         ReceiveCipher.Commit(transformed);
         ReceiveSequence = unchecked(ReceiveSequence + 1);
         LastReceiveSelector = matchedSelector;

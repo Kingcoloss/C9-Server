@@ -107,6 +107,30 @@ checksum-valid plaintext. Identical plaintext from several selectors counts
 once. This is a research implementation strategy, not a recovered server
 routine or proof of the original server's adjustment table.
 
+## Cipher epochs (client b4580ed4, image 52e0527a)
+
+Recovered 20 November 2026 with Ghidra headless on the memory image; this replaces the
+"subsequent cipher epochs remain unverified" boundary for the current client.
+
+| Rule | Static evidence |
+|---|---|
+| Two direction states of 0x98 bytes: cipher holder +0x90, frame counter +4/+8 (starts at 1), table +0x0C (128 bytes of 99) | 00D04730 |
+| Each transformed frame stores plaintext bytes into table[b & 0x7F]: first 8 bytes when length > 8, else the first byte | 00D047D0 |
+| When the counter equals the cipher's threshold (cipher object +4) the table seeds a new cipher and the counter resets to 1 | 00D04940 (send), 00D049D0 (receive), 00D04870 |
+| Seed selector: seed[0] when length < 10, else ((seed[1]^seed[0]) << (seed[2]%3) \| seed[3]) ^ seed[4] as a byte | 00D0A880 |
+| Hash = selector % 11: 1 SHA-256, 3 SHA-512, 4 SHA-384, 5 MD4, 6 MD5, 7 RIPEMD-160, 8 RIPEMD-320, 9 RIPEMD-128, 10 RIPEMD-256, 0/2 MD5 (RTTI names) | jump table 00D0AE40 |
+| Cipher index = digest[k] % 10 with k = 0,1,2,3,4,5,6,7,8 for cases 1,3,4,5,6,7,8,9,10 and 9 for 0/2; digest is zero-extended | 00D0A880 assembly |
+| Index 0 TEA, 1 3-Way, 2 CAST-128, 3/8 GOST, 4 RC5, 5 RC6, 6 MARS, 7 IDEA, 9 by digest[0] & 7: Twofish, DES, DES-EDE2, DES-EDE3, DES-XEX3, SKIPJACK, SAFER-K, SAFER-SK | 00D0A480, ConcreteCipher RTTI |
+| Key bytes used / threshold: TEA, CAST, RC5, RC6, MARS, IDEA 16/256; 3-Way 12/256; GOST 32/256; Twofish 16/8; DES 8/8; EDE2 16/8; EDE3 24/32; XEX3 24/8; SKIPJACK 10/32; SAFER-K 16/8; SAFER-SK 16/32 | ConcreteCipher vtable +4 (e.g. 00D08310, 00D08E70) |
+| ECB blocks of the cipher's size, zero padding, one trailing padding-count byte | 00D06610 (8), 00D07D80 (12), 00D084B0 (16); decrypt 00D085D0 etc. |
+
+The Crypto++ constant tables (CAST, MARS, SKIPJACK, Twofish q/MDS, DES SP-boxes, GOST, SAFER)
+occur byte-for-byte in the image at 00FBDFD0..00FC2550. `tools/cipher-epoch-ref/ref.cpp` models the
+logic on Crypto++ 8.9; the C# port matches its vectors, its three wire streams (26,000 frames,
+110 epochs) and published vectors for CAST-128, DES, SKIPJACK, Twofish, IDEA, MD4 and RIPEMD.
+Crypto++ SKIPJACK reverses key and block bytes relative to the NSA vector. In-game play beyond
+the first 256 frames has not been observed yet.
+
 ## Validation boundaries
 
 - `phase4_all_twisters.c/.asm.txt`: 160 statically recovered functions.

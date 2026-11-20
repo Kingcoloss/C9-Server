@@ -215,6 +215,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     {
                         // Observe the next world requests without inventing replies.
                         // Gameplay handlers are added only after verifying their readers.
+                        if (WorldSessionPackets.Reply(packet, DateTimeOffset.Now) is { } worldReply)
+                            await SendAsync(worldReply);
                     }
                     else if (state != "character_lobby" || (packet.Type, packet.Payload.Length) is not ((9999, 8) or (9901, 24) or (12005, 0)))
                     {

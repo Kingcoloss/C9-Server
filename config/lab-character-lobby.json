@@ -4,7 +4,7 @@
   "host": "127.0.0.1",
   "port": 14001,
   "max_connections": 1,
-  "max_packets": 255,
+  "max_packets": 1000000,
   "timeout_seconds": 120,
   "character_store": "../artifacts/lab-characters.local.json",
   "initial_map_id": 10,

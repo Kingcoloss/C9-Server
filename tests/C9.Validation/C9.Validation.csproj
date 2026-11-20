@@ -10,6 +10,7 @@
     <ProjectReference Include="../../src/C9.AuthService/C9.AuthService.csproj" />
     <EmbeddedResource Include="../fixtures/rc6_kats.json" LogicalName="rc6_kats.json" />
     <EmbeddedResource Include="../fixtures/python_port_vectors.json" LogicalName="python_port_vectors.json" />
+    <EmbeddedResource Include="../fixtures/cipher_epoch_vectors.json" LogicalName="cipher_epoch_vectors.json" />
     <EmbeddedResource Include="../../config/lab-fixture.json" LogicalName="lab-fixture.json" />
     <EmbeddedResource Include="../../config/lab-official-login-fixture.json" LogicalName="lab-official-login-fixture.json" />
     <EmbeddedResource Include="../../config/lab-official-character-lobby.json" LogicalName="lab-official-character-lobby.json" />
