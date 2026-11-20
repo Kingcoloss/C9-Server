@@ -57,15 +57,30 @@ internal sealed class CharacterLobby
 
     private static byte Template(LobbyCharacter character) => TemplateIds[character.Job];
 
-    // Block A of 0x0C1E is the Client's C9CharacterStatus (C9.pdb, PS_CharacterStatus_Ack 3102). Fields up to the speed
-    // factors at block +0x2C/+0x2E match the speed offsets recovered from 008CFF30, so these offsets are used as is:
-    // (stat key, payload offset, size). Move/attack speed rates (+0x28/+0x2A) and later fields wait for the probe.
+    // Block A of 0x0C1E (payload +0x0C) is the Client's C9CharacterStatus (C9.pdb, PS_CharacterStatus_Ack 3102):
+    // (stat key, payload offset, size). Up to the final speed factors the Aug 2026 PDB layout matches as is; the 2026-11
+    // Client widens the four elemental defences to DWORDs, which moves everything after them by 8 bytes. Offsets from
+    // +0x3C on were confirmed with the C9_STAT_PROBE markers in the in-game Status window (20 Nov 2026: HP Recovery 112,
+    // elements 113-120, Max DEF 121, Physical Atk R 125~127 / L 126~128, Magical Atk 129~130, Physical/Magic Def 139/140).
     private static readonly (string Key, int Offset, int Size)[] StatusFields =
     [
         ("strength", 0x18, 4), ("intelligence", 0x1C, 4), ("health", 0x20, 4), ("wisdom", 0x24, 4),
         ("accuracy", 0x28, 2), ("evasion", 0x2A, 2), ("valiance", 0x2C, 2), ("concentration", 0x2E, 2),
-        ("critical_rate", 0x30, 2), ("critical_resistance", 0x32, 2),
+        ("critical_rate", 0x30, 2), ("critical_resistance", 0x32, 2), ("move_speed", 0x34, 2), ("attack_speed", 0x36, 2),
+        ("hp_recovery", 0x3C, 2), ("mp_recovery", 0x3E, 2),
+        ("fire_attack", 0x40, 4), ("water_attack", 0x44, 4), ("earth_attack", 0x48, 4), ("air_attack", 0x4C, 4),
+        ("fire_resistance", 0x50, 4), ("water_resistance", 0x54, 4), ("earth_resistance", 0x58, 4), ("air_resistance", 0x5C, 4),
+        ("guard_limit", 0x60, 4), ("guard_recovery", 0x64, 4),
+        // C9CharacterDamage: m_nMinDD[2] (right, left), m_nMaxDD[2], m_nMinMD, m_nMaxMD; no weapon yet, so min = max.
+        ("physical_attack", 0x70, 4), ("physical_attack", 0x74, 4), ("physical_attack", 0x78, 4), ("physical_attack", 0x7C, 4),
+        ("magic_attack", 0x80, 4), ("magic_attack", 0x84, 4),
+        // C9CharacterDefence: m_nDDV, m_nMDV.
+        ("physical_defense", 0xA8, 4), ("magic_defense", 0xAC, 4),
     ];
+
+    /// <summary>Final speed factor (1000 = 1.0) = 1000 + the rate stat, clamped to what the client accepts (007FCF20/007FCEA0).</summary>
+    private short FinalSpeed(string key, int maximum) =>
+        (short)Math.Clamp(1000L + (stats?.GetValueOrDefault(key) ?? 0), 1000, maximum);
 
     // HP must stay above zero: the client marks a local player spawned with HP <= 0 as dead (see SelectAsync).
     private uint MaxHp => stats is not null && stats.TryGetValue("max_hp", out int hp) && hp > 0 ? (uint)hp : initialHp;
@@ -183,9 +198,9 @@ internal sealed class CharacterLobby
             // when the HUD calls 0078F5A0 after map loading.
             BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(12), character.Job);
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(16), 1);
-            // 009EC510 reads Player +0x20/+0x24, not +0x28/+0x2C.
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(24), MaxHp);
-            BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(28), MaxMp);
+            // PSDBCharacter_BasicData (C9.pdb): payload +24 is m_nExp (int64). Writing max HP/MP here showed
+            // EXP 429496729700 (100 | 100 << 32) in the Details panel (20 Nov 2026); no experience system yet, so 0.
+            BinaryPrimitives.WriteInt64LittleEndian(payload.AsSpan(24), 0);
             // Current HP/MP for the local actor. 00C9BFEB -> 00882AF0 -> 00882B50 copies
             // Player +0x28 (payload +32) into actor HP (+0x844) and Player +0x2C (payload +36)
             // into actor +0x85C when the local player is created, then 00C9BFF2 marks the actor
@@ -247,8 +262,8 @@ internal sealed class CharacterLobby
         // character standing but unable to walk, so both factors are 1.0.
         // HP/MP are applied by the 0C20 vitals packet, not here.
         byte[] payload = new byte[398];
+        // +0 is not decoded yet (kept as before). +4 is the battle power (u64, "CP"): max MP at +8 showed CP 429496729600.
         BinaryPrimitives.WriteUInt32LittleEndian(payload, MaxHp);
-        BinaryPrimitives.WriteUInt32LittleEndian(payload.AsSpan(8), MaxMp);
         if (StatProbe)
         {
             for (int i = 0; i < 48; i++)
@@ -266,8 +281,8 @@ internal sealed class CharacterLobby
             if (size == 4) BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(offset), value);
             else BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(offset), (short)Math.Clamp(value, short.MinValue, short.MaxValue));
         }
-        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x38), 1000);
-        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x3A), 1000);
+        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x38), FinalSpeed("move_speed", 1700));
+        BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x3A), FinalSpeed("attack_speed", 1300));
         return new Packet(0x0C1E, payload);
     }
 

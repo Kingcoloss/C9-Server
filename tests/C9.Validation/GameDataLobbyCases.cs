@@ -138,9 +138,9 @@ internal static partial class Validation
                 Check.Equal((ushort)0x0BC0, selected.Type);
                 Check.Equal(lab2Id, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
                 Check.Equal(9u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
-                Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
-                Check.Equal(80u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
+                Check.Equal(0L, BinaryPrimitives.ReadInt64LittleEndian(selected.Payload.Span[24..])); // m_nExp
                 Check.Equal(250u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[32..]));
+                Check.Equal(80u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[36..]));
                 Check.Equal((ushort)0x0BC3, (await lobby.ReceiveAsync()).Type);
                 await lobby.SendAsync(new Packet(0x0BC5));
                 Packet status = await lobby.ReceiveAsync();
@@ -149,6 +149,8 @@ internal static partial class Validation
                 Check.Equal(80, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x14..])); // m_nMaxMP
                 Check.Equal(6, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x18..])); // m_nSTR, Client Shaman base
                 Check.Equal(9, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x24..])); // m_nWIS
+                Check.Equal((short)1000, BinaryPrimitives.ReadInt16LittleEndian(status.Payload.Span[0x38..])); // final move speed
+                Check.Equal(0, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x70..])); // m_nMinDD[0]
                 Check.Equal<ulong?>(lab2Id, lobby.Session.Snapshot().CharacterId);
                 Check.Equal<long?>(local.Id, lobby.Session.Snapshot().AccountId);
             }

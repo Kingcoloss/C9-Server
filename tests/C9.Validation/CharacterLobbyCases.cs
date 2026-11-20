@@ -94,8 +94,7 @@ internal static partial class Validation
                     Check.Equal((ulong)slotCount, BinaryPrimitives.ReadUInt64LittleEndian(selected.Payload.Span));
                     Check.Equal(1u, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[12..]));
                     Check.Equal((ushort)1, BinaryPrimitives.ReadUInt16LittleEndian(selected.Payload.Span[16..]));
-                    Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[24..]));
-                    Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[28..]));
+                    Check.Equal(0L, BinaryPrimitives.ReadInt64LittleEndian(selected.Payload.Span[24..])); // m_nExp
                     // Current HP/MP (Player +0x28/+0x2C): zero marks the local actor dead and blocks keyboard movement.
                     Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[32..]));
                     Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(selected.Payload.Span[36..]));
@@ -132,7 +131,7 @@ internal static partial class Validation
                         Check.Equal((ushort)0x0C1E, attributes.Type);
                         Check.Equal(398, attributes.Payload.Length);
                         Check.Equal(hp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span));
-                        Check.Equal(mp, BinaryPrimitives.ReadUInt32LittleEndian(attributes.Payload.Span[8..]));
+                        Check.Equal(0ul, BinaryPrimitives.ReadUInt64LittleEndian(attributes.Payload.Span[4..])); // battle power
                         // Block A = C9CharacterStatus: m_nMaxHP (int64) at +0x0C, m_nMaxMP at +0x14 (C9.pdb PS_CharacterStatus_Ack).
                         Check.Equal((long)hp, BinaryPrimitives.ReadInt64LittleEndian(attributes.Payload.Span[0x0C..]));
                         Check.Equal((int)mp, BinaryPrimitives.ReadInt32LittleEndian(attributes.Payload.Span[0x14..]));
