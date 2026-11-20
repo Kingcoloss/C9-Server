@@ -22,8 +22,9 @@ internal sealed class CharacterLobby
     // Stat totals of the selected character (class base + spent points); null with the JSON store.
     private IReadOnlyDictionary<string, int>? stats;
     /// <summary>
-    /// C9_STAT_PROBE=1 fills every unmapped DWORD of the two 0x0C1E attribute blocks with a marker (block A 100+i,
-    /// block B 300+i for DWORD i) so the in-game Status window shows which field is which. Lab use only.
+    /// C9_STAT_PROBE=1 fills every DWORD of the two 0x0C1E attribute blocks that is not yet mapped (block A from +0x30,
+    /// marker 100+i; all of block B, marker 300+i; i = DWORD index in the block) so the in-game Status window shows
+    /// which field is which. Lab use only.
     /// </summary>
     internal static readonly bool StatProbe = Environment.GetEnvironmentVariable("C9_STAT_PROBE") == "1";
     private static readonly UnicodeEncoding NameEncoding = new(false, false, true);
@@ -55,6 +56,16 @@ internal sealed class CharacterLobby
     public long? AccountId => store.AccountId;
 
     private static byte Template(LobbyCharacter character) => TemplateIds[character.Job];
+
+    // Block A of 0x0C1E is the Client's C9CharacterStatus (C9.pdb, PS_CharacterStatus_Ack 3102). Fields up to the speed
+    // factors at block +0x2C/+0x2E match the speed offsets recovered from 008CFF30, so these offsets are used as is:
+    // (stat key, payload offset, size). Move/attack speed rates (+0x28/+0x2A) and later fields wait for the probe.
+    private static readonly (string Key, int Offset, int Size)[] StatusFields =
+    [
+        ("strength", 0x18, 4), ("intelligence", 0x1C, 4), ("health", 0x20, 4), ("wisdom", 0x24, 4),
+        ("accuracy", 0x28, 2), ("evasion", 0x2A, 2), ("valiance", 0x2C, 2), ("concentration", 0x2E, 2),
+        ("critical_rate", 0x30, 2), ("critical_resistance", 0x32, 2),
+    ];
 
     // HP must stay above zero: the client marks a local player spawned with HP <= 0 as dead (see SelectAsync).
     private uint MaxHp => stats is not null && stats.TryGetValue("max_hp", out int hp) && hp > 0 ? (uint)hp : initialHp;
@@ -242,9 +253,18 @@ internal sealed class CharacterLobby
         {
             for (int i = 0; i < 48; i++)
             {
-                BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0x0C + i * 4), 100 + i);
+                if (i >= 12) BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0x0C + i * 4), 100 + i);
                 BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0xCC + i * 4), 300 + i);
             }
+        }
+        // C9CharacterStatus: m_nMaxHP (int64) and m_nMaxMP, then the stats in StatusFields.
+        BinaryPrimitives.WriteInt64LittleEndian(payload.AsSpan(0x0C), MaxHp);
+        BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(0x14), (int)MaxMp);
+        foreach ((string key, int offset, int size) in StatusFields)
+        {
+            int value = stats?.GetValueOrDefault(key) ?? 0;
+            if (size == 4) BinaryPrimitives.WriteInt32LittleEndian(payload.AsSpan(offset), value);
+            else BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(offset), (short)Math.Clamp(value, short.MinValue, short.MaxValue));
         }
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x38), 1000);
         BinaryPrimitives.WriteInt16LittleEndian(payload.AsSpan(0x3A), 1000);

@@ -52,12 +52,18 @@ public sealed class CharacterItem
     public uint Version { get; set; }
 }
 
-/// <summary>Reference data recovered from Client GameData tables (not yet decoded).</summary>
+/// <summary>
+/// Reference data exported from the Client (re/scripts/export_item_catalog.py → items.json): names, description and
+/// icon. Category, rarity and stack size are not decoded yet.
+/// </summary>
 public sealed class CatalogItem
 {
     public int ItemId { get; set; }
     public string? NameEn { get; set; }
     public string? NameKo { get; set; }
+    public string? DescriptionEn { get; set; }
+    /// <summary>Icon file key (PNG name without extension in the catalog's icons folder); null when the Client has none.</summary>
+    public string? Icon { get; set; }
     public string? Category { get; set; }
     public short? Rarity { get; set; }
     public int? MaxStack { get; set; }

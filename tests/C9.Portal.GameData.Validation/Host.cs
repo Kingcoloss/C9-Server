@@ -20,6 +20,8 @@ using Microsoft.Extensions.Options;
 internal sealed class PortalTestHost : IAsyncDisposable
 {
     public const string RolesHeader = "X-Test-Roles";
+    /// <summary>Exported item catalog (items.json + icons/) the Items module reads; a fresh temp folder per run.</summary>
+    public static readonly string CatalogDirectory = Path.Combine(Path.GetTempPath(), "c9-item-catalog-" + Guid.NewGuid().ToString("N"));
     private readonly WebApplication app;
     public HttpClient Client { get; }
     public MemoryAudit Audit { get; } = new();
@@ -46,7 +48,8 @@ internal sealed class PortalTestHost : IAsyncDisposable
             foreach (var (policy, roles) in PortalPolicies.Roles) options.AddPolicy(policy, p => p.RequireRole(roles));
         });
         if (connection is not null) builder.Services.AddC9GameData(connection);
-        IPortalModule[] modules = [new C9.Portal.Accounts.AccountsModule(), new C9.Portal.World.WorldModule()];
+        builder.Configuration["Items:CatalogDirectory"] = CatalogDirectory;
+        IPortalModule[] modules = [new C9.Portal.Accounts.AccountsModule(), new C9.Portal.World.WorldModule(), new C9.Portal.World.ItemsModule()];
         foreach (IPortalModule module in modules) module.ConfigureServices(builder.Services, builder.Configuration);
         // As in the portal host: Blazor Web App with interactive server components (pages are prerendered on GET).
         builder.Services.AddRazorComponents().AddInteractiveServerComponents();

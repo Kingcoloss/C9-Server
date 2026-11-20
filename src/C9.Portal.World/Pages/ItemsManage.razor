@@ -1,0 +1,264 @@
+@page "/items/manage"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.AccountsRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+
+<PageTitle>Items management</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+        <div>
+            <p class="eyebrow">ITEMS</p>
+            <h1>Items management</h1>
+            <p class="muted">สร้าง item bundle และส่ง item ให้ตัวละครหรือบัญชี ทีละคนหรือหลายคน</p>
+        </div>
+    </header>
+    <div class="alert warn small">
+        ของที่ส่งจะเข้า Gift Box (กระเป๋ารับของจาก Shop) ของผู้รับ ตอนนี้ระบบ Gift Box ในเกมยังไม่เสร็จ รายการจึงอยู่สถานะ "รอส่งเข้าเกม" และยกเลิกได้
+        · ส่งให้บัญชี = ตัวละครใดของบัญชีนั้นรับก่อนก็ได้ (รับได้ครั้งเดียว)
+    </div>
+
+    <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+        <section class="panel">
+            <h2>ส่ง item</h2>
+            <div class="filters">
+                <label class="field">ส่งให้
+                    <select @bind="target">
+                        <option value="@DeliveryTarget.Character">ตัวละคร (ชื่อตัวละคร)</option>
+                        <option value="@DeliveryTarget.Account">บัญชี (ชื่อ login)</option>
+                    </select>
+                </label>
+                @if (target == DeliveryTarget.Account)
+                {
+                    <label class="check"><input type="checkbox" @bind="allAccounts" /> ทุกบัญชีที่ใช้งานอยู่</label>
+                }
+                <label class="field">Bundle
+                    <select @bind="bundleId">
+                        <option value="0">— ไม่ใช้ bundle —</option>
+                        @foreach (ItemBundle b in bundles.Where(b => b.Enabled)) { <option value="@b.Id">@b.Name (@b.Entries.Count รายการ)</option> }
+                    </select>
+                </label>
+            </div>
+            <div class="filters">
+                @if (!(target == DeliveryTarget.Account && allAccounts))
+                {
+                    <label class="field" style="flex:1">ผู้รับ (บรรทัดละคน หรือคั่นด้วย , )
+                        <textarea rows="4" @bind="recipients" placeholder="Lab&#10;Lab2"></textarea>
+                    </label>
+                }
+                <label class="field" style="flex:1">item เพิ่มเติม (บรรทัดละ "ID x จำนวน")
+                    <textarea rows="4" @bind="sendLines" @bind:after="Preview" placeholder="20332 x 1&#10;9603 x 5"></textarea>
+                </label>
+            </div>
+            @if (preview.Count > 0)
+            {
+                <div class="filters">
+                    @foreach ((ItemLine line, CatalogItem? item) in preview)
+                    {
+                        <span class="badge idle" title="@line.ItemId">
+                            @if (item?.Icon is { } icon) { <img src="@($"/api/v1/items/icons/{icon}.png")" alt="" width="20" height="20" /> }
+                            @(item?.NameEn ?? item?.NameKo ?? $"ไม่พบ ID {line.ItemId}") × @line.Quantity
+                        </span>
+                    }
+                </div>
+            }
+            <div class="filters">
+                <label class="field" style="flex:1">ข้อความถึงผู้รับ <input @bind="message" maxlength="200" /></label>
+                <label class="field">เหตุผล <input @bind="sendReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SendAsync">ส่ง</button>
+            </div>
+        </section>
+    </AuthorizeView>
+
+    <section class="panel">
+        <h2>Item bundles</h2>
+        <div class="table-scroll">
+            <table>
+                <thead><tr><th>ชื่อ</th><th>item</th><th>สถานะ</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (ItemBundle b in bundles)
+                    {
+                        <tr>
+                            <td>@b.Name<div class="muted small">@b.Description</div></td>
+                            <td class="small">@string.Join(", ", b.Entries.OrderBy(e => e.Line).Select(e => $"{Name(e.ItemId)} ×{e.Quantity}"))</td>
+                            <td><span class="badge @(b.Enabled ? "ok" : "bad")">@(b.Enabled ? "ใช้งาน" : "ปิด")</span></td>
+                            <td><AuthorizeView Policy="@PortalPolicies.WorldWrite" Context="auth"><button @onclick="() => Edit(b)">แก้</button></AuthorizeView></td>
+                        </tr>
+                    }
+                    @if (bundles.Count == 0) { <tr><td colspan="4" class="muted small">ยังไม่มี bundle</td></tr> }
+                </tbody>
+            </table>
+        </div>
+        <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+            <h3>@(editing is null ? "สร้าง bundle" : $"แก้ bundle: {editing.Name}")</h3>
+            <div class="filters">
+                <label class="field">ชื่อ <input @bind="bundleName" maxlength="100" /></label>
+                <label class="field" style="flex:1">คำอธิบาย <input @bind="bundleDescription" maxlength="1000" /></label>
+                @if (editing is not null) { <label class="check"><input type="checkbox" @bind="bundleEnabled" /> ใช้งาน</label> }
+            </div>
+            <div class="filters">
+                <label class="field" style="flex:1">item (บรรทัดละ "ID x จำนวน")
+                    <textarea rows="5" @bind="bundleLines" placeholder="20332 x 1&#10;9603 x 5"></textarea>
+                </label>
+            </div>
+            <div class="filters">
+                <label class="field">เหตุผล <input @bind="bundleReason" placeholder="จำเป็น" /></label>
+                <button class="primary" @onclick="SaveBundleAsync">@(editing is null ? "สร้าง" : "บันทึก")</button>
+                @if (editing is not null) { <button @onclick="ResetBundle">ยกเลิก</button> }
+            </div>
+        </AuthorizeView>
+    </section>
+
+    <section class="panel">
+        <h2>ประวัติการส่ง</h2>
+        <div class="filters">
+            <label class="field">สถานะ
+                <select @bind="statusFilter" @bind:after="LoadDeliveriesAsync">
+                    <option value="">ทั้งหมด</option>
+                    <option value="@DeliveryStatus.Pending">รอส่งเข้าเกม</option>
+                    <option value="@DeliveryStatus.Delivered">ส่งแล้ว</option>
+                    <option value="@DeliveryStatus.Cancelled">ยกเลิก</option>
+                </select>
+            </label>
+            <label class="field">ผู้รับ <input @bind="recipientFilter" @bind:after="LoadDeliveriesAsync" placeholder="ชื่อตัวละครหรือ login" /></label>
+            <span class="muted small">@deliveries.Total.ToString("N0") รายการ (แสดงล่าสุด 100)</span>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead><tr><th></th><th>item</th><th>จำนวน</th><th>ผู้รับ</th><th>สถานะ</th><th>โดย / เหตุผล</th><th>เวลา</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (DeliveryView d in deliveries.Items)
+                    {
+                        <tr>
+                            <td>@if (d.Icon is { } icon) { <img src="@($"/api/v1/items/icons/{icon}.png")" alt="" width="28" height="28" loading="lazy" /> }</td>
+                            <td>@(d.ItemName ?? "—") <span class="muted small">#@d.ItemId</span></td>
+                            <td>@d.Quantity</td>
+                            <td>@(d.Target == DeliveryTarget.Character ? $"ตัวละคร {d.CharacterName}" : $"บัญชี {d.AccountLogin}")</td>
+                            <td><span class="badge @(d.Status switch { DeliveryStatus.Delivered => "ok", DeliveryStatus.Cancelled => "bad", _ => "busy" })">@StatusText(d.Status)</span></td>
+                            <td class="small">@d.CreatedBy<div class="muted">@d.Reason</div></td>
+                            <td class="small">@d.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                @if (d.Status == DeliveryStatus.Pending)
+                                {
+                                    <AuthorizeView Policy="@PortalPolicies.AccountsWrite" Context="auth">
+                                        <button class="danger" title="ยกเลิกทั้งชุดที่ส่งพร้อมกัน" @onclick="() => CancelAsync(d.BatchId)">ยกเลิกชุดนี้</button>
+                                    </AuthorizeView>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (deliveries.Items.Count == 0) { <tr><td colspan="8" class="muted small">ยังไม่มีรายการ</td></tr> }
+                </tbody>
+            </table>
+        </div>
+        <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
+            <div class="filters"><label class="field">เหตุผลการยกเลิก <input @bind="cancelReason" placeholder="จำเป็นเมื่อกดยกเลิก" /></label></div>
+        </AuthorizeView>
+    </section>
+</GameDataGate>
+
+@code {
+    private IReadOnlyList<ItemBundle> bundles = [];
+    private Page<DeliveryView> deliveries = new([], 0, 0, 100);
+    private readonly Dictionary<int, CatalogItem?> names = new();
+    private List<(ItemLine Line, CatalogItem? Item)> preview = [];
+    private DeliveryTarget target = DeliveryTarget.Character;
+    private bool allAccounts, bundleEnabled = true;
+    private long bundleId;
+    private string? recipients, sendLines, message, sendReason, bundleName, bundleDescription, bundleLines, bundleReason, cancelReason, recipientFilter;
+    private string statusFilter = "";
+    private ItemBundle? editing;
+
+    private ItemService Items => (ItemService)Services.GetService(typeof(ItemService))!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        bundles = await Items.BundlesAsync();
+        await ResolveAsync(bundles.SelectMany(b => b.Entries.Select(e => e.ItemId)));
+        await LoadDeliveriesAsync();
+    }
+
+    private async Task LoadDeliveriesAsync()
+    {
+        DeliveryStatus? status = Enum.TryParse(statusFilter, out DeliveryStatus parsed) ? parsed : null;
+        deliveries = await Items.DeliveriesAsync(status, null, recipientFilter, 0, 100);
+    }
+
+    private async Task ResolveAsync(IEnumerable<int> ids)
+    {
+        foreach (int id in ids.Distinct().Where(i => !names.ContainsKey(i)).Take(200)) names[id] = await Items.GetCatalogAsync(id);
+    }
+
+    private string Name(int id) => names.GetValueOrDefault(id) is { } item ? item.NameEn ?? item.NameKo ?? $"#{id}" : $"#{id}";
+
+    private async Task Preview()
+    {
+        IReadOnlyList<ItemLine> lines = ItemLines.Parse(sendLines).Lines;
+        await ResolveAsync(lines.Select(l => l.ItemId));
+        preview = lines.Select(l => (l, names.GetValueOrDefault(l.ItemId))).ToList();
+    }
+
+    private static string StatusText(DeliveryStatus status) => status switch
+    {
+        DeliveryStatus.Pending => "รอส่งเข้าเกม",
+        DeliveryStatus.Delivered => "ส่งแล้ว",
+        _ => "ยกเลิก",
+    };
+
+    private async Task SendAsync()
+    {
+        (IReadOnlyList<ItemLine> lines, IReadOnlyList<string> errors) = ItemLines.Parse(sendLines);
+        if (errors.Count > 0) { await Actions.RunAsync<bool>("items.send", "item_delivery:new", sendReason, _ => throw new GameDataException(GameDataError.Invalid, "อ่านบรรทัด item ไม่ได้: " + string.Join(" | ", errors))); return; }
+        DeliveryRequest request = new(target, ItemLines.Names(recipients), target == DeliveryTarget.Account && allAccounts,
+            bundleId == 0 ? null : bundleId, lines, message);
+        DeliveryResult? result = await Actions.RunAsync("items.send", "item_delivery:new", sendReason, op => Items.SendAsync(request, op), "ส่งแล้ว");
+        if (result is not null)
+        {
+            (recipients, sendLines, message, sendReason, preview) = (null, null, null, null, []);
+            await LoadDeliveriesAsync();
+        }
+    }
+
+    private async Task CancelAsync(Guid batch)
+    {
+        if (await Actions.RunAsync("items.cancel", $"item_delivery_batch:{batch}", cancelReason, op => Items.CancelBatchAsync(batch, op), "ยกเลิกแล้ว") > 0)
+            cancelReason = null;
+        await LoadDeliveriesAsync();
+    }
+
+    private void Edit(ItemBundle bundle)
+    {
+        editing = bundle;
+        (bundleName, bundleDescription, bundleEnabled) = (bundle.Name, bundle.Description, bundle.Enabled);
+        bundleLines = ItemLines.Format(bundle.Entries.OrderBy(e => e.Line).Select(e => new ItemLine(e.ItemId, e.Quantity)));
+    }
+
+    private void ResetBundle()
+    {
+        editing = null;
+        (bundleName, bundleDescription, bundleLines, bundleEnabled) = (null, null, null, true);
+    }
+
+    private async Task SaveBundleAsync()
+    {
+        (IReadOnlyList<ItemLine> lines, IReadOnlyList<string> errors) = ItemLines.Parse(bundleLines);
+        if (errors.Count > 0) { await Actions.RunAsync<bool>("items.bundle", "item_bundle", bundleReason, _ => throw new GameDataException(GameDataError.Invalid, "อ่านบรรทัด item ไม่ได้: " + string.Join(" | ", errors))); return; }
+        ItemBundle? saved = editing is null
+            ? await Actions.RunAsync("items.bundle_create", "item_bundle:new", bundleReason, op => Items.CreateBundleAsync(bundleName ?? "", bundleDescription, lines, op), "สร้าง bundle แล้ว")
+            : await Actions.RunAsync("items.bundle_update", $"item_bundle:{editing.Id}", bundleReason,
+                op => Items.UpdateBundleAsync(editing.Id, editing.Version, bundleName ?? "", bundleDescription, bundleEnabled, lines, op), "บันทึก bundle แล้ว");
+        if (saved is not null)
+        {
+            bundleReason = null;
+            ResetBundle();
+            await LoadAsync();
+        }
+    }
+}

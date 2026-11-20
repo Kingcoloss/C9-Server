@@ -176,3 +176,8 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
   - Waterford (map 10) มี NPC 50 ตัวจากไฟล์แผนที่ของ client (`config/npc-spawns.json`) และ compose ส่งไฟล์นี้ให้ c9-lobby แล้ว; รอผู้ใช้ทดสอบในเกม
   - รายละเอียดและขั้นต่อไป: [NPC_SPAWN_TH.md](NPC_SPAWN_TH.md)
 - branch ถัดไปที่จะต่อจาก branch นี้: Sprint 1 ของเธรดระบบพื้นฐาน (patch `SessionProcessor.cs`), item catalog
+
+## 14. Items Catalog + Items management (อัปเดต 20 พ.ย. 2026 ~19:50 น. โดย thread base status/items)
+- ผู้ใช้ยืนยัน: "กระเป๋ากลาง" = กระเป๋ารับของจาก Shop (Gift Box = ระบบ MailEx ใน Post) และขอเมนู Items Catalog (มีรูป) + Items management (bundle, ส่งให้ตัวละคร/บัญชี แบบเดี่ยวและ batch)
+- **เขียนเสร็จ ทดสอบผ่าน commit แล้ว ยังไม่ deploy** บน branch `claude/project-thread-wk3q2i`: export catalog จาก Client (45,996 item, รูป PNG 10,584 ไฟล์ นอก git), migration `ItemCatalogDelivery`, `ItemService`, หน้า `/items` และ `/items/manage`
+- ของที่ส่งยังไม่เข้าเกม (รอ RE inventory + Gift Box) รายการค้างสถานะ "รอส่งเข้าเกม" ยกเลิกได้; รายละเอียด: [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md)

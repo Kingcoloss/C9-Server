@@ -207,6 +207,56 @@ try
         Status(400, await h.Get("/api/v1/world/economy?from=2020-01-01T00:00:00Z&to=2026-01-01T00:00:00Z"), "range bound");
     });
 
+    await Case("items: catalog import from items.json, icons, bundles and sending through the API", async () =>
+    {
+        string folder = PortalTestHost.CatalogDirectory;
+        Status(422, await h.Post("/api/v1/items/catalog/import", new { reason = "no file yet" }, "ContentEditor"), "import without items.json");
+        Directory.CreateDirectory(Path.Combine(folder, "icons"));
+        await File.WriteAllTextAsync(Path.Combine(folder, "items.json"), JsonSerializer.Serialize(new
+        {
+            schema = 1, exported_at = "2026-11-20T03:00:00+00:00",
+            items = new object[]
+            {
+                new { id = 20332, name_en = "Skill Recycler", name_ko = "스킬", description_en = "A token.", icon = "icon_gp_skillrecycle" },
+                new { id = 9603, name_en = "Aura of Strength: 1 min", name_ko = (string?)null, description_en = (string?)null, icon = (string?)null },
+            }
+        }));
+        await File.WriteAllBytesAsync(Path.Combine(folder, "icons", "icon_gp_skillrecycle.png"), [0x89, 0x50, 0x4E, 0x47]);
+        Status(403, await h.Post("/api/v1/items/catalog/import", new { reason = "x" }, "GM"), "GM cannot import the catalog");
+        var imported = await h.Post("/api/v1/items/catalog/import", new { reason = "first import" }, "ContentEditor");
+        Status(200, imported, "import");
+        True(imported.Body.GetProperty("added").GetInt32() == 2, "two items added");
+        var found = await h.Get("/api/v1/items/catalog?q=recycler", "ReadOnly");
+        True(found.Body.GetProperty("total").GetInt32() == 1 && found.Body.GetProperty("items")[0].GetProperty("icon").GetString() == "icon_gp_skillrecycle", "search with icon");
+        using (HttpRequestMessage icon = new(HttpMethod.Get, "/api/v1/items/icons/icon_gp_skillrecycle.png"))
+        {
+            icon.Headers.Add(PortalTestHost.RolesHeader, "ReadOnly");
+            using HttpResponseMessage response = await h.Client.SendAsync(icon);
+            True(response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "image/png", "icon served as PNG");
+        }
+        Status(400, await h.Get("/api/v1/items/icons/..%2F..%2Fitems.json", "ReadOnly"), "icon path traversal");
+        Status(400, await h.Get("/api/v1/items/icons/ICON.png", "ReadOnly"), "icon name policy");
+        Status(404, await h.Get("/api/v1/items/icons/missing.png", "ReadOnly"), "missing icon");
+
+        var bundle = await h.Post("/api/v1/items/bundles", new { name = "Starter", items = new[] { new { item_id = 20332, quantity = 1 }, new { item_id = 9603, quantity = 5 } }, reason = "starter pack" }, "ContentEditor");
+        Status(201, bundle, "bundle create");
+        long bundleId = bundle.Body.GetProperty("id").GetInt64();
+        string character;
+        await using (GameDbContext db = h.Services.GetRequiredService<IDbContextFactory<GameDbContext>>().CreateDbContext())
+            character = (await db.Characters.FirstAsync(c => c.Id == characterId)).Name;
+        Status(403, await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { character }, bundle_id = bundleId, reason = "x" }, "ContentEditor"), "ContentEditor cannot send");
+        Guid key = Guid.NewGuid();
+        var sent = await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { character }, bundle_id = bundleId, message = "Welcome", reason = "event" }, "GM", key);
+        Status(201, sent, "send");
+        True(sent.Body.GetProperty("rows").GetInt32() == 2, "bundle expanded to two deliveries");
+        Status(201, await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { character }, bundle_id = bundleId, message = "Welcome", reason = "event" }, "GM", key), "idempotent retry");
+        Status(404, await h.Post("/api/v1/items/deliveries", new { target = "Character", recipients = new[] { "NoSuchHero" }, items = new[] { new { item_id = 20332, quantity = 1 } }, reason = "x" }, "GM"), "unknown recipient");
+        var list = await h.Get("/api/v1/items/deliveries?status=Pending", "ReadOnly");
+        True(list.Body.GetProperty("total").GetInt32() == 2, "two pending deliveries");
+        Status(200, await h.Post($"/api/v1/items/deliveries/{key}/cancel", new { reason = "mistake" }, "GM"), "cancel batch");
+        True((await h.Get("/api/v1/items/deliveries?status=Cancelled", "ReadOnly")).Body.GetProperty("total").GetInt32() == 2, "cancelled");
+    });
+
     await Case("online sessions: population per map, audited disconnect, session history", async () =>
     {
         h.Game.Sessions.Add(FakeGameServices.Session("lobby-b1-1", 10, 0, (ulong)characterId));
@@ -275,10 +325,19 @@ try
         string statsRo = await Html("/world/stats", "ReadOnly");
         True(statsRo.Contains("Strength") && !statsRo.Contains("บันทึกตาราง point"), "ReadOnly sees stats without editor");
         True((await h.Page("/world/stats", "Player")).Status == 403, "stats page policy enforced");
+        string catalog = await Html("/items", "ReadOnly");
+        True(catalog.Contains("Skill Recycler") && catalog.Contains("/api/v1/items/icons/icon_gp_skillrecycle.png") && !catalog.Contains("นำเข้า catalog</button>"), "catalog page with icons, no import for ReadOnly");
+        string catalogEditor = await Html("/items", "ContentEditor");
+        True(catalogEditor.Contains("นำเข้า catalog"), "catalog import for ContentEditor");
+        string manage = await Html("/items/manage", "GM");
+        True(manage.Contains("ส่ง item") && manage.Contains("Starter") && manage.Contains("ยกเลิก"), "manage page with send form, bundles and history");
+        string manageRo = await Html("/items/manage", "ReadOnly");
+        True(!manageRo.Contains("ส่ง item</h2>") && manageRo.Contains("Starter"), "ReadOnly sees bundles without the send form");
     });
 }
 finally
 {
+    if (Directory.Exists(PortalTestHost.CatalogDirectory)) Directory.Delete(PortalTestHost.CatalogDirectory, recursive: true);
     NpgsqlConnection.ClearAllPools();
     await using NpgsqlConnection connection = new(admin);
     await connection.OpenAsync();

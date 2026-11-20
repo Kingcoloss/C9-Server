@@ -31,6 +31,7 @@ public static class GameDataServiceCollectionExtensions
         services.AddSingleton<SecondPasswordService>();
         services.AddSingleton<WorldService>();
         services.AddSingleton<StatService>();
+        services.AddSingleton<ItemService>();
         services.AddSingleton<LegacyImporter>();
         return services;
     }
