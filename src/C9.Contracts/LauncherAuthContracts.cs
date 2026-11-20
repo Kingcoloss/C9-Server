@@ -60,7 +60,7 @@ public sealed record HandoffResolveRequest(
     [property: JsonPropertyName("account_id")] long AccountId,
     [property: JsonPropertyName("handoff_key")] string HandoffKey);
 
-/// <summary>One stat of a character: class base + spent points × per-point gain = total.</summary>
+/// <summary>One stat of a character: class base + level bonus (per-level growth × (level − 1)) + spent points × per-point gain = total.</summary>
 public sealed record LauncherStatLine(
     [property: JsonPropertyName("key")] string Key,
     [property: JsonPropertyName("name")] string Name,
@@ -68,7 +68,8 @@ public sealed record LauncherStatLine(
     [property: JsonPropertyName("per_point")] int PerPoint,
     [property: JsonPropertyName("base")] int Base,
     [property: JsonPropertyName("points")] int Points,
-    [property: JsonPropertyName("total")] int Total);
+    [property: JsonPropertyName("total")] int Total,
+    [property: JsonPropertyName("level_bonus")] int LevelBonus = 0);
 
 public sealed record LauncherCharacterStats(
     [property: JsonPropertyName("character_id")] long CharacterId,

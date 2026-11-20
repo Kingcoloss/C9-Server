@@ -761,6 +761,10 @@ namespace C9.GameData.Migrations
                         .HasColumnType("character varying(32)")
                         .HasColumnName("stat_key");
 
+                    b.Property<int>("PerLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("per_level");
+
                     b.Property<int>("Value")
                         .HasColumnType("integer")
                         .HasColumnName("value");
@@ -773,6 +777,8 @@ namespace C9.GameData.Migrations
 
                     b.ToTable("class_stat_bases", "game", t =>
                         {
+                            t.HasCheckConstraint("ck_class_stat_bases_per_level", "per_level >= 0");
+
                             t.HasCheckConstraint("ck_class_stat_bases_value", "value >= 0");
                         });
 
@@ -781,990 +787,1155 @@ namespace C9.GameData.Migrations
                         {
                             ClassCode = (short)0,
                             StatKey = "strength",
+                            PerLevel = 4,
                             Value = 10
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "intelligence",
+                            PerLevel = 4,
                             Value = 5
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "health",
+                            PerLevel = 5,
                             Value = 9
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "wisdom",
+                            PerLevel = 2,
                             Value = 1
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "max_hp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "max_mp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "physical_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "magic_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "physical_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "magic_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "critical_rate",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "critical_damage",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "critical_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "accuracy",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "evasion",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "attack_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "move_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "cast_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "concentration",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "guard_limit",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "guard_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "piercing",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "fire_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "water_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "earth_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "air_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "fire_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "water_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "earth_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "air_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "valiance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "hp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)0,
                             StatKey = "mp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "strength",
+                            PerLevel = 4,
                             Value = 6
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "intelligence",
+                            PerLevel = 3,
                             Value = 5
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "health",
+                            PerLevel = 3,
                             Value = 5
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "wisdom",
+                            PerLevel = 5,
                             Value = 9
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "max_hp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "max_mp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "physical_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "magic_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "physical_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "magic_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "critical_rate",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "critical_damage",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "critical_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "accuracy",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "evasion",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "attack_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "move_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "cast_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "concentration",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "guard_limit",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "guard_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "piercing",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "fire_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "water_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "earth_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "air_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "fire_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "water_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "earth_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "air_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "valiance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "hp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)1,
                             StatKey = "mp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "strength",
+                            PerLevel = 4,
                             Value = 5
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "intelligence",
+                            PerLevel = 1,
                             Value = 1
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "health",
+                            PerLevel = 4,
                             Value = 4
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "wisdom",
+                            PerLevel = 1,
                             Value = 2
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "max_hp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "max_mp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "physical_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "magic_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "physical_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "magic_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "critical_rate",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "critical_damage",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "critical_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "accuracy",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "evasion",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "attack_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "move_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "cast_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "concentration",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "guard_limit",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "guard_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "piercing",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "fire_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "water_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "earth_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "air_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "fire_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "water_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "earth_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "air_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "valiance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "hp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)2,
                             StatKey = "mp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "strength",
+                            PerLevel = 4,
                             Value = 8
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "intelligence",
+                            PerLevel = 5,
                             Value = 7
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "health",
+                            PerLevel = 4,
                             Value = 7
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "wisdom",
+                            PerLevel = 2,
                             Value = 3
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "max_hp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "max_mp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "physical_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "magic_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "physical_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "magic_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "critical_rate",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "critical_damage",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "critical_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "accuracy",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "evasion",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "attack_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "move_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "cast_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "concentration",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "guard_limit",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "guard_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "piercing",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "fire_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "water_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "earth_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "air_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "fire_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "water_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "earth_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "air_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "valiance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "hp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)3,
                             StatKey = "mp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "strength",
+                            PerLevel = 5,
                             Value = 8
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "intelligence",
+                            PerLevel = 2,
                             Value = 4
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "health",
+                            PerLevel = 3,
                             Value = 5
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "wisdom",
+                            PerLevel = 5,
                             Value = 8
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "max_hp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "max_mp",
+                            PerLevel = 0,
                             Value = 100
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "physical_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "magic_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "physical_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "magic_defense",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "critical_rate",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "critical_damage",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "critical_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "accuracy",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "evasion",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "attack_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "move_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "cast_speed",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "concentration",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "guard_limit",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "guard_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "piercing",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "fire_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "water_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "earth_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "air_attack",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "fire_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "water_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "earth_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "air_resistance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "valiance",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "hp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         },
                         new
                         {
                             ClassCode = (short)4,
                             StatKey = "mp_recovery",
+                            PerLevel = 0,
                             Value = 0
                         });
                 });

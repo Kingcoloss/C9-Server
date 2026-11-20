@@ -18,7 +18,8 @@
         หน่วยของ status ย่อย (เช่น Critical) เป็นค่าดิบที่ส่งให้ Client</p>
 
     <section class="panel table-scroll">
-        <h2>ค่า base ต่ออาชีพ</h2>
+        <h2>ค่า base และค่าเพิ่มต่อ level ต่อสายอาชีพ</h2>
+        <p class="muted small">status = base (level 1) + เพิ่มต่อ level × (level − 1) + point ที่ผู้เล่นใช้ × ค่าต่อ point · ค่าเริ่มต้นของ STR/INT/Health/WIS มาจากตารางอาชีพของ Client</p>
         <div class="filters">
             <label class="field">อาชีพ
                 <select @bind="classCode" @bind:after="SelectClass">
@@ -27,13 +28,14 @@
             </label>
         </div>
         <table>
-            <thead><tr><th>Status</th><th>ค่า base</th><th>อัปได้</th><th>1 point = +</th></tr></thead>
+            <thead><tr><th>Status</th><th>ค่า base</th><th>เพิ่มต่อ level</th><th>อัปได้</th><th>1 point = +</th></tr></thead>
             <tbody>
                 @foreach (StatDefinition stat in stats)
                 {
                     <tr>
                         <td><input @bind="names[stat.Key]" maxlength="64" /><div class="muted small">@stat.Key</div></td>
                         <td><input type="number" min="0" max="@StatService.MaxStatValue" @bind="bases[stat.Key]" /></td>
+                        <td><input type="number" min="0" max="@StatService.MaxGrowth" @bind="growth[stat.Key]" /></td>
                         <td><input type="checkbox" @bind="upgradable[stat.Key]" /></td>
                         <td><input type="number" min="1" max="@StatService.MaxPerPoint" @bind="perPoint[stat.Key]" /></td>
                     </tr>
@@ -43,7 +45,7 @@
         <AuthorizeView Policy="@PortalPolicies.WorldWrite">
             <div class="filters">
                 <label class="field">เหตุผล <input @bind="reason" placeholder="จำเป็น" /></label>
-                <button class="primary" @onclick="SaveBaseAsync">บันทึกค่า base ของ @ClassName</button>
+                <button class="primary" @onclick="SaveBaseAsync">บันทึกค่า base และเพิ่มต่อ level ของ @ClassName</button>
                 <button @onclick="SaveDefinitionsAsync">บันทึกชื่อ/อัปได้/ค่าต่อ point (ทุกอาชีพ)</button>
             </div>
         </AuthorizeView>
@@ -88,6 +90,7 @@
     private readonly Dictionary<string, bool> upgradable = new();
     private readonly Dictionary<string, int> perPoint = new();
     private readonly Dictionary<string, int> bases = new();
+    private readonly Dictionary<string, int> growth = new();
     private List<int> levels = [];
     private short classCode;
     private int maxLevel = 95, fillFrom = 1, fillTo = 95, fillPoints = 5;
@@ -112,7 +115,10 @@
     private void SelectClass()
     {
         foreach (StatDefinition s in stats)
-            bases[s.Key] = allBases.FirstOrDefault(b => b.ClassCode == classCode && b.StatKey == s.Key)?.Value ?? 0;
+        {
+            ClassStatBase? row = allBases.FirstOrDefault(b => b.ClassCode == classCode && b.StatKey == s.Key);
+            (bases[s.Key], growth[s.Key]) = (row?.Value ?? 0, row?.PerLevel ?? 0);
+        }
     }
 
     private void SetLevel(int index, object? value)
@@ -137,9 +143,12 @@
     private async Task SaveBaseAsync()
     {
         short code = classCode;
-        Dictionary<string, int> values = new(bases);
-        if (await Actions.RunAsync("stats.class_base", $"stat_class:{code}", reason,
-            op => Stats.SetClassBaseAsync(code, values, op), $"บันทึกค่า base ของ {ClassName} แล้ว") is not null)
+        Dictionary<string, int> values = new(bases), perLevel = new(growth);
+        string why = reason ?? "";
+        if (await Actions.RunAsync("stats.class_base", $"stat_class:{code}", why,
+            op => Stats.SetClassBaseAsync(code, values, op), $"บันทึกค่า base ของ {ClassName} แล้ว") is not null &&
+            await Actions.RunAsync("stats.class_growth", $"stat_class:{code}", why,
+            op => Stats.SetClassGrowthAsync(code, perLevel, op), $"บันทึกค่า base และเพิ่มต่อ level ของ {ClassName} แล้ว") is not null)
             reason = null;
         await LoadAsync();
         classCode = code;

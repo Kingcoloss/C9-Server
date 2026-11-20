@@ -1,6 +1,6 @@
 # Base Status ต่ออาชีพ และ Status Upgrade Point (Current State)
 
-อัปเดต: 20 พฤศจิกายน 2026 ~20:30 น. (Asia/Bangkok) — **เฟส 1 deploy แล้ว; เฟส 2 (ค่าต้นฉบับ + ส่ง status เข้าเกม) commit แล้ว รอ deploy รวม**
+อัปเดต: 20 พฤศจิกายน 2026 ~20:45 น. (Asia/Bangkok) — **เฟส 1–2 deploy แล้ว (13:06 UTC โดยเธรด NPC); เฟส 3 (stat เพิ่มตาม level) commit แล้ว รอ deploy**
 มาตรฐานอ้างอิง: ISO/IEC 29110 (บันทึกงาน/ส่งต่อ), ISO 9001 (ทวนสอบตรวจย้อนได้), ISO/IEC 27001 (สิทธิ์และ audit)
 เกี่ยวข้อง: [GAME_DATA_TH.md](GAME_DATA_TH.md), [LAUNCHER_ACCOUNTS_TH.md](LAUNCHER_ACCOUNTS_TH.md), [GAME_PORTAL_MODULES_TH.md](GAME_PORTAL_MODULES_TH.md)
 
@@ -12,8 +12,9 @@
 | 2 | ค่า base | **แก้ได้ต่ออาชีพ** (ค่าเริ่มต้นตอนนี้เป็น placeholder ยังไม่ใช่ค่าต้นฉบับของเกม) |
 | 3 | point ต่อ level | ใช่: ค่าเริ่มต้น 5 point ทุก level 1–95, แก้รายตัวได้ |
 | 4 | เวลาที่มีผล | ตามที่เสนอ: มีผลตอนเข้าโลกครั้งถัดไป |
+| 5 (20 พ.ย.) | ใช้ stat เพิ่มตาม level แบบเกมต้นฉบับด้วยไหม | **ใช้ร่วมกับ point** |
 
-กติกา: point ที่ได้ = ผลรวมของตารางตั้งแต่ level 1 ถึง level ปัจจุบัน − point ที่ใช้ไปแล้ว (ใช้แล้วคืนไม่ได้ ยังไม่มีระบบรีเซ็ต)
+กติกา: **status = base (level 1) + เพิ่มต่อ level × (level − 1) + point ที่ใช้ × ค่าต่อ point**; point ที่ได้ = ผลรวมของตารางตั้งแต่ level 1 ถึง level ปัจจุบัน − point ที่ใช้ไปแล้ว (ใช้แล้วคืนไม่ได้ ยังไม่มีระบบรีเซ็ต)
 ถ้าผู้ดูแลลดตารางจนได้ point น้อยกว่าที่ใช้ไป ระบบไม่ลบ point เดิม แต่ผู้เล่นจะมี point เหลือ 0 จน level ถึง
 
 ## 2. ข้อมูลอ้างอิงจากเกม
@@ -54,6 +55,7 @@
 | Admin Portal | `src/C9.Portal.World/Pages/CharacterStats.razor`, `WorldModule.cs` | เมนู Game World → "Status ตัวละคร" (`/world/stats`): base ต่ออาชีพ, ชื่อ/อัปได้/ค่าต่อ point, ตาราง point ต่อ level (ปรับ max level, ใส่ค่าเป็นช่วง) ต้องมีสิทธิ์ WorldWrite และใส่เหตุผล |
 | Game server | `src/C9.Server/CharacterStores.cs`, `CharacterLobby.cs`, `compose.yaml` | ตอนเลือกตัวละคร lobby โหลดผลรวม status จาก DB แล้วใช้ `max_hp`/`max_mp` ใน 0BC0/0C1C/0C1E/0C20 (HP ต้อง > 0 ไม่งั้นใช้ค่าเดิม 100); `C9_STAT_PROBE=1` ใส่เลขกำกับใน 0x0C1E |
 
+| เฟส 3 (20 พ.ย.) | `Entities/Stats.cs` (`ClassStatBase.PerLevel`), `StatService.cs` (`SetClassGrowthAsync`, `LevelBonus`), migration `StatClassGrowth`, `LauncherAuthContracts.cs` (`level_bonus`), `LauncherPage.cs`, `CharacterStats.razor` | ค่าเพิ่มต่อ level ต่อสาย × status; ค่าเริ่มต้นจาก novice ของ Client: Fighter +4/+4/+5/+2, Shaman +4/+3/+3/+5, Valcan +4/+1/+4/+1, Hunter +4/+5/+4/+2, WitchBlade +5/+2/+3/+5 (STR/INT/CON/WIS) อื่น 0; Portal แก้ได้ในคอลัมน์ "เพิ่มต่อ level"; Launcher แสดง base + level + point. หมายเหตุ: เกมเดิมใช้ค่าเพิ่มของคลาสปัจจุบัน (elite/advanced ต่างกัน) เรายังใช้ค่าของ novice ทั้งสาย |
 | เฟส 2 (20 พ.ย.) | `StatService.cs`, migration `20261120125157_StatClientClassBase`, `CharacterLobby.cs` | ชื่อสายอาชีพถูกต้อง; ค่า STR/INT/CON/WIS ต้นฉบับแทน placeholder 10 (อัปเดตเฉพาะแถวที่ยังเป็น 10); เพิ่ม status `valiance`, `hp_recovery`, `mp_recovery` (รวม 33); 0x0C1E ส่ง MaxHP (i64), MaxMP, STR, INT, CON, WIS, Hit, Evade, Valiance, Concentration, Critical, Critical Resist ตาม C9CharacterStatus |
 
 ### 3.1 โหมดหา layout ของหน้าต่าง Status (`C9_STAT_PROBE=1`)
@@ -77,6 +79,7 @@ block B 192 ไบต์ที่ +0xCC, WORD count ที่ +0x18C) เมื�
 | `tests/C9.Portal.GameData.Validation` | **11/11**, 109 assertions (หน้า `/world/stats` แสดงผล, ReadOnly ไม่มีฟอร์มแก้, Player ได้ 403) |
 | Deploy | image `c9-platform:local` ใหม่, `docker compose --profile gamedata up -d` จาก worktree โดย `C9_STATE_DIR` = state เดิมของ main checkout; ทุก service healthy, migration ลง DB แล้ว, บัญชี 4 และตัวละคร 2 ตัวอยู่ครบ, API ไม่มี token ตอบ 401 |
 | ทดสอบในเกม | **ยังไม่ทำ** (ผู้ใช้เป็นคนทดสอบ) |
+| เฟส 3 (20 พ.ย., ต่อจาก deploy รวม `97c7af5`) | GameData **22/22** (197 assertions: growth ×(level−1), แก้ growth ได้, ค่าติดลบถูกปฏิเสธ, audit), C9.Validation **78/78**, Portal **12/12**, MAUI build 0 warning |
 | เฟส 2 (20 พ.ย., branch รวม Sprint 1 `55d7205`) | build 0 warning; GameData **22/22** (188), C9.Validation **77/77** (37,539; ตรวจ 0x0C1E MaxHP/MaxMP/STR/WIS จาก DB), Portal **12/12** |
 
 ## 5. ตำแหน่งโค้ดและการรวมงาน (สำคัญสำหรับคนทำต่อ)
@@ -95,6 +98,6 @@ block B 192 ไบต์ที่ +0xCC, WORD count ที่ +0x18C) เมื�
 
 1. หลัง deploy รวม: ผู้ใช้ดูหน้าต่าง Status ในเกม ว่า STR/INT/CON(Health)/WIS, Hit, Evade, Critical ตรงกับ base ของสาย + point ที่ใช้ และส่งภาพเลข probe ของช่องที่เหลือ
 2. ทำ offset ของช่องหลัง +0x2E (ความเร็ว, HPR/MPR, ธาตุ, Guard, Damage/Defence) จากผล probe แล้วปิด probe
-3. (เสนอ) ใช้ค่า Increase ต่อ level ของเกมเดิมเพิ่มจาก point — รอผู้ใช้ตัดสินใจ
+3. ~~ใช้ค่า Increase ต่อ level~~ ทำแล้ว (เฟส 3) — ถ้าต้องการให้ตรงเกมเดิมมากขึ้น อาจแยกค่าเพิ่มต่อ level ตาม job (elite/advanced) ภายหลัง
 4. ~~ถอดค่า base ต้นฉบับ~~ เสร็จ; ~~ยืนยันชื่ออาชีพ~~ ได้จากตารางคลาส
 5. รวม branch นี้เข้า `p-server` (รอผู้ใช้ตัดสินใจ) แล้วทำชุดถัดไป: Item Catalog, ส่ง item ผ่าน mail/กระเป๋ากลาง, starter items

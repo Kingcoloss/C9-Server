@@ -174,7 +174,7 @@ static IResult SessionExpired() =>
 
 static LauncherCharacterStats StatSheet(CharacterStatSheet s) => new(s.CharacterId, s.Name, s.Class.Name, s.Level,
     s.EarnedPoints, s.SpentPoints, s.AvailablePoints,
-    s.Stats.Select(l => new LauncherStatLine(l.Key, l.Name, l.Upgradable, l.PerPoint, l.Base, l.Points, l.Total)).ToArray());
+    s.Stats.Select(l => new LauncherStatLine(l.Key, l.Name, l.Upgradable, l.PerPoint, l.Base, l.Points, l.Total, l.LevelBonus)).ToArray());
 
 static IResult? Problem(LauncherCredentials? body) =>
     body is null || string.IsNullOrWhiteSpace(body.Login) || string.IsNullOrEmpty(body.Password) || body.Login.Length > 64 || body.Password.Length > 128

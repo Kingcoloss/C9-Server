@@ -457,7 +457,7 @@ public sealed class LauncherPage : ContentPage
             Children =
             {
                 new Label { Text = line.Name, FontSize = 14, TextColor = TextTone, LineBreakMode = LineBreakMode.TailTruncation },
-                new Label { Text = $"base {line.Base} + {line.Points} point{gain}", FontSize = 11, TextColor = Subtle },
+                new Label { Text = $"base {line.Base} + level {line.LevelBonus} + {line.Points} point{gain}", FontSize = 11, TextColor = Subtle },
             },
         }, 0, 0);
         row.Add(new Label

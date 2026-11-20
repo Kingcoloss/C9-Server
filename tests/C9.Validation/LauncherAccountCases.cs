@@ -309,7 +309,7 @@ internal static partial class Validation
 
     private static async Task LauncherStatClientFlow()
     {
-        const string sheet = """{"character_id":11,"name":"Lab","class_name":"Fighter","level":3,"earned_points":15,"spent_points":2,"available_points":13,"stats":[{"key":"strength","name":"Strength","upgradable":true,"per_point":1,"base":10,"points":2,"total":12}]}""";
+        const string sheet = """{"character_id":11,"name":"Lab","class_name":"Fighter","level":3,"earned_points":15,"spent_points":2,"available_points":13,"stats":[{"key":"strength","name":"Strength","upgradable":true,"per_point":1,"base":10,"points":2,"total":20,"level_bonus":8}]}""";
         string? body = null;
         StubHandler handler = new(request => (body = request.Content?.ReadAsStringAsync().Result, request.RequestUri!.AbsolutePath) switch
         {
@@ -324,7 +324,8 @@ internal static partial class Validation
         Check.Equal("Bearer tok", handler.Requests[^1].Headers.Authorization!.ToString());
         LauncherCharacterStats first = sheets.Value!.Characters.Single();
         Check.Equal(13, first.AvailablePoints);
-        Check.Equal(12, first.Stats.Single().Total);
+        Check.Equal(20, first.Stats.Single().Total);
+        Check.Equal(8, first.Stats.Single().LevelBonus);
         Guid request = Guid.NewGuid();
         AuthResult<LauncherCharacterStats> spent = await client.SpendStatsAsync("tok", 11,
             new LauncherStatSpend(request, new Dictionary<string, int> { ["strength"] = 1 }));

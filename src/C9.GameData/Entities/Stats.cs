@@ -15,13 +15,18 @@ public sealed class StatDefinition
     public int PerPoint { get; set; } = 1;
 }
 
-/// <summary>Base value of one stat for one base class; advanced jobs use their base class (<see cref="Services.StatService.ClassOf"/>).</summary>
+/// <summary>
+/// Base value of one stat for one class line at level 1, and how much it grows on every level after that (the Client's
+/// class table m_iStrIncrease etc.). Advanced jobs use their line (<see cref="Services.StatService.ClassOf"/>).
+/// </summary>
 public sealed class ClassStatBase
 {
-    /// <summary>0 Fighter, 1 Hunter, 2 Shaman, 3 WitchBlade, 4 Mistic (Client template order).</summary>
+    /// <summary>0 Fighter, 1 Shaman, 2 Valcan, 3 Hunter, 4 WitchBlade (novice class key = Client template).</summary>
     public short ClassCode { get; set; }
     public required string StatKey { get; set; }
     public int Value { get; set; }
+    /// <summary>Added for each level above 1.</summary>
+    public int PerLevel { get; set; }
 }
 
 /// <summary>Stat upgrade points granted when a character reaches <see cref="Level"/>. Rows cover levels 1..max without gaps.</summary>

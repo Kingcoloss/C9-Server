@@ -60,6 +60,24 @@ public static class StatKeys
             [0] = (10, 5, 9, 1), [1] = (6, 5, 5, 9), [2] = (5, 1, 4, 2), [3] = (8, 7, 7, 3), [4] = (8, 4, 5, 8),
         };
 
+    /// <summary>Per-level growth of Strength/Intelligence/Health(CON)/Wisdom of each line's novice class (m_iStrIncrease etc.).</summary>
+    public static readonly IReadOnlyDictionary<short, (int Strength, int Intelligence, int Health, int Wisdom)> ClientClassGrowth =
+        new Dictionary<short, (int, int, int, int)>
+        {
+            [0] = (4, 4, 5, 2), [1] = (4, 3, 3, 5), [2] = (4, 1, 4, 1), [3] = (4, 5, 4, 2), [4] = (5, 2, 3, 5),
+        };
+
+    /// <summary>Default per-level growth of a stat for a class (Client class table for the four primary stats, else 0).</summary>
+    public static int DefaultGrowth(short classCode, Info stat) =>
+        ClientClassGrowth.TryGetValue(classCode, out var g) ? stat.Key switch
+        {
+            "strength" => g.Strength,
+            "intelligence" => g.Intelligence,
+            "health" => g.Health,
+            "wisdom" => g.Wisdom,
+            _ => 0,
+        } : 0;
+
     /// <summary>Default base value of a stat for a class (Client class table for the four primary stats).</summary>
     public static int DefaultBase(short classCode, Info stat)
     {
@@ -79,11 +97,11 @@ public static class StatKeys
 
 public sealed record StatClass(short Code, string Name);
 
-/// <summary>Effective stats of one character: base of its class + spent points × per-point gain.</summary>
+/// <summary>Effective stats of one character: class base + per-level growth × (level − 1) + spent points × per-point gain.</summary>
 public sealed record CharacterStatSheet(long CharacterId, string Name, short Job, StatClass Class, short Level,
     int EarnedPoints, int SpentPoints, int AvailablePoints, IReadOnlyList<CharacterStatSheet.Line> Stats)
 {
-    public sealed record Line(string Key, string Name, bool Upgradable, int PerPoint, int Base, int Points, int Total);
+    public sealed record Line(string Key, string Name, bool Upgradable, int PerPoint, int Base, int LevelBonus, int Points, int Total);
 
     public int Total(string key) => Stats.FirstOrDefault(s => s.Key == key)?.Total ?? 0;
 }
@@ -103,6 +121,7 @@ public sealed class StatService(IDbContextFactory<GameDbContext> factory, TimePr
     public const int MaxPointsPerLevel = 10_000;
     public const int MaxStatValue = 100_000_000;
     public const int MaxPerPoint = 1_000_000;
+    public const int MaxGrowth = 1_000_000;
 
     /// <summary>
     /// Class lines by the key of their novice class in the Client class table (= CharacterLobby.TemplateIds template):
@@ -157,34 +176,45 @@ public sealed class StatService(IDbContextFactory<GameDbContext> factory, TimePr
         return all;
     }
 
-    /// <summary>Replaces the base values of the given stats for one class.</summary>
-    public async Task<IReadOnlyList<ClassStatBase>> SetClassBaseAsync(short classCode, IReadOnlyDictionary<string, int> values,
-        OperatorContext context, CancellationToken token = default)
+    /// <summary>Replaces the base values (level 1) of the given stats for one class.</summary>
+    public Task<IReadOnlyList<ClassStatBase>> SetClassBaseAsync(short classCode, IReadOnlyDictionary<string, int> values,
+        OperatorContext context, CancellationToken token = default) =>
+        SetClassAsync(classCode, values, growth: false, context, token);
+
+    /// <summary>Replaces the per-level growth of the given stats for one class.</summary>
+    public Task<IReadOnlyList<ClassStatBase>> SetClassGrowthAsync(short classCode, IReadOnlyDictionary<string, int> values,
+        OperatorContext context, CancellationToken token = default) =>
+        SetClassAsync(classCode, values, growth: true, context, token);
+
+    private async Task<IReadOnlyList<ClassStatBase>> SetClassAsync(short classCode, IReadOnlyDictionary<string, int> values, bool growth,
+        OperatorContext context, CancellationToken token)
     {
         context.Validate();
         if (Classes.All(c => c.Code != classCode)) throw new GameDataException(GameDataError.NotFound, "Unknown class");
         if (values.Count == 0) throw new GameDataException(GameDataError.Invalid, "No stat values given");
-        if (values.Values.Any(v => v is < 0 or > MaxStatValue))
-            throw new GameDataException(GameDataError.Invalid, $"Base values must be 0–{MaxStatValue}");
+        if (values.Values.Any(v => v is < 0 or > MaxStatValue) || (growth && values.Values.Any(v => v > MaxGrowth)))
+            throw new GameDataException(GameDataError.Invalid, growth ? $"Per-level growth must be 0–{MaxGrowth}" : $"Base values must be 0–{MaxStatValue}");
         await using GameDbContext db = await factory.CreateDbContextAsync(token);
         List<ClassStatBase> rows = await db.ClassStatBases.Where(b => b.ClassCode == classCode).ToListAsync(token);
         if (await Audited.AlreadyAppliedAsync(db, context, token)) return rows;
         HashSet<string> known = (await db.StatDefinitions.Select(s => s.Key).ToListAsync(token)).ToHashSet();
         if (values.Keys.FirstOrDefault(k => !known.Contains(k)) is { } unknown)
             throw new GameDataException(GameDataError.NotFound, $"Unknown stat {unknown}");
-        var before = rows.ToDictionary(r => r.StatKey, r => r.Value);
+        Func<ClassStatBase, int> read = growth ? r => r.PerLevel : r => r.Value;
+        var before = rows.ToDictionary(r => r.StatKey, read);
         foreach ((string key, int value) in values)
         {
-            if (rows.FirstOrDefault(r => r.StatKey == key) is { } row) row.Value = value;
-            else
+            ClassStatBase? row = rows.FirstOrDefault(r => r.StatKey == key);
+            if (row is null)
             {
-                ClassStatBase added = new() { ClassCode = classCode, StatKey = key, Value = value };
-                db.ClassStatBases.Add(added);
-                rows.Add(added);
+                row = new() { ClassCode = classCode, StatKey = key };
+                db.ClassStatBases.Add(row);
+                rows.Add(row);
             }
+            if (growth) row.PerLevel = value; else row.Value = value;
         }
-        Audited.Record(db, context, "stats.class_base", "stat_class", classCode.ToString(), before,
-            rows.ToDictionary(r => r.StatKey, r => r.Value), clock);
+        Audited.Record(db, context, growth ? "stats.class_growth" : "stats.class_base", "stat_class", classCode.ToString(), before,
+            rows.ToDictionary(r => r.StatKey, read), clock);
         await Audited.SaveAsync(db, token);
         return rows;
     }
@@ -293,10 +323,12 @@ public sealed class StatService(IDbContextFactory<GameDbContext> factory, TimePr
         int spentTotal = (int)Math.Min(int.MaxValue, spent.Values.Sum(v => (long)v));
         CharacterStatSheet.Line[] lines = sources.Definitions.Select(d =>
         {
-            int baseValue = sources.Bases.FirstOrDefault(b => b.ClassCode == classCode && b.StatKey == d.Key)?.Value ?? 0;
+            ClassStatBase? row = sources.Bases.FirstOrDefault(b => b.ClassCode == classCode && b.StatKey == d.Key);
+            int baseValue = row?.Value ?? 0;
+            int levelBonus = (int)Math.Clamp((long)(row?.PerLevel ?? 0) * Math.Max(0, character.Level - 1), 0, int.MaxValue);
             int points = spent.GetValueOrDefault(d.Key);
-            int total = (int)Math.Clamp(baseValue + (long)points * d.PerPoint, int.MinValue, int.MaxValue);
-            return new CharacterStatSheet.Line(d.Key, d.Name, d.Upgradable, d.PerPoint, baseValue, points, total);
+            int total = (int)Math.Clamp(baseValue + (long)levelBonus + (long)points * d.PerPoint, int.MinValue, int.MaxValue);
+            return new CharacterStatSheet.Line(d.Key, d.Name, d.Upgradable, d.PerPoint, baseValue, levelBonus, points, total);
         }).ToArray();
         return new(character.Id, character.Name, character.Job, Classes[classCode], character.Level,
             earned, spentTotal, Math.Max(0, earned - spentTotal), lines);

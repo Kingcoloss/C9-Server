@@ -1376,3 +1376,1348 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    ALTER TABLE game.class_stat_bases ADD per_level integer NOT NULL DEFAULT 0;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'accuracy';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'air_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'air_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'attack_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'cast_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'concentration';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'critical_damage';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'critical_rate';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'critical_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'earth_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'earth_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'evasion';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'fire_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'fire_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'guard_limit';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'guard_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 5
+    WHERE class_code = 0 AND stat_key = 'health';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'hp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 0 AND stat_key = 'intelligence';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'magic_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'magic_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'max_hp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'max_mp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'move_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'mp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'physical_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'physical_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'piercing';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 0 AND stat_key = 'strength';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'valiance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'water_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 0 AND stat_key = 'water_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 2
+    WHERE class_code = 0 AND stat_key = 'wisdom';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'accuracy';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'air_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'air_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'attack_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'cast_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'concentration';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'critical_damage';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'critical_rate';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'critical_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'earth_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'earth_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'evasion';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'fire_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'fire_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'guard_limit';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'guard_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 3
+    WHERE class_code = 1 AND stat_key = 'health';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'hp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 3
+    WHERE class_code = 1 AND stat_key = 'intelligence';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'magic_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'magic_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'max_hp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'max_mp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'move_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'mp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'physical_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'physical_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'piercing';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 1 AND stat_key = 'strength';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'valiance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'water_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 1 AND stat_key = 'water_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 5
+    WHERE class_code = 1 AND stat_key = 'wisdom';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'accuracy';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'air_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'air_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'attack_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'cast_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'concentration';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'critical_damage';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'critical_rate';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'critical_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'earth_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'earth_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'evasion';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'fire_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'fire_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'guard_limit';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'guard_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 2 AND stat_key = 'health';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'hp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 1
+    WHERE class_code = 2 AND stat_key = 'intelligence';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'magic_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'magic_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'max_hp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'max_mp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'move_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'mp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'physical_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'physical_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'piercing';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 2 AND stat_key = 'strength';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'valiance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'water_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 2 AND stat_key = 'water_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 1
+    WHERE class_code = 2 AND stat_key = 'wisdom';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'accuracy';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'air_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'air_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'attack_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'cast_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'concentration';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'critical_damage';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'critical_rate';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'critical_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'earth_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'earth_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'evasion';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'fire_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'fire_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'guard_limit';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'guard_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 3 AND stat_key = 'health';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'hp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 5
+    WHERE class_code = 3 AND stat_key = 'intelligence';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'magic_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'magic_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'max_hp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'max_mp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'move_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'mp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'physical_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'physical_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'piercing';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 4
+    WHERE class_code = 3 AND stat_key = 'strength';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'valiance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'water_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 3 AND stat_key = 'water_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 2
+    WHERE class_code = 3 AND stat_key = 'wisdom';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'accuracy';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'air_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'air_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'attack_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'cast_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'concentration';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'critical_damage';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'critical_rate';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'critical_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'earth_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'earth_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'evasion';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'fire_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'fire_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'guard_limit';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'guard_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 3
+    WHERE class_code = 4 AND stat_key = 'health';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'hp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 2
+    WHERE class_code = 4 AND stat_key = 'intelligence';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'magic_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'magic_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'max_hp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'max_mp';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'move_speed';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'mp_recovery';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'physical_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'physical_defense';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'piercing';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 5
+    WHERE class_code = 4 AND stat_key = 'strength';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'valiance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'water_attack';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 0
+    WHERE class_code = 4 AND stat_key = 'water_resistance';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    UPDATE game.class_stat_bases SET per_level = 5
+    WHERE class_code = 4 AND stat_key = 'wisdom';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    ALTER TABLE game.class_stat_bases ADD CONSTRAINT ck_class_stat_bases_per_level CHECK (per_level >= 0);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120131238_StatClassGrowth') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261120131238_StatClassGrowth', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+

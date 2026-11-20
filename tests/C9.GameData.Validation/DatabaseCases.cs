@@ -229,7 +229,19 @@ internal static partial class GameDataValidation
             Check.Equal(5, sheet.EarnedPoints);
             Check.Equal(5, sheet.AvailablePoints);
             await h.Characters.UpdateAsync(fighter.Id, fighter.Version, new CharacterChanges(Level: 10), Harness.Op("level up"));
-            Check.Equal(50, (await h.Stats.ForCharacterAsync(fighter.Id))!.EarnedPoints);
+            CharacterStatSheet level10 = (await h.Stats.ForCharacterAsync(fighter.Id))!;
+            Check.Equal(50, level10.EarnedPoints);
+            // Client growth: Fighter Strength +4 per level above 1 (base 25 set above), Wisdom 1 + 2 × 9.
+            Check.Equal(25 + 4 * 9, level10.Total("strength"));
+            Check.Equal(36, level10.Stats.Single(s => s.Key == "strength").LevelBonus);
+            Check.Equal(1 + 2 * 9, level10.Total("wisdom"));
+            Check.Equal(150, level10.Total("max_hp")); // no growth configured for derived stats
+            await h.Stats.SetClassGrowthAsync(0, new Dictionary<string, int> { ["max_hp"] = 20, ["strength"] = 0 }, Harness.Op("hp growth"));
+            CharacterStatSheet regrown = (await h.Stats.ForCharacterAsync(fighter.Id))!;
+            Check.Equal(150 + 20 * 9, regrown.Total("max_hp"));
+            Check.Equal(25, regrown.Total("strength"));
+            await Check.Fails(GameDataError.Invalid, () => h.Stats.SetClassGrowthAsync(0, new Dictionary<string, int> { ["strength"] = -1 }, Harness.Op()));
+            await h.Stats.SetClassGrowthAsync(0, new Dictionary<string, int> { ["max_hp"] = 0, ["strength"] = 4 }, Harness.Op("restore"));
             await h.Stats.SetLevelPointsAsync([0, .. Enumerable.Repeat(3, 98)], Harness.Op("new table"));
             Check.Equal(27, (await h.Stats.ForCharacterAsync(fighter.Id))!.EarnedPoints);
             Check.Equal(99, (await h.Stats.ConfigurationAsync()).Levels.Count);
@@ -239,6 +251,8 @@ internal static partial class GameDataValidation
             await Check.Fails(GameDataError.Invalid, () => h.Stats.UpdateDefinitionsAsync([new("max_hp", "Maximum HP", true, 0)], Harness.Op()));
             await using GameDbContext db = h.Db();
             Check.True(await db.AuditLog.AnyAsync(a => a.Action == "stats.class_base" && a.TargetId == "0"));
+            Check.True(await db.AuditLog.AnyAsync(a => a.Action == "stats.class_growth" && a.TargetId == "0"));
+            Check.Equal(5, (await db.ClassStatBases.SingleAsync(b => b.ClassCode == 4 && b.StatKey == "strength")).PerLevel);
         });
 
         yield return ("spending stat points is bounded, owner-only and idempotent", async () =>

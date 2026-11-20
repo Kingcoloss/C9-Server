@@ -256,11 +256,15 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
 
         model.Entity<ClassStatBase>(e =>
         {
-            e.ToTable("class_stat_bases", GameSchema, t => t.HasCheckConstraint("ck_class_stat_bases_value", "value >= 0"));
+            e.ToTable("class_stat_bases", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_class_stat_bases_value", "value >= 0");
+                t.HasCheckConstraint("ck_class_stat_bases_per_level", "per_level >= 0");
+            });
             e.HasKey(b => new { b.ClassCode, b.StatKey });
             e.HasOne<StatDefinition>().WithMany().HasForeignKey(b => b.StatKey).OnDelete(DeleteBehavior.Restrict);
             e.HasData(StatService.Classes.SelectMany(c => StatKeys.All.Select(s =>
-                new ClassStatBase { ClassCode = c.Code, StatKey = s.Key, Value = StatKeys.DefaultBase(c.Code, s) })));
+                new ClassStatBase { ClassCode = c.Code, StatKey = s.Key, Value = StatKeys.DefaultBase(c.Code, s), PerLevel = StatKeys.DefaultGrowth(c.Code, s) })));
         });
 
         model.Entity<StatPointLevel>(e =>
