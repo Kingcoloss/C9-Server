@@ -11,7 +11,7 @@ try
 {
     string? configPath = null, hostOverride = null, clientDirectory = null, eventLog = null;
     string? serviceId = null, agentUrl = null, agentTokenFile = null, traceDirectory = null, tracePayloads = null;
-    string? configOverlay = null, characterStore = null, probeUrl = null;
+    string? configOverlay = null, characterStore = null, probeUrl = null, npcSpawnFile = null;
     int? traceRetentionDays = null;
     bool checkRuntime = false, launcherUpdate = false, managed = false, allowContainerBind = false;
     int updatePort = 18080;
@@ -32,6 +32,7 @@ try
                   --service-id ID                   login, lobby, ... (default from profile)
                   --config-overlay FILE             portal-written profile used instead of --config when it exists
                   --character-store FILE            overrides character_store of the profile
+                  --npc-spawn-file FILE             NPC list per map sent as 0x0BE3 (overrides npc_spawn_file; also without agent mode)
                   --trace-dir DIR                   persist packet trace as JSONL (memory ring otherwise)
                   --trace-payloads POLICY           redact-credentials (default) | full | headers
                   --trace-retention-days N          default 7
@@ -62,6 +63,7 @@ try
             case "--trace-retention-days": traceRetentionDays = int.Parse(args[++i], System.Globalization.CultureInfo.InvariantCulture); break;
             case "--config-overlay": configOverlay = args[++i]; break;
             case "--character-store": characterStore = args[++i]; break;
+            case "--npc-spawn-file": npcSpawnFile = args[++i]; break;
             case "--probe": probeUrl = args[++i]; break;
             default: throw new ArgumentException("Unknown command-line option");
         }
@@ -101,6 +103,8 @@ try
         options = options with { CharacterStore = Path.GetFullPath(store, Path.GetDirectoryName(Path.GetFullPath(configPath!))!) };
     if (options.NpcSpawnFile is { } npcFile)
         options = options with { NpcSpawnFile = Path.GetFullPath(npcFile, Path.GetDirectoryName(Path.GetFullPath(configPath!))!) };
+    if (npcSpawnFile is not null)
+        options = options with { NpcSpawnFile = Path.GetFullPath(npcSpawnFile) };
     options = options.WithGameDatabaseFromEnvironment().WithLauncherAuthFromEnvironment();
     if (checkRuntime)
     {
@@ -136,7 +140,7 @@ try
             throw new ArgumentException(allowContainerBind
                 ? "--agent-url must use a loopback address, or 0.0.0.0/[::] inside a container"
                 : "--agent-url must use a loopback address (use --allow-container-bind only inside a container)");
-        ConfigSource source = new(configPath, configOverlay, hostOverride, portOverride, characterStore, allowContainerBind);
+        ConfigSource source = new(configPath, configOverlay, hostOverride, portOverride, characterStore, allowContainerBind, npcSpawnFile);
         ServerOptions initial = ServerOptions.FromJson(await File.ReadAllTextAsync(configPath));
         string id = serviceId ?? initial.Profile switch { "fixture" => "login", "character_lobby" => "lobby", string other => other };
         TraceOptions traceOptions = new()

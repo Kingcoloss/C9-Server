@@ -172,6 +172,7 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
   - ตาราง `game.account_second_passwords` (migration `20261120020414_AccountSecondPassword` ต่อจาก StatUpgradePoints), handler 2744–274B ใน lobby, สถานะใน 0x0BC0, ล็อก 5 ครั้ง/72 ชม., audit
   - C9.Validation **73/73** (รวม DB จริง) รายละเอียด: [EXIT_AND_2ND_PASSWORD_TH.md](EXIT_AND_2ND_PASSWORD_TH.md)
 - **NPC: สาเหตุคือ server ไม่เคยส่ง packet สร้าง NPC** (`0x0BE3` Exist_NPC, Ref catalog id 3043)
-  - โค้ดส่ง `0x0BE3` หลัง `0x0BC5 → 0x0BC6` พร้อมแล้ว อ่านรายชื่อจาก option `npc_spawn_file`; ยังไม่มีรายชื่อ/ตำแหน่ง NPC จริงจึงยังไม่เปิดใช้
+  - โค้ดส่ง `0x0BE3` หลัง `0x0BC5 → 0x0BC6` อ่านรายชื่อจาก option `npc_spawn_file` หรือ `--npc-spawn-file`
+  - Waterford (map 10) มี NPC 50 ตัวจากไฟล์แผนที่ของ client (`config/npc-spawns.json`) และ compose ส่งไฟล์นี้ให้ c9-lobby แล้ว; รอผู้ใช้ทดสอบในเกม
   - รายละเอียดและขั้นต่อไป: [NPC_SPAWN_TH.md](NPC_SPAWN_TH.md)
 - branch ถัดไปที่จะต่อจาก branch นี้: Sprint 1 ของเธรดระบบพื้นฐาน (patch `SessionProcessor.cs`), item catalog

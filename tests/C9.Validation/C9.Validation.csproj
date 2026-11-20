@@ -14,6 +14,7 @@
     <EmbeddedResource Include="../../config/lab-fixture.json" LogicalName="lab-fixture.json" />
     <EmbeddedResource Include="../../config/lab-official-login-fixture.json" LogicalName="lab-official-login-fixture.json" />
     <EmbeddedResource Include="../../config/lab-official-character-lobby.json" LogicalName="lab-official-character-lobby.json" />
+    <EmbeddedResource Include="../../config/npc-spawns.json" LogicalName="npc-spawns.json" />
     <EmbeddedResource Include="../../config/lab-handoff-probe.json" LogicalName="lab-handoff-probe.json" />
   </ItemGroup>
 </Project>

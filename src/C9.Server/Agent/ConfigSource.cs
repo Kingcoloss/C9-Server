@@ -5,7 +5,8 @@ namespace C9.Server;
 /// base profile when it exists, then command-line overrides apply. Re-read on every (re)start.
 /// </summary>
 public sealed record ConfigSource(string BasePath, string? OverlayPath = null, string? HostOverride = null,
-    int? PortOverride = null, string? CharacterStoreOverride = null, bool AllowContainerBind = false)
+    int? PortOverride = null, string? CharacterStoreOverride = null, bool AllowContainerBind = false,
+    string? NpcSpawnFileOverride = null)
 {
     public sealed record Loaded(ServerOptions Options, string Path, bool OverlayActive);
 
@@ -24,6 +25,11 @@ public sealed record ConfigSource(string BasePath, string? OverlayPath = null, s
             options = options with { CharacterStore = Path.GetFullPath(CharacterStoreOverride) };
         else if (options.CharacterStore is { } store)
             options = options with { CharacterStore = Path.GetFullPath(store, Path.GetDirectoryName(path)!) };
+        // NPC lists are game data shipped with the image, so the command line wins over a Portal overlay.
+        if (NpcSpawnFileOverride is not null)
+            options = options with { NpcSpawnFile = Path.GetFullPath(NpcSpawnFileOverride) };
+        else if (options.NpcSpawnFile is { } npcFile)
+            options = options with { NpcSpawnFile = Path.GetFullPath(npcFile, Path.GetDirectoryName(path)!) };
         options = options.WithGameDatabaseFromEnvironment().WithLauncherAuthFromEnvironment();
         options.Validate();
         return new(options, path, overlay);

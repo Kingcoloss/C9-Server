@@ -156,7 +156,8 @@ public sealed record ServerOptions
         RequireFields(root, ["description", "host", "port", "profile", "max_frame", "max_connections",
             "local_account_enabled", "initial_hp", "initial_mp",
             "max_packets", "timeout_seconds", "greetings", "rules", "character_store",
-            "character_list_header_bytes", "character_slots", "world_vitals_layout", "initial_map_id", "initial_submap", "initial_position"]);
+            "character_list_header_bytes", "character_slots", "world_vitals_layout", "initial_map_id", "initial_submap", "initial_position",
+            "npc_spawn_file"]);
         List<Packet> greetings = [];
         if (root.TryGetProperty("greetings", out JsonElement greetingArray))
             foreach (JsonElement packet in greetingArray.EnumerateArray()) greetings.Add(ParsePacket(packet));

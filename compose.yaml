@@ -80,6 +80,9 @@ services:
       - /c9/state/portal/profiles/lab-official-character-lobby.json
       - --character-store
       - /c9/state/lobby/characters.local.json
+      # Town NPCs (0x0BE3) from client map data; see docs/NPC_SPAWN_TH.md.
+      - --npc-spawn-file
+      - /c9/app/config/npc-spawns.json
       - --host
       - 0.0.0.0
       - --allow-container-bind

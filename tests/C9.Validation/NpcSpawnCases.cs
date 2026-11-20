@@ -48,7 +48,9 @@ internal static partial class Validation
         Check.Equal(3501.25f, BinaryPrimitives.ReadSingleLittleEndian(first[0x20..]));
         Check.Equal(35871.75f, BinaryPrimitives.ReadSingleLittleEndian(first[0x24..]));
         Check.Equal(1.5f, BinaryPrimitives.ReadSingleLittleEndian(first[0x28..]));
-        Check.Bytes(first.Slice(0x1C, 12), first.Slice(0x2C, 12));
+        Check.Equal(0f, BinaryPrimitives.ReadSingleLittleEndian(first[0x2C..]));
+        Check.Equal(1f, BinaryPrimitives.ReadSingleLittleEndian(first[0x30..]));
+        Check.Equal(0f, BinaryPrimitives.ReadSingleLittleEndian(first[0x34..]));
         Check.True(first[0x38..].IndexOfAnyExcept((byte)0) < 0, "Unconfirmed fields must stay zero");
 
         // More NPCs than a u8 count holds are split over several packets.
@@ -82,6 +84,29 @@ internal static partial class Validation
             Check.Throws<ArgumentException>(() => NpcSpawnCatalog.Parse(invalid.RootElement));
         }
         Check.Equal(0, NpcSpawnCatalog.Load(null).Count);
+
+        using (JsonDocument tilted = JsonDocument.Parse("""{ "maps": [ { "map_id": 10, "npcs": [ { "info_id": 5, "x": 1, "y": 2, "z": 3, "up": [0.5, 0.5, 0.7071] } ] } ] }"""))
+        {
+            ReadOnlySpan<byte> entry = NpcPackets.ExistPackets(NpcSpawnCatalog.Parse(tilted.RootElement).For(10, 0)).Single().Payload.Span[1..];
+            Check.Equal(0.5f, BinaryPrimitives.ReadSingleLittleEndian(entry[0x2C..]));
+            Check.Equal(0.7071f, BinaryPrimitives.ReadSingleLittleEndian(entry[0x34..]));
+        }
+        using (JsonDocument shortUp = JsonDocument.Parse("""{ "maps": [ { "map_id": 10, "npcs": [ { "info_id": 5, "x": 1, "y": 2, "z": 3, "up": [0, 1] } ] } ] }"""))
+            Check.Throws<ArgumentException>(() => NpcSpawnCatalog.Parse(shortUp.RootElement));
+
+        // The shipped Waterford list (client C9_1th_Town_Waterford_VILLAGE.C9MM): 50 NPCs, all on map 10 / sub-map 0.
+        using (JsonDocument shipped = Fixture("npc-spawns.json"))
+        {
+            NpcSpawnCatalog waterford = NpcSpawnCatalog.Parse(shipped.RootElement);
+            IReadOnlyList<(ulong ObjectId, NpcSpawn Spawn)> villagers = waterford.For(10, 0);
+            Check.Equal(50, waterford.Count);
+            Check.Equal(50, villagers.Count);
+            Check.Equal(50, villagers.Select(v => v.Spawn.InfoId).Distinct().Count());
+            Check.True(villagers.Any(v => v.Spawn.InfoId == 128 && MathF.Abs(v.Spawn.Position.X - 38496.957f) < 0.01f), "Blacksmith Abramo at the first marker");
+            Check.True(villagers.All(v => v.Spawn.Position.X is > 20000 and < 50000 && v.Spawn.Position.Z is > 20000 and < 50000), "Waterford bounds");
+            Packet square = NpcPackets.ExistPackets(villagers).Single();
+            Check.Equal(1 + 50 * NpcPackets.EntryBytes, square.Payload.Length);
+        }
     }
 
     private static async Task MemoryNpcSpawn()
@@ -133,5 +158,30 @@ internal static partial class Validation
             File.Delete(store);
             File.Delete(npcFile);
         }
+    }
+
+    private static void NpcSpawnConfigSource()
+    {
+        string workspace = Directory.CreateTempSubdirectory("c9-npc-config-").FullName;
+        try
+        {
+            using JsonDocument lobby = Fixture("lab-official-character-lobby.json");
+            var profile = System.Text.Json.Nodes.JsonNode.Parse(lobby.RootElement.GetRawText())!.AsObject();
+            profile["npc_spawn_file"] = "npc/town.json";
+            string basePath = Path.Combine(workspace, "lobby.json");
+            File.WriteAllText(basePath, profile.ToJsonString());
+            // A relative npc_spawn_file resolves against the profile, like character_store.
+            Check.Equal(Path.Combine(workspace, "npc", "town.json"), new ConfigSource(basePath).Load().Options.NpcSpawnFile);
+            // A Portal overlay without the key keeps no NPC list unless the command line names one; the command line wins.
+            string overlayDir = Directory.CreateDirectory(Path.Combine(workspace, "portal")).FullName;
+            string overlayPath = Path.Combine(overlayDir, "lobby.json");
+            File.WriteAllText(overlayPath, lobby.RootElement.GetRawText());
+            Check.Equal<string?>(null, new ConfigSource(basePath, overlayPath).Load().Options.NpcSpawnFile);
+            string shipped = Path.Combine(workspace, "npc-spawns.json");
+            ConfigSource docker = new(basePath, overlayPath, NpcSpawnFileOverride: shipped);
+            Check.Equal(shipped, docker.Load().Options.NpcSpawnFile);
+            Check.True(docker.Load().OverlayActive, "Overlay stays active");
+        }
+        finally { Directory.Delete(workspace, recursive: true); }
     }
 }

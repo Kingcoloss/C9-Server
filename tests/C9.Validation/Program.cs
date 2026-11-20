@@ -116,6 +116,7 @@ internal static partial class Validation
             ("Memory extended world-load acknowledgement and duplicate handling", () => MemoryWorldStartup(WorldVitalsLayout.Extended)),
             ("NPC spawn 0x0BE3/0x0BE4 layout and per-map catalog", Sync(NpcSpawnPacketLayout)),
             ("Memory lobby announces town NPCs once after world load", MemoryNpcSpawn),
+            ("NPC list path: profile-relative, overlay, --npc-spawn-file", Sync(NpcSpawnConfigSource)),
             ("World session reply contracts (0EFE/ED1E/11A2/0EB2/0E4C/F750)", Sync(WorldSessionReplyContracts)),
             ("Memory world-entry replies follow the client trace order", MemoryWorldSessionReplies),
             ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),

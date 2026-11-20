@@ -31,7 +31,7 @@ WORKDIR /c9/app
 COPY --from=build /out/server/ /c9/app/server/
 COPY --from=build /out/portal/ /c9/app/portal/
 COPY --from=build /out/auth/ /c9/app/auth/
-COPY --chmod=0644 config/lab-official-login-fixture.json config/lab-official-character-lobby.json /c9/app/config/
+COPY --chmod=0644 config/lab-official-login-fixture.json config/lab-official-character-lobby.json config/npc-spawns.json /c9/app/config/
 COPY --chmod=0755 docker/init-state.sh /c9/app/docker/init-state.sh
 # sed: tolerate a Windows checkout that converted the script to CRLF.
 RUN sed -i 's/\r$//' /c9/app/docker/init-state.sh \

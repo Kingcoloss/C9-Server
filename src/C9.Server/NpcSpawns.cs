@@ -6,7 +6,11 @@ namespace C9.Server;
 
 // One NPC placed on a map/sub-map. InfoId is the client NPC template id
 // (looked up by 008CEAB0 in the table at [0179FFD4]+0x74).
-public sealed record NpcSpawn(uint InfoId, MapPosition Position, float Yaw, uint Hp = 1, uint MaxHp = 1);
+public sealed record NpcSpawn(uint InfoId, MapPosition Position, float Yaw, uint Hp = 1, uint MaxHp = 1, MapPosition? Up = null)
+{
+    // The client builds players with (0, 1, 0) here (008CE7B0 -> 007E0FA0); map placement records carry the same unit vector.
+    public static readonly MapPosition DefaultUp = new(0, 1, 0);
+}
 
 // Client b4580ed4, dispatcher C9NetworkCharacterMove 008CE070:
 //   0x0BE3 (case 008CE16F): u8 count + count x 0x70-byte entries, each handled by 008CEAB0
@@ -62,16 +66,18 @@ public static class NpcPackets
         BinaryPrimitives.WriteSingleLittleEndian(entry[0x20..], npc.Position.Y);
         BinaryPrimitives.WriteSingleLittleEndian(entry[0x24..], npc.Position.Z);
         BinaryPrimitives.WriteSingleLittleEndian(entry[0x28..], npc.Yaw);
-        // +0x2C..+0x37: second vector (event +0x20..+0x28); the current position keeps the NPC still.
-        BinaryPrimitives.WriteSingleLittleEndian(entry[0x2C..], npc.Position.X);
-        BinaryPrimitives.WriteSingleLittleEndian(entry[0x30..], npc.Position.Y);
-        BinaryPrimitives.WriteSingleLittleEndian(entry[0x34..], npc.Position.Z);
+        // +0x2C..+0x37: up vector (event +0x20..+0x28).
+        MapPosition up = npc.Up ?? NpcSpawn.DefaultUp;
+        BinaryPrimitives.WriteSingleLittleEndian(entry[0x2C..], up.X);
+        BinaryPrimitives.WriteSingleLittleEndian(entry[0x30..], up.Y);
+        BinaryPrimitives.WriteSingleLittleEndian(entry[0x34..], up.Z);
         // +0x38..+0x4F and the 32-byte record at +0x50 stay zero.
     }
 }
 
 // Per-map NPC list loaded from JSON:
 // { "maps": [ { "map_id": 10, "submap": 0, "npcs": [ { "info_id": 1, "x": 0, "y": 0, "z": 0, "yaw": 0 } ] } ] }
+// Optional per NPC: "hp" (default 1), "up": [x, y, z] (default [0, 1, 0]); other keys such as "name" are notes.
 public sealed class NpcSpawnCatalog
 {
     // Object ids above every character id, unique per map/sub-map and slot.
@@ -115,9 +121,15 @@ public sealed class NpcSpawnCatalog
                     npc.GetProperty("z").GetSingle());
                 float yaw = npc.TryGetProperty("yaw", out JsonElement y) ? y.GetSingle() : 0;
                 uint hp = npc.TryGetProperty("hp", out JsonElement h) ? h.GetUInt32() : 1;
-                if (!position.IsValid || !float.IsFinite(yaw) || hp == 0)
+                MapPosition? up = null;
+                if (npc.TryGetProperty("up", out JsonElement u))
+                {
+                    if (u.GetArrayLength() != 3) throw new ArgumentException($"NPC up vector on map {mapId}/{submap} needs three numbers");
+                    up = new MapPosition(u[0].GetSingle(), u[1].GetSingle(), u[2].GetSingle());
+                }
+                if (!position.IsValid || !float.IsFinite(yaw) || hp == 0 || up is { IsValid: false })
                     throw new ArgumentException($"Invalid NPC entry on map {mapId}/{submap}");
-                list.Add(new NpcSpawn(npc.GetProperty("info_id").GetUInt32(), position, yaw, hp, hp));
+                list.Add(new NpcSpawn(npc.GetProperty("info_id").GetUInt32(), position, yaw, hp, hp, up));
             }
             if (list.Count > ushort.MaxValue) throw new ArgumentException($"Too many NPCs on map {mapId}/{submap}");
             if (!maps.TryAdd((mapId, submap), list.AsReadOnly()))
