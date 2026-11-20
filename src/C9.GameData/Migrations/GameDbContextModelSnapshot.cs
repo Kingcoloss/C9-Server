@@ -456,16 +456,28 @@ namespace C9.GameData.Migrations
                         .HasColumnType("text")
                         .HasColumnName("category");
 
+                    b.Property<string>("DescriptionEn")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
+                        .HasColumnName("description_en");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("icon");
+
                     b.Property<int?>("MaxStack")
                         .HasColumnType("integer")
                         .HasColumnName("max_stack");
 
                     b.Property<string>("NameEn")
-                        .HasColumnType("text")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("name_en");
 
                     b.Property<string>("NameKo")
-                        .HasColumnType("text")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("name_ko");
 
                     b.Property<short?>("Rarity")
@@ -1667,6 +1679,208 @@ namespace C9.GameData.Migrations
                         });
                 });
 
+            modelBuilder.Entity("C9.GameData.Entities.ItemBundle", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("created_by");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("enabled");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id")
+                        .HasName("pk_item_bundles");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_item_bundles_name");
+
+                    b.ToTable("item_bundles", "game");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ItemBundleEntry", b =>
+                {
+                    b.Property<long>("BundleId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("bundle_id");
+
+                    b.Property<short>("Line")
+                        .HasColumnType("smallint")
+                        .HasColumnName("line");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer")
+                        .HasColumnName("item_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("BundleId", "Line")
+                        .HasName("pk_item_bundle_entries");
+
+                    b.HasIndex("ItemId")
+                        .HasDatabaseName("ix_item_bundle_entries_item_id");
+
+                    b.ToTable("item_bundle_entries", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_item_bundle_entries_quantity", "quantity > 0");
+                        });
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ItemDelivery", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("account_id");
+
+                    b.Property<Guid>("BatchId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("batch_id");
+
+                    b.Property<long?>("BundleId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("bundle_id");
+
+                    b.Property<DateTimeOffset?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cancelled_at");
+
+                    b.Property<string>("CancelledBy")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("cancelled_by");
+
+                    b.Property<long?>("CharacterId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("character_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTimeOffset?>("DeliveredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivered_at");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer")
+                        .HasColumnName("item_id");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("message");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("reason");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("target");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id")
+                        .HasName("pk_item_deliveries");
+
+                    b.HasIndex("BatchId")
+                        .HasDatabaseName("ix_item_deliveries_batch_id");
+
+                    b.HasIndex("BundleId")
+                        .HasDatabaseName("ix_item_deliveries_bundle_id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_item_deliveries_created_at");
+
+                    b.HasIndex("ItemId")
+                        .HasDatabaseName("ix_item_deliveries_item_id");
+
+                    b.HasIndex("AccountId", "Status")
+                        .HasDatabaseName("ix_item_deliveries_account_id_status");
+
+                    b.HasIndex("CharacterId", "Status")
+                        .HasDatabaseName("ix_item_deliveries_character_id_status");
+
+                    b.ToTable("item_deliveries", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_item_deliveries_quantity", "quantity > 0");
+
+                            t.HasCheckConstraint("ck_item_deliveries_target", "(target = 'Character') = (character_id IS NOT NULL)");
+                        });
+                });
+
             modelBuilder.Entity("C9.GameData.Entities.LedgerEntry", b =>
                 {
                     b.Property<long>("Id")
@@ -2846,6 +3060,52 @@ namespace C9.GameData.Migrations
                         .HasConstraintName("fk_class_stat_bases_stat_definitions_stat_key");
                 });
 
+            modelBuilder.Entity("C9.GameData.Entities.ItemBundleEntry", b =>
+                {
+                    b.HasOne("C9.GameData.Entities.ItemBundle", null)
+                        .WithMany("Entries")
+                        .HasForeignKey("BundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_item_bundle_entries_item_bundles_bundle_id");
+
+                    b.HasOne("C9.GameData.Entities.CatalogItem", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_item_bundle_entries_item_catalog_item_id");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ItemDelivery", b =>
+                {
+                    b.HasOne("C9.GameData.Entities.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_item_deliveries_accounts_account_id");
+
+                    b.HasOne("C9.GameData.Entities.ItemBundle", null)
+                        .WithMany()
+                        .HasForeignKey("BundleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_item_deliveries_item_bundles_bundle_id");
+
+                    b.HasOne("C9.GameData.Entities.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_item_deliveries_characters_character_id");
+
+                    b.HasOne("C9.GameData.Entities.CatalogItem", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_item_deliveries_item_catalog_item_id");
+                });
+
             modelBuilder.Entity("C9.GameData.Entities.Account", b =>
                 {
                     b.Navigation("Characters");
@@ -2856,6 +3116,11 @@ namespace C9.GameData.Migrations
             modelBuilder.Entity("C9.GameData.Entities.Character", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.ItemBundle", b =>
+                {
+                    b.Navigation("Entries");
                 });
 #pragma warning restore 612, 618
         }

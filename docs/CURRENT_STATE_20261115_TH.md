@@ -175,3 +175,8 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
   - โค้ดส่ง `0x0BE3` หลัง `0x0BC5 → 0x0BC6` พร้อมแล้ว อ่านรายชื่อจาก option `npc_spawn_file`; ยังไม่มีรายชื่อ/ตำแหน่ง NPC จริงจึงยังไม่เปิดใช้
   - รายละเอียดและขั้นต่อไป: [NPC_SPAWN_TH.md](NPC_SPAWN_TH.md)
 - branch ถัดไปที่จะต่อจาก branch นี้: Sprint 1 ของเธรดระบบพื้นฐาน (patch `SessionProcessor.cs`), item catalog
+
+## 14. Items Catalog + Items management (อัปเดต 20 พ.ย. 2026 ~19:50 น. โดย thread base status/items)
+- ผู้ใช้ยืนยัน: "กระเป๋ากลาง" = กระเป๋ารับของจาก Shop (Gift Box = ระบบ MailEx ใน Post) และขอเมนู Items Catalog (มีรูป) + Items management (bundle, ส่งให้ตัวละคร/บัญชี แบบเดี่ยวและ batch)
+- **เขียนเสร็จ ทดสอบผ่าน commit แล้ว ยังไม่ deploy** บน branch `claude/project-thread-wk3q2i`: export catalog จาก Client (45,996 item, รูป PNG 10,584 ไฟล์ นอก git), migration `ItemCatalogDelivery`, `ItemService`, หน้า `/items` และ `/items/manage`
+- ของที่ส่งยังไม่เข้าเกม (รอ RE inventory + Gift Box) รายการค้างสถานะ "รอส่งเข้าเกม" ยกเลิกได้; รายละเอียด: [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md)

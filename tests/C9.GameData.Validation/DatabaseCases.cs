@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 internal static partial class GameDataValidation
 {
-    private const int DatabaseCaseCount = 13;
+    private const int DatabaseCaseCount = 15;
 
     private static IEnumerable<(string, Func<Task>)> DatabaseCases(Harness h)
     {
@@ -273,6 +273,68 @@ internal static partial class GameDataValidation
             Check.Equal(1, won);
             Check.Equal(0, (await h.Stats.ForCharacterAsync(c.Id))!.AvailablePoints);
             Check.Equal(1, (await h.Stats.ForAccountAsync(owner.Id)).Count);
+        });
+
+        yield return ("item catalog import, search and bundles", async () =>
+        {
+            CatalogImportRow[] rows =
+            [
+                new(20332, "Skill Recycler", "스킬 리사이클러", "A token.", "icon_gp_skillrecycle"),
+                new(9603, "Aura of Strength: 1 min", null, null, "icon_ip_02_001"),
+                new(7380, null, "스카라브의 뿔", null, "../../etc/passwd"),
+            ];
+            OperatorContext op = Harness.Op("import catalog");
+            CatalogImportResult first = await h.Items.ImportCatalogAsync(rows, op);
+            Check.Equal(new CatalogImportResult(3, 0, 0), first);
+            Check.Equal(new CatalogImportResult(0, 0, 3), await h.Items.ImportCatalogAsync(rows, op)); // retry of the same request
+            CatalogImportResult again = await h.Items.ImportCatalogAsync([.. rows[..2], rows[2] with { NameEn = "Scarab Horn" }], Harness.Op("re-export"));
+            Check.Equal(new CatalogImportResult(0, 1, 2), again);
+            Check.Equal<string?>(null, (await h.Items.GetCatalogAsync(7380))!.Icon); // unsafe icon key dropped
+            Check.Equal(1, (await h.Items.SearchCatalogAsync("recycl")).Total);
+            Check.Equal(1, (await h.Items.SearchCatalogAsync("스카라브")).Total);
+            Check.Equal(9603, (await h.Items.SearchCatalogAsync("9603")).Items.Single().ItemId);
+            Check.Equal(0, (await h.Items.SearchCatalogAsync("100%_")).Total);
+            await Check.Fails(GameDataError.Invalid, () => h.Items.ImportCatalogAsync([rows[0], rows[0]], Harness.Op()));
+
+            ItemBundle bundle = await h.Items.CreateBundleAsync("Starter", "first login", [new(20332, 1), new(9603, 5)], Harness.Op("bundle"));
+            await Check.Fails(GameDataError.NotFound, () => h.Items.CreateBundleAsync("Bad", null, [new(1, 1)], Harness.Op()));
+            await Check.Fails(GameDataError.Invalid, () => h.Items.CreateBundleAsync("Bad", null, [new(20332, 0)], Harness.Op()));
+            await Check.Fails(GameDataError.Duplicate, () => h.Items.CreateBundleAsync("Starter", null, [new(20332, 1)], Harness.Op()));
+            ItemBundle edited = await h.Items.UpdateBundleAsync(bundle.Id, bundle.Version, "Starter", null, true, [new(9603, 2)], Harness.Op("edit"));
+            Check.Equal(1, edited.Entries.Count);
+            await Check.Fails(GameDataError.Conflict, () => h.Items.UpdateBundleAsync(bundle.Id, bundle.Version, "Starter", null, false, [new(9603, 2)], Harness.Op()));
+            Check.Equal(9603, (await h.Items.BundlesAsync()).Single().Entries.Single().ItemId);
+        });
+
+        yield return ("sending items to characters and accounts (single, batch, all) and cancelling", async () =>
+        {
+            Account a1 = await h.Accounts.CreateAsync("gift1", "password-9", Harness.Op());
+            Account a2 = await h.Accounts.CreateAsync("gift2", "password-9", Harness.Op());
+            Character c1 = await h.Characters.CreateAsync(a1.Id, 0, 1, "Giftee", Appearance);
+            Character c2 = await h.Characters.CreateAsync(a2.Id, 0, 9, "Giftee2", Appearance);
+            long bundleId = (await h.Items.BundlesAsync()).Single(b => b.Name == "Starter").Id;
+
+            OperatorContext single = Harness.Op("event reward");
+            DeliveryResult one = await h.Items.SendAsync(new(DeliveryTarget.Character, ["giftee"], false, bundleId, [new(20332, 1)], "Welcome"), single);
+            Check.Equal(new DeliveryResult(single.RequestId, 1, 2), one);
+            Check.Equal(one, await h.Items.SendAsync(new(DeliveryTarget.Character, ["giftee"], false, bundleId, [new(20332, 1)], "Welcome"), single));
+            DeliveryResult batch = await h.Items.SendAsync(new(DeliveryTarget.Character, ["Giftee", "Giftee2", " giftee "], false, null, [new(9603, 3)], null), Harness.Op("batch"));
+            Check.Equal(2, batch.Recipients);
+            await Check.Fails(GameDataError.NotFound, () => h.Items.SendAsync(new(DeliveryTarget.Character, ["Giftee", "Nobody"], false, null, [new(9603, 1)], null), Harness.Op()));
+            await Check.Fails(GameDataError.Invalid, () => h.Items.SendAsync(new(DeliveryTarget.Character, ["Giftee"], false, null, [], null), Harness.Op()));
+            DeliveryResult account = await h.Items.SendAsync(new(DeliveryTarget.Account, ["gift2"], false, null, [new(20332, 2)], null), Harness.Op("account"));
+            Check.Equal(1, account.Rows);
+            DeliveryResult everyone = await h.Items.SendAsync(new(DeliveryTarget.Account, [], true, null, [new(9603, 1)], "Maintenance gift"), Harness.Op("all"));
+            Check.True(everyone.Recipients >= 2, "every active account");
+
+            Page<DeliveryView> pending = await h.Items.DeliveriesAsync(DeliveryStatus.Pending, recipient: "Giftee");
+            Check.Equal(3, pending.Total); // two from the bundle send, one from the batch
+            Check.True(pending.Items.All(d => d.CharacterName == "Giftee" && d.AccountLogin == "gift1" && d.ItemName is not null));
+            Check.Equal(2, await h.Items.CancelBatchAsync(single.RequestId, Harness.Op("wrong recipient")));
+            await Check.Fails(GameDataError.NotFound, () => h.Items.CancelBatchAsync(single.RequestId, Harness.Op()));
+            Check.Equal(2, (await h.Items.DeliveriesAsync(DeliveryStatus.Cancelled)).Total);
+            Check.Equal(1, (await h.Items.DeliveriesAsync(recipient: "gift2", status: DeliveryStatus.Pending)).Items.Count(d => d.Target == DeliveryTarget.Account && d.ItemId == 20332));
+            Check.True(c2.Id > c1.Id);
         });
     }
 }

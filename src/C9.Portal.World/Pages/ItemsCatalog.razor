@@ -1,0 +1,122 @@
+@page "/items"
+@rendermode InteractiveServer
+@attribute [Authorize(Policy = PortalPolicies.WorldRead)]
+@inject IServiceProvider Services
+@inject PortalActions Actions
+@inject ItemCatalogFolder Folder
+
+<PageTitle>Items Catalog</PageTitle>
+
+<GameDataGate Actions="Actions">
+    <header class="page-head">
+        <div>
+            <p class="eyebrow">ITEMS</p>
+            <h1>Items Catalog</h1>
+            <p class="muted">รายการ item ทั้งหมดของ Client (ชื่อ อังกฤษ/เกาหลี, คำอธิบาย และรูป) ค้นด้วยเลข ID หรือชื่อ</p>
+        </div>
+    </header>
+
+    <section class="panel">
+        <div class="filters">
+            <label class="field">ค้นหา <input @bind="query" @bind:event="oninput" @onkeyup="SearchOnEnter" placeholder="เช่น 20332 หรือ Recycler" /></label>
+            <button class="primary" @onclick="() => SearchAsync(0)">ค้นหา</button>
+            <span class="muted small">พบ @results.Total.ToString("N0") รายการ</span>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead><tr><th></th><th>ID</th><th>ชื่อ (EN)</th><th>ชื่อ (KO)</th><th>คำอธิบาย</th></tr></thead>
+                <tbody>
+                    @foreach (CatalogItem item in results.Items)
+                    {
+                        <tr>
+                            <td style="width:52px">
+                                @if (item.Icon is { } icon)
+                                {
+                                    <img src="@($"/api/v1/items/icons/{icon}.png")" alt="" width="42" height="42" loading="lazy" />
+                                }
+                            </td>
+                            <td><code>@item.ItemId</code></td>
+                            <td>@(item.NameEn ?? "—")</td>
+                            <td>@(item.NameKo ?? "—")</td>
+                            <td class="muted small">@Short(item.DescriptionEn)</td>
+                        </tr>
+                    }
+                    @if (results.Items.Count == 0) { <tr><td colspan="5" class="muted small">ไม่พบ item (ถ้า catalog ยังว่าง ให้ import จากไฟล์ด้านล่าง)</td></tr> }
+                </tbody>
+            </table>
+        </div>
+        <div class="filters">
+            <button disabled="@(results.Skip == 0)" @onclick="() => SearchAsync(Math.Max(0, results.Skip - PageSize))">ก่อนหน้า</button>
+            <span class="muted small">@(results.Total == 0 ? 0 : results.Skip + 1)–@(results.Skip + results.Items.Count) จาก @results.Total.ToString("N0")</span>
+            <button disabled="@(results.Skip + results.Items.Count >= results.Total)" @onclick="() => SearchAsync(results.Skip + PageSize)">ถัดไป</button>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>นำเข้า catalog จาก Client</h2>
+        <p class="muted small">
+            สร้างไฟล์ด้วย <code>python re/scripts/export_item_catalog.py --game C:\VFUN\C9-GL --out artifacts/docker-state/item-catalog</code>
+            บนเครื่องที่ติดตั้งเกม แล้วกดนำเข้า (เพิ่ม/อัปเดตเท่านั้น ไม่ลบ item เดิม) · โฟลเดอร์ที่ Portal อ่าน: <code>@Folder.Path</code>
+        </p>
+        @if (source.Exists)
+        {
+            <p class="small">พบไฟล์: @source.Items.ToString("N0") item, มีรูป @source.WithIcon.ToString("N0") item, export เมื่อ @(source.ExportedAt ?? "—")</p>
+        }
+        else
+        {
+            <p class="small">ยังไม่พบ items.json ในโฟลเดอร์นี้</p>
+        }
+        <AuthorizeView Policy="@PortalPolicies.WorldWrite">
+            <div class="filters">
+                <label class="field">เหตุผล <input @bind="reason" placeholder="จำเป็น" /></label>
+                <button class="primary" disabled="@(!source.Exists)" @onclick="ImportAsync">นำเข้า catalog</button>
+            </div>
+        </AuthorizeView>
+    </section>
+</GameDataGate>
+
+@code {
+    private const int PageSize = 50;
+    private Page<CatalogItem> results = new([], 0, 0, PageSize);
+    private ItemCatalogFolder.Summary source = new(false, null, 0, 0);
+    private string? query, reason;
+
+    private ItemService Items => (ItemService)Services.GetService(typeof(ItemService))!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        source = Folder.Describe();
+        await SearchAsync(0);
+    }
+
+    private async Task SearchAsync(int skip)
+    {
+        if (!GameDataApi.Configured(Services)) return;
+        results = await Items.SearchCatalogAsync(query, skip, PageSize);
+    }
+
+    private async Task SearchOnEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchAsync(0);
+    }
+
+    private async Task ImportAsync()
+    {
+        IReadOnlyList<CatalogImportRow> rows;
+        try { rows = Folder.Load().Rows; }
+        catch (Exception error) when (error is IOException or InvalidDataException or System.Text.Json.JsonException or KeyNotFoundException)
+        {
+            source = Folder.Describe();
+            return;
+        }
+        CatalogImportResult? result = await Actions.RunAsync("items.catalog_import", "item_catalog:all", reason,
+            op => Items.ImportCatalogAsync(rows, op), "นำเข้าแล้ว");
+        if (result is not null)
+        {
+            reason = null;
+            await SearchAsync(0);
+        }
+    }
+
+    private static string Short(string? text) => text is null ? "" : text.Length <= 120 ? text : text[..120] + "…";
+}

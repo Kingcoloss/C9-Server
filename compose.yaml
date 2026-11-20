@@ -127,6 +127,8 @@ services:
       Portal__Url: http://0.0.0.0:14880
       Portal__Workspace: /c9/app
       Portal__StateDirectory: /c9/state/portal
+      # Item catalog exported from the Client by re/scripts/export_item_catalog.py (items.json + icons/), outside git.
+      Items__CatalogDirectory: /c9/state/item-catalog
       Portal__AgentTokenFile: /c9/state/secrets/agent.token
       Portal__GrafanaUrl: http://127.0.0.1:${C9_GRAFANA_PORT:-3000}/d/c9-overview
       Portal__PrometheusUrl: http://127.0.0.1:${C9_PROMETHEUS_PORT:-9090}

@@ -35,6 +35,9 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
     public DbSet<ClassStatBase> ClassStatBases => Set<ClassStatBase>();
     public DbSet<StatPointLevel> StatPointLevels => Set<StatPointLevel>();
     public DbSet<CharacterStat> CharacterStats => Set<CharacterStat>();
+    public DbSet<ItemBundle> ItemBundles => Set<ItemBundle>();
+    public DbSet<ItemBundleEntry> ItemBundleEntries => Set<ItemBundleEntry>();
+    public DbSet<ItemDelivery> ItemDeliveries => Set<ItemDelivery>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder builder)
     {
@@ -121,6 +124,10 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.HasKey(i => i.ItemId);
             e.Property(i => i.ItemId).ValueGeneratedNever();
             e.Property(i => i.Raw).HasColumnType("jsonb");
+            e.Property(i => i.NameEn).HasMaxLength(200);
+            e.Property(i => i.NameKo).HasMaxLength(200);
+            e.Property(i => i.DescriptionEn).HasMaxLength(4000);
+            e.Property(i => i.Icon).HasMaxLength(128);
         });
 
         model.Entity<LedgerEntry>(e =>
@@ -275,6 +282,48 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.HasKey(s => new { s.CharacterId, s.StatKey });
             e.HasOne<Character>().WithMany().HasForeignKey(s => s.CharacterId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<StatDefinition>().WithMany().HasForeignKey(s => s.StatKey).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        model.Entity<ItemBundle>(e =>
+        {
+            e.ToTable("item_bundles", GameSchema);
+            e.Property(b => b.Name).HasMaxLength(100);
+            e.Property(b => b.Description).HasMaxLength(1000);
+            e.Property(b => b.CreatedBy).HasMaxLength(64);
+            e.Property(b => b.CreatedAt).HasDefaultValueSql("now()");
+            e.HasIndex(b => b.Name).IsUnique();
+            Xmin(e);
+        });
+
+        model.Entity<ItemBundleEntry>(e =>
+        {
+            e.ToTable("item_bundle_entries", GameSchema, t => t.HasCheckConstraint("ck_item_bundle_entries_quantity", "quantity > 0"));
+            e.HasKey(x => new { x.BundleId, x.Line });
+            e.HasOne<ItemBundle>().WithMany(b => b.Entries).HasForeignKey(x => x.BundleId).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<CatalogItem>().WithMany().HasForeignKey(x => x.ItemId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        model.Entity<ItemDelivery>(e =>
+        {
+            e.ToTable("item_deliveries", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_item_deliveries_quantity", "quantity > 0");
+                t.HasCheckConstraint("ck_item_deliveries_target", "(target = 'Character') = (character_id IS NOT NULL)");
+            });
+            e.HasOne<Account>().WithMany().HasForeignKey(d => d.AccountId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<Character>().WithMany().HasForeignKey(d => d.CharacterId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<CatalogItem>().WithMany().HasForeignKey(d => d.ItemId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<ItemBundle>().WithMany().HasForeignKey(d => d.BundleId).OnDelete(DeleteBehavior.Restrict);
+            e.Property(d => d.Message).HasMaxLength(200);
+            e.Property(d => d.Reason).HasMaxLength(500);
+            e.Property(d => d.CreatedBy).HasMaxLength(64);
+            e.Property(d => d.CancelledBy).HasMaxLength(64);
+            e.Property(d => d.CreatedAt).HasDefaultValueSql("now()");
+            e.HasIndex(d => d.BatchId);
+            e.HasIndex(d => new { d.AccountId, d.Status });
+            e.HasIndex(d => new { d.CharacterId, d.Status });
+            e.HasIndex(d => d.CreatedAt);
+            Xmin(e);
         });
 
         // Player data is never hard-deleted through a parent row (soft delete only).
