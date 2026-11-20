@@ -166,3 +166,12 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
 - ค่า base ตอนนี้เป็น placeholder (ตัวหลัก 10, Max HP/MP 100, อื่น 0) ค่าต้นฉบับอยู่ใน `GameData.c9d` ยังถอดไม่ได้; status อื่นนอกจาก HP/MP ยังไม่ส่งเข้าเกมจนกว่าจะได้ layout ของ 0x0C1E จาก probe (`C9_STAT_PROBE=1` เปิดอยู่ใน deploy นี้)
 - งานอยู่บน worktree branch `claude/project-thread-wk3q2i` (ยังไม่รวมเข้า main checkout/p-server); test: GameData 20/20, Validation 68/68, Portal 11/11
 - รายละเอียด/วิธีรวม migration กับเธรด 2nd password: [CHARACTER_STATS_TH.md](CHARACTER_STATS_TH.md)
+
+## 13. 2nd Password ในเกม + NPC ในเมือง (อัปเดต 20 พ.ย. 2026 ~09:15 น. โดย thread "แก้ NPC และ 2nd password ในเกม")
+- **2nd Password: implement แล้ว รอทดสอบในเกม** บน branch `claude/second-password-npc` (ต่อจาก `claude/project-thread-wk3q2i` @ `d407e60`; ไม่แตะ main checkout/p-server)
+  - ตาราง `game.account_second_passwords` (migration `20261120020414_AccountSecondPassword` ต่อจาก StatUpgradePoints), handler 2744–274B ใน lobby, สถานะใน 0x0BC0, ล็อก 5 ครั้ง/72 ชม., audit
+  - C9.Validation **73/73** (รวม DB จริง) รายละเอียด: [EXIT_AND_2ND_PASSWORD_TH.md](EXIT_AND_2ND_PASSWORD_TH.md)
+- **NPC: สาเหตุคือ server ไม่เคยส่ง packet สร้าง NPC** (`0x0BE3` Exist_NPC, Ref catalog id 3043)
+  - โค้ดส่ง `0x0BE3` หลัง `0x0BC5 → 0x0BC6` พร้อมแล้ว อ่านรายชื่อจาก option `npc_spawn_file`; ยังไม่มีรายชื่อ/ตำแหน่ง NPC จริงจึงยังไม่เปิดใช้
+  - รายละเอียดและขั้นต่อไป: [NPC_SPAWN_TH.md](NPC_SPAWN_TH.md)
+- branch ถัดไปที่จะต่อจาก branch นี้: Sprint 1 ของเธรดระบบพื้นฐาน (patch `SessionProcessor.cs`), item catalog

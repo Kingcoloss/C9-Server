@@ -41,3 +41,25 @@ public sealed class AccountSanction
     public bool IsActiveAt(DateTimeOffset at) =>
         RevokedAt is null && StartsAt <= at && (EndsAt is null || EndsAt > at);
 }
+
+/// <summary>
+/// In-game secondary password of an account (client panel C9UISecondaryPasswordPanel, docs/EXIT_AND_2ND_PASSWORD_TH.md).
+/// The client never sends the password itself, only CRC32(UTF-16LE(password)); that value and the security answer are
+/// stored as PBKDF2 strings from <see cref="Services.PasswordHasher.HashSecret"/>, never raw.
+/// </summary>
+public sealed class AccountSecondPassword
+{
+    public long AccountId { get; set; }
+    public required string PasswordHash { get; set; }
+    /// <summary>Security question index shown by the client (C9GAMESTR_SECONDARYPASSWORD_QUESTION_00..09).</summary>
+    public short Question { get; set; }
+    public required string AnswerHash { get; set; }
+    /// <summary>Wrong passwords or answers since the last success; the account locks at <see cref="Services.SecondPasswordPolicy.MaxFailures"/>.</summary>
+    public short FailCount { get; set; }
+    /// <summary>Start of the current lock; the client shows the unlock time as this + 72 hours.</summary>
+    public DateTimeOffset? LockedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
+    /// <summary>PostgreSQL xmin.</summary>
+    public uint Version { get; set; }
+}

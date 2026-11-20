@@ -1,5 +1,26 @@
 # Exit hang ("Transmiting to Server") + 2nd Password — Current State
 
+## Current State 20 พ.ย. 2026 (ล่าสุด ใช้ส่วนนี้ก่อน)
+
+อัปเดต 20 พ.ย. 2026 ~09:15 น. (Asia/Bangkok) โดย thread "แก้ NPC และ 2nd password ในเกม" มาตรฐาน ISO/IEC 27001, ISO 9001, ISO/IEC 29110
+
+- **2nd Password ในเกม implement แล้ว** บน branch `claude/second-password-npc` (ต่อจาก `claude/project-thread-wk3q2i` @ `d407e60`)
+  - C9.Validation **73/73** (7,306 assertions, mode full, รวม PostgreSQL 16 จริงผ่าน `C9_DB_ADMIN_CONNECTION`) บนฐาน branch status
+  - migration `20261120020414_AccountSecondPassword` ต่อจาก `20261119162447_StatUpgradePoints`; snapshot มีทั้งสองงาน; `db/migrations/game-data.sql` สร้างใหม่ (idempotent)
+  - รอผู้ใช้ทดสอบในเกม
+- **ตาราง** `game.account_second_passwords` (PK/FK `account_id`): `password_hash`, `answer_hash` = PBKDF2-SHA256 210,000 รอบ (ไม่เก็บค่าดิบ), `question` 0–9, `fail_count` 0–5 (check constraint), `locked_at`, xmin
+- **กฎ** (`SecondPasswordPolicy`): ผิด 5 ครั้ง = ล็อก 72 ชม. (ตรงกับ client FailCntMax และ 259,200 วินาที); สำเร็จแล้วนับใหม่; คำตอบไม่สนตัวพิมพ์และช่องว่างหัวท้าย ยาวไม่เกิน 25 ตัว
+- **Protocol** (client b4580ed4):
+  - รับ `0x2744` set (63 B), `0x2746` reset (59 B), `0x2748` change (16 B), `0x274A` certify (4 B) ในสถานะ character_lobby, world_loading, world_ready
+  - ตอบ `0x2745/0x2747/0x2749` (flag 0) และ `0x274B` (flag 1) ตามตาราง registration ของ client
+  - ถ้าผิดส่ง `0x0001` (28 B, popup) error code = CRC32(UTF-16LE) ของชื่อ string: INVALID_2NDPASSWORD_1 `0xC22AA395`, INVALID_2NDPASSWORD_2 `0xE907F056`, LOCKED_2NDPASSWORD `0xE853BEC9`, INVALID_2NDPASSWORD_Q_AND_A `0x48E08822`
+  - `0x0BC0` +0x7234 ตั้งแล้ว, +0x7235 จำนวนครั้งที่ผิด, +0x7236 เวลาเริ่มล็อก (unix วินาที), +0x723F ยืนยันแล้วใน session นี้
+- **Audit:** `account.second_password.set/change/reset/clear/lock` (ไม่มี hash หรือคำตอบ); trace ใหม่ไม่เก็บ payload ของ 2744/2746/2748/274A (Sensitive)
+- **ข้อจำกัด:** client ส่งรหัสเป็น CRC32 มีได้เพียง 2^32 ค่า ถ้า DB รั่ว hash ยังเดาได้ด้วยเครื่องแรงพอ (ข้อจำกัดของ protocol)
+- **ต้องตัดสินใจ:** trace เก่า `artifacts/docker-state/trace/lobby/20261115/{7fa510,af6f01}-001.jsonl` มีคำตอบ 2nd password แบบข้อความธรรมดาและ CRC (ยังไม่แตะไฟล์ รอผู้ใช้สั่งลบหรือ redact)
+- **ขั้นทดสอบในเกม:** ตั้งรหัสในเมือง (หน้าต่างต้องไม่ค้าง WAITING) → ยืนยันด้วยรหัสผิด 1 ครั้ง (ขึ้นผิด 1/5) → ยืนยันด้วยรหัสถูก → ออกแล้วเข้าใหม่ เกมต้องจำว่ามีรหัสแล้ว → (ถ้าต้องการ) เปลี่ยนรหัส / ล้างด้วยคำตอบ
+- NPC ในเมือง: ดู [NPC_SPAWN_TH.md](NPC_SPAWN_TH.md)
+
 ## ผลตรวจยืนยันเพิ่มเติม 16 พ.ย. 2026
 
 - ผู้ใช้ยืนยันแล้วว่า Quit Game ใช้งานได้หลังแก้ `0x17D4 -> 0x17D5`; ยังต้องแก้ **กลับหน้าเลือกตัวละคร** ซึ่งเป็นคนละ flow (`0x0EC4 -> 0x2EEB -> reconnect 0x2EE8/0x2EE9`)

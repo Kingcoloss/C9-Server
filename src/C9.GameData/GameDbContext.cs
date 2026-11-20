@@ -17,6 +17,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
 
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<AccountSanction> AccountSanctions => Set<AccountSanction>();
+    public DbSet<AccountSecondPassword> AccountSecondPasswords => Set<AccountSecondPassword>();
     public DbSet<Character> Characters => Set<Character>();
     public DbSet<CharacterItem> CharacterItems => Set<CharacterItem>();
     public DbSet<CatalogItem> ItemCatalog => Set<CatalogItem>();
@@ -66,6 +67,22 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.Property(s => s.IssuedBy).HasMaxLength(64);
             e.Property(s => s.RevokedBy).HasMaxLength(64);
             e.HasIndex(s => new { s.AccountId, s.StartsAt });
+        });
+
+        model.Entity<AccountSecondPassword>(e =>
+        {
+            e.ToTable("account_second_passwords", GameSchema, t =>
+            {
+                t.HasCheckConstraint("ck_account_second_passwords_question", "question BETWEEN 0 AND 9");
+                t.HasCheckConstraint("ck_account_second_passwords_fail_count", "fail_count BETWEEN 0 AND 5");
+            });
+            e.HasKey(p => p.AccountId);
+            e.Property(p => p.AccountId).ValueGeneratedNever();
+            e.HasOne<Account>().WithOne().HasForeignKey<AccountSecondPassword>(p => p.AccountId).OnDelete(DeleteBehavior.Restrict);
+            e.Property(p => p.PasswordHash).HasMaxLength(256);
+            e.Property(p => p.AnswerHash).HasMaxLength(256);
+            e.Property(p => p.CreatedAt).HasDefaultValueSql("now()");
+            Xmin(e);
         });
 
         model.Entity<Character>(e =>

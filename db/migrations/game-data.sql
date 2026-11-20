@@ -1112,3 +1112,34 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120020414_AccountSecondPassword') THEN
+    CREATE TABLE game.account_second_passwords (
+        account_id bigint NOT NULL,
+        password_hash character varying(256) NOT NULL,
+        question smallint NOT NULL,
+        answer_hash character varying(256) NOT NULL,
+        fail_count smallint NOT NULL,
+        locked_at timestamp with time zone,
+        created_at timestamp with time zone NOT NULL DEFAULT (now()),
+        updated_at timestamp with time zone NOT NULL,
+        CONSTRAINT pk_account_second_passwords PRIMARY KEY (account_id),
+        CONSTRAINT ck_account_second_passwords_fail_count CHECK (fail_count BETWEEN 0 AND 5),
+        CONSTRAINT ck_account_second_passwords_question CHECK (question BETWEEN 0 AND 9),
+        CONSTRAINT fk_account_second_passwords_accounts_account_id FOREIGN KEY (account_id) REFERENCES game.accounts (id) ON DELETE RESTRICT
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120020414_AccountSecondPassword') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261120020414_AccountSecondPassword', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+

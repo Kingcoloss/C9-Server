@@ -19,6 +19,19 @@ public static class PasswordHasher
         return $"pbkdf2-sha256${Iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(hash)}";
     }
 
+    /// <summary>
+    /// Same PBKDF2 format for a secret that is not a login password (no length policy), e.g. the CRC32 the client
+    /// sends for its secondary password or a security answer. Check it with <see cref="Verify"/>.
+    /// </summary>
+    public static string HashSecret(string secret)
+    {
+        if (string.IsNullOrEmpty(secret) || secret.Length > 128)
+            throw new GameDataException(GameDataError.Invalid, "Secret must be 1–128 characters");
+        byte[] salt = RandomNumberGenerator.GetBytes(SaltBytes);
+        byte[] hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(secret), salt, Iterations, HashAlgorithmName.SHA256, HashBytes);
+        return $"pbkdf2-sha256${Iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(hash)}";
+    }
+
     public static bool Verify(string password, string stored)
     {
         string[] parts = stored.Split('$');

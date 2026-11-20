@@ -124,7 +124,6 @@ internal sealed class JsonCharacterStore : ICharacterStore
 internal sealed class GameDataCharacterStore(ServerOptions options, string connection, IServerEvents? events, long? fixedAccount = null) : ICharacterStore
 {
     private const string Operator = "c9-lobby";
-    private static readonly ConcurrentDictionary<string, Lazy<ServiceProvider>> Providers = new();
     private readonly SemaphoreSlim opening = new(1, 1);
     private readonly byte slotCount = checked((byte)options.CharacterSlots);
     private long account;
@@ -235,7 +234,21 @@ internal sealed class GameDataCharacterStore(ServerOptions options, string conne
         });
     }
 
-    private T Service<T>() where T : notnull =>
+    private T Service<T>() where T : notnull => GameDataProviders.Service<T>(connection);
+
+    private void Evict() => GameDataProviders.Evict(connection);
+
+    private static bool Unavailable(Exception error) => GameDataProviders.Unavailable(error);
+
+    private static ProtocolException NotReady(Exception error) => GameDataProviders.NotReady(error);
+}
+
+/// <summary>One C9.GameData service provider per connection string, shared by the lobby's stores (characters, 2nd password).</summary>
+internal static class GameDataProviders
+{
+    private static readonly ConcurrentDictionary<string, Lazy<ServiceProvider>> Providers = new();
+
+    public static T Service<T>(string connection) where T : notnull =>
         Providers.GetOrAdd(connection, raw => new Lazy<ServiceProvider>(() =>
         {
             string resolved = GameDataConnection.ResolveWithEnvironmentPassword(raw)
@@ -246,15 +259,15 @@ internal sealed class GameDataCharacterStore(ServerOptions options, string conne
             return services.BuildServiceProvider();
         })).Value.GetRequiredService<T>();
 
-    private void Evict()
+    public static void Evict(string connection)
     {
         if (Providers.TryRemove(connection, out Lazy<ServiceProvider>? stale) && stale.IsValueCreated)
             _ = stale.Value.DisposeAsync().AsTask();
     }
 
-    private static bool Unavailable(Exception error) =>
+    public static bool Unavailable(Exception error) =>
         error is DbException or DbUpdateException or TimeoutException or InvalidOperationException or ArgumentException;
 
-    private static ProtocolException NotReady(Exception error) =>
+    public static ProtocolException NotReady(Exception error) =>
         new(ProtocolError.InvalidPacket, "Game database is not ready: " + error.GetType().Name + ": " + error.Message);
 }

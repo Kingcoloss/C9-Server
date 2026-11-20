@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
+using C9.GameData.Services;
 using C9.Protocol;
 
 namespace C9.Server;
@@ -131,18 +132,24 @@ internal sealed class CharacterLobby
         }
     }
 
-    public ValueTask<Packet> SelectAsync(ReadOnlySpan<byte> request, CancellationToken token = default)
+    public ValueTask<Packet> SelectAsync(ReadOnlySpan<byte> request, CancellationToken token = default) =>
+        SelectAsync(request, SecondPasswordStatus.None, false, token);
+
+    /// <param name="secondPassword">The account's secondary password; written to the 0x0BC0 fields at +0x7234.</param>
+    /// <param name="certified">True when the player certified it in this session (client state 3).</param>
+    public ValueTask<Packet> SelectAsync(ReadOnlySpan<byte> request, SecondPasswordStatus secondPassword, bool certified,
+        CancellationToken token = default)
     {
         if (request.Length != sizeof(ulong))
             throw new ProtocolException(ProtocolError.InvalidLength, "Invalid character selection length");
-        return SelectAsync(BinaryPrimitives.ReadUInt64LittleEndian(request), token);
+        return SelectAsync(BinaryPrimitives.ReadUInt64LittleEndian(request), secondPassword, certified, token);
     }
 
     private async ValueTask<LobbyCharacter> FindAsync(ulong id, CancellationToken token) =>
         (await store.LoadAsync(token)).FirstOrDefault(c => c.Id == id)
             ?? throw new ProtocolException(ProtocolError.InvalidPacket, "Unknown local character");
 
-    private async ValueTask<Packet> SelectAsync(ulong id, CancellationToken token)
+    private async ValueTask<Packet> SelectAsync(ulong id, SecondPasswordStatus secondPassword, bool certified, CancellationToken token)
     {
         LobbyCharacter character = await FindAsync(id, token);
         stats = await store.StatsAsync(id, token);
@@ -182,6 +189,8 @@ internal sealed class CharacterLobby
             // remain unresolved. The actor's class is the DWORD at +12 above.
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(0x6E), character.Job); // 009FA200.
             BinaryPrimitives.WriteUInt16LittleEndian(payload.AsSpan(0x70), 1); // 009ECA00.
+            // Secondary password state (case 008CBCD2 -> 008842B0): set / fail count / lock start / certified.
+            SecondPasswordPackets.WriteSelect(payload, secondPassword, certified);
             return new Packet(0x0BC0, payload);
         }
     }

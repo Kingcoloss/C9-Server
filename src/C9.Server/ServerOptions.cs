@@ -24,6 +24,8 @@ public sealed record ServerOptions
     public int InitialMapId { get; init; } = 10;
     public int InitialSubmap { get; init; }
     public MapPosition? InitialPosition { get; init; }
+    // JSON list of NPCs per map/sub-map sent as 0x0BE3 after world entry (see NpcSpawnCatalog); null sends none.
+    public string? NpcSpawnFile { get; init; }
     public int MaxFrame { get; init; } = DefaultMaxFrame;
     // Large enough for the 33,734-byte 0x0BC0 select acknowledgement of the current client.
     public const int DefaultMaxFrame = 40960;
@@ -189,6 +191,7 @@ public sealed record ServerOptions
             },
             InitialMapId = GetInt(root, "initial_map_id", 10), InitialSubmap = GetInt(root, "initial_submap", 0),
             InitialPosition = ParsePosition(root),
+            NpcSpawnFile = root.TryGetProperty("npc_spawn_file", out JsonElement npcFile) ? npcFile.GetString() : null,
             MaxConnections = GetInt(root, "max_connections", 4), MaxPackets = GetInt(root, "max_packets", 64),
             TimeoutSeconds = root.TryGetProperty("timeout_seconds", out JsonElement t) ? t.GetDouble() : 10,
             Greetings = greetings.AsReadOnly(), Rules = rules.AsReadOnly()

@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Diagnostics.Metrics;
 using System.IO.Pipelines;
 using C9.Contracts;
+using C9.GameData.Services;
 using C9.Protocol;
 
 namespace C9.Server;
@@ -15,6 +16,10 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
         ? new CharacterLobby(options, events) : null;
     // Set with C9_AUTH_URL: login requires an L9 ticket and the lobby serves the account behind the handoff.
     private readonly ILauncherAuthority? launcherAuthority = authority ?? HttpLauncherAuthority.FromOptions(options);
+    // Account-level secondary password: game.account_second_passwords, or memory on the lab (shared by this server's sessions).
+    private readonly ISecondPasswordStore? secondPasswords = options.Profile == "character_lobby" ? SecondPasswordStores.Open(options) : null;
+
+    private readonly NpcSpawnCatalog npcSpawns = options.Profile == "character_lobby" ? NpcSpawnCatalog.Load(options.NpcSpawnFile) : NpcSpawnCatalog.Empty;
 
     public Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default) =>
         RunAsync(SessionContext.Legacy(id), reader, writer, cancellationToken);
@@ -25,6 +30,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
         string state = options.Profile == "observer" ? "observing" : "connected";
         ulong selectedCharacterId = 0;
         CharacterLobby? lobby = characterLobby;
+        SecondPasswordSession? secondPassword = secondPasswords is null ? null : new SecondPasswordSession(secondPasswords);
+        long? launcherAccount = null;
         long inboundOffset = 0, outboundOffset = 0;
         string? closeReason = null;
         Dictionary<(string, ushort), ResponseRule> rules = options.Rules.ToDictionary(r => (r.State, r.RequestType));
@@ -41,6 +48,11 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
             session.RecordError(reason);
             events.Emit(Event("session_error") with { Reason = reason });
         }
+        // The secondary password belongs to the account bound at 0x1771: the lobby's game database account, else the
+        // launcher account, else the single lab account 0.
+        long SecondPasswordAccount() => lobby?.AccountId ?? (secondPasswords!.NeedsDatabaseAccount
+            ? throw new ProtocolException(ProtocolError.InvalidPacket, "Secondary password needs a game database account")
+            : launcherAccount ?? 0);
 
         session.InitState(state);
         session.Observer?.Opened(session);
@@ -124,6 +136,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                             if (owner.AccountId != account)
                                 throw new ProtocolException(ProtocolError.InvalidPacket, "Launcher handoff belongs to another account");
                             if (options.GameDatabase is not null) lobby = new CharacterLobby(options, events, owner.AccountId);
+                            launcherAccount = owner.AccountId;
                             events.Emit(Event("launcher_identity") with { State = state, Reason = $"account {owner.AccountId}" });
                         }
                         await SendAsync(await lobby.ListAsync(cancellationToken));
@@ -139,7 +152,10 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     }
                     else if (state == "character_lobby" && packet.Type == 0x0BBF)
                     {
-                        await SendAsync(await lobby.SelectAsync(packet.Payload.Span, cancellationToken));
+                        SecondPasswordStatus secondPasswordStatus = secondPassword is null
+                            ? SecondPasswordStatus.None : await secondPassword.StatusAsync(SecondPasswordAccount(), cancellationToken);
+                        await SendAsync(await lobby.SelectAsync(packet.Payload.Span, secondPasswordStatus, secondPassword?.Certified == true,
+                            cancellationToken));
                         selectedCharacterId = BinaryPrimitives.ReadUInt64LittleEndian(packet.Payload.Span);
                         if (options.WorldVitals == WorldVitalsLayout.Legacy)
                         {
@@ -158,6 +174,10 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                             events.Emit(Event("world_vitals_sent") with { State = state });
                         }
                         await SendAsync(WorldStartupPackets.ActionStarted(selectedCharacterId));
+                        // Town NPCs exist only when the server announces them (0x0BE3); the client never spawns them itself.
+                        IReadOnlyList<(ulong ObjectId, NpcSpawn Spawn)> npcs = npcSpawns.For(options.InitialMapId, options.InitialSubmap);
+                        foreach (Packet npcPacket in NpcPackets.ExistPackets(npcs)) await SendAsync(npcPacket);
+                        if (npcs.Count > 0) events.Emit(Event("npc_spawn") with { State = state, MapId = options.InitialMapId, Reason = $"{npcs.Count} NPC" });
                         ChangeState("world_ready");
                     }
                     else if (state is "character_lobby" or "world_loading" or "world_ready" &&
@@ -175,6 +195,21 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         // not read the ack payload.
                         await SendAsync(new Packet(0x17D5));
                         events.Emit(Event("logout_ack") with { State = state });
+                    }
+                    else if (secondPassword is not null && (state is "character_lobby" or "world_loading" or "world_ready") &&
+                        SecondPasswordPackets.IsRequest(packet))
+                    {
+                        // 2744 set / 2746 reset / 2748 change / 274A certify -> ack (2745/2747/2749/274B) or 0x0001 error.
+                        long account = SecondPasswordAccount();
+                        (Packet reply, SecondPasswordOutcome outcome, SecondPasswordStatus? status) =
+                            await secondPassword.HandleAsync(account, packet, cancellationToken);
+                        await SendAsync(reply);
+                        // No CRC, hash or answer in the event; the account and the outcome are enough for support.
+                        events.Emit(Event("second_password") with
+                        {
+                            State = state, Type = packet.Type,
+                            Reason = $"account {account}: {outcome}" + (status is { } s ? $", fails {s.FailCount}{(s.IsLocked ? ", locked" : "")}" : "")
+                        });
                     }
                     else if (state is "world_loading" or "world_ready")
                     {

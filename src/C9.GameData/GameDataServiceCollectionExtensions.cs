@@ -28,6 +28,7 @@ public static class GameDataServiceCollectionExtensions
         services.AddSingleton<AccountService>();
         services.AddSingleton<SanctionService>();
         services.AddSingleton<CharacterService>();
+        services.AddSingleton<SecondPasswordService>();
         services.AddSingleton<WorldService>();
         services.AddSingleton<StatService>();
         services.AddSingleton<LegacyImporter>();

@@ -99,6 +99,8 @@ try
     options.Validate();
     if (options.CharacterStore is { } store)
         options = options with { CharacterStore = Path.GetFullPath(store, Path.GetDirectoryName(Path.GetFullPath(configPath!))!) };
+    if (options.NpcSpawnFile is { } npcFile)
+        options = options with { NpcSpawnFile = Path.GetFullPath(npcFile, Path.GetDirectoryName(Path.GetFullPath(configPath!))!) };
     options = options.WithGameDatabaseFromEnvironment().WithLauncherAuthFromEnvironment();
     if (checkRuntime)
     {

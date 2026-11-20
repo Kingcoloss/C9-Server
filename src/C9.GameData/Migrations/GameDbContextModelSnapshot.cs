@@ -210,6 +210,63 @@ namespace C9.GameData.Migrations
                     b.ToTable("account_sanctions", "game");
                 });
 
+            modelBuilder.Entity("C9.GameData.Entities.AccountSecondPassword", b =>
+                {
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AnswerHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("answer_hash");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<short>("FailCount")
+                        .HasColumnType("smallint")
+                        .HasColumnName("fail_count");
+
+                    b.Property<DateTimeOffset?>("LockedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("locked_at");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<short>("Question")
+                        .HasColumnType("smallint")
+                        .HasColumnName("question");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("AccountId")
+                        .HasName("pk_account_second_passwords");
+
+                    b.ToTable("account_second_passwords", "game", t =>
+                        {
+                            t.HasCheckConstraint("ck_account_second_passwords_fail_count", "fail_count BETWEEN 0 AND 5");
+
+                            t.HasCheckConstraint("ck_account_second_passwords_question", "question BETWEEN 0 AND 9");
+                        });
+                });
+
             modelBuilder.Entity("C9.GameData.Entities.AdminCommand", b =>
                 {
                     b.Property<Guid>("RequestId")
@@ -2728,6 +2785,16 @@ namespace C9.GameData.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_account_sanctions_accounts_account_id");
+                });
+
+            modelBuilder.Entity("C9.GameData.Entities.AccountSecondPassword", b =>
+                {
+                    b.HasOne("C9.GameData.Entities.Account", null)
+                        .WithOne()
+                        .HasForeignKey("C9.GameData.Entities.AccountSecondPassword", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_account_second_passwords_accounts_account_id");
                 });
 
             modelBuilder.Entity("C9.GameData.Entities.Character", b =>
