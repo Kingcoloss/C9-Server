@@ -114,7 +114,7 @@ public static class ItemLabels
         ["enhance_stone"] = "หินตีบวก", ["gem"] = "อัญมณี", ["ammo"] = "กระสุน", ["spellstone"] = "Spellstone", ["recipe"] = "สูตรคราฟ",
         ["growth_stone"] = "หินเติบโต", ["enhancement"] = "ตีบวก", ["buff"] = "บัฟ", ["skill_book"] = "สกิลบุ๊ค", ["skill"] = "สกิล",
         ["skill_reset"] = "รีเซ็ตสกิล", ["holy_statue"] = "รูปปั้นศักดิ์สิทธิ์", ["rune"] = "รูน", ["charm"] = "เครื่องราง", ["attendant"] = "ผู้ติดตาม",
-        ["artifact"] = "โบราณวัตถุ", ["test"] = "ทดสอบ", ["cash"] = "Cash", ["event"] = "อีเวนต์", ["admin"] = "Super Admin",
+        ["artifact"] = "โบราณวัตถุ", ["auspice"] = "Auspice (수호)", ["test"] = "ทดสอบ", ["cash"] = "Cash", ["event"] = "อีเวนต์", ["admin"] = "Super Admin",
     };
 
     public static readonly IReadOnlyList<string> Grades = ["", "Old", "Common", "Magic", "Rare", "Master", "Epic", "Legendary"];

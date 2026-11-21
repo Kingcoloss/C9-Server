@@ -127,6 +127,10 @@ class ExportCases(unittest.TestCase):
         test_potion = {'internal': '[테스트]물약', 'large': 1, 'middle': 0, 'small': 255, 'service': 7}
         self.assertTrue(exporter.classify(5, test_potion, 'Test: Potion')[3])
         self.assertEqual(exporter.classify(6, None, None), ([], None, None, False))
+        guardian_ring = {'internal': '[수호]수호자 네파시 정령 반지', 'large': 0, 'middle': 8, 'small': 255, 'service': 7}
+        self.assertNotIn('auspice', exporter.classify(45485, guardian_ring, 'Guardian Nepahi Elf Ring[WIS]')[0])
+        auspice = {'internal': '[이벤트]수호: 모험의 시작', 'large': 3, 'middle': 255, 'small': 255, 'service': 7}
+        self.assertEqual(exporter.classify(12700, auspice, 'Auspice: Beginning Adventurer')[0], ['usable', 'auspice', 'event'])
 
 
 if __name__ == '__main__':

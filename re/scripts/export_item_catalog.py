@@ -205,6 +205,9 @@ def classify(item, record, name):
                 tags.append('craft_material')
         elif large in (10, 12):
             tags.append('skill')
+    # Character window "Auspice" (수호) slot: the Client files these under large category 3 (usable), not equipment.
+    if re.search(r'^Auspi|Auspice$', name or '') or (internal.startswith('[수호]') and (record or {}).get('large') != 0):
+        tags.append('auspice')
     if '[유료]' in internal or '[캐시]' in internal:
         tags.append('cash')
     if '[이벤트]' in internal or (name or '').startswith('[Event]'):
