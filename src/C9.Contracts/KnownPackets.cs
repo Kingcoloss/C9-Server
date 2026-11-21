@@ -28,7 +28,7 @@ public static class KnownPackets
         new(0x0C1C, "InitialVitals", TraceDirections.Outbound, "Level, HP/MP (legacy layout)"),
         new(0x0C1E, "InitialAttributes", TraceDirections.Outbound, "Attribute blocks"),
         new(0x0C20, "ExtendedVitals", TraceDirections.Outbound, "Character id, HP/MP and maxima (build 55350 layout)"),
-        new(0x0EC4, "ReturnToWorldList", TraceDirections.Inbound, "Leave lobby back to Choose World"),
+        new(0x0EC4, "PlayTimer300s", TraceDirections.Inbound, "Empty, sent every 300 s while connected (client 0085DFD0), no reply"),
         new(0x0EFA, "CharacterList", TraceDirections.Outbound, "Character lobby list"),
         new(0x0EFB, "CharacterDetailsReq", TraceDirections.Inbound, "Request appearance/equipment for one character"),
         new(0x0EFC, "CharacterDetailsAck", TraceDirections.Outbound, "Appearance and equipment"),

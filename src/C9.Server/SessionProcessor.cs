@@ -181,8 +181,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         ChangeState("world_ready");
                     }
                     else if (state is "character_lobby" or "world_loading" or "world_ready" &&
-                        ((packet.Type == 0x0EC4 && packet.Payload.IsEmpty) ||
-                         (packet.Type == 0x2EEA && packet.Payload.Length == 16)))
+                        packet.Type == 0x2EEA && packet.Payload.Length == 16)
                     {
                         // Client 00A62D76 reconnects to login and requests 2EE8.
                         await SendAsync(new Packet(0x2EEB));
@@ -215,10 +214,12 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                     {
                         // Observe the next world requests without inventing replies.
                         // Gameplay handlers are added only after verifying their readers.
+                        // 0x0EC4 (empty) is a timer packet: client 0085DFD0 sends it every 300 s of play
+                        // while connected. It is not a leave request, so it gets no 0x2EEB.
                         if (WorldSessionPackets.Reply(packet, DateTimeOffset.Now) is { } worldReply)
                             await SendAsync(worldReply);
                     }
-                    else if (state != "character_lobby" || (packet.Type, packet.Payload.Length) is not ((9999, 8) or (9901, 24) or (12005, 0)))
+                    else if (state != "character_lobby" || (packet.Type, packet.Payload.Length) is not ((9999, 8) or (9901, 24) or (12005, 0) or (0x0EC4, 0)))
                     {
                         throw new ProtocolException(ProtocolError.InvalidPacket, "Unexpected character lobby request");
                     }

@@ -118,8 +118,11 @@ internal static partial class Validation
             // Requests in world_ready are answered too; the next reply proves nothing extra was queued.
             await session.SendAsync(new Packet(0x0EFD, flag: 0));
             Check.Equal((ushort)0x0EFE, (await session.ReceiveAsync()).Type);
+            // 0x0EC4 is the client's 300 s timer packet: no reply, and the session stays in the world.
             await session.SendAsync(new Packet(0x0EC4));
-            Check.Equal((ushort)0x2EEB, (await session.ReceiveAsync()).Type);
+            await session.SendAsync(new Packet(0x0EFD, flag: 0));
+            Check.Equal((ushort)0x0EFE, (await session.ReceiveAsync()).Type);
+            Check.Equal(0, session.Events.Values.Count(e => e.Event == "sent" && e.Type == 0x2EEB));
             await session.CompleteInputAsync();
             await session.Completion.WaitAsync(TimeSpan.FromSeconds(2));
             Check.True(!session.Events.Values.Any(e => e.Event == "session_error"));

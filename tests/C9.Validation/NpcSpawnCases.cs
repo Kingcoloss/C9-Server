@@ -145,7 +145,8 @@ internal static partial class Validation
 
             // A second load notification must not announce the NPCs again.
             await session.SendAsync(new Packet(0x0BC5));
-            await session.SendAsync(new Packet(0x0EC4));
+            await session.SendAsync(new Packet(0x0EC4)); // 300 s timer, no reply.
+            await session.SendAsync(new Packet(0x2EEA, new byte[16]));
             Check.Equal((ushort)0x2EEB, (await session.ReceiveAsync()).Type);
             await session.CompleteInputAsync();
             await session.Completion.WaitAsync(TimeSpan.FromSeconds(2));

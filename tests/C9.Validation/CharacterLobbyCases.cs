@@ -40,6 +40,7 @@ internal static partial class Validation
                     Check.Equal((byte)1, list.Payload.Span[8]);
                     Check.Bytes(new byte[] { slotCount, 0 }, list.Payload.Span[(listHeaderBytes - 2)..]);
                     await stream.WriteAsync(codec.Encode(new Packet(9999, new byte[8])));
+                    await stream.WriteAsync(codec.Encode(new Packet(0x0EC4))); // Timer packet is tolerated in the list too.
                     await stream.WriteAsync(codec.Encode(new Packet(0x0BBB, create)));
                     Packet ack = codec.Decode(await ReadWireAsync(stream));
                     Check.Equal((ushort)0x0BBC, ack.Type);
@@ -153,8 +154,7 @@ internal static partial class Validation
                     Check.Bytes(identity, started.Payload.Span);
                     await stream.WriteAsync(codec.Encode(new Packet(0x0BC5))); // No duplicate vitals or acknowledgement.
                     await stream.WriteAsync(codec.Encode(new Packet(0x177D))); // Unimplemented world request is observed.
-                    await stream.WriteAsync(codec.Encode(new Packet(0x0EC4)));
-                    Check.Equal((ushort)0x2EEB, codec.Decode(await ReadWireAsync(stream)).Type);
+                    await stream.WriteAsync(codec.Encode(new Packet(0x0EC4))); // 300 s timer: no reply, no leave.
                     await stream.WriteAsync(codec.Encode(new Packet(0x2EEA, new byte[16])));
                     Check.Equal((ushort)0x2EEB, codec.Decode(await ReadWireAsync(stream)).Type);
                 }

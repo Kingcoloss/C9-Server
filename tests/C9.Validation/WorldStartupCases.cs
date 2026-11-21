@@ -58,9 +58,10 @@ internal static partial class Validation
             await session.SendAsync(new Packet(0x0BC5));
             await session.SendAsync(new Packet(0x0BCE, new byte[46]));
             await session.SendAsync(new Packet(0x270F, new byte[8]));
-            await session.SendAsync(new Packet(0x0EC4));
-            // The next encrypted reply must still decode and be the leave acknowledgement.
-            // This also detects extra replies to duplicate load/position/heartbeat requests.
+            await session.SendAsync(new Packet(0x0EC4)); // 300 s timer: must not trigger a leave ack.
+            await session.SendAsync(new Packet(0x2EEA, new byte[16]));
+            // The next encrypted reply must still decode and be the leave acknowledgement for 0x2EEA.
+            // This also detects extra replies to duplicate load/position/heartbeat/timer requests.
             Check.Equal((ushort)0x2EEB, (await session.ReceiveAsync()).Type);
 
             // In-world exit: client sends 0x17D4 and quits on the 0x17D5 ack (encrypted).
