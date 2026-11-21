@@ -135,13 +135,14 @@ internal static partial class Validation
             Check.Equal((ushort)0x0C1E, (await session.ReceiveAsync()).Type);
             Check.Equal((ushort)0x0C1C, (await session.ReceiveAsync()).Type);
             Check.Equal((ushort)0x0BC3, (await session.ReceiveAsync()).Type);
-
-            await session.SendAsync(new Packet(0x0BC5));
-            Check.Equal((ushort)0x0BC6, (await session.ReceiveAsync()).Type);
+            // NPCs follow 0x0BC3 at once, so they reach the client while the map is still loading.
             Packet npcs = await session.ReceiveAsync();
             Check.Equal((ushort)0x0BE3, npcs.Type);
             Check.Equal((byte)2, npcs.Payload.Span[0]);
             Check.Equal(1001u, BinaryPrimitives.ReadUInt32LittleEndian(npcs.Payload.Span[(1 + 0x18)..]));
+
+            await session.SendAsync(new Packet(0x0BC5));
+            Check.Equal((ushort)0x0BC6, (await session.ReceiveAsync()).Type);
 
             // A second load notification must not announce the NPCs again.
             await session.SendAsync(new Packet(0x0BC5));

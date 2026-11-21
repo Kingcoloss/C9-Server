@@ -164,6 +164,12 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         }
                         await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition));
                         ChangeState("world_loading", selectedCharacterId, options.InitialMapId, options.InitialSubmap);
+                        // Town NPCs exist only when the server announces them (0x0BE3); the client never spawns them itself.
+                        // Send them while the map loads: 0x0BC3 holds world events, and StageMapLoad (00C9A8C0) hands the
+                        // held 0x16 creates to the loader thread (00C9C352) before the client sends 0x0BC4 and 0x0BC5.
+                        IReadOnlyList<(ulong ObjectId, NpcSpawn Spawn)> npcs = npcSpawns.For(options.InitialMapId, options.InitialSubmap);
+                        foreach (Packet npcPacket in NpcPackets.ExistPackets(npcs)) await SendAsync(npcPacket);
+                        if (npcs.Count > 0) events.Emit(Event("npc_spawn") with { State = state, MapId = options.InitialMapId, Reason = $"{npcs.Count} NPC" });
                     }
                     else if (state == "world_loading" && packet.Type == 0x0BC5 && packet.Payload.IsEmpty)
                     {
@@ -174,10 +180,6 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                             events.Emit(Event("world_vitals_sent") with { State = state });
                         }
                         await SendAsync(WorldStartupPackets.ActionStarted(selectedCharacterId));
-                        // Town NPCs exist only when the server announces them (0x0BE3); the client never spawns them itself.
-                        IReadOnlyList<(ulong ObjectId, NpcSpawn Spawn)> npcs = npcSpawns.For(options.InitialMapId, options.InitialSubmap);
-                        foreach (Packet npcPacket in NpcPackets.ExistPackets(npcs)) await SendAsync(npcPacket);
-                        if (npcs.Count > 0) events.Emit(Event("npc_spawn") with { State = state, MapId = options.InitialMapId, Reason = $"{npcs.Count} NPC" });
                         ChangeState("world_ready");
                     }
                     else if (state is "character_lobby" or "world_loading" or "world_ready" &&

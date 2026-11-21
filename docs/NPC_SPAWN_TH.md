@@ -1,24 +1,29 @@
 # NPC ในเมือง: Current State และ contract ของ 0x0BE3
 
-อัปเดต 20 พ.ย. 2026 ~13:45 น. (Asia/Bangkok) โดย thread "แก้ NPC และ 2nd password ในเกม"
+อัปเดต 21 พ.ย. 2026 ~05:50 น. (Asia/Bangkok) โดย thread "แก้ NPC และ 2nd password ในเกม"
 มาตรฐานอ้างอิง: ISO/IEC 27001, ISO 9001, ISO/IEC 29110
 
 ## Current State
 
-- **สาเหตุที่ NPC หาย:** server ไม่เคยส่ง packet สร้าง NPC client ไม่สร้าง NPC เองจากข้อมูลแผนที่
+- **สาเหตุเดิมที่ NPC หาย:** server ไม่เคยส่ง packet สร้าง NPC client ไม่สร้าง NPC เองจากข้อมูลแผนที่
   - client รอให้ server ส่ง `0x0BE3` (Exist_NPC)
   - คำสั่ง GM `/createnpc` (0x0086857A) ก็ส่ง `0x1786` subtype 6 ให้ server เป็นผู้สร้าง
-- **โค้ด (commit `7eacd4c`):** ส่ง `0x0BE3` หลัง `0x0BC5 → 0x0BC6` ครั้งเดียว (packet ละไม่เกิน 255 ตัว) และบันทึก event `npc_spawn`
-- **ขั้นที่ 2 (ชุด `apply_npc_waterford.py`):** ผ่าน test ใน cloud แล้ว (`C9.Validation` mode full รวม PostgreSQL: 74/74 บน `7eacd4c` และ 78/78 บน `7eacd4c` + Sprint 1 ที่ deploy อยู่) แต่ยังไม่ได้ commit และยังไม่ deploy
+- **Deploy 20 พ.ย. 13:06Z (`50f55e2`) ผลทดสอบในเกม: NPC ยังไม่แสดง**
+  - trace ยืนยันว่า server ส่ง `0x0BE3` ครบ 50 ตัว (flag 1, payload 5601 ไบต์) ทุกครั้งที่เข้าเมือง ข้อมูล entry ถูกต้อง
+  - แต่ส่งหลัง `0x0BC5 → 0x0BC6` คือหลังโหลดแผนที่เสร็จ client ไม่มี log ตอนทิ้ง
+- **สิ่งที่พบใน client (static RE, image b4580ed4):**
+  - `0x0BC0` (`008CB980`) และ `0x0BC3` แบบเปลี่ยนแผนที่ (`008EF110` case 0xBC3) ตั้ง hold flag `[0179FF50]+0x48 = 1` event ของโลกทั้งหมดจึงไปรอใน list hold (`+0x24`)
+  - `C9StageMapLoad` vfunc 11 (`00C9A8C0`) ตอน state 3 ดึง event สร้าง object (`0x16`) จาก hold ไปให้ loader thread (`00C9B9B0`, loop `00C9C352`) สร้าง object และโหลด visual ของตัวที่อยู่ในระยะทันที ถ้าอยู่ใน instance (type 1/3/4/6) จะส่งไปเฉพาะ object type 2 (NPC) แสดงว่า client ออกแบบให้ NPC มาถึงระหว่างโหลด
+  - loader ส่ง `0x0BC4` (`00C9C71A`) หลังขั้นนี้ ส่วน `C9StageGame` vfunc 1 (`00C54320`) ย้าย hold ที่เหลือเข้า queue หลัก ตั้ง flag = 0 แล้วส่ง `0x0BC5`
+  - ทางสร้างจริงทั้งสองทาง: `008464B0` → `00848A20` → factory `0083C5C0` (ต้องมี info id ใน `[0179FFD4]+0x74` มิฉะนั้นคืน 0 เงียบ ๆ)
+- **แก้ (21 พ.ย.):** ส่ง `0x0BE3` ทันทีหลัง `0x0BC3` (ระหว่างโหลด) แทนหลัง `0x0BC6` ส่งครั้งเดียวต่อการเลือกตัวละคร test `MemoryNpcSpawn` ปรับตาม (C9.Validation 78/78 full ใน cloud)
+- **ถ้ายังไม่แสดง:** ให้ผู้ใช้ทำ memory dump ตอนยืนใน Waterford แล้วรัน `npc_dump_probe.py <C9.DMP> config/npc-spawns.json` (อยู่ใน `/mnt/project-files/second-password/merge-npc3/` ไม่อยู่ใน git) จะบอกว่า event ค้างใน queue ไหน object NPC ถูกสร้างหรือไม่ และ info id ใดไม่มีในตาราง template
+- รายละเอียดไฟล์และ packet เดิมของขั้นที่ 2:
   - `config/npc-spawns.json` มี NPC ของ Waterford 50 ตัว (map 10, sub-map 0)
   - compose ส่ง `--npc-spawn-file /c9/app/config/npc-spawns.json` ให้ c9-lobby และ Dockerfile คัดลอกไฟล์นี้เข้า image
-  - `npc_spawn_file` ใน profile ใช้ได้แล้ว: ก่อนหน้านี้ `ServerOptions.FromJson` ปฏิเสธ key นี้เพราะไม่อยู่ใน allowed list
-  - ถ้าใช้ path แบบ relative จะอ้างจากไฟล์ profile ที่โหลด แต่ถ้ามี `--npc-spawn-file` บน command line จะใช้ค่านั้นแทน แม้ Portal จะเขียน overlay ไว้
-  - +0x2C ของ entry เปลี่ยนเป็น up vector `(0, 1, 0)` (ดูหลักฐานด้านล่าง)
-- **ยังไม่ได้ทดสอบในเกม** สิ่งที่ต้องดู:
-  - NPC ขึ้นตรงตำแหน่งหรือไม่
-  - หันถูกทางหรือไม่ (yaw = 0 หันไปแกนไหนยังไม่ยืนยัน)
-  - คลิกคุยได้หรือไม่
+  - `npc_spawn_file` ใน profile ใช้ได้ ถ้าใช้ path แบบ relative จะอ้างจากไฟล์ profile ที่โหลด แต่ `--npc-spawn-file` บน command line ชนะเสมอ
+  - +0x2C ของ entry เป็น up vector `(0, 1, 0)`
+- **ยังต้องทดสอบในเกม:** NPC ขึ้นตรงตำแหน่งไหม หันถูกทางไหม คลิกคุยได้ไหม
 
 ## ที่มาของรายชื่อ NPC
 
