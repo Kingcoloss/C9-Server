@@ -35,7 +35,8 @@ namespace C9.GameData.Migrations
                 schema: "game",
                 table: "item_catalog",
                 type: "text[]",
-                nullable: false);
+                nullable: false,
+                defaultValueSql: "'{}'::text[]");
 
             migrationBuilder.AddColumn<short>(
                 name: "use_level",
