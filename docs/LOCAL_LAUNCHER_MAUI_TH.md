@@ -198,3 +198,17 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
 1. Branch `claude/project-thread-3dpsvk` ยังไม่ merge เข้า `p-server` (ผู้ใช้ตัดสินใจ)
 2. `bin\` ยังใหญ่ (~273 MB, 564 ไฟล์) เพราะ Windows App SDK 1.8 พา DLL ของ AI/ML (DirectML, onnxruntime ฯลฯ) และโฟลเดอร์ภาษา ~120 ภาษามาด้วย ลดขนาดได้ในงานแยก
 3. `C9WorkspaceRoot` ถูกฝังตอน build (path ของ checkout ที่ build) ใช้เป็นที่หา project defaults เมื่อยังไม่มี `L9.local.json` เท่านั้น
+
+### 8.6 ไอคอน Launcher (26 พ.ย. 2026)
+
+ผู้ใช้ขอเพิ่มไอคอน (26 พ.ย. 13:40 น.) ออกแบบใหม่เป็นของโปรเจกต์เอง (ไม่ใช้ไอคอนของเกม): พื้นสี่เหลี่ยมมุมมน `#11171F` ขอบ `#2A3648`
+วงแหวน + ปุ่มเล่นสีทอง `#E8BE68` (สีเดียวกับหน้าจอ L9)
+
+| ไฟล์ | การเปลี่ยนแปลง |
+|---|---|
+| `src/C9.LocalLauncher.Maui/Resources/AppIcon/appicon.svg` (ใหม่) | ต้นฉบับไอคอน (456×456) |
+| `src/C9.LocalLauncher.Maui/C9.LocalLauncher.Maui.csproj` | `<MauiIcon Include="Resources/AppIcon/appicon.svg" />` MAUI สร้าง `appicon.ico` + PNG หลายขนาดให้ `bin\L9.exe` และหน้าต่าง |
+| `scripts/Build-C9Launcher.ps1` | สร้าง `.ico` หลายขนาด (16/24/32/48/256 px, PNG entries) จาก `bin\appiconLogo.targetsize-*.png` แล้วใส่ใน starter `L9.exe` (shortcut และ uninstaller ใช้ไอคอนนี้) |
+
+ทวนสอบ: build + `-Installer` exit 0 (setup 71.1 MB); ไอคอนของ `L9.exe` และ `bin\L9.exe` เป็นไอคอนใหม่;
+ติดตั้งทับแล้วเปิดจาก Start Menu หน้าต่าง "C9 Local Launcher" มีไอคอนใหม่ (WM_GETICON)

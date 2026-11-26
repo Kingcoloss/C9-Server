@@ -47,9 +47,24 @@ if (-not $csc) { throw 'The .NET Framework 4.x compiler (csc.exe) was not found 
 $starter = Join-Path $output 'L9.exe'
 $icon = Join-Path ([IO.Path]::GetTempPath()) "L9-starter-$PID.ico"
 try {
-    Add-Type -AssemblyName System.Drawing
-    $stream = [IO.File]::Create($icon)
-    try { [Drawing.Icon]::ExtractAssociatedIcon((Join-Path $runtime 'L9.exe')).Save($stream) } finally { $stream.Dispose() }
+    # Multi-size .ico (16-256 px, PNG entries) from the PNGs MAUI renders from Resources/AppIcon/appicon.svg.
+    $images = @(16, 24, 32, 48, 256) | ForEach-Object {
+        $png = Join-Path $runtime "appiconLogo.targetsize-$_.png"
+        if (-not (Test-Path -LiteralPath $png -PathType Leaf)) { throw "Missing rendered icon $png" }
+        [pscustomobject]@{ Size = $_; Data = [IO.File]::ReadAllBytes($png) }
+    }
+    $writer = New-Object IO.BinaryWriter ([IO.File]::Create($icon))
+    try {
+        $writer.Write([uint16]0); $writer.Write([uint16]1); $writer.Write([uint16]$images.Count)
+        $offset = 6 + 16 * $images.Count
+        foreach ($image in $images) {
+            $side = [byte]($image.Size % 256)
+            $writer.Write($side); $writer.Write($side); $writer.Write([byte]0); $writer.Write([byte]0)
+            $writer.Write([uint16]1); $writer.Write([uint16]32); $writer.Write([uint32]$image.Data.Length); $writer.Write([uint32]$offset)
+            $offset += $image.Data.Length
+        }
+        foreach ($image in $images) { $writer.Write($image.Data) }
+    } finally { $writer.Dispose() }
     & $csc /nologo /target:winexe /optimize+ /codepage:65001 /r:System.Windows.Forms.dll "/win32icon:$icon" "/out:$starter" (Join-Path $package 'L9Starter.cs')
     if ($LASTEXITCODE -ne 0) { throw 'Building the starter L9.exe failed.' }
 } finally { Remove-Item -LiteralPath $icon -ErrorAction SilentlyContinue }

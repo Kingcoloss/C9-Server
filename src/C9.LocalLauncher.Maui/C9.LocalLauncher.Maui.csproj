@@ -21,6 +21,7 @@
     <ProjectReference Include="../C9.ClientProfiles/C9.ClientProfiles.csproj"
                       GlobalPropertiesToRemove="RuntimeIdentifier;RuntimeIdentifierOverride;SelfContained" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <MauiIcon Include="Resources/AppIcon/appicon.svg" />
     <AssemblyMetadata Include="C9WorkspaceRoot" Value="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../..'))" />
   </ItemGroup>
 </Project>
