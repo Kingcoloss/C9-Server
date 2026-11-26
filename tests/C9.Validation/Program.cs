@@ -95,6 +95,7 @@ internal static partial class Validation
             ("Local launcher configuration bootstrap and preservation", Sync(LocalConfigurationBootstrap)),
             ("Launcher user settings persist game folder and mode", Sync(LauncherSettingsPersistence)),
             ("Launcher release layout keeps config beside the starter L9.exe", Sync(LauncherReleaseLayoutHome)),
+            ("Launcher text has English and Chinese for every Thai text", Sync(LauncherTextTranslations)),
             ("Launcher login identity in launch arguments", Sync(LauncherIdentityArguments)),
             ("Launcher account server URL policy", Sync(LauncherAuthUrlPolicy)),
             ("Launcher account client register/login/ticket", LauncherAuthClientFlow),

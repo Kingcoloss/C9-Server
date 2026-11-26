@@ -18,7 +18,7 @@ internal static partial class Validation
             Check.Equal<string?>(null, LauncherUserSettings.ValidateGameDirectory(game));
             Check.Equal<string?>(null, LauncherUserSettings.ValidateGameDirectory("\"" + game + "\""));
 
-            LauncherUserSettings saved = new() { GameDirectory = game, LastLogin = "player" };
+            LauncherUserSettings saved = new() { GameDirectory = game, LastLogin = "player", Language = "zh" };
             saved.Save(storage);
             Check.Equal(saved, LauncherUserSettings.Load(storage));
             Check.Equal(game, LauncherUserSettings.Load(storage).ResolveGameDirectory(launcher, null));

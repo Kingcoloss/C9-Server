@@ -1,6 +1,7 @@
 using C9.Contracts;
 using C9.LocalLauncher;
 using Microsoft.Maui.Controls.Shapes;
+using static C9.LocalLauncher.LauncherText;
 
 namespace C9.LocalLauncher.Maui;
 
@@ -49,9 +50,9 @@ public sealed class LauncherPage : ContentPage
     // Account (c9-auth). The session token lives in memory only; the password is cleared after each attempt.
     private LauncherSession? session;
     private bool registerMode;
-    private readonly Entry loginEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = "ชื่อผู้ใช้ (3–32 ตัว: A–Z a–z 0–9 _ . -)", MaxLength = 32 };
-    private readonly Entry passwordEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = "รหัสผ่าน", IsPassword = true, MaxLength = 128 };
-    private readonly Entry confirmEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = "ยืนยันรหัสผ่าน (8 ตัวขึ้นไป)", IsPassword = true, MaxLength = 128, IsVisible = false };
+    private readonly Entry loginEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = T("ชื่อผู้ใช้ (3–32 ตัว: A–Z a–z 0–9 _ . -)"), MaxLength = 32 };
+    private readonly Entry passwordEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = T("รหัสผ่าน"), IsPassword = true, MaxLength = 128 };
+    private readonly Entry confirmEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = T("ยืนยันรหัสผ่าน (8 ตัวขึ้นไป)"), IsPassword = true, MaxLength = 128, IsVisible = false };
     private readonly Entry authUrlEntry = new() { FontSize = 13, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = LauncherAuthClient.DefaultUrl };
     private readonly Label accountMessage = new() { FontSize = 13, LineBreakMode = LineBreakMode.WordWrap, IsVisible = false };
     private readonly Label signedInName = new() { FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = TextTone, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
@@ -67,30 +68,29 @@ public sealed class LauncherPage : ContentPage
     private long? statCharacterId;
     private readonly Dictionary<string, int> pendingPoints = new(StringComparer.Ordinal);
     private Guid pendingRequest = Guid.NewGuid();
-    private readonly Picker characterPicker = new() { FontSize = 14, TextColor = TextTone, BackgroundColor = Field, TitleColor = Subtle, Title = "เลือกตัวละคร" };
+    private readonly Picker characterPicker = new() { FontSize = 14, TextColor = TextTone, BackgroundColor = Field, TitleColor = Subtle, Title = T("เลือกตัวละคร") };
     private readonly Label statPoints = new() { FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Gold, LineBreakMode = LineBreakMode.WordWrap };
     private readonly Label statMessage = new() { FontSize = 13, LineBreakMode = LineBreakMode.WordWrap, IsVisible = false };
     private readonly VerticalStackLayout statRows = new() { Spacing = 2 };
     private Border? statCard;
     private Button saveStats = null!;
 
-    public LauncherPage(LauncherStartup startup)
+    /// <param name="runtime">Kept when the page is rebuilt for another language, so a running game stays tracked.</param>
+    /// <param name="session">Kept the same way, so changing the language does not sign the player out.</param>
+    public LauncherPage(LauncherStartup startup, LocalLauncherRuntime? runtime = null, LauncherSession? session = null)
     {
         this.startup = startup;
-        runtime = new LocalLauncherRuntime(startup.LauncherDirectory, startup.Workspace);
-        runtime.StatusChanged += status => MainThread.BeginInvokeOnMainThread(() =>
-        {
-            ShowStatus(status);
-            UpdateButtons();
-        });
+        this.runtime = runtime ?? new LocalLauncherRuntime(startup.LauncherDirectory, startup.Workspace);
+        this.session = session;
+        this.runtime.StatusChanged += OnRuntimeStatus;
         settings = LauncherUserSettings.Load();
         loginEntry.Text = settings.LastLogin;
         authUrlEntry.Text = settings.AuthUrl ?? LauncherAuthClient.DefaultUrl;
         gameDirectory = startup.ClientDirectoryOverride ?? settings.ResolveGameDirectory(startup.LauncherDirectory, startup.Workspace);
 
         BackgroundColor = Ink;
-        play = MakeButton("▶  เปิดเกม Local", Gold, Ink, primary: true);
-        check = MakeButton("ตรวจความพร้อม", Muted, TextTone, primary: true);
+        play = MakeButton(T("▶  เปิดเกม Local"), Gold, Ink, primary: true);
+        check = MakeButton(T("ตรวจความพร้อม"), Muted, TextTone, primary: true);
         play.Clicked += async (_, _) => await StartGameAsync();
         check.Clicked += async (_, _) => await CheckAsync();
         modeBadgeFrame = new Border
@@ -130,6 +130,41 @@ public sealed class LauncherPage : ContentPage
         if (initialized) return;
         initialized = true;
         await CheckAsync();
+        if (session is not null) await LoadStatsAsync();
+    }
+
+    private void OnRuntimeStatus(LauncherStatus status) => MainThread.BeginInvokeOnMainThread(() =>
+    {
+        ShowStatus(status);
+        UpdateButtons();
+    });
+
+    /// <summary>Rebuilds the screen in another language; the session and the running game carry over.</summary>
+    private void SwitchLanguage(LauncherLanguage language)
+    {
+        if (busy || language == LauncherText.Language || Window is not { } window) return;
+        LauncherText.Language = language;
+        Remember(settings with { Language = LauncherText.Code(language) });
+        runtime.StatusChanged -= OnRuntimeStatus;
+        window.Page = new LauncherPage(startup, runtime, session);
+    }
+
+    private View BuildLanguageSwitch()
+    {
+        HorizontalStackLayout row = new() { Spacing = 6, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
+        foreach ((LauncherLanguage language, string name) in new[]
+                 { (LauncherLanguage.Thai, "ไทย"), (LauncherLanguage.English, "EN"), (LauncherLanguage.Chinese, "中文") })
+        {
+            bool current = language == LauncherText.Language;
+            Button button = MakeButton(name, current ? Gold : Muted, current ? Ink : TextTone);
+            button.HeightRequest = 34;
+            button.Padding = new Thickness(10, 0);
+            button.FontSize = 12;
+            button.Clicked += (_, _) => SwitchLanguage(language);
+            lockWhileBusy.Add(button);
+            row.Add(button);
+        }
+        return row;
     }
 
     // ----- layout -----
@@ -162,7 +197,7 @@ public sealed class LauncherPage : ContentPage
     private View BuildHeader()
     {
         Label title = new() { Text = "C9  LOCAL", FontSize = 34, FontAttributes = FontAttributes.Bold, TextColor = Gold, CharacterSpacing = 2 };
-        Label subtitle = new() { Text = "เปิดเกมบนเซิร์ฟเวอร์ในเครื่อง", FontSize = 15, TextColor = Subtle };
+        Label subtitle = new() { Text = T("เปิดเกมบนเซิร์ฟเวอร์ในเครื่อง"), FontSize = 15, TextColor = Subtle };
         Grid header = new()
         {
             ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
@@ -172,14 +207,15 @@ public sealed class LauncherPage : ContentPage
         header.Add(title, 0, 0);
         header.Add(subtitle, 0, 1);
         header.Add(modeBadgeFrame, 1, 0);
+        header.Add(BuildLanguageSwitch(), 1, 1);
         return header;
     }
 
     private View BuildAccountCard()
     {
-        submitAccount = MakeButton("เข้าสู่ระบบ", Gold, Ink, primary: true);
-        switchMode = MakeButton("ยังไม่มีบัญชี? สมัครสมาชิก", Muted, TextTone);
-        Button signOut = MakeButton("ออกจากระบบ", Muted, TextTone);
+        submitAccount = MakeButton(T("เข้าสู่ระบบ"), Gold, Ink, primary: true);
+        switchMode = MakeButton(T("ยังไม่มีบัญชี? สมัครสมาชิก"), Muted, TextTone);
+        Button signOut = MakeButton(T("ออกจากระบบ"), Muted, TextTone);
         submitAccount.Clicked += async (_, _) => await SubmitAccountAsync();
         passwordEntry.Completed += async (_, _) => { if (!registerMode) await SubmitAccountAsync(); };
         confirmEntry.Completed += async (_, _) => await SubmitAccountAsync();
@@ -199,7 +235,7 @@ public sealed class LauncherPage : ContentPage
         signedInView.Children.Add(signedInRow);
         signedInView.Children.Add(accountCaption);
         UpdateAccountView();
-        return MakeCard("บัญชีผู้เล่น", new VerticalStackLayout { Spacing = 0, Children = { signedOutView, signedInView } });
+        return MakeCard(T("บัญชีผู้เล่น"), new VerticalStackLayout { Spacing = 0, Children = { signedOutView, signedInView } });
     }
 
     private static Border FieldFrame(View content) => new()
@@ -216,12 +252,13 @@ public sealed class LauncherPage : ContentPage
         signedInView.IsVisible = signedIn;
         confirmEntry.IsVisible = registerMode;
         if (confirmEntry.Parent is View frame) frame.IsVisible = registerMode;
-        submitAccount.Text = registerMode ? "สมัครสมาชิกและเข้าสู่ระบบ" : "เข้าสู่ระบบ";
-        switchMode.Text = registerMode ? "มีบัญชีแล้ว? เข้าสู่ระบบ" : "ยังไม่มีบัญชี? สมัครสมาชิก";
+        submitAccount.Text = registerMode ? T("สมัครสมาชิกและเข้าสู่ระบบ") : T("เข้าสู่ระบบ");
+        switchMode.Text = registerMode ? T("มีบัญชีแล้ว? เข้าสู่ระบบ") : T("ยังไม่มีบัญชี? สมัครสมาชิก");
         if (session is { } current)
         {
             signedInName.Text = current.Login;
-            accountCaption.Text = $"เข้าสู่ระบบแล้ว • บัญชีเลขที่ {current.AccountId} • หมดอายุ {current.ExpiresAt.ToLocalTime():HH:mm}";
+            accountCaption.Text = F("เข้าสู่ระบบแล้ว • บัญชีเลขที่ {0} • หมดอายุ {1}", current.AccountId,
+                current.ExpiresAt.ToLocalTime().ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
         }
         else
         {
@@ -246,7 +283,7 @@ public sealed class LauncherPage : ContentPage
         catch (ArgumentException error)
         {
             ShowAccountMessage(error.Message, error: true);
-            ShowStatus(new LauncherStatus(LauncherTone.Error, "ตั้งค่าเซิร์ฟเวอร์บัญชีไม่ถูกต้อง", error.Message));
+            ShowStatus(new LauncherStatus(LauncherTone.Error, T("ตั้งค่าเซิร์ฟเวอร์บัญชีไม่ถูกต้อง"), error.Message));
             return null;
         }
     }
@@ -256,9 +293,9 @@ public sealed class LauncherPage : ContentPage
         if (busy) return;
         string login = loginEntry.Text?.Trim() ?? "";
         string password = passwordEntry.Text ?? "";
-        if (login.Length == 0 || password.Length == 0) { ShowAccountMessage("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", error: true); return; }
-        if (registerMode && password != (confirmEntry.Text ?? "")) { ShowAccountMessage("รหัสผ่านทั้งสองช่องไม่ตรงกัน", error: true); return; }
-        if (registerMode && password.Length < 8) { ShowAccountMessage("รหัสผ่านต้องยาว 8 ตัวอักษรขึ้นไป", error: true); return; }
+        if (login.Length == 0 || password.Length == 0) { ShowAccountMessage(T("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน"), error: true); return; }
+        if (registerMode && password != (confirmEntry.Text ?? "")) { ShowAccountMessage(T("รหัสผ่านทั้งสองช่องไม่ตรงกัน"), error: true); return; }
+        if (registerMode && password.Length < 8) { ShowAccountMessage(T("รหัสผ่านต้องยาว 8 ตัวอักษรขึ้นไป"), error: true); return; }
         SetBusy(true);
         try
         {
@@ -269,7 +306,7 @@ public sealed class LauncherPage : ContentPage
                 : await client.LoginAsync(login, password);
             if (!result.Ok)
             {
-                ShowAccountMessage(result.ErrorMessage ?? "เข้าสู่ระบบไม่สำเร็จ", error: true);
+                ShowAccountMessage(result.ErrorMessage ?? T("เข้าสู่ระบบไม่สำเร็จ"), error: true);
                 runtime.Log($"account {(registerMode ? "register" : "login")} failed login={login} code={result.ErrorCode}");
                 return;
             }
@@ -278,7 +315,7 @@ public sealed class LauncherPage : ContentPage
             registerMode = false;
             accountMessage.IsVisible = false;
             Remember(settings with { LastLogin = session.Login });
-            ShowStatus(new LauncherStatus(LauncherTone.Good, $"ยินดีต้อนรับ {session.Login}", "กด \"เปิดเกม Local\" เพื่อเริ่มเล่น"));
+            ShowStatus(new LauncherStatus(LauncherTone.Good, F("ยินดีต้อนรับ {0}", session.Login), T("กด \"เปิดเกม Local\" เพื่อเริ่มเล่น")));
         }
         finally
         {
@@ -300,7 +337,7 @@ public sealed class LauncherPage : ContentPage
         }
         session = null;
         UpdateAccountView();
-        ShowStatus(new LauncherStatus(LauncherTone.Neutral, "ออกจากระบบแล้ว", "เข้าสู่ระบบอีกครั้งเพื่อเปิดเกม"));
+        ShowStatus(new LauncherStatus(LauncherTone.Neutral, T("ออกจากระบบแล้ว"), T("เข้าสู่ระบบอีกครั้งเพื่อเปิดเกม")));
     }
 
     private void SaveAuthUrl()
@@ -311,11 +348,11 @@ public sealed class LauncherPage : ContentPage
             string value = url.GetLeftPart(UriPartial.Authority);
             Remember(settings with { AuthUrl = value == LauncherAuthClient.DefaultUrl ? null : value });
             authUrlEntry.Text = value;
-            ShowStatus(new LauncherStatus(LauncherTone.Good, "บันทึกเซิร์ฟเวอร์บัญชีแล้ว", value));
+            ShowStatus(new LauncherStatus(LauncherTone.Good, T("บันทึกเซิร์ฟเวอร์บัญชีแล้ว"), value));
         }
         catch (ArgumentException error)
         {
-            ShowStatus(new LauncherStatus(LauncherTone.Error, "URL เซิร์ฟเวอร์บัญชีไม่ถูกต้อง", error.Message));
+            ShowStatus(new LauncherStatus(LauncherTone.Error, T("URL เซิร์ฟเวอร์บัญชีไม่ถูกต้อง"), error.Message));
         }
     }
 
@@ -329,7 +366,7 @@ public sealed class LauncherPage : ContentPage
         heading.Add(statusDot, 0, 0);
         heading.Add(statusTitle, 1, 0);
         heading.Add(activity, 2, 0);
-        return MakeCard("สถานะ", new VerticalStackLayout { Spacing = 8, Children = { heading, statusDetail, clientInfo } });
+        return MakeCard(T("สถานะ"), new VerticalStackLayout { Spacing = 8, Children = { heading, statusDetail, clientInfo } });
     }
 
     private View BuildActionsCard()
@@ -345,17 +382,17 @@ public sealed class LauncherPage : ContentPage
         {
             FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap,
             Text = LocalLauncherRuntime.IsElevated
-                ? "Launcher ทำงานด้วยสิทธิ์ Administrator อยู่แล้ว จะเปิด C9.exe ได้ทันที"
-                : "กดเปิดเกมแล้ว Windows จะถามสิทธิ์ Administrator (UAC) ให้กด Yes เพราะ C9.exe ต้องใช้สิทธิ์นี้",
+                ? T("Launcher ทำงานด้วยสิทธิ์ Administrator อยู่แล้ว จะเปิด C9.exe ได้ทันที")
+                : T("กดเปิดเกมแล้ว Windows จะถามสิทธิ์ Administrator (UAC) ให้กด Yes เพราะ C9.exe ต้องใช้สิทธิ์นี้"),
         };
-        return MakeCard("เริ่มเล่น", new VerticalStackLayout { Spacing = 12, Children = { actions, hint } });
+        return MakeCard(T("เริ่มเล่น"), new VerticalStackLayout { Spacing = 12, Children = { actions, hint } });
     }
 
     private View BuildStatsCard()
     {
-        saveStats = MakeButton("บันทึก", Gold, Ink);
-        Button clear = MakeButton("ล้างที่ยังไม่บันทึก", Muted, TextTone);
-        Button reload = MakeButton("โหลดใหม่", Muted, TextTone);
+        saveStats = MakeButton(T("บันทึก"), Gold, Ink);
+        Button clear = MakeButton(T("ล้างที่ยังไม่บันทึก"), Muted, TextTone);
+        Button reload = MakeButton(T("โหลดใหม่"), Muted, TextTone);
         saveStats.Clicked += async (_, _) => await SaveStatsAsync();
         clear.Clicked += (_, _) => { ClearPending(); RenderStats(); };
         reload.Clicked += async (_, _) => await LoadStatsAsync();
@@ -371,11 +408,10 @@ public sealed class LauncherPage : ContentPage
         lockWhileBusy.AddRange([clear, reload, characterPicker]);
         Label note = new()
         {
-            Text = "ได้ point เมื่อ level ถึงตามตารางของเซิร์ฟเวอร์ ค่าที่บันทึกแล้วมีผลเมื่อเข้าโลกครั้งถัดไป " +
-                   "(กลับหน้าเลือกตัวละครแล้วเข้าใหม่) และยังคืน point ไม่ได้",
+            Text = T("ได้ point เมื่อ level ถึงตามตารางของเซิร์ฟเวอร์ ค่าที่บันทึกแล้วมีผลเมื่อเข้าโลกครั้งถัดไป (กลับหน้าเลือกตัวละครแล้วเข้าใหม่) และยังคืน point ไม่ได้"),
             FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap,
         };
-        statCard = MakeCard("Status ตัวละคร", new VerticalStackLayout
+        statCard = MakeCard(T("Status ตัวละคร"), new VerticalStackLayout
         {
             Spacing = 10,
             Children = { FieldFrame(characterPicker), statPoints, statRows, statMessage, Wrap(saveStats, clear, reload), note },
@@ -419,13 +455,13 @@ public sealed class LauncherPage : ContentPage
         LauncherCharacterStats? sheet = SelectedSheet();
         if (sheet is null)
         {
-            statPoints.Text = statSheets is { Characters.Count: 0 } ? "บัญชีนี้ยังไม่มีตัวละคร สร้างตัวละครในเกมก่อน" : "";
+            statPoints.Text = statSheets is { Characters.Count: 0 } ? T("บัญชีนี้ยังไม่มีตัวละคร สร้างตัวละครในเกมก่อน") : "";
             UpdateButtons();
             return;
         }
         int left = sheet.AvailablePoints - PendingTotal;
-        statPoints.Text = $"Point เหลือ {left} จาก {sheet.AvailablePoints}  •  Lv {sheet.Level} {sheet.ClassName}  •  " +
-                          $"ได้รับทั้งหมด {sheet.EarnedPoints} ใช้ไปแล้ว {sheet.SpentPoints}";
+        statPoints.Text = F("Point เหลือ {0} จาก {1}  •  Lv {2} {3}  •  ได้รับทั้งหมด {4} ใช้ไปแล้ว {5}",
+            left, sheet.AvailablePoints, sheet.Level, sheet.ClassName, sheet.EarnedPoints, sheet.SpentPoints);
         foreach (LauncherStatLine line in sheet.Stats) statRows.Children.Add(StatRow(sheet, line, left));
         UpdateButtons();
     }
@@ -485,7 +521,7 @@ public sealed class LauncherPage : ContentPage
             if (!result.Ok)
             {
                 if (result.ErrorCode is "session_expired") { session = null; UpdateAccountView(); }
-                ShowStatMessage(result.ErrorMessage ?? "โหลด status ไม่สำเร็จ", error: true);
+                ShowStatMessage(result.ErrorMessage ?? T("โหลด status ไม่สำเร็จ"), error: true);
                 return;
             }
             statSheets = result.Value!;
@@ -517,7 +553,7 @@ public sealed class LauncherPage : ContentPage
             {
                 if (result.ErrorCode is "session_expired") { session = null; UpdateAccountView(); }
                 // Keep the pending points and request id so pressing "บันทึก" again cannot apply them twice.
-                ShowStatMessage(result.ErrorMessage ?? "บันทึก status ไม่สำเร็จ", error: true);
+                ShowStatMessage(result.ErrorMessage ?? T("บันทึก status ไม่สำเร็จ"), error: true);
                 runtime.Log($"stats spend failed character={sheet.CharacterId} code={result.ErrorCode}");
                 return;
             }
@@ -527,7 +563,7 @@ public sealed class LauncherPage : ContentPage
             };
             runtime.Log($"stats spend ok character={sheet.CharacterId} points={PendingTotal}");
             ClearPending();
-            ShowStatMessage("บันทึกแล้ว ค่าใหม่มีผลเมื่อเข้าโลกครั้งถัดไป", error: false);
+            ShowStatMessage(T("บันทึกแล้ว ค่าใหม่มีผลเมื่อเข้าโลกครั้งถัดไป"), error: false);
         }
         finally
         {
@@ -538,9 +574,9 @@ public sealed class LauncherPage : ContentPage
 
     private View BuildDirectoryCard()
     {
-        Button browse = MakeButton("เลือกโฟลเดอร์…", Gold, Ink);
-        Button save = MakeButton("ใช้ path นี้", Muted, TextTone);
-        Button reset = MakeButton("ค่าเริ่มต้น", Muted, TextTone);
+        Button browse = MakeButton(T("เลือกโฟลเดอร์…"), Gold, Ink);
+        Button save = MakeButton(T("ใช้ path นี้"), Muted, TextTone);
+        Button reset = MakeButton(T("ค่าเริ่มต้น"), Muted, TextTone);
         browse.Clicked += async (_, _) => await BrowseAsync();
         save.Clicked += async (_, _) => await ApplyDirectoryAsync(directoryEntry.Text, remember: true);
         reset.Clicked += async (_, _) => await ResetDirectoryAsync();
@@ -550,7 +586,7 @@ public sealed class LauncherPage : ContentPage
             BackgroundColor = Field, StrokeThickness = 1, Stroke = new SolidColorBrush(Muted),
             StrokeShape = new RoundRectangle { CornerRadius = 8 }, Padding = new Thickness(6, 2), Content = directoryEntry,
         };
-        return MakeCard("โฟลเดอร์เกม (Game Directory)", new VerticalStackLayout
+        return MakeCard(T("โฟลเดอร์เกม (Game Directory)"), new VerticalStackLayout
         {
             Spacing = 10,
             Children = { field, directoryState, Wrap(browse, save, reset), directorySource },
@@ -559,28 +595,28 @@ public sealed class LauncherPage : ContentPage
 
     private View BuildToolsCard()
     {
-        Button folder = MakeButton("เปิดโฟลเดอร์เกม", Muted, TextTone);
-        Button official = MakeButton("เปิด VFUN Launcher (Official)", Muted, TextTone);
-        Button log = MakeButton("ดู Log", Muted, TextTone);
+        Button folder = MakeButton(T("เปิดโฟลเดอร์เกม"), Muted, TextTone);
+        Button official = MakeButton(T("เปิด VFUN Launcher (Official)"), Muted, TextTone);
+        Button log = MakeButton(T("ดู Log"), Muted, TextTone);
         folder.Clicked += (_, _) => ShowIfFailed(runtime.OpenShell(gameDirectory, Directory.Exists(gameDirectory) ? gameDirectory : null));
         official.Clicked += (_, _) => ShowIfFailed(runtime.OpenOfficialLauncher());
         log.Clicked += (_, _) => ShowIfFailed(File.Exists(runtime.LogPath) ? runtime.OpenShell(runtime.LogPath) : runtime.OpenShell(runtime.ConfigurationDirectory));
-        Label note = new() { Text = "อัปเดตเกมผ่าน VFUN Launcher เท่านั้น ตัวเปิดนี้ไม่แก้ไขไฟล์ของเกม", FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap };
-        Button saveAuth = MakeButton("ใช้ URL นี้", Muted, TextTone);
+        Label note = new() { Text = T("อัปเดตเกมผ่าน VFUN Launcher เท่านั้น ตัวเปิดนี้ไม่แก้ไขไฟล์ของเกม"), FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap };
+        Button saveAuth = MakeButton(T("ใช้ URL นี้"), Muted, TextTone);
         saveAuth.Clicked += (_, _) => SaveAuthUrl();
         lockWhileBusy.AddRange([saveAuth, authUrlEntry]);
-        Label authCaption = new() { Text = "เซิร์ฟเวอร์บัญชี (c9-auth)", FontSize = 12, TextColor = Subtle };
+        Label authCaption = new() { Text = T("เซิร์ฟเวอร์บัญชี (c9-auth)"), FontSize = 12, TextColor = Subtle };
         Border authField = new()
         {
             BackgroundColor = Field, StrokeThickness = 1, Stroke = new SolidColorBrush(Muted),
             StrokeShape = new RoundRectangle { CornerRadius = 8 }, Padding = new Thickness(6, 2), Content = authUrlEntry,
         };
-        return MakeCard("เครื่องมือ", new VerticalStackLayout { Spacing = 8, Children = { Wrap(folder, official, log), note, authCaption, authField, Wrap(saveAuth) } });
+        return MakeCard(T("เครื่องมือ"), new VerticalStackLayout { Spacing = 8, Children = { Wrap(folder, official, log), note, authCaption, authField, Wrap(saveAuth) } });
     }
 
     private static View BuildFooter() => new Label
     {
-        Text = "บัญชีทดสอบ: test  •  โหมดพัฒนา local server  •  ค่าที่ตั้งไว้ถูกจำใน %LOCALAPPDATA%\\C9Local\\L9",
+        Text = T("บัญชีทดสอบ: test  •  โหมดพัฒนา local server  •  ค่าที่ตั้งไว้ถูกจำใน %LOCALAPPDATA%\\C9Local\\L9"),
         FontSize = 11, TextColor = Color.FromArgb("#6B7585"), LineBreakMode = LineBreakMode.WordWrap,
     };
 
@@ -632,17 +668,17 @@ public sealed class LauncherPage : ContentPage
             // Login is mandatory: the game only starts with a one-time ticket from c9-auth (no anonymous/lab path in L9).
             if (session is not { } current)
             {
-                ShowStatus(new LauncherStatus(LauncherTone.Warning, "กรุณาเข้าสู่ระบบก่อน", "เข้าสู่ระบบหรือสมัครสมาชิกในการ์ด \"บัญชีผู้เล่น\" ก่อนเปิดเกม"));
+                ShowStatus(new LauncherStatus(LauncherTone.Warning, T("กรุณาเข้าสู่ระบบก่อน"), T("เข้าสู่ระบบหรือสมัครสมาชิกในการ์ด \"บัญชีผู้เล่น\" ก่อนเปิดเกม")));
                 return;
             }
-            ShowStatus(new LauncherStatus(LauncherTone.Neutral, "กำลังขอ game ticket…", $"บัญชี {current.Login}"));
+            ShowStatus(new LauncherStatus(LauncherTone.Neutral, T("กำลังขอ game ticket…"), F("บัญชี {0}", current.Login)));
             using LauncherAuthClient? client = CreateAuthClient();
             if (client is null) return;
             AuthResult<LauncherTicket> ticket = await client.TicketAsync(current.SessionToken);
             if (!ticket.Ok)
             {
                 if (ticket.ErrorCode is "session_expired") { session = null; UpdateAccountView(); }
-                ShowStatus(new LauncherStatus(LauncherTone.Error, "ขอ game ticket ไม่สำเร็จ", ticket.ErrorMessage ?? ""));
+                ShowStatus(new LauncherStatus(LauncherTone.Error, T("ขอ game ticket ไม่สำเร็จ"), ticket.ErrorMessage ?? ""));
                 return;
             }
             LaunchIdentity identity = LaunchIdentity.From(ticket.Value!);
@@ -687,7 +723,7 @@ public sealed class LauncherPage : ContentPage
         catch (Exception error)
         {
             runtime.Log($"folder picker failed: {error.GetType().Name}: {error.Message}");
-            directoryState.Text = "✕  เปิดหน้าต่างเลือกโฟลเดอร์ไม่ได้ (เช่นเมื่อเปิด Launcher แบบ Administrator) กรุณาพิมพ์หรือวาง path แล้วกด \"ใช้ path นี้\"";
+            directoryState.Text = "✕  " + T("เปิดหน้าต่างเลือกโฟลเดอร์ไม่ได้ (เช่นเมื่อเปิด Launcher แบบ Administrator) กรุณาพิมพ์หรือวาง path แล้วกด \"ใช้ path นี้\"");
             directoryState.TextColor = Bad;
         }
     }
@@ -720,18 +756,18 @@ public sealed class LauncherPage : ContentPage
         catch (Exception error) when (error is IOException or UnauthorizedAccessException or ArgumentException)
         {
             runtime.Log($"settings save failed: {error.GetType().Name}: {error.Message}");
-            ShowStatus(new LauncherStatus(LauncherTone.Warning, "บันทึกการตั้งค่าไม่สำเร็จ", "ค่าที่เลือกจะใช้ได้จนกว่าจะปิด Launcher"));
+            ShowStatus(new LauncherStatus(LauncherTone.Warning, T("บันทึกการตั้งค่าไม่สำเร็จ"), T("ค่าที่เลือกจะใช้ได้จนกว่าจะปิด Launcher")));
         }
     }
 
     private void UpdateDirectoryState()
     {
         string? problem = LauncherUserSettings.ValidateGameDirectory(gameDirectory);
-        directoryState.Text = problem is null ? "✓  พบ C9.exe" : "✕  " + problem;
+        directoryState.Text = problem is null ? "✓  " + T("พบ C9.exe") : "✕  " + problem;
         directoryState.TextColor = problem is null ? Good : Bad;
         directorySource.Text = startup.ClientDirectoryOverride is not null && gameDirectory == startup.ClientDirectoryOverride
-            ? "ใช้ค่าจาก --client-dir (ชั่วคราว)"
-            : settings.GameDirectory is null ? "ใช้ค่าเริ่มต้นของโปรเจกต์" : "ใช้โฟลเดอร์ที่เลือกไว้ (จำค่าไว้แล้ว)";
+            ? T("ใช้ค่าจาก --client-dir (ชั่วคราว)")
+            : settings.GameDirectory is null ? T("ใช้ค่าเริ่มต้นของโปรเจกต์") : T("ใช้โฟลเดอร์ที่เลือกไว้ (จำค่าไว้แล้ว)");
     }
 
     private void ShowIfFailed(LauncherStatus? status)
@@ -767,13 +803,13 @@ public sealed class LauncherPage : ContentPage
     private void UpdateButtons()
     {
         play.IsEnabled = !busy && !runtime.GameRunning && session is not null;
-        play.Text = runtime.GameRunning ? "เกมกำลังทำงาน" : "▶  เปิดเกม Local";
+        play.Text = runtime.GameRunning ? T("เกมกำลังทำงาน") : T("▶  เปิดเกม Local");
         check.IsEnabled = !busy;
         foreach (View view in lockWhileBusy) view.IsEnabled = !busy;
         if (saveStats is not null)
         {
             saveStats.IsEnabled = !busy && PendingTotal > 0;
-            saveStats.Text = PendingTotal > 0 ? $"บันทึก (ใช้ {PendingTotal} point)" : "บันทึก";
+            saveStats.Text = PendingTotal > 0 ? F("บันทึก (ใช้ {0} point)", PendingTotal) : T("บันทึก");
         }
     }
 }

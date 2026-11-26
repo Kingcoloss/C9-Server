@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using C9.Contracts;
+using static C9.LocalLauncher.LauncherText;
 
 namespace C9.LocalLauncher;
 
@@ -44,10 +45,10 @@ public sealed class LauncherAuthClient : IDisposable
     {
         if (!Uri.TryCreate(value?.Trim(), UriKind.Absolute, out Uri? url) || url.Scheme is not ("http" or "https") ||
             !string.IsNullOrEmpty(url.UserInfo) || url.PathAndQuery != "/")
-            throw new ArgumentException("URL เซิร์ฟเวอร์บัญชีไม่ถูกต้อง ตัวอย่าง: http://127.0.0.1:14890");
+            throw new ArgumentException(T("URL เซิร์ฟเวอร์บัญชีไม่ถูกต้อง ตัวอย่าง: http://127.0.0.1:14890"));
         bool loopback = url.IsLoopback || (IPAddress.TryParse(url.Host, out IPAddress? address) && IPAddress.IsLoopback(address));
         if (url.Scheme == "http" && !loopback)
-            throw new ArgumentException("เซิร์ฟเวอร์บัญชีที่อยู่นอกเครื่องต้องใช้ https เพื่อไม่ให้รหัสผ่านถูกส่งแบบไม่เข้ารหัส");
+            throw new ArgumentException(T("เซิร์ฟเวอร์บัญชีที่อยู่นอกเครื่องต้องใช้ https เพื่อไม่ให้รหัสผ่านถูกส่งแบบไม่เข้ารหัส"));
         return url;
     }
 
@@ -84,18 +85,18 @@ public sealed class LauncherAuthClient : IDisposable
             {
                 if (response.StatusCode == HttpStatusCode.NoContent) return AuthResult<T>.Failure("no_content", "");
                 T? value = await response.Content.ReadFromJsonAsync<T>(token);
-                return value is null ? AuthResult<T>.Failure("invalid_response", "เซิร์ฟเวอร์บัญชีตอบกลับไม่ถูกต้อง") : AuthResult<T>.Success(value);
+                return value is null ? AuthResult<T>.Failure("invalid_response", LauncherText.T("เซิร์ฟเวอร์บัญชีตอบกลับไม่ถูกต้อง")) : AuthResult<T>.Success(value);
             }
             LauncherAuthError? error = null;
             try { error = await response.Content.ReadFromJsonAsync<LauncherAuthError>(token); }
             catch (Exception parse) when (parse is JsonException or NotSupportedException) { }
             return AuthResult<T>.Failure(error?.Code ?? $"http_{(int)response.StatusCode}",
-                error?.Message ?? $"เซิร์ฟเวอร์บัญชีตอบกลับ HTTP {(int)response.StatusCode}");
+                error?.Message is { } message ? LauncherText.T(message) : F("เซิร์ฟเวอร์บัญชีตอบกลับ HTTP {0}", (int)response.StatusCode));
         }
         catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
         {
             return AuthResult<T>.Failure("unreachable",
-                $"ติดต่อเซิร์ฟเวอร์บัญชีไม่ได้ ({BaseUrl.GetLeftPart(UriPartial.Authority)}) ตรวจว่าเริ่ม platform ด้วย -GameData แล้ว");
+                F("ติดต่อเซิร์ฟเวอร์บัญชีไม่ได้ ({0}) ตรวจว่าเริ่ม platform ด้วย -GameData แล้ว", BaseUrl.GetLeftPart(UriPartial.Authority)));
         }
     }
 

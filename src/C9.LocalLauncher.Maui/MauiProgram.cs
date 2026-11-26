@@ -33,8 +33,11 @@ public sealed record LauncherStartup(string LauncherDirectory, string? Workspace
 
 public sealed class LauncherApp : Application
 {
-    protected override Window CreateWindow(IActivationState? activationState) =>
-        new(new LauncherPage(LauncherStartup.FromEnvironment()))
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        // Set before the page is built: its controls take their text from LauncherText when created.
+        LauncherText.Language = LauncherText.Parse(LauncherUserSettings.Load().Language);
+        return new(new LauncherPage(LauncherStartup.FromEnvironment()))
         {
             Title = "C9 Local Launcher",
             Width = 980,
@@ -42,4 +45,5 @@ public sealed class LauncherApp : Application
             MinimumWidth = 420,
             MinimumHeight = 560,
         };
+    }
 }

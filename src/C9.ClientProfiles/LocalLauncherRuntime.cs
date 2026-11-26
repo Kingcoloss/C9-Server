@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text.Json;
+using static C9.LocalLauncher.LauncherText;
 
 namespace C9.LocalLauncher;
 
@@ -41,11 +42,11 @@ public sealed class LocalLauncherRuntime
         {
             LocalLaunchPlan plan = Prepare(gameDirectory);
             if (activeGame is not null)
-                return new(LauncherTone.Good, "เกมกำลังทำงาน", "ปิดเกมก่อนหากต้องการเปลี่ยนโฟลเดอร์หรือโหมด", plan.DisplayName, plan.ClientHash);
+                return new(LauncherTone.Good, T("เกมกำลังทำงาน"), T("ปิดเกมก่อนหากต้องการเปลี่ยนโฟลเดอร์"), plan.DisplayName, plan.ClientHash);
             bool ready = await ServerReadyAsync();
             return ready
-                ? new(LauncherTone.Good, "พร้อมเปิดเกม local", $"ตรวจพบ client {plan.DisplayName} และเซิร์ฟเวอร์ในเครื่อง", plan.DisplayName, plan.ClientHash)
-                : new(LauncherTone.Warning, "Client พร้อม • เซิร์ฟเวอร์ยังไม่เปิด", "กดเปิดเกมเพื่อเริ่มเซิร์ฟเวอร์ในเครื่องโดยอัตโนมัติ", plan.DisplayName, plan.ClientHash);
+                ? new(LauncherTone.Good, T("พร้อมเปิดเกม local"), F("ตรวจพบ client {0} และเซิร์ฟเวอร์ในเครื่อง", plan.DisplayName), plan.DisplayName, plan.ClientHash)
+                : new(LauncherTone.Warning, T("Client พร้อม • เซิร์ฟเวอร์ยังไม่เปิด"), T("กดเปิดเกมเพื่อเริ่มเซิร์ฟเวอร์ในเครื่องโดยอัตโนมัติ"), plan.DisplayName, plan.ClientHash);
         }
         catch (Exception error) when (IsExpected(error)) { return Failure(error); }
     }
@@ -55,13 +56,13 @@ public sealed class LocalLauncherRuntime
         LaunchIdentity? identity = null)
     {
         if (activeGame is not null)
-            return new(LauncherTone.Warning, "เกมกำลังทำงานอยู่", "ปิดเกมเดิมก่อนเปิดใหม่");
+            return new(LauncherTone.Warning, T("เกมกำลังทำงานอยู่"), T("ปิดเกมเดิมก่อนเปิดใหม่"));
         try
         {
             LocalLaunchPlan plan = Prepare(gameDirectory, identity);
             if (ClientRunning())
-                throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
-            progress?.Report(new(LauncherTone.Neutral, "กำลังเตรียมเซิร์ฟเวอร์…", "เริ่ม login และ character lobby ในเครื่อง"));
+                throw new InvalidOperationException(T("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local"));
+            progress?.Report(new(LauncherTone.Neutral, T("กำลังเตรียมเซิร์ฟเวอร์…"), T("เริ่ม login และ character lobby ในเครื่อง")));
             using (JsonDocument config = ReadConfiguration())
             {
                 JsonElement settings = config.RootElement;
@@ -72,21 +73,21 @@ public sealed class LocalLauncherRuntime
                 await EnsureBackendAsync(settings, "backend_config", loginHost, loginPort, 0, "L9.server.log");
             }
             if (!IsElevated)
-                progress?.Report(new(LauncherTone.Neutral, "รอการอนุญาตสิทธิ์ผู้ดูแลระบบ…",
-                    "C9.exe ต้องใช้สิทธิ์ Administrator กรุณากด Yes ในหน้าต่าง UAC"));
+                progress?.Report(new(LauncherTone.Neutral, T("รอการอนุญาตสิทธิ์ผู้ดูแลระบบ…"),
+                    T("C9.exe ต้องใช้สิทธิ์ Administrator กรุณากด Yes ในหน้าต่าง UAC")));
             Process game = StartClient(plan);
             activeGame = game;
             // The ticket itself is never logged; it is single-use and expires within two minutes.
             Log($"started pid={game.Id} client={plan.ClientHash} endpoint=loopback elevated_launcher={IsElevated} login={identity?.Login ?? "(local lab)"}");
             _ = MonitorGameAsync(game);
-            return new(LauncherTone.Good, "กำลังเริ่มเกม…", "รอเกมเตรียมระบบ หากเกมปิดตัวลง สามารถเปิดจากหน้านี้อีกครั้งได้",
+            return new(LauncherTone.Good, T("กำลังเริ่มเกม…"), T("รอเกมเตรียมระบบ หากเกมปิดตัวลง สามารถเปิดจากหน้านี้อีกครั้งได้"),
                 plan.DisplayName, plan.ClientHash);
         }
         catch (Win32Exception error) when (error.NativeErrorCode == ElevationCancelled)
         {
             Log("game start cancelled at the elevation prompt");
-            return new(LauncherTone.Warning, "ยังไม่ได้รับสิทธิ์ผู้ดูแลระบบ",
-                "C9.exe ต้องใช้สิทธิ์ Administrator กดเปิดเกมอีกครั้งแล้วเลือก Yes ในหน้าต่าง UAC");
+            return new(LauncherTone.Warning, T("ยังไม่ได้รับสิทธิ์ผู้ดูแลระบบ"),
+                T("C9.exe ต้องใช้สิทธิ์ Administrator กดเปิดเกมอีกครั้งแล้วเลือก Yes ในหน้าต่าง UAC"));
         }
         catch (Exception error) when (IsExpected(error)) { return Failure(error); }
     }
@@ -95,7 +96,7 @@ public sealed class LocalLauncherRuntime
     {
         try
         {
-            if (ClientRunning()) throw new InvalidOperationException("กรุณาปิดเกมก่อนเปิด VFUN Launcher");
+            if (ClientRunning()) throw new InvalidOperationException(T("กรุณาปิดเกมก่อนเปิด VFUN Launcher"));
             string? launcher = LocalLauncherConfiguration.FindOfficialLauncher(ConfigurationDirectory);
             if (launcher is null) return OpenShell("https://vfun.valofe.com/game/download");
             using Process? process = Process.Start(new ProcessStartInfo(launcher)
@@ -150,16 +151,16 @@ public sealed class LocalLauncherRuntime
             int id = game.Id;
             Task exited = game.WaitForExitAsync();
             if (await Task.WhenAny(exited, Task.Delay(TimeSpan.FromSeconds(30))) != exited)
-                StatusChanged?.Invoke(new(LauncherTone.Warning, "กำลังรอเกมเตรียมระบบ…",
-                    "หากรอนาน กรุณาตรวจข้อความในหน้าต่าง C9 รวมถึงข้อผิดพลาดจาก GameGuard"));
+                StatusChanged?.Invoke(new(LauncherTone.Warning, T("กำลังรอเกมเตรียมระบบ…"),
+                    T("หากรอนาน กรุณาตรวจข้อความในหน้าต่าง C9 รวมถึงข้อผิดพลาดจาก GameGuard")));
             await exited;
             string code;
             try { code = game.ExitCode.ToString(System.Globalization.CultureInfo.InvariantCulture); }
             catch (Exception error) when (error is InvalidOperationException or Win32Exception) { code = "unknown"; }
             Log($"game exited pid={id} code={code}");
             activeGame = null;
-            StatusChanged?.Invoke(new(LauncherTone.Warning, "เกมปิดตัวลงแล้ว",
-                "ดูรายละเอียดการเริ่มเกมใน L9.local.log และการเชื่อมต่อใน L9.server.log"));
+            StatusChanged?.Invoke(new(LauncherTone.Warning, T("เกมปิดตัวลงแล้ว"),
+                T("ดูรายละเอียดการเริ่มเกมใน L9.local.log และการเชื่อมต่อใน L9.server.log")));
         }
     }
 
@@ -215,7 +216,7 @@ public sealed class LocalLauncherRuntime
             if (await EndpointReadyAsync(host, port, mode)) return;
             if (server.HasExited) break;
         }
-        throw new InvalidOperationException($"เปิดเซิร์ฟเวอร์พอร์ต {port} ไม่สำเร็จ กรุณาตรวจ {logName}");
+        throw new InvalidOperationException(F("เปิดเซิร์ฟเวอร์พอร์ต {0} ไม่สำเร็จ กรุณาตรวจ {1}", port, logName));
     }
 
     public void Log(string message)
@@ -227,18 +228,18 @@ public sealed class LocalLauncherRuntime
     private LauncherStatus Failure(Exception error)
     {
         Log($"launcher error: {error.GetType().Name}: {error.Message}");
-        return new(LauncherTone.Error, "ยังเปิดเกม local ไม่ได้", Describe(error));
+        return new(LauncherTone.Error, T("ยังเปิดเกม local ไม่ได้"), Describe(error));
     }
 
     public static string Describe(Exception error) => error switch
     {
         DirectoryNotFoundException => error.Message,
         InvalidDataException when error.Message.Contains("compatibility profile", StringComparison.Ordinal) =>
-            "C9.exe รุ่นนี้ยังไม่มี profile ที่รองรับ (ระบบรองรับ Client รุ่น 14 พ.ย. 2026) กรุณาอัปเดต L9",
+            T("C9.exe รุ่นนี้ยังไม่มี profile ที่รองรับ (ระบบรองรับ Client รุ่น 14 พ.ย. 2026) กรุณาอัปเดต L9"),
         InvalidDataException or InvalidOperationException => error.Message,
         FileNotFoundException => error.Message,
-        Win32Exception => $"Windows ไม่อนุญาตให้เปิดโปรแกรม: {error.Message}",
-        _ => "กรุณาตรวจไฟล์ติดตั้งและ L9.local.log",
+        Win32Exception => F("Windows ไม่อนุญาตให้เปิดโปรแกรม: {0}", error.Message),
+        _ => T("กรุณาตรวจไฟล์ติดตั้งและ L9.local.log"),
     };
 
     public static bool IsExpected(Exception error) => error is IOException or InvalidDataException or ArgumentException or JsonException or

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static C9.LocalLauncher.LauncherText;
 
 namespace C9.LocalLauncher;
 
@@ -18,6 +19,8 @@ public sealed record LauncherUserSettings
     [JsonPropertyName("auth_url")] public string? AuthUrl { get; init; }
     /// <summary>Last login name, pre-filled on the next start. Passwords and tokens are never saved.</summary>
     [JsonPropertyName("last_login")] public string? LastLogin { get; init; }
+    /// <summary>Display language code ("th", "en" or "zh"); null means Thai. See <see cref="LauncherText"/>.</summary>
+    [JsonPropertyName("language")] public string? Language { get; init; }
 
     public static string DefaultStorageDirectory => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C9Local", "L9");
@@ -84,11 +87,11 @@ public sealed record LauncherUserSettings
     /// <summary>Returns a Thai message describing why <paramref name="directory"/> is unusable, or null.</summary>
     public static string? ValidateGameDirectory(string? directory)
     {
-        if (string.IsNullOrWhiteSpace(directory)) return "กรุณาเลือกโฟลเดอร์เกม";
+        if (string.IsNullOrWhiteSpace(directory)) return T("กรุณาเลือกโฟลเดอร์เกม");
         string trimmed = directory.Trim().Trim('"');
-        if (!Path.IsPathFullyQualified(trimmed)) return "ต้องเป็น path เต็ม เช่น C:\\VFUN\\C9-GL";
-        if (!Directory.Exists(trimmed)) return "ไม่พบโฟลเดอร์นี้";
-        if (!File.Exists(Path.Combine(trimmed, "C9.exe"))) return "ไม่พบ C9.exe ในโฟลเดอร์นี้";
+        if (!Path.IsPathFullyQualified(trimmed)) return T("ต้องเป็น path เต็ม เช่น C:\\VFUN\\C9-GL");
+        if (!Directory.Exists(trimmed)) return T("ไม่พบโฟลเดอร์นี้");
+        if (!File.Exists(Path.Combine(trimmed, "C9.exe"))) return T("ไม่พบ C9.exe ในโฟลเดอร์นี้");
         return null;
     }
 
