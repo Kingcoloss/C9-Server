@@ -119,6 +119,8 @@ internal static partial class Validation
             ("NPC list path: profile-relative, overlay, --npc-spawn-file", Sync(NpcSpawnConfigSource)),
             ("World session reply contracts (0EFE/ED1E/11A2/0EB2/0E4C/F750)", Sync(WorldSessionReplyContracts)),
             ("Memory world-entry replies follow the client trace order", MemoryWorldSessionReplies),
+            ("Player position in 0x0BCE / 0x0BCC (client trace)", Sync(WorldPositionPacketLayout)),
+            ("Memory lobby saves the position on leave and enters there next time", MemoryWorldPositionPersistence),
             ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),
             ("Memory official-build fixture rejects wrong size and state", MemoryOfficialLoginInvalid),
             ("Stream pipe adapters encrypted fixture", StreamAdapterFixture),

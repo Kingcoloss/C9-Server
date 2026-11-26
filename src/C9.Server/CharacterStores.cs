@@ -14,6 +14,9 @@ namespace C9.Server;
 /// <summary>A character as the lobby packets need it. <see cref="Id"/> is what the client echoes back.</summary>
 internal sealed record LobbyCharacter(ulong Id, byte Slot, ushort Job, string Name, byte[] Appearance);
 
+/// <summary>Where a character was when its last world session saved it (S01 position persistence).</summary>
+internal sealed record SavedPosition(int MapId, int Submap, MapPosition Position);
+
 /// <summary>Where the character lobby keeps characters: the local JSON file, or the game database.</summary>
 internal interface ICharacterStore
 {
@@ -28,6 +31,12 @@ internal interface ICharacterStore
 
     /// <summary>Total of each stat (class base + spent points), or null when the store has no stat system (JSON).</summary>
     ValueTask<IReadOnlyDictionary<string, int>?> StatsAsync(ulong characterId, CancellationToken token);
+
+    /// <summary>The character's saved map, sub-map and position, or null when none is stored.</summary>
+    ValueTask<SavedPosition?> PositionAsync(ulong characterId, CancellationToken token);
+
+    /// <summary>Stores the last position the client reported and adds <paramref name="playSeconds"/> of play time.</summary>
+    ValueTask SavePositionAsync(ulong characterId, SavedPosition position, long playSeconds, CancellationToken token);
 }
 
 internal static class CharacterStores
@@ -50,6 +59,8 @@ internal sealed class JsonCharacterStore : ICharacterStore
     private readonly object gate = new();
     private readonly string path;
     private Character[] characters;
+    // Positions stay in memory (until the process restarts) so the file format is unchanged.
+    private readonly ConcurrentDictionary<ulong, SavedPosition> positions = new();
 
     public JsonCharacterStore(ServerOptions options)
     {
@@ -69,6 +80,15 @@ internal sealed class JsonCharacterStore : ICharacterStore
 
     public ValueTask<IReadOnlyDictionary<string, int>?> StatsAsync(ulong characterId, CancellationToken token) =>
         ValueTask.FromResult<IReadOnlyDictionary<string, int>?>(null);
+
+    public ValueTask<SavedPosition?> PositionAsync(ulong characterId, CancellationToken token) =>
+        ValueTask.FromResult(positions.TryGetValue(characterId, out SavedPosition? saved) ? saved : null);
+
+    public ValueTask SavePositionAsync(ulong characterId, SavedPosition position, long playSeconds, CancellationToken token)
+    {
+        positions[characterId] = position;
+        return ValueTask.CompletedTask;
+    }
 
     public ValueTask<IReadOnlyList<LobbyCharacter>> LoadAsync(CancellationToken token)
     {
@@ -167,6 +187,35 @@ internal sealed class GameDataCharacterStore(ServerOptions options, string conne
             CharacterStatSheet? sheet = await Service<StatService>().ForCharacterAsync((long)characterId, token);
             return sheet?.Stats.ToDictionary(s => s.Key, s => s.Total);
         }
+        catch (Exception error) when (Unavailable(error)) { throw NotReady(error); }
+    }
+
+    public async ValueTask<SavedPosition?> PositionAsync(ulong characterId, CancellationToken token)
+    {
+        long id = await AccountAsync(token);
+        try
+        {
+            // Listing by account keeps a character of another account out of reach.
+            Character? c = (await Service<CharacterService>().ListAsync(id, false, token)).FirstOrDefault(c => c.Id == (long)characterId);
+            if (c is not { MapId: { } map, Submap: { } submap, PosX: { } x, PosY: { } y, PosZ: { } z }) return null;
+            MapPosition point = new(x, y, z);
+            return point.IsValid ? new SavedPosition(map, submap, point) : null;
+        }
+        catch (Exception error) when (Unavailable(error)) { throw NotReady(error); }
+    }
+
+    public async ValueTask SavePositionAsync(ulong characterId, SavedPosition position, long playSeconds, CancellationToken token)
+    {
+        long id = await AccountAsync(token);
+        try
+        {
+            MapPosition p = position.Position;
+            if (!await Service<CharacterService>().SaveWorldPositionAsync((long)characterId, id, position.MapId, checked((short)position.Submap),
+                    p.X, p.Y, p.Z, playSeconds, token))
+                throw new ProtocolException(ProtocolError.InvalidPacket, "Character position not saved: the character is gone or deleted");
+        }
+        catch (GameDataException error)
+        { throw new ProtocolException(ProtocolError.InvalidPacket, "Character position rejected by the game database: " + error.Message); }
         catch (Exception error) when (Unavailable(error)) { throw NotReady(error); }
     }
 

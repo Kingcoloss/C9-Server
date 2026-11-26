@@ -55,6 +55,13 @@ internal sealed class CharacterLobby
     /// <summary>Game database account of the lobby (null with the JSON store); known after the first list.</summary>
     public long? AccountId => store.AccountId;
 
+    /// <summary>Where the character's last world session left it (null when nothing is stored yet).</summary>
+    public ValueTask<SavedPosition?> SavedPositionAsync(ulong characterId, CancellationToken token = default) =>
+        store.PositionAsync(characterId, token);
+
+    public ValueTask SavePositionAsync(ulong characterId, SavedPosition position, long playSeconds, CancellationToken token = default) =>
+        store.SavePositionAsync(characterId, position, playSeconds, token);
+
     private static byte Template(LobbyCharacter character) => TemplateIds[character.Job];
 
     // Block A of 0x0C1E (payload +0x0C) is the Client's C9CharacterStatus (C9.pdb, PS_CharacterStatus_Ack 3102):

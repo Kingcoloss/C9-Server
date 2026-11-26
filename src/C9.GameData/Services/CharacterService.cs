@@ -113,6 +113,34 @@ public sealed class CharacterService(IDbContextFactory<GameDbContext> factory, T
             return Task.CompletedTask;
         }, token);
 
+    /// <summary>
+    /// Game server write (c9-lobby): the last position the client reported in the world, plus the play time since the
+    /// previous save. It runs every few seconds of play, so it keeps no snapshot or audit row and does not take the
+    /// operator's expected version (a Portal edit made meanwhile gets the usual version conflict). Only a live character
+    /// of <paramref name="accountId"/> is written; false when none matched.
+    /// </summary>
+    public async Task<bool> SaveWorldPositionAsync(long id, long accountId, int mapId, short submap, float x, float y, float z,
+        long playSeconds, CancellationToken token = default)
+    {
+        if (mapId is < 1 or > 65535 || submap < 0 || playSeconds < 0 || !ValidCoordinate(x) || !ValidCoordinate(y) || !ValidCoordinate(z))
+            throw new GameDataException(GameDataError.Invalid, "Map 1–65535, sub-map >= 0, three finite coordinates and play seconds >= 0 are required");
+        DateTimeOffset now = clock.GetUtcNow();
+        await using GameDbContext db = await factory.CreateDbContextAsync(token);
+        int rows = await db.Characters
+            .Where(c => c.Id == id && c.AccountId == accountId && c.DeletedAt == null)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(c => c.MapId, (int?)mapId)
+                .SetProperty(c => c.Submap, (short?)submap)
+                .SetProperty(c => c.PosX, (float?)x)
+                .SetProperty(c => c.PosY, (float?)y)
+                .SetProperty(c => c.PosZ, (float?)z)
+                .SetProperty(c => c.PlaySeconds, c => c.PlaySeconds + playSeconds)
+                .SetProperty(c => c.LastPlayedAt, (DateTimeOffset?)now), token);
+        return rows == 1;
+    }
+
+    private static bool ValidCoordinate(float value) => float.IsFinite(value) && MathF.Abs(value) <= 1e7f;
+
     public Task<Character> SoftDeleteAsync(long id, uint expectedVersion, OperatorContext context, CancellationToken token = default) =>
         MutateAsync(id, expectedVersion, context, "character.delete", (_, c) =>
         {

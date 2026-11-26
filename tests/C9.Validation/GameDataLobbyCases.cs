@@ -153,8 +153,22 @@ internal static partial class Validation
                 Check.Equal(0, BinaryPrimitives.ReadInt32LittleEndian(status.Payload.Span[0x70..])); // m_nMinDD[0]
                 Check.Equal<ulong?>(lab2Id, lobby.Session.Snapshot().CharacterId);
                 Check.Equal<long?>(local.Id, lobby.Session.Snapshot().AccountId);
+                // S01: the last reported position is written when the session ends.
+                await lobby.SendAsync(new Packet(0x0BCE, MoveAt(1234.5f, 678.25f, -910.75f)));
             }
             Check.Bytes(legacyBytes, File.ReadAllBytes(store)); // The JSON store is no longer written.
+            Character walked = await characters.GetAsync((long)lab2Id) ?? throw new InvalidOperationException("Lab2 missing");
+            Check.True(walked is { Submap: 0, PosX: 1234.5f, PosY: 678.25f, PosZ: -910.75f, LastPlayedAt: not null } &&
+                walked.MapId == options.InitialMapId, "position saved in the database");
+            Check.True(events.Values.Any(e => e.Event == "position_saved" && e.CharacterId == lab2Id), "position_saved event");
+            // The game-server write touches only a live character of the given account and checks its input.
+            Check.True(!await characters.SaveWorldPositionAsync((long)lab2Id, other.Id, 10, 0, 1, 2, 3, 0), "another account's character");
+            try
+            {
+                await characters.SaveWorldPositionAsync((long)lab2Id, localId, 10, 0, float.NaN, 0, 0, 0);
+                Check.True(false, "NaN position rejected");
+            }
+            catch (GameDataException error) { Check.Equal(GameDataError.Invalid, error.Code); }
 
             // 4. Portal edits reach the game: rename Lab, delete Lab3. A restarted lobby does not import again.
             Character renamed = (await characters.ListAsync(localId)).Single(c => c.Name == "Lab");
@@ -175,6 +189,26 @@ internal static partial class Validation
             }
             Check.Equal(1, events.Values.Count(e => e.Event == "legacy_import")); // Not repeated after a restart.
             Check.Equal(3, (await characters.ListAsync(localId, includeDeleted: true)).Count);
+            Check.True(!await characters.SaveWorldPositionAsync((long)lab3Id, localId, 10, 0, 1, 2, 3, 0), "deleted character");
+
+            // 5. S01: the next entry starts at the saved point. A point saved on another map is not used, because map
+            // changes (S05) do not exist yet; the character enters the entry map at its spawn point.
+            async Task<MapPosition> EntryAsync()
+            {
+                await using LobbyPipe again = new(new SessionProcessor(options, new CollectedEvents()));
+                await again.SendAsync(new Packet(0x1771, new byte[49]));
+                Check.Equal((ushort)0x0EFA, (await again.ReceiveAsync()).Type);
+                byte[] identity = new byte[8];
+                BinaryPrimitives.WriteUInt64LittleEndian(identity, lab2Id);
+                await again.SendAsync(new Packet(0x0BBF, identity));
+                Check.Equal((ushort)0x0BC0, (await again.ReceiveAsync()).Type);
+                return EntryPosition(await again.ReceiveAsync());
+            }
+            Check.Equal(new MapPosition(1234.5f, 678.25f, -910.75f), await EntryAsync());
+            Character elsewhere = await characters.GetAsync((long)lab2Id) ?? throw new InvalidOperationException("Lab2 missing");
+            await characters.UpdateAsync(elsewhere.Id, elsewhere.Version,
+                new CharacterChanges(MapId: options.InitialMapId + 1, Submap: 0, PosX: 1, PosY: 2, PosZ: 3), op with { RequestId = Guid.NewGuid() });
+            Check.Equal(EntryPosition(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition)), await EntryAsync());
         }
         finally
         {

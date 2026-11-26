@@ -53,6 +53,14 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
         long SecondPasswordAccount() => lobby?.AccountId ?? (secondPasswords!.NeedsDatabaseAccount
             ? throw new ProtocolException(ProtocolError.InvalidPacket, "Secondary password needs a game database account")
             : launcherAccount ?? 0);
+        // S01: the selected character's position, saved while it moves and once when the session leaves the world.
+        WorldPositionTracker? position = null;
+        async ValueTask LeaveWorldAsync(CancellationToken token)
+        {
+            if (position is not { } last) return;
+            position = null;
+            await last.TrySaveAsync(events, Event("position_saved") with { State = state }, token);
+        }
 
         session.InitState(state);
         session.Observer?.Opened(session);
@@ -162,7 +170,13 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                             await SendAsync(lobby.InitialAttributes());
                             await SendAsync(lobby.InitialVitals());
                         }
-                        await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, options.InitialPosition));
+                        // Enter where the last world session left the character while that is the entry map (map changes are S05).
+                        SavedPosition? saved = await lobby.SavedPositionAsync(selectedCharacterId, cancellationToken);
+                        MapPosition spawn = WorldMapCatalog.Resolve(options.InitialMapId, options.InitialSubmap,
+                            saved is { } previous && previous.MapId == options.InitialMapId && previous.Submap == options.InitialSubmap
+                                ? previous.Position : options.InitialPosition).Position;
+                        await SendAsync(WorldMapCatalog.Entry(options.InitialMapId, options.InitialSubmap, spawn));
+                        position = new WorldPositionTracker(lobby, selectedCharacterId, options.InitialMapId, options.InitialSubmap, spawn);
                         ChangeState("world_loading", selectedCharacterId, options.InitialMapId, options.InitialSubmap);
                         // Town NPCs exist only when the server announces them (0x0BE3); the client never spawns them itself.
                         // Send them while the map loads: 0x0BC3 holds world events, and StageMapLoad (00C9A8C0) hands the
@@ -186,6 +200,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         packet.Type == 0x2EEA && packet.Payload.Length == 16)
                     {
                         // Client 00A62D76 reconnects to login and requests 2EE8.
+                        await LeaveWorldAsync(cancellationToken);
                         await SendAsync(new Packet(0x2EEB));
                     }
                     else if ((state is "world_loading" or "world_ready") && packet.Type == 0x17D4)
@@ -194,6 +209,7 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         // 0x17D5, so the in-world exit request (0x17D4) must be acknowledged or
                         // the client waits forever at "Transmitting to Server". The client does
                         // not read the ack payload.
+                        await LeaveWorldAsync(cancellationToken);
                         await SendAsync(new Packet(0x17D5));
                         events.Emit(Event("logout_ack") with { State = state });
                     }
@@ -218,6 +234,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         // Gameplay handlers are added only after verifying their readers.
                         // 0x0EC4 (empty) is a timer packet: client 0085DFD0 sends it every 300 s of play
                         // while connected. It is not a leave request, so it gets no 0x2EEB.
+                        if (position?.Observe(packet) == true)
+                            await position.TrySaveAsync(events, Event("position_saved") with { State = state }, cancellationToken);
                         if (WorldSessionPackets.Reply(packet, DateTimeOffset.Now) is { } worldReply)
                             await SendAsync(worldReply);
                     }
@@ -289,6 +307,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
         catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested) { closeReason = "server_stopped"; }
         finally
         {
+            // Any other way out of the world (disconnect, timeout, error, server stop) keeps the last position too.
+            using (CancellationTokenSource flush = new(TimeSpan.FromSeconds(5))) await LeaveWorldAsync(flush.Token);
             events.Emit(Event("disconnected"));
             session.Close(closeReason);
         }

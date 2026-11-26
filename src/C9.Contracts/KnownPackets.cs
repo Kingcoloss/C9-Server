@@ -23,6 +23,8 @@ public static class KnownPackets
         new(0x0BC3, "WorldEntry", TraceDirections.Outbound, "Map id, sub-map and position"),
         new(0x0BC5, "WorldLoaded", TraceDirections.Inbound, "Client finished loading the world"),
         new(0x0BC6, "WorldActionStarted", TraceDirections.Outbound, "Plain world-load acknowledgement; 64-bit player object id"),
+        new(0x0BCC, "PlayerAction", TraceDirections.Inbound, "36 bytes: f32 x, y, z of the local player, motion fields, u32 client tick; saved as the character position"),
+        new(0x0BCE, "PlayerMove", TraceDirections.Inbound, "46 bytes: f32 x, y, z of the local player, move fields, u32 client tick; saved as the character position"),
         new(0x0BE3, "NpcExist", TraceDirections.Outbound, "NPCs in range: u8 count + 112-byte entries (object id, NPC info id, position, yaw)"),
         new(0x0BE4, "ObjectRemove", TraceDirections.Outbound, "Remove objects: u8 count + 64-bit object ids (plain)"),
         new(0x0C1C, "InitialVitals", TraceDirections.Outbound, "Level, HP/MP (legacy layout)"),
