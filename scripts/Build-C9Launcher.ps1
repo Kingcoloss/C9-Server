@@ -29,6 +29,9 @@ $project = Join-Path $workspace 'src/C9.LocalLauncher.Maui/C9.LocalLauncher.Maui
 $package = Join-Path $workspace 'src/C9.LocalLauncher.Package'
 # bin\ holds only build output: start empty so files dropped from the project (languages, DLLs) do not linger.
 if (Test-Path -LiteralPath $runtime) { Remove-Item -LiteralPath $runtime -Recurse -Force }
+# MAUI's resizetizer cache kept the old icon after appicon.svg changed; render the icon fresh each build.
+Get-ChildItem -LiteralPath (Join-Path $workspace 'src/C9.LocalLauncher.Maui/obj') -Recurse -Directory -Filter resizetizer -ErrorAction SilentlyContinue |
+    Remove-Item -Recurse -Force
 Push-Location -LiteralPath $workspace
 try {
     & $dotnet publish $project -c Release -p:RuntimeIdentifierOverride=$RuntimeIdentifier -o $runtime --nologo

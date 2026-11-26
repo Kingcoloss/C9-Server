@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="456" height="456" viewBox="0 0 456 456">
-  <!-- C9 Local Launcher icon: launcher palette (Ink #11171F, Muted #2A3648, Gold #E8BE68), ring + play mark. -->
+  <!-- C9 Local Launcher icon: "L9" drawn as shapes (no font needed) in the launcher palette (Ink #11171F, Muted #2A3648, Gold #E8BE68). -->
   <rect x="8" y="8" width="440" height="440" rx="96" ry="96" fill="#11171F" stroke="#2A3648" stroke-width="16"/>
-  <circle cx="228" cy="228" r="138" fill="none" stroke="#E8BE68" stroke-width="30"/>
-  <path d="M196 150 L310 228 L196 306 Z" fill="#E8BE68" stroke="#E8BE68" stroke-width="14" stroke-linejoin="round"/>
+  <g fill="#E8BE68">
+    <rect x="84" y="116" width="42" height="224" rx="6"/>
+    <rect x="84" y="298" width="110" height="42" rx="6"/>
+    <rect x="337" y="186" width="42" height="154" rx="6"/>
+    <rect x="250" y="298" width="129" height="42" rx="6"/>
+  </g>
+  <circle cx="300" cy="195" r="58" fill="none" stroke="#E8BE68" stroke-width="42"/>
 </svg>
