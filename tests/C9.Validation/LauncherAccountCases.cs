@@ -59,7 +59,7 @@ internal static partial class Validation
         Check.Equal(4L, account);
         // The field L9 builds is exactly what the client copies into 0x2F04.
         string[] fields = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000, LocalLaunchPlan.Observed20261114,
-            compatibilityTest: true, identity: new LaunchIdentity("zoomer", 4, ticket)).Arguments.Split(':');
+            identity: new LaunchIdentity("zoomer", 4, ticket)).Arguments.Split(':');
         Check.True(LauncherLoginPacket.TryParse(LauncherLoginPayload(fields[3], $"{fields[4]}:{fields[5]}"), out string fromPlan, out _));
         Check.Equal(parsed, fromPlan);
         foreach (byte[] invalid in new[]
@@ -245,7 +245,7 @@ internal static partial class Validation
         byte[] ticket = Enumerable.Range(1, 16).Select(value => (byte)(value * 15)).ToArray();
         LaunchIdentity identity = new("player.one", 42, ticket);
         LocalLaunchPlan plan = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-            LocalLaunchPlan.Observed20261114, compatibilityTest: true, identity: identity);
+            LocalLaunchPlan.Observed20261114, identity: identity);
         string[] fields = plan.Arguments.Split(':');
         Check.Equal(11, fields.Length);
         Check.Equal("fromVLauncher", fields[0]);
@@ -256,7 +256,7 @@ internal static partial class Validation
         Check.True(!plan.Arguments.Contains(' ') && !plan.Arguments.Contains('"'));
         // Without a launcher login the synthetic lab argument is unchanged.
         LocalLaunchPlan lab = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-            LocalLaunchPlan.Observed20261114, compatibilityTest: true);
+            LocalLaunchPlan.Observed20261114);
         Check.Equal("fromVLauncher::VALOFE:AAAAAAAAAAAAAAAAAAAAAA%3D%3D:c9-gl:0000000000001:test::127.0.0.1:14000:EN", lab.Arguments);
         foreach (LaunchIdentity invalid in new[]
         {
@@ -264,7 +264,7 @@ internal static partial class Validation
             new LaunchIdentity("player", 0, ticket), new LaunchIdentity("player", 42, new byte[8]),
         })
             Check.Throws<ArgumentException>(() => LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-                LocalLaunchPlan.Observed20261114, compatibilityTest: true, identity: invalid));
+                LocalLaunchPlan.Observed20261114, identity: invalid));
     }
 
     private static void LauncherAuthUrlPolicy()

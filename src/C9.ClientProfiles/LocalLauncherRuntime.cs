@@ -35,11 +35,11 @@ public sealed class LocalLauncherRuntime
     /// <summary>Raised when the game process reports progress after <see cref="StartGameAsync"/> returned.</summary>
     public event Action<LauncherStatus>? StatusChanged;
 
-    public async Task<LauncherStatus> CheckAsync(string gameDirectory, bool compatibilityTest)
+    public async Task<LauncherStatus> CheckAsync(string gameDirectory)
     {
         try
         {
-            LocalLaunchPlan plan = Prepare(gameDirectory, compatibilityTest);
+            LocalLaunchPlan plan = Prepare(gameDirectory);
             if (activeGame is not null)
                 return new(LauncherTone.Good, "เกมกำลังทำงาน", "ปิดเกมก่อนหากต้องการเปลี่ยนโฟลเดอร์หรือโหมด", plan.DisplayName, plan.ClientHash);
             bool ready = await ServerReadyAsync();
@@ -51,14 +51,14 @@ public sealed class LocalLauncherRuntime
     }
 
     /// <param name="progress">Receives intermediate steps (server start, UAC prompt).</param>
-    public async Task<LauncherStatus> StartGameAsync(string gameDirectory, bool compatibilityTest, IProgress<LauncherStatus>? progress = null,
+    public async Task<LauncherStatus> StartGameAsync(string gameDirectory, IProgress<LauncherStatus>? progress = null,
         LaunchIdentity? identity = null)
     {
         if (activeGame is not null)
             return new(LauncherTone.Warning, "เกมกำลังทำงานอยู่", "ปิดเกมเดิมก่อนเปิดใหม่");
         try
         {
-            LocalLaunchPlan plan = Prepare(gameDirectory, compatibilityTest, identity);
+            LocalLaunchPlan plan = Prepare(gameDirectory, identity);
             if (ClientRunning())
                 throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
             progress?.Report(new(LauncherTone.Neutral, "กำลังเตรียมเซิร์ฟเวอร์…", "เริ่ม login และ character lobby ในเครื่อง"));
@@ -77,7 +77,7 @@ public sealed class LocalLauncherRuntime
             Process game = StartClient(plan);
             activeGame = game;
             // The ticket itself is never logged; it is single-use and expires within two minutes.
-            Log($"started pid={game.Id} client={plan.ClientHash} endpoint=loopback elevated_launcher={IsElevated} compatibility_test={plan.CompatibilityTest} login={identity?.Login ?? "(local lab)"}");
+            Log($"started pid={game.Id} client={plan.ClientHash} endpoint=loopback elevated_launcher={IsElevated} login={identity?.Login ?? "(local lab)"}");
             _ = MonitorGameAsync(game);
             return new(LauncherTone.Good, "กำลังเริ่มเกม…", "รอเกมเตรียมระบบ หากเกมปิดตัวลง สามารถเปิดจากหน้านี้อีกครั้งได้",
                 plan.DisplayName, plan.ClientHash);
@@ -116,7 +116,7 @@ public sealed class LocalLauncherRuntime
         catch (Exception error) when (IsExpected(error)) { return Failure(error); }
     }
 
-    private LocalLaunchPlan Prepare(string gameDirectory, bool compatibilityTest, LaunchIdentity? identity = null)
+    private LocalLaunchPlan Prepare(string gameDirectory, LaunchIdentity? identity = null)
     {
         string? problem = LauncherUserSettings.ValidateGameDirectory(gameDirectory);
         if (problem is not null) throw new DirectoryNotFoundException(problem);
@@ -125,7 +125,7 @@ public sealed class LocalLauncherRuntime
             Path.Combine(ConfigurationDirectory, LocalLauncherConfiguration.FileName));
         using (JsonDocument config = ReadConfiguration()) LocalLauncherConfiguration.Verify(config.RootElement);
         if (result.Created) Log("created and verified local configuration from project defaults");
-        return LocalLaunchPlan.Read(folder, ConfigurationDirectory, compatibilityTest, identity);
+        return LocalLaunchPlan.Read(folder, ConfigurationDirectory, identity);
     }
 
     private static Process StartClient(LocalLaunchPlan plan)
@@ -234,7 +234,7 @@ public sealed class LocalLauncherRuntime
     {
         DirectoryNotFoundException => error.Message,
         InvalidDataException when error.Message.Contains("compatibility profile", StringComparison.Ordinal) =>
-            "C9.exe รุ่นนี้ยังไม่มี profile ที่รองรับ หากเป็น Client รุ่น 14 พ.ย. ให้เปิด \"ทดสอบ Client รุ่นใหม่ (Local)\"",
+            "C9.exe รุ่นนี้ยังไม่มี profile ที่รองรับ (ระบบรองรับ Client รุ่น 14 พ.ย. 2026) กรุณาอัปเดต L9",
         InvalidDataException or InvalidOperationException => error.Message,
         FileNotFoundException => error.Message,
         Win32Exception => $"Windows ไม่อนุญาตให้เปิดโปรแกรม: {error.Message}",

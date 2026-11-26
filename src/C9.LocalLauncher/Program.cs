@@ -24,10 +24,8 @@ internal static class Program
                 }
                 string? workspace = ProjectWorkspace, output = null, configurationDirectory = null;
                 if (directory != AppContext.BaseDirectory) configurationDirectory = AppContext.BaseDirectory;
-                bool compatibilityTest = false;
                 for (int index = command is null ? 0 : 1; index < args.Length; index++)
                 {
-                    if (args[index] == "--compatibility-test") { compatibilityTest = true; continue; }
                     if (index + 1 >= args.Length) throw new ArgumentException("Missing option value");
                     switch (args[index])
                     {
@@ -42,7 +40,7 @@ internal static class Program
                 {
                     if (output is not null) throw new ArgumentException("--output requires --configure or --check");
                     ApplicationConfiguration.Initialize();
-                    Application.Run(new LauncherForm(directory, configurationDirectory, workspace, compatibilityTest));
+                    Application.Run(new LauncherForm(directory, configurationDirectory, workspace));
                     return 0;
                 }
                 output ??= configurationDirectory is null ? null : Path.Combine(configurationDirectory, LocalLauncherConfiguration.FileName);
@@ -54,9 +52,9 @@ internal static class Program
                         client_compatibility_checked = false, official_files_modified = false }));
                 else
                 {
-                    LocalLaunchPlan plan = LocalLaunchPlan.Read(directory, Path.GetDirectoryName(result.Path), compatibilityTest);
+                    LocalLaunchPlan plan = LocalLaunchPlan.Read(directory, Path.GetDirectoryName(result.Path));
                     Console.WriteLine(JsonSerializer.Serialize(new { status = "passed", configuration = result.Path, created = result.Created,
-                        client_sha256 = plan.ClientHash, compatibility_test = plan.CompatibilityTest,
+                        client_sha256 = plan.ClientHash,
                         endpoint = "loopback", official_files_modified = false }));
                 }
                 return 0;

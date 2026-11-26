@@ -25,7 +25,6 @@ public sealed class LauncherPage : ContentPage
     private readonly LocalLauncherRuntime runtime;
     private LauncherUserSettings settings;
     private string gameDirectory;
-    private bool compatibilityTest;
     private bool busy;
     private bool initialized;
     private bool? wideLayout;
@@ -38,14 +37,13 @@ public sealed class LauncherPage : ContentPage
     private readonly Label statusDetail = new() { FontSize = 14, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap };
     private readonly Label clientInfo = new() { FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.TailTruncation };
     private readonly ActivityIndicator activity = new() { Color = Gold, WidthRequest = 22, HeightRequest = 22, IsRunning = false, IsVisible = false };
-    private readonly Label modeBadge = new() { FontSize = 12, FontAttributes = FontAttributes.Bold, TextColor = Ink };
+    private readonly Label modeBadge = new() { Text = "LOCAL", FontSize = 12, FontAttributes = FontAttributes.Bold, TextColor = TextTone };
     private readonly Border modeBadgeFrame;
     private readonly Button play;
     private readonly Button check;
     private readonly Entry directoryEntry = new() { FontSize = 14, TextColor = TextTone, PlaceholderColor = Subtle, BackgroundColor = Field, Placeholder = LauncherUserSettings.FallbackGameDirectory };
     private readonly Label directoryState = new() { FontSize = 13, LineBreakMode = LineBreakMode.WordWrap };
     private readonly Label directorySource = new() { FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap };
-    private readonly Switch compatibilitySwitch = new() { OnColor = Gold, VerticalOptions = LayoutOptions.Center };
     private readonly List<View> lockWhileBusy = [];
 
     // Account (c9-auth). The session token lives in memory only; the password is cleared after each attempt.
@@ -89,7 +87,6 @@ public sealed class LauncherPage : ContentPage
         loginEntry.Text = settings.LastLogin;
         authUrlEntry.Text = settings.AuthUrl ?? LauncherAuthClient.DefaultUrl;
         gameDirectory = startup.ClientDirectoryOverride ?? settings.ResolveGameDirectory(startup.LauncherDirectory, startup.Workspace);
-        compatibilityTest = startup.CompatibilityOverride ?? settings.CompatibilityTest;
 
         BackgroundColor = Ink;
         play = MakeButton("▶  เปิดเกม Local", Gold, Ink, primary: true);
@@ -98,7 +95,7 @@ public sealed class LauncherPage : ContentPage
         check.Clicked += async (_, _) => await CheckAsync();
         modeBadgeFrame = new Border
         {
-            BackgroundColor = Gold, StrokeThickness = 0, Padding = new Thickness(10, 4),
+            BackgroundColor = Muted, StrokeThickness = 0, Padding = new Thickness(10, 4),
             StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = modeBadge,
             HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center,
         };
@@ -108,7 +105,6 @@ public sealed class LauncherPage : ContentPage
         primaryColumn.Children.Add(BuildActionsCard());
         primaryColumn.Children.Add(BuildStatsCard());
         settingsColumn.Children.Add(BuildDirectoryCard());
-        settingsColumn.Children.Add(BuildModeCard());
         settingsColumn.Children.Add(BuildToolsCard());
         columns.Children.Add(primaryColumn);
         columns.Children.Add(settingsColumn);
@@ -124,10 +120,7 @@ public sealed class LauncherPage : ContentPage
         SizeChanged += (_, _) => { if (Width > 0) ApplyLayout(Width); };
 
         directoryEntry.Text = gameDirectory;
-        compatibilitySwitch.IsToggled = compatibilityTest;
-        compatibilitySwitch.Toggled += async (_, e) => await SetCompatibilityAsync(e.Value);
         directoryEntry.Completed += async (_, _) => await ApplyDirectoryAsync(directoryEntry.Text, remember: true);
-        UpdateMode();
         UpdateDirectoryState();
     }
 
@@ -136,7 +129,6 @@ public sealed class LauncherPage : ContentPage
         base.OnAppearing();
         if (initialized) return;
         initialized = true;
-        UpdateMode();
         await CheckAsync();
     }
 
@@ -565,21 +557,6 @@ public sealed class LauncherPage : ContentPage
         });
     }
 
-    private View BuildModeCard()
-    {
-        Label name = new() { Text = "ทดสอบ Client รุ่นใหม่ (Local)", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = TextTone, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.WordWrap };
-        Label note = new()
-        {
-            Text = "เปิด C9.exe รุ่น 14 พ.ย. 2026 ด้วยรูปแบบ argument ของ Build 55350 (โหมดทดลอง ระบบจะจำค่าที่เลือกไว้)",
-            FontSize = 12, TextColor = Subtle, LineBreakMode = LineBreakMode.WordWrap,
-        };
-        Grid row = new() { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 12 };
-        row.Add(name, 0, 0);
-        row.Add(compatibilitySwitch, 1, 0);
-        lockWhileBusy.Add(compatibilitySwitch);
-        return MakeCard("โหมดการเปิดเกม", new VerticalStackLayout { Spacing = 6, Children = { row, note } });
-    }
-
     private View BuildToolsCard()
     {
         Button folder = MakeButton("เปิดโฟลเดอร์เกม", Muted, TextTone);
@@ -642,7 +619,7 @@ public sealed class LauncherPage : ContentPage
     {
         if (busy) return;
         SetBusy(true);
-        try { ShowStatus(await runtime.CheckAsync(gameDirectory, compatibilityTest)); }
+        try { ShowStatus(await runtime.CheckAsync(gameDirectory)); }
         finally { SetBusy(false); }
     }
 
@@ -670,18 +647,9 @@ public sealed class LauncherPage : ContentPage
             }
             LaunchIdentity identity = LaunchIdentity.From(ticket.Value!);
             Progress<LauncherStatus> progress = new(ShowStatus);
-            ShowStatus(await runtime.StartGameAsync(gameDirectory, compatibilityTest, progress, identity));
+            ShowStatus(await runtime.StartGameAsync(gameDirectory, progress, identity));
         }
         finally { SetBusy(false); }
-    }
-
-    private async Task SetCompatibilityAsync(bool value)
-    {
-        if (value == compatibilityTest) return;
-        compatibilityTest = value;
-        Remember(settings with { CompatibilityTest = value });
-        UpdateMode();
-        await CheckAsync();
     }
 
     private async Task ApplyDirectoryAsync(string? path, bool remember)
@@ -764,14 +732,6 @@ public sealed class LauncherPage : ContentPage
         directorySource.Text = startup.ClientDirectoryOverride is not null && gameDirectory == startup.ClientDirectoryOverride
             ? "ใช้ค่าจาก --client-dir (ชั่วคราว)"
             : settings.GameDirectory is null ? "ใช้ค่าเริ่มต้นของโปรเจกต์" : "ใช้โฟลเดอร์ที่เลือกไว้ (จำค่าไว้แล้ว)";
-    }
-
-    private void UpdateMode()
-    {
-        modeBadge.Text = compatibilityTest ? "COMPATIBILITY TEST" : "LOCAL";
-        modeBadgeFrame.BackgroundColor = compatibilityTest ? Gold : Muted;
-        modeBadge.TextColor = compatibilityTest ? Ink : TextTone;
-        if (Window is not null) Window.Title = compatibilityTest ? "C9 Local Launcher - Compatibility Test" : "C9 Local Launcher";
     }
 
     private void ShowIfFailed(LauncherStatus? status)

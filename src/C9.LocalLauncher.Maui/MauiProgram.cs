@@ -13,7 +13,7 @@ public static class MauiProgram
 }
 
 /// <summary>Start-up options: launcher folder, project workspace and optional command-line overrides.</summary>
-public sealed record LauncherStartup(string LauncherDirectory, string? Workspace, string? ClientDirectoryOverride, bool? CompatibilityOverride)
+public sealed record LauncherStartup(string LauncherDirectory, string? Workspace, string? ClientDirectoryOverride)
 {
     public static LauncherStartup FromEnvironment()
     {
@@ -21,15 +21,13 @@ public sealed record LauncherStartup(string LauncherDirectory, string? Workspace
             .FirstOrDefault(value => value.Key == "C9WorkspaceRoot")?.Value;
         if (workspace is not null && !File.Exists(Path.Combine(workspace, "C9.slnx"))) workspace = null;
         string? client = null;
-        bool? compatibility = null;
         string[] args = Environment.GetCommandLineArgs();
         for (int index = 1; index < args.Length; index++)
         {
-            if (args[index] == "--compatibility-test") compatibility = true;
-            else if (args[index] == "--client-dir" && index + 1 < args.Length) client = Path.GetFullPath(args[++index]);
+            if (args[index] == "--client-dir" && index + 1 < args.Length) client = Path.GetFullPath(args[++index]);
             else if (args[index] == "--workspace" && index + 1 < args.Length) workspace = Path.GetFullPath(args[++index]);
         }
-        return new(LocalLauncherConfiguration.LauncherHome(AppContext.BaseDirectory), workspace, client, compatibility);
+        return new(LocalLauncherConfiguration.LauncherHome(AppContext.BaseDirectory), workspace, client);
     }
 }
 

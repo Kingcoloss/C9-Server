@@ -11,7 +11,7 @@
 | โปรเจกต์ MAUI ใหม่ `src/C9.LocalLauncher.Maui` → `L9.exe` | เสร็จ (build บน Windows x64) |
 | UI Responsive (กว้าง ≥ 760px = 2 คอลัมน์, แคบ = 1 คอลัมน์ + scroll) | เสร็จ |
 | เลือก/พิมพ์ Game Directory, ตรวจว่ามี `C9.exe`, จำค่าไว้ | เสร็จ |
-| โหมด "ทดสอบ Client รุ่นใหม่ (Local)" และจำค่าที่เลือก | เสร็จ |
+| โหมด "ทดสอบ Client รุ่นใหม่ (Local)" และจำค่าที่เลือก | เอาออกแล้ว 26 พ.ย. (Client 14 พ.ย. เป็น profile ปกติ ดูหัวข้อ 8.4) |
 | ขอสิทธิ์ Administrator (UAC) เองตอนเปิด `C9.exe` | เสร็จ; ทดสอบจริงจนเข้าเมือง Waterford แล้ว (15 พ.ย. 17:01 น.) |
 | WinForms L9 เดิม (`src/C9.LocalLauncher`) | คงไว้เป็น legacy และ CLI `--check` / `--configure` |
 | Commit เข้า git | ยังไม่ commit (ทั้ง repo มีงานที่ยังไม่ commit จากหลาย session) |
@@ -39,8 +39,8 @@
 - **สิทธิ์ Admin:** `C9.exe` มี manifest `requireAdministrator` L9 จึงเปิดด้วย ShellExecute verb `runas`
   ซึ่ง Windows จะแสดง UAC ทุกครั้งที่เปิดเกม ถ้ากด No จะขึ้นสถานะ "ยังไม่ได้รับสิทธิ์ผู้ดูแลระบบ" (ERROR_CANCELLED 1223)
   ถ้า L9 ถูกเปิดแบบ Admin อยู่แล้ว จะเปิด `C9.exe` ตรงๆ
-- **โหมดปกติ (LOCAL) กับ Client 14 พ.ย.:** การตรวจตอนเปิดจะแจ้งว่ายังไม่มี profile และแนะนำให้เปิดสวิตช์ "ทดสอบ Client รุ่นใหม่ (Local)"
-  เป็นพฤติกรรมที่ตั้งใจ (hash `b4580ed4…` รองรับเฉพาะในโหมดทดสอบ)
+- **Client 14 พ.ย. (`b4580ed4…`):** ตั้งแต่ 26 พ.ย. รองรับเป็นปกติ ไม่มีสวิตช์โหมดทดสอบแล้ว (หัวข้อ 8.4)
+  Client ที่ hash ไม่รู้จักยังถูกปฏิเสธ ("ยังไม่มี profile ที่รองรับ")
 
 ## 4. การทวนสอบ (ISO 9001)
 
@@ -93,8 +93,10 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Launch
 ```
 
 1. ตรวจช่อง "โฟลเดอร์เกม" (ค่าเริ่มต้น `C:\VFUN\C9-GL`) กด "เลือกโฟลเดอร์…" หรือพิมพ์ path แล้วกด "ใช้ path นี้"
-2. ถ้าเป็น Client รุ่น 14 พ.ย. ให้เปิดสวิตช์ "ทดสอบ Client รุ่นใหม่ (Local)"
+2. เข้าสู่ระบบ (หรือสมัครสมาชิก) ในการ์ด "บัญชีผู้เล่น"
 3. กด "เปิดเกม Local" แล้วกด Yes ที่หน้าต่าง UAC
+
+เครื่องผู้เล่นทั่วไปใช้ตัวติดตั้ง `L9-Setup-<version>-<rid>.exe` แทน (หัวข้อ 8.3)
 
 ## 8. Release layout แบบกะทัดรัด + ตัวติดตั้ง (26 พ.ย. 2026)
 
@@ -152,10 +154,47 @@ starter จึงเป็นทางที่ง่ายและไม่ต
 - รวม `L9.local.json` ของเครื่องที่ build ถ้ามี (เป็น path ในเครื่อง ไม่มีรหัสผ่าน/token); ไม่รวมไฟล์ `.pdb`
 - ถอนการติดตั้ง: ลบโปรแกรมและ `L9.*.log`, เก็บ `L9.local.json` ไว้; ค่าผู้ใช้ใน `%LOCALAPPDATA%\C9Local\L9` ไม่ถูกแตะ
 
-สถานะ: สคริปต์เขียนแล้ว **ยังไม่ได้ build/ทดสอบ** เพราะเครื่องยังไม่มี Inno Setup (รอผู้ใช้อนุญาตให้ดาวน์โหลดผ่าน winget)
+สถานะ: **build และทดสอบแล้ว 26 พ.ย.** (Inno Setup 6 ติดตั้งแบบรายผู้ใช้ผ่าน winget ตามที่ผู้ใช้อนุญาต)
 
 ```powershell
 winget install JRSoftware.InnoSetup
 powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
 # ได้ artifacts\launcher\L9-Setup-2.0-win-x64.exe
 ```
+
+| การทวนสอบตัวติดตั้ง (26 พ.ย.) | ผล |
+|---|---|
+| `Build-C9Launcher.ps1 -Installer` | exit 0, `artifacts/launcher/L9-Setup-2.0-win-x64.exe` 70.7 MB |
+| ติดตั้งเงียบ `/VERYSILENT` | exit 0; `%LOCALAPPDATA%\Programs\L9` มี `L9.exe`, `L9.local.json`, `bin\` (564 ไฟล์, ไม่มี `.pdb`), uninstaller; shortcut Start Menu ชี้ `L9.exe`; มี uninstall entry ใน HKCU (ไม่ต้องใช้ UAC) |
+| เปิดจาก shortcut | หน้าต่าง "C9 Local Launcher" badge LOCAL, "พร้อมเปิดเกม local • ตรวจพบ client 2026-11-14 และเซิร์ฟเวอร์ในเครื่อง" |
+| ล็อกอินจากตัวที่ติดตั้ง (UI Automation, บัญชี `l9layout01`) | ผ่าน; `L9.local.log` ถูกเขียนข้าง `L9.exe` ในโฟลเดอร์ติดตั้ง |
+| ติดตั้งทับ (อัปเกรด) โดยวางไฟล์ `bin\stale-old.dll` ไว้ก่อน | ไฟล์เก่าถูกลบ, `L9.local.json` ที่แก้ไว้ไม่ถูกเขียนทับ, log ยังอยู่ |
+| ถอนการติดตั้ง | exit 0; เหลือเฉพาะ `L9.local.json`; shortcut และ uninstall entry หายไป |
+
+หลังทดสอบได้ติดตั้งไว้ในเครื่องผู้ใช้แล้ว 1 ชุด (`%LOCALAPPDATA%\Programs\L9`, config = สำเนาของ `artifacts/launcher/win-x64/L9.local.json`)
+และคืนค่า `last_login` ใน `%LOCALAPPDATA%\C9Local\L9\launcher-settings.json` เป็นค่าเดิมของผู้ใช้หลังการทดสอบ
+
+### 8.4 เอาโหมด "Compatibility Test" ออก (26 พ.ย. 2026)
+
+ผู้ใช้ตัดสินใจ (26 พ.ย. 13:33 น.): เอาออก เพราะเกมอัปเดตตามปกติผ่าน VFUN และ argument ไม่น่าเปลี่ยนแล้ว ไม่จำเป็นต้องกั้น
+เดิมสวิตช์เป็นแค่ประตูกั้น (argument ที่ส่งให้ `C9.exe` เหมือนกันทุกตัวอักษรทั้งเปิดและปิด)
+
+| ไฟล์ | การเปลี่ยนแปลง |
+|---|---|
+| `src/C9.ClientProfiles/LocalLaunchPlan.cs` | รับ hash `Observed20261114` เป็นปกติ, ลบ parameter `compatibilityTest` และ property `CompatibilityTest`; `DisplayName` = "2026-11-14"; hash ที่ไม่รู้จักยังถูกปฏิเสธ |
+| `src/C9.ClientProfiles/LocalLauncherRuntime.cs` | `CheckAsync`/`StartGameAsync` ไม่รับ flag แล้ว, log ไม่มี `compatibility_test`, ข้อความ error สำหรับ client ที่ไม่รู้จักบอกให้อัปเดต L9 |
+| `src/C9.ClientProfiles/LauncherUserSettings.cs` | ลบ `compatibility_test` (ไฟล์ settings เก่าที่มี key นี้ยังโหลดได้ ระบบไม่สนใจ key นี้) |
+| `src/C9.LocalLauncher.Maui/*` | ลบการ์ด "โหมดการเปิดเกม" + สวิตช์, badge เป็น LOCAL ตลอด, ชื่อหน้าต่าง "C9 Local Launcher", ลบ argument `--compatibility-test` |
+| `src/C9.LocalLauncher/*` (WinForms legacy) | ลบ checkbox และ `--compatibility-test` ให้ใช้ `LocalLaunchPlan` แบบใหม่ได้ (build ผ่าน, ไม่ได้ทดสอบ UI) |
+| `tests/C9.Validation` | ปรับ case: Client 14 พ.ย. ผ่านโดยไม่มี flag และได้ argument เดียวกับ 55350, settings เก่าที่มี `compatibility_test` ยังโหลดได้ |
+
+ผล: `tests/C9.Validation` 83/83 ผ่าน (37,609 assertions)
+
+หมายเหตุ: ใน `launcher-settings.json` ของผู้ใช้ยังคง `"compatibility_test": true` ไว้ เพื่อให้ L9 รุ่นเก่าใน `artifacts/launcher/win-x64` (build 16 พ.ย.) ยังเปิดเกมได้ L9 รุ่นใหม่ไม่อ่านค่านี้
+เมื่อเลิกใช้รุ่นเก่าแล้วจะลบ key นี้ทิ้งหรือไม่ก็ได้
+
+### 8.5 งานที่ยังค้าง / ข้อเสนอ
+
+1. Branch `claude/project-thread-3dpsvk` ยังไม่ merge เข้า `p-server` (ผู้ใช้ตัดสินใจ)
+2. `bin\` ยังใหญ่ (~273 MB, 564 ไฟล์) เพราะ Windows App SDK 1.8 พา DLL ของ AI/ML (DirectML, onnxruntime ฯลฯ) และโฟลเดอร์ภาษา ~120 ภาษามาด้วย ลดขนาดได้ในงานแยก
+3. `C9WorkspaceRoot` ถูกฝังตอน build (path ของ checkout ที่ build) ใช้เป็นที่หา project defaults เมื่อยังไม่มี `L9.local.json` เท่านั้น

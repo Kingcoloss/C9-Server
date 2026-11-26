@@ -9,7 +9,6 @@ internal sealed class LauncherForm : Form
     private readonly string folder;
     private readonly string configurationFolder;
     private readonly string? projectWorkspace;
-    private bool compatibilityTest;
     private readonly Label status = new();
     private readonly Label detail = new();
     private readonly Button play = new();
@@ -18,13 +17,12 @@ internal sealed class LauncherForm : Form
     private bool busy;
     private Process? activeGame;
 
-    internal LauncherForm(string directory, string? configDirectory, string? workspace, bool compatibilityTest)
+    internal LauncherForm(string directory, string? configDirectory, string? workspace)
     {
         folder = Path.GetFullPath(directory);
         configurationFolder = Path.GetFullPath(configDirectory ?? folder);
         projectWorkspace = workspace;
-        this.compatibilityTest = compatibilityTest;
-        Text = compatibilityTest ? "C9 Local Launcher - Compatibility Test" : "C9 Local Launcher";
+        Text = "C9 Local Launcher";
         ClientSize = new Size(680, 550);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
@@ -56,15 +54,6 @@ internal sealed class LauncherForm : Form
         ConfigureButton(official, "เปิด VFUN Launcher", new Rectangle(250, 432, 244, 36), BackColor, Color.Silver);
         openFolder.Click += (_, _) => RunShell(folder);
         official.Click += (_, _) => OpenOfficial();
-        CheckBox trial = new() { Text = "ทดสอบ Client รุ่นใหม่ (Local)", Checked = compatibilityTest,
-            Bounds = new Rectangle(34, 478, 610, 26), ForeColor = gold };
-        trial.CheckedChanged += async (_, _) =>
-        {
-            this.compatibilityTest = trial.Checked;
-            Text = trial.Checked ? "C9 Local Launcher - Compatibility Test" : "C9 Local Launcher";
-            await CheckAsync();
-        };
-        Controls.Add(trial);
         AddLabel("บัญชีทดสอบ: test  •  โหมดพัฒนา local server", new Rectangle(34, 514, 612, 24), 9, Color.Gray);
         Shown += async (_, _) => await CheckAsync();
     }
@@ -99,7 +88,7 @@ internal sealed class LauncherForm : Form
         try
         {
             EnsureConfiguration();
-            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder, compatibilityTest);
+            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder);
             bool ready = await ServerReadyAsync();
             status.Text = ready ? "พร้อมเปิดเกม local" : "Client พร้อม • เซิร์ฟเวอร์ยังไม่เปิด";
             status.ForeColor = ready ? Color.LightGreen : gold;
@@ -117,7 +106,7 @@ internal sealed class LauncherForm : Form
         try
         {
             EnsureConfiguration();
-            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder, compatibilityTest);
+            LocalLaunchPlan plan = LocalLaunchPlan.Read(folder, configurationFolder);
             if (Process.GetProcessesByName("C9").Length > 0)
                 throw new InvalidOperationException("มีเกม C9 เปิดอยู่ กรุณาปิดเกมก่อนเปิดชุด local");
             status.Text = "กำลังเตรียมเซิร์ฟเวอร์…";

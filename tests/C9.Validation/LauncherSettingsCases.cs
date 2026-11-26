@@ -18,19 +18,20 @@ internal static partial class Validation
             Check.Equal<string?>(null, LauncherUserSettings.ValidateGameDirectory(game));
             Check.Equal<string?>(null, LauncherUserSettings.ValidateGameDirectory("\"" + game + "\""));
 
-            LauncherUserSettings saved = new() { GameDirectory = game, CompatibilityTest = true };
+            LauncherUserSettings saved = new() { GameDirectory = game, LastLogin = "player" };
             saved.Save(storage);
             Check.Equal(saved, LauncherUserSettings.Load(storage));
             Check.Equal(game, LauncherUserSettings.Load(storage).ResolveGameDirectory(launcher, null));
             Check.Equal(0, Directory.GetFiles(storage, "*.tmp").Length);
-            (saved with { CompatibilityTest = false }).Save(storage);
-            Check.True(!LauncherUserSettings.Load(storage).CompatibilityTest, "Saving again must replace the previous value");
+            (saved with { LastLogin = null }).Save(storage);
+            Check.True(LauncherUserSettings.Load(storage).LastLogin is null, "Saving again must replace the previous value");
 
             string file = Path.Combine(storage, LauncherUserSettings.FileName);
             File.WriteAllText(file, "{broken");
             Check.Equal(new LauncherUserSettings(), LauncherUserSettings.Load(storage));
-            File.WriteAllText(file, """{"game_directory":"relative\\dir","compatibility_test":true}""");
-            Check.Equal(new LauncherUserSettings { CompatibilityTest = true }, LauncherUserSettings.Load(storage));
+            // Settings saved by older L9 builds still load: the removed "compatibility_test" key is ignored.
+            File.WriteAllText(file, """{"game_directory":"relative\\dir","compatibility_test":true,"last_login":"player"}""");
+            Check.Equal(new LauncherUserSettings { LastLogin = "player" }, LauncherUserSettings.Load(storage));
             Check.Throws<ArgumentException>(() => new LauncherUserSettings { GameDirectory = "relative" }.Save(storage));
 
             File.WriteAllText(Path.Combine(launcher, "C9.exe"), "fixture");

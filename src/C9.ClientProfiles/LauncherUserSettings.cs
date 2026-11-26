@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace C9.LocalLauncher;
 
 /// <summary>
-/// Per-user launcher preferences (game folder and launch mode). Stored outside the game folder and
+/// Per-user launcher preferences (game folder, account server, last login). Stored outside the game folder and
 /// separately from <see cref="LocalLauncherConfiguration"/>, whose schema is strict and project-owned.
 /// </summary>
 public sealed record LauncherUserSettings
@@ -14,7 +14,6 @@ public sealed record LauncherUserSettings
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 
     [JsonPropertyName("game_directory")] public string? GameDirectory { get; init; }
-    [JsonPropertyName("compatibility_test")] public bool CompatibilityTest { get; init; }
     /// <summary>c9-auth base URL; null means <see cref="LauncherAuthClient.DefaultUrl"/>.</summary>
     [JsonPropertyName("auth_url")] public string? AuthUrl { get; init; }
     /// <summary>Last login name, pre-filled on the next start. Passwords and tokens are never saved.</summary>

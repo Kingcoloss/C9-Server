@@ -44,13 +44,10 @@ internal static partial class Validation
                 LocalLaunchPlan.Official52893));
         Check.Throws<InvalidDataException>(() => LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
             new string('0', 64)));
-        Check.Throws<InvalidDataException>(() => LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-            LocalLaunchPlan.Observed20261114));
-        LocalLaunchPlan trial = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-            LocalLaunchPlan.Observed20261114, compatibilityTest: true);
-        Check.True(trial.CompatibilityTest);
-        Check.Equal(updated.Arguments, trial.Arguments);
-        Check.Throws<InvalidDataException>(() => LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
-            new string('0', 64), compatibilityTest: true));
+        // The 14 Nov 2026 Client is a normal profile (no compatibility switch) with the 55350 argument layout.
+        LocalLaunchPlan current = LocalLaunchPlan.Create(Path.GetTempPath(), "127.0.0.1", 14000,
+            LocalLaunchPlan.Observed20261114);
+        Check.Equal("2026-11-14", current.DisplayName);
+        Check.Equal(updated.Arguments, current.Arguments);
     }
 }
