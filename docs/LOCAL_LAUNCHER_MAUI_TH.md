@@ -212,3 +212,17 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
 
 ทวนสอบ: build + `-Installer` exit 0 (setup 71.1 MB); ไอคอนของ `L9.exe` และ `bin\L9.exe` เป็นไอคอนใหม่;
 ติดตั้งทับแล้วเปิดจาก Start Menu หน้าต่าง "C9 Local Launcher" มีไอคอนใหม่ (WM_GETICON)
+
+### 8.7 ภาษาเหลือ TH, EN, CN (26 พ.ย. 2026)
+
+ผู้ใช้ขอ (26 พ.ย. 13:45 น.) ให้ไฟล์ภาษาเหลือแค่ไทย อังกฤษ จีน (ตีความ CN = จีนตัวย่อ zh-Hans/zh-CN)
+
+| ไฟล์ | การเปลี่ยนแปลง |
+|---|---|
+| `src/C9.LocalLauncher.Maui/C9.LocalLauncher.Maui.csproj` | `SatelliteResourceLanguages` = th;th-TH;en;en-US;en-GB;zh-Hans;zh-CN (ไฟล์ภาษา `Microsoft.Maui.Controls.resources.dll`) + target `C9KeepWinUILanguages` ตัด `.mui` ของ WinUI ที่ไม่ใช่ th-TH/en-US/en-GB/zh-CN ออกจากรายการ publish |
+| `scripts/Build-C9Launcher.ps1` | ลบ `bin\` ก่อน publish ทุกครั้ง (เป็น build output ล้วน) ไฟล์ที่เลิกใช้จึงไม่ค้าง |
+
+ผล: โฟลเดอร์ใน `bin\` 121 → 8 (`en-GB`, `en-us`, `th`, `th-TH`, `zh-CN`, `zh-Hans`, `Microsoft.UI.Xaml`, `NpuDetect`), ไฟล์ 581 → 417;
+ขนาดลดไม่มาก (~273 → ~270 MB, setup 70.7 MB) เพราะส่วนใหญ่เป็น DLL ของ Windows App SDK ไม่ใช่ไฟล์ภาษา
+ทวนสอบ: build/`-Installer` exit 0, เปิด L9 จาก build และจากตัวที่ติดตั้งทับได้ปกติ (Windows UI ภาษา en-US)
+ความเสี่ยง: เครื่องที่ตั้ง Windows เป็นภาษาอื่น (เช่น ญี่ปุ่น) จะได้ข้อความของระบบ WinUI (เช่นเมนูคลิกขวา Copy/Paste) จากภาษาสำรองแทน ยังไม่ได้ทดสอบบนเครื่องภาษาอื่น

@@ -27,6 +27,8 @@ $output = Join-Path $workspace "artifacts/launcher/$RuntimeIdentifier"
 $runtime = Join-Path $output 'bin'
 $project = Join-Path $workspace 'src/C9.LocalLauncher.Maui/C9.LocalLauncher.Maui.csproj'
 $package = Join-Path $workspace 'src/C9.LocalLauncher.Package'
+# bin\ holds only build output: start empty so files dropped from the project (languages, DLLs) do not linger.
+if (Test-Path -LiteralPath $runtime) { Remove-Item -LiteralPath $runtime -Recurse -Force }
 Push-Location -LiteralPath $workspace
 try {
     & $dotnet publish $project -c Release -p:RuntimeIdentifierOverride=$RuntimeIdentifier -o $runtime --nologo

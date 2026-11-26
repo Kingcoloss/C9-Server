@@ -16,6 +16,8 @@
     <ApplicationId>com.c9local.launcher</ApplicationId>
     <ApplicationDisplayVersion>2.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
+    <!-- Ship only Thai, English and Chinese (Simplified) resources: .NET satellites and WinUI .mui folders. -->
+    <SatelliteResourceLanguages>th;th-TH;en;en-US;en-GB;zh-Hans;zh-CN</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../C9.ClientProfiles/C9.ClientProfiles.csproj"
@@ -24,4 +26,11 @@
     <MauiIcon Include="Resources/AppIcon/appicon.svg" />
     <AssemblyMetadata Include="C9WorkspaceRoot" Value="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../..'))" />
   </ItemGroup>
+  <!-- Windows App SDK publishes WinUI .mui strings for ~86 languages; keep the same three as SatelliteResourceLanguages. -->
+  <Target Name="C9KeepWinUILanguages" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+          Condition="'%(Extension)' == '.mui' and !$([System.Text.RegularExpressions.Regex]::IsMatch('%(RelativePath)', '(?i)^(th-TH|en-US|en-GB|zh-CN)[\\/]'))" />
+    </ItemGroup>
+  </Target>
 </Project>
