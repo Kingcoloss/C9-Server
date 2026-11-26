@@ -233,3 +233,30 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
 `appicon.svg` วาด "L" และ "9" (วงกลม + ก้าน + ฐาน แบบตัวเลขดิจิทัล) เป็น shape ล้วน ไม่พึ่งฟอนต์ สีทอง `#E8BE68` บนพื้น `#11171F` เหมือนเดิม
 `Build-C9Launcher.ps1` ลบ cache `obj/**/resizetizer` ก่อน build เพราะ cache เดิมทำให้ไอคอนเก่าค้างหลังแก้ SVG
 ทวนสอบ: ดูภาพที่ 256/48/32/24/16 px อ่านเป็น "L9" ได้ทุกขนาด; build `-Installer` exit 0; ติดตั้งทับแล้วไอคอนของ `L9.exe` ที่ติดตั้งเป็น "L9" และเปิดจาก Start Menu ได้
+
+### 8.9 ตัดส่วนที่ L9 ไม่ใช้ออก (26 พ.ย. 2026)
+
+ผู้ใช้ขอ (26 พ.ย. 14:16 น.) ให้ compact มากขึ้นโดยตัดส่วนที่ไม่จำเป็น
+
+| การเปลี่ยนแปลง (`C9.LocalLauncher.Maui.csproj`) | ผล |
+|---|---|
+| `PackageReference` ของ `Microsoft.WindowsAppSDK.AI` 1.8.76, `.ML` 1.8.2197, `.Widgets` 1.8.251231004 แบบ `ExcludeAssets="all"` (ตัด projection DLL ที่เป็น .NET) **ต้องอัปเดตเลขเวอร์ชันพร้อม MAUI** | |
+| target `C9KeepWinUILanguages` ตัดไฟล์ native ของ AI/ML/Widgets จาก runtime แบบ self-contained ด้วย: `NpuDetect\`, `DirectML.dll`, `onnxruntime*`, `Microsoft.Windows.(AI\|Widgets\|Workloads\|Vision\|SemanticSearch)*`, `workloads.*.json` | `bin\` 270 → 223 MB |
+| `PublishTrimmed=true`, `TrimMode=partial` (ตัดโค้ดที่ไม่ใช้เฉพาะใน DLL ของ framework/SDK; DLL ของเราไม่ถูกตัด), `JsonSerializerIsReflectionEnabledByDefault=true` (settings/c9-auth ใช้ System.Text.Json แบบ reflection) | `bin\` 223 → 111 MB; `Microsoft.Windows.SDK.NET.dll` 53 MB หายไป, ไม่มี trim warning |
+
+ผลรวม: `bin\` ~270 MB / 417 ไฟล์ → **~111 MB / 236 ไฟล์**; ไฟล์ติดตั้ง 70.7 → **32.2 MB**
+
+ทวนสอบ (build ที่ trim แล้ว):
+
+| รายการ | ผล |
+|---|---|
+| เปิด L9 + "ตรวจความพร้อม" | "พร้อมเปิดเกม local • ตรวจพบ client 2026-11-14 และเซิร์ฟเวอร์ในเครื่อง" |
+| สมัคร → ออกจากระบบ → ล็อกอิน (บัญชีทดสอบใหม่ `l9layout02`, account 6) | ผ่าน; `L9.local.log` บันทึก register ok / logout / login ok |
+| การ์ด STATUS ตัวละคร (เรียก API ของ portal) | แสดง "บัญชีนี้ยังไม่มีตัวละคร…" ถูกต้อง |
+| บันทึก `launcher-settings.json` (JSON) | เขียนได้ |
+| ปุ่ม "เลือกโฟลเดอร์…" (WinRT FolderPicker) | หน้าต่าง "Select Folder" เปิดได้ ปิดแล้ว L9 ยังทำงาน |
+| ติดตั้งทับจาก setup ใหม่ แล้วล็อกอินจากตัวที่ติดตั้ง | ผ่าน; `onnxruntime.dll` ไม่อยู่ในโฟลเดอร์ติดตั้งแล้ว |
+| `tests/C9.Validation` | 83/83 ผ่าน |
+
+ยังไม่ได้ทดสอบกับ build ที่ trim แล้ว: กด "เปิดเกม Local" จนเข้าเกม (ต้องกด UAC บนเครื่องผู้ใช้), ปุ่ม "ดู Log"/"เปิดโฟลเดอร์เกม"/"เปิด VFUN Launcher"
+บัญชีทดสอบใน DB จริงตอนนี้มี `l9layout01` (5) และ `l9layout02` (6) ลบ/แบนได้ทาง Admin Portal; คืนค่า `last_login` ของผู้ใช้แล้ว

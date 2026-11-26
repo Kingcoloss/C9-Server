@@ -18,12 +18,22 @@
     <ApplicationVersion>2</ApplicationVersion>
     <!-- Ship only Thai, English and Chinese (Simplified) resources: .NET satellites and WinUI .mui folders. -->
     <SatelliteResourceLanguages>th;th-TH;en;en-US;en-GB;zh-Hans;zh-CN</SatelliteResourceLanguages>
+    <!-- Trim unused code from framework/SDK assemblies only (partial); our own assemblies and their
+         reflection-based System.Text.Json use stay intact. -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../C9.ClientProfiles/C9.ClientProfiles.csproj"
                       GlobalPropertiesToRemove="RuntimeIdentifier;RuntimeIdentifierOverride;SelfContained" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <MauiIcon Include="Resources/AppIcon/appicon.svg" />
+    <!-- Windows App SDK parts L9 never calls (Windows AI, ONNX/DirectML, Widgets): keep their files out of the app.
+         Versions are the ones MAUI $(MauiVersion) brings in; update them together with MAUI. -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.AI" Version="1.8.76" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.ML" Version="1.8.2197" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" Version="1.8.251231004" ExcludeAssets="all" />
     <AssemblyMetadata Include="C9WorkspaceRoot" Value="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../..'))" />
   </ItemGroup>
   <!-- Windows App SDK publishes WinUI .mui strings for ~86 languages; keep the same three as SatelliteResourceLanguages. -->
@@ -31,6 +41,9 @@
     <ItemGroup>
       <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
           Condition="'%(Extension)' == '.mui' and !$([System.Text.RegularExpressions.Regex]::IsMatch('%(RelativePath)', '(?i)^(th-TH|en-US|en-GB|zh-CN)[\\/]'))" />
+      <!-- The self-contained Windows App SDK runtime still carries the native AI/ML/Widgets files excluded above. -->
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+          Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(RelativePath)', '(?i)^(NpuDetect[\\/]|DirectML\.dll$|onnxruntime|Microsoft\.Windows\.(AI|Widgets|Workloads|Private\.Workloads|Vision|VisionInternal|Internal\.Vision|SemanticSearch)\.|workloads\.)'))" />
     </ItemGroup>
   </Target>
 </Project>
