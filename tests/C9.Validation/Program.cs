@@ -94,6 +94,7 @@ internal static partial class Validation
             ("Official Client local launch arguments", Sync(LocalLauncherArguments)),
             ("Local launcher configuration bootstrap and preservation", Sync(LocalConfigurationBootstrap)),
             ("Launcher user settings persist game folder and mode", Sync(LauncherSettingsPersistence)),
+            ("Launcher release layout keeps config beside the starter L9.exe", Sync(LauncherReleaseLayoutHome)),
             ("Launcher login identity in launch arguments", Sync(LauncherIdentityArguments)),
             ("Launcher account server URL policy", Sync(LauncherAuthUrlPolicy)),
             ("Launcher account client register/login/ticket", LauncherAuthClientFlow),

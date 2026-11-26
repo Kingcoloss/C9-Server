@@ -12,6 +12,17 @@ public static class LocalLauncherConfiguration
 {
     public const string FileName = "L9.local.json";
 
+    /// <summary>
+    /// Folder that holds L9.local.json and the logs. In the release layout the runtime lives in
+    /// <c>bin\</c> under a small starter <c>L9.exe</c>; then the folder above <c>bin\</c> is used.
+    /// </summary>
+    public static string LauncherHome(string runtimeDirectory)
+    {
+        DirectoryInfo runtime = new(Path.TrimEndingDirectorySeparator(Path.GetFullPath(runtimeDirectory)));
+        return runtime.Name.Equals("bin", StringComparison.OrdinalIgnoreCase) && runtime.Parent is { } home &&
+            File.Exists(Path.Combine(home.FullName, "L9.exe")) ? home.FullName : runtime.FullName;
+    }
+
     public static JsonDocument Read(string directory)
     {
         JsonDocument document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(directory, FileName)));

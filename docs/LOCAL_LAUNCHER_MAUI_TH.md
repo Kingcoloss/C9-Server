@@ -1,6 +1,6 @@
 # C9 Local Launcher (MAUI) — Current State
 
-อัปเดต: 15 พฤศจิกายน 2026 (Asia/Bangkok)
+อัปเดต: 26 พฤศจิกายน 2026 (Asia/Bangkok) — เพิ่มหัวข้อ 8 release layout แบบกะทัดรัด + ตัวติดตั้ง
 ขอบเขต: Task 1 (UI ของ Client Launcher เป็น MAUI แบบ Responsive) และ Task 2 (กำหนด Game Directory ได้)
 มาตรฐานอ้างอิง: ISO/IEC 29110 (บันทึกงาน/ส่งต่อ), ISO 9001 (การทวนสอบที่ตรวจย้อนได้), ISO/IEC 27001 (ความปลอดภัย)
 
@@ -95,3 +95,67 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Launch
 1. ตรวจช่อง "โฟลเดอร์เกม" (ค่าเริ่มต้น `C:\VFUN\C9-GL`) กด "เลือกโฟลเดอร์…" หรือพิมพ์ path แล้วกด "ใช้ path นี้"
 2. ถ้าเป็น Client รุ่น 14 พ.ย. ให้เปิดสวิตช์ "ทดสอบ Client รุ่นใหม่ (Local)"
 3. กด "เปิดเกม Local" แล้วกด Yes ที่หน้าต่าง UAC
+
+## 8. Release layout แบบกะทัดรัด + ตัวติดตั้ง (26 พ.ย. 2026)
+
+ผู้ใช้ขอ (ผ่าน coordinator, 26 พ.ย.): เก็บ MAUI launcher ไว้ แต่ให้โฟลเดอร์ที่ส่งออกเหลือแค่ `L9.exe` + config ด้านบน
+ไฟล์ runtime ทั้งหมดย้ายไปโฟลเดอร์ย่อย และมีตัวติดตั้ง Windows
+Branch: `claude/project-thread-3dpsvk` (แตกจาก `claude/npc-waterford` `e841266` ซึ่งเป็นโค้ดที่ deploy อยู่)
+
+### 8.1 Layout ใหม่ (`artifacts/launcher/<rid>/`)
+
+```
+L9.exe            starter ขนาด ~7 KB (src/C9.LocalLauncher.Package/L9Starter.cs) เปิด bin\L9.exe แล้วจบ
+L9.local.json     config เดิม (ไม่ถูกลบตอน build ใหม่)
+L9.*.log          log ของ L9 (L9.local.log, L9.server.log, L9.handoff.log)
+bin\              MAUI launcher จริง (bin\L9.exe) + .NET/Windows App SDK runtime ทั้งหมด (567 ไฟล์, ~273 MB)
+```
+
+| ไฟล์ | การเปลี่ยนแปลง |
+|---|---|
+| `src/C9.LocalLauncher.Package/L9Starter.cs` (ใหม่) | starter: หา `bin\L9.exe` ข้างตัวเอง เปิดด้วย working dir = โฟลเดอร์บน ส่ง argument ต่อ (quote ตามกฎ Windows) ถ้าไม่พบไฟล์แสดงกล่องข้อความภาษาไทย. compile ด้วย `csc.exe` ของ .NET Framework 4.x ที่มากับ Windows (ไม่ต้องติดตั้งอะไรเพิ่ม) และใช้ icon เดียวกับ L9 |
+| `src/C9.ClientProfiles/LocalLauncherConfiguration.cs` | เพิ่ม `LauncherHome(runtimeDir)`: ถ้า runtime อยู่ในโฟลเดอร์ชื่อ `bin` และโฟลเดอร์แม่มี `L9.exe` ให้ใช้โฟลเดอร์แม่เป็นที่เก็บ `L9.local.json`/log/หา `C9.exe` ข้าง L9; ไม่เช่นนั้นใช้โฟลเดอร์ของ runtime เหมือนเดิม |
+| `src/C9.LocalLauncher.Maui/MauiProgram.cs` | `LauncherDirectory` = `LauncherHome(AppContext.BaseDirectory)` |
+| `scripts/Build-C9Launcher.ps1` | publish ไป `bin\`, ลบไฟล์ runtime ที่ค้างอยู่ด้านบนจาก build แบบเดิม (เฉพาะชื่อที่มีใน `bin\`; config/log ไม่ถูกแตะ), compile starter, สวิตช์ใหม่ `-Installer` |
+| `src/C9.LocalLauncher.Package/L9Setup.iss` (ใหม่) | สคริปต์ Inno Setup 6 (ดู 8.3) |
+| `tests/C9.Validation/LauncherSettingsCases.cs` | case ใหม่ "Launcher release layout keeps config beside the starter L9.exe" |
+
+ทำไมใช้ starter แทนการให้ `L9.exe` ตัวจริงชี้เข้า `bin\` โดยตรง: ทดลองแก้ apphost ให้โหลด `bin\L9.dll` แล้ว (.NET โหลดได้)
+แต่ WinUI 3 แบบ self-contained หา class ผ่าน manifest ของ exe ซึ่งอ้างไฟล์ DLL ข้าง exe จึง crash
+`COMException 0x80040111 ClassFactory cannot supply requested class` ที่ `Microsoft.UI.Xaml.Application.Start`
+starter จึงเป็นทางที่ง่ายและไม่ต้องแก้ไฟล์ของ Windows App SDK
+
+### 8.2 การทวนสอบ layout (ISO 9001)
+
+| รายการ | ผล |
+|---|---|
+| `scripts/Build-C9Launcher.ps1` | exit 0; ด้านบนเหลือ `bin`, `L9.exe`, `L9.local.json`, log |
+| build ทับโฟลเดอร์ layout เดิม (จำลอง 360 ไฟล์ + 122 โฟลเดอร์ด้านบน) | ด้านบนเหลือ `bin`, `L9.exe`, `L9.local.json`, `L9.local.log` (config/log เดิมยังอยู่) |
+| เปิด `L9.exe` ด้านบน | starter จบด้วย exit 0, process `bin\L9.exe` เปิดหน้าต่าง "C9 Local Launcher - Compatibility Test" |
+| อ่าน config ด้านบน | สถานะ "พร้อมเปิดเกม local • ตรวจพบ client 2026-11-14 และเซิร์ฟเวอร์ในเครื่อง" (มี `L9.local.json` เฉพาะด้านบน) |
+| สมัคร + ออกจากระบบ + ล็อกอิน ผ่าน UI (UI Automation) กับ c9-auth ใน Docker | ผ่าน: บัญชีทดสอบ `l9layout01` (account 5); `L9.local.log` ด้านบนบันทึก register ok / logout / login ok |
+| `tests/C9.Validation` (Release) | 83/83 ผ่าน, 37,611 assertions |
+
+หมายเหตุ: ครั้งแรกหลังเปิด L9 (cold start) การตรวจ greeting ของ 14000/14001 มี timeout 700 ms จึงเคยขึ้น
+"เซิร์ฟเวอร์ยังไม่เปิด" ทั้งที่ port เปิดอยู่; กด "ตรวจความพร้อม" อีกครั้งแล้วปกติ เป็นพฤติกรรมเดิม ไม่เกี่ยวกับ layout
+
+บัญชีทดสอบ `l9layout01` (account 5) ถูกสร้างใน DB จริงระหว่างทดสอบ ไม่ได้บันทึกรหัสผ่านไว้ใน repo; ลบ/แบนได้ทาง Admin Portal
+
+### 8.3 ตัวติดตั้ง (Inno Setup 6)
+
+เลือก Inno Setup 6 เพราะใช้สคริปต์ไฟล์เดียวได้ setup `.exe` ไฟล์เดียว ติดตั้งแบบรายผู้ใช้ได้โดยไม่ต้องใช้สิทธิ์ Admin
+และมี uninstaller + shortcut ในตัว (MSIX ต้องมีใบรับรองสำหรับ sign, WiX ซับซ้อนเกินงานนี้)
+
+- ติดตั้งที่ `%LOCALAPPDATA%\Programs\L9` (`PrivilegesRequired=lowest`) เพราะ L9 เขียน config/log ข้าง `L9.exe`
+- shortcut ใน Start Menu "C9 Local Launcher" (desktop icon เป็นตัวเลือก)
+- อัปเดตเวอร์ชัน: ลบ `{app}\bin` ทั้งโฟลเดอร์ก่อนลงไฟล์ใหม่ จึงไม่มี DLL เก่าค้าง; `L9.local.json` ที่มีอยู่ไม่ถูกเขียนทับ
+- รวม `L9.local.json` ของเครื่องที่ build ถ้ามี (เป็น path ในเครื่อง ไม่มีรหัสผ่าน/token); ไม่รวมไฟล์ `.pdb`
+- ถอนการติดตั้ง: ลบโปรแกรมและ `L9.*.log`, เก็บ `L9.local.json` ไว้; ค่าผู้ใช้ใน `%LOCALAPPDATA%\C9Local\L9` ไม่ถูกแตะ
+
+สถานะ: สคริปต์เขียนแล้ว **ยังไม่ได้ build/ทดสอบ** เพราะเครื่องยังไม่มี Inno Setup (รอผู้ใช้อนุญาตให้ดาวน์โหลดผ่าน winget)
+
+```powershell
+winget install JRSoftware.InnoSetup
+powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
+# ได้ artifacts\launcher\L9-Setup-2.0-win-x64.exe
+```

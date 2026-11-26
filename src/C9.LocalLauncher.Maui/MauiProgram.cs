@@ -29,7 +29,7 @@ public sealed record LauncherStartup(string LauncherDirectory, string? Workspace
             else if (args[index] == "--client-dir" && index + 1 < args.Length) client = Path.GetFullPath(args[++index]);
             else if (args[index] == "--workspace" && index + 1 < args.Length) workspace = Path.GetFullPath(args[++index]);
         }
-        return new(AppContext.BaseDirectory, workspace, client, compatibility);
+        return new(LocalLauncherConfiguration.LauncherHome(AppContext.BaseDirectory), workspace, client, compatibility);
     }
 }
 

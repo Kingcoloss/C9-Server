@@ -38,4 +38,23 @@ internal static partial class Validation
         }
         finally { Directory.Delete(root, recursive: true); }
     }
+
+    private static void LauncherReleaseLayoutHome()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "c9-layout-" + Guid.NewGuid().ToString("N"));
+        string bin = Path.Combine(root, "bin");
+        Directory.CreateDirectory(bin);
+        try
+        {
+            Check.Equal(bin, LocalLauncherConfiguration.LauncherHome(bin + Path.DirectorySeparatorChar));
+            File.WriteAllText(Path.Combine(root, "L9.exe"), "starter");
+            Check.Equal(root, LocalLauncherConfiguration.LauncherHome(bin + Path.DirectorySeparatorChar));
+            Check.Equal(root, LocalLauncherConfiguration.LauncherHome(bin));
+            Check.Equal(root, LocalLauncherConfiguration.LauncherHome(root));
+            string flat = Path.Combine(root, "win-x64");
+            Directory.CreateDirectory(flat);
+            Check.Equal(flat, LocalLauncherConfiguration.LauncherHome(flat + Path.DirectorySeparatorChar));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
 }
