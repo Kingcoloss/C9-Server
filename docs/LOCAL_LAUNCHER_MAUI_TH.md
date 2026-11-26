@@ -281,3 +281,9 @@ powershell -ExecutionPolicy Bypass -File scripts\Build-C9Launcher.ps1 -Installer
 
 หมายเหตุ: คำแปลจีนเขียนโดย Claude ควรให้ผู้ที่อ่านจีนตรวจอีกรอบ; ชื่อ status/อาชีพที่มาจากข้อมูลเกม (เช่นชื่อ stat) ไม่ได้แปล
 บัญชีทดสอบใน DB จริงตอนนี้: `l9layout01` (5), `l9layout02` (6), `l9layout03` (7); คืน `last_login` ของผู้ใช้แล้ว ตั้ง `language` = th
+
+### 8.11 Merge (26 พ.ย. 2026)
+
+ผู้ใช้เลือก (15:12 น.) ให้ merge เข้า `claude/npc-waterford` (branch ที่ deploy อยู่): fast-forward `e841266` → `82d3f55` (+ commit บันทึกนี้)
+ไม่มี conflict, ไม่ต้อง deploy server ใหม่ (เปลี่ยนเฉพาะ launcher/ClientProfiles/tests/docs/scripts); แจ้ง thread NPC ผ่าน coordinator แล้ว
+ยังไม่ได้ merge เข้า `p-server` (จะพางานอื่นอีก 24 commit และ checkout หลักมีไฟล์ค้างไม่ commit 45 ไฟล์ ควรทำเป็นงานรวบ branch แยก)
