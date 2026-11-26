@@ -160,7 +160,7 @@ thread ระบบ (Sprint 1) ขยายต่อใน S03 (ย้าย/ส
 - **ข้อ 4 Item สนับสนุนตอนเริ่มเล่น:** Portal `/items/manage` ปุ่ม "ตั้งเป็นชุดเริ่มเล่น" (ต้องใส่เหตุผล, bundle ต้องเปิดใช้, ของ GM ต้องเป็น Owner) → ทุกตัวละครที่**สร้างใหม่ในเกม**
   ได้ของชุดนั้นใน Gift Box ทันที (ใน transaction เดียวกับการสร้าง, audit `items.starter_send`; ของ GM ถูกข้ามเสมอ) ตัวละครเดิมไม่ได้ย้อนหลัง; API `PUT /api/v1/items/bundles/starter`
 - หน้า "ประวัติการส่ง": สถานะ "อยู่ใน Gift Box" (ยังไม่เปิด/เปิดอ่านแล้ว), "รับเข้ากระเป๋าแล้ว" (ตัวละคร + เวลา), "ยกเลิก" (หรือ "ผู้เล่นลบในเกม")
-- test: C9.Validation 80/80 (layout ทุก packet + memory session เต็มขั้น), GameData 25/25 (Gift Box, ชุดเริ่มเล่น, **migration จากตารางที่มีข้อมูลของรุ่นก่อน**), Portal 12/12
+- test (ต่อจาก `49dfb1e` บันทึกตำแหน่งของ thread ระบบ): C9.Validation 82/82 (layout ทุก packet + memory session เต็มขั้น), GameData 25/25 (Gift Box, ชุดเริ่มเล่น, **migration จากตารางที่มีข้อมูลของรุ่นก่อน**), Portal 12/12
 
 ### 7.4 วิธีทดสอบในเกมหลัง deploy
 

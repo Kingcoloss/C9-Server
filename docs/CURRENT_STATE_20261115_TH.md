@@ -183,4 +183,4 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
 - ของที่ส่งยังไม่เข้าเกม (รอ RE inventory + Gift Box) รายการค้างสถานะ "รอส่งเข้าเกม" ยกเลิกได้; รายละเอียด: [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md)
 - **26 พ.ย. 2026 ~10:45 น. (เขียนเสร็จ ทดสอบผ่าน ยังไม่ deploy):** Gift Box ในเกม (`0EB1→0EB2` นับจริง, `0E97→0EA0`, `0E9D→0E9E`, `0E9B→0CFB+0E9C+0E9A`, `0E99→0E9A`),
   กระเป๋า `0BC1` ตอนเลือกตัวละคร, migration `GiftBoxInventory`, `GiftBoxService`, ชุดเริ่มเล่น (bundle → Gift Box ของตัวละครใหม่);
-  Validation 80/80, GameData 25/25, Portal 12/12 — ดู [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md) ข้อ 7
+  Validation 82/82, GameData 25/25, Portal 12/12 (branch ต่อจาก `49dfb1e`) — ดู [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md) ข้อ 7
