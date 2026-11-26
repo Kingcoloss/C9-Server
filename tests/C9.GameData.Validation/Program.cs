@@ -44,6 +44,8 @@ internal sealed class ManualClock(DateTimeOffset now) : TimeProvider
 
 internal sealed record Harness(ServiceProvider Services, ManualClock Clock)
 {
+    /// <summary>Admin connection for cases that need a database of their own (migration from older data).</summary>
+    public string? AdminConnection { get; init; }
     public AccountService Accounts => Services.GetRequiredService<AccountService>();
     public SanctionService Sanctions => Services.GetRequiredService<SanctionService>();
     public CharacterService Characters => Services.GetRequiredService<CharacterService>();
@@ -82,7 +84,7 @@ internal static partial class GameDataValidation
                 .AddC9GameData(new NpgsqlConnectionStringBuilder(admin) { Database = database }.ConnectionString)
                 .AddSingleton<TimeProvider>(clock)
                 .BuildServiceProvider();
-            Harness harness = new(services, clock);
+            Harness harness = new(services, clock) { AdminConnection = admin };
             cases.AddRange(DatabaseCases(harness));
         }
         else skipped = DatabaseCaseCount;

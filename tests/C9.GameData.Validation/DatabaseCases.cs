@@ -2,10 +2,14 @@ using C9.GameData;
 using C9.GameData.Entities;
 using C9.GameData.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 internal static partial class GameDataValidation
 {
-    private const int DatabaseCaseCount = 15;
+    private const int DatabaseCaseCount = 18;
 
     private static IEnumerable<(string, Func<Task>)> DatabaseCases(Harness h)
     {
@@ -367,6 +371,155 @@ internal static partial class GameDataValidation
             Check.Equal(2, (await h.Items.DeliveriesAsync(DeliveryStatus.Cancelled)).Total);
             Check.Equal(1, (await h.Items.DeliveriesAsync(recipient: "gift2", status: DeliveryStatus.Pending)).Items.Count(d => d.Target == DeliveryTarget.Account && d.ItemId == 20332));
             Check.True(c2.Id > c1.Id);
+        });
+
+        yield return ("Gift Box in game: list, read, take once into the right bag, account gift once, delete", async () =>
+        {
+            await h.Items.ImportCatalogAsync([new(30001, "Cash Wings", null, null, null, ["costume", "cash"])], Harness.Op("cash item"));
+            Account account = await h.Accounts.CreateAsync("boxer", "password-9", Harness.Op());
+            Character one = await h.Characters.CreateAsync(account.Id, 0, 1, "BoxOne", Appearance);
+            Character two = await h.Characters.CreateAsync(account.Id, 1, 9, "BoxTwo", Appearance);
+            await h.Items.SendAsync(new(DeliveryTarget.Character, ["BoxOne"], false, null, [new(9603, 3), new(7380, 1)], "Hello"), Harness.Op("gift"));
+            await h.Items.SendAsync(new(DeliveryTarget.Account, ["boxer"], false, null, [new(30001, 1)], null), Harness.Op("account gift"));
+            GiftBoxService box = h.Services.GetRequiredService<GiftBoxService>();
+
+            IReadOnlyList<GiftView> mine = await box.ListAsync(one.Id);
+            Check.True(mine.Select(g => g.ItemId).SequenceEqual([9603, 7380, 30001]), "own gifts and the account gift, oldest first");
+            Check.Equal(1, (await box.ListAsync(two.Id)).Count);
+            Check.Equal(0, (await box.ListAsync(-5)).Count);
+            long buff = mine[0].Id, quest = mine[1].Id, wings = mine[2].Id;
+
+            Check.Equal<GiftView?>(null, await box.ReadAsync(two.Id, buff)); // another character's gift
+            GiftView read = (await box.ReadAsync(one.Id, buff))!;
+            Check.True(read.OpenedAt == h.Clock.Now && read.Message == "Hello", "first read records the time");
+            h.Clock.Now = h.Clock.Now.AddMinutes(1);
+            Check.True((await box.ReadAsync(one.Id, buff))!.OpenedAt < h.Clock.Now, "later reads keep the first time");
+
+            GiftClaim taken = await box.ClaimAsync(one.Id, buff);
+            Check.Equal(GiftClaimOutcome.Claimed, taken.Outcome);
+            Check.True(taken.Item is { Bag: 0, Slot: 0, ItemId: 9603, Quantity: 3, Location: ItemLocation.Inventory } && taken.Item.GameSerial > 0, "main bag, first slot");
+            Check.Equal(GiftClaimOutcome.NotFound, (await box.ClaimAsync(one.Id, buff)).Outcome);
+            Check.Equal(GiftClaimOutcome.NotFound, (await box.ClaimAsync(two.Id, quest)).Outcome);
+            Check.True((await box.ClaimAsync(one.Id, quest)).Item is { Bag: 2, Slot: 0 }, "quest bag");
+            GiftClaim wingsTaken = await box.ClaimAsync(two.Id, wings);
+            Check.True(wingsTaken.Item is { Bag: 1, Slot: 0 } && wingsTaken.Item.CharacterId == two.Id, "account gift: cash bag of the character that took it");
+            Check.Equal(GiftClaimOutcome.NotFound, (await box.ClaimAsync(one.Id, wings)).Outcome);
+            Check.Equal(0, (await box.ListAsync(one.Id)).Count);
+
+            IReadOnlyList<CharacterItem> bag = await box.InventoryAsync(one.Id);
+            Check.True(bag.Select(i => (i.Bag, i.ItemId)).SequenceEqual([((short)0, 9603), ((short)2, 7380)]), "inventory by bag");
+            Check.True(bag.Select(i => i.GameSerial).Distinct().Count() == 2 && bag[0].GameSerial != wingsTaken.Item!.GameSerial, "unique game serials");
+            DeliveryView claimed = (await h.Items.DeliveriesAsync(DeliveryStatus.Delivered, recipient: "boxer")).Items.Single(d => d.ItemId == 30001);
+            Check.True(claimed.ClaimedBy == "BoxTwo" && claimed.DeliveredAt is not null, "Portal shows who took the account gift");
+
+            await h.Items.SendAsync(new(DeliveryTarget.Character, ["BoxOne"], false, null, [new(9603, 1)], null), Harness.Op("again"));
+            long unwanted = (await box.ListAsync(one.Id)).Single().Id;
+            Check.True(!await box.DismissAsync(two.Id, unwanted), "cannot delete another character's gift");
+            Check.True(await box.DismissAsync(one.Id, unwanted));
+            Check.True(!await box.DismissAsync(one.Id, unwanted));
+            DeliveryView dismissed = (await h.Items.DeliveriesAsync(DeliveryStatus.Cancelled, recipient: "BoxOne")).Items.Single();
+            Check.Equal($"game:{one.Id}", dismissed.CancelledBy);
+            Check.True((await box.ClaimAsync(one.Id, unwanted)).Outcome == GiftClaimOutcome.NotFound);
+
+            await using GameDbContext db = h.Db();
+            Check.Equal(3, await db.AuditLog.CountAsync(a => a.Action == "gift.claim"));
+            Check.True(await db.AuditLog.AnyAsync(a => a.Action == "gift.dismiss" && a.Operator == $"game:{one.Id}"), "player actions are audited");
+            Check.Equal<short?>(2, GiftBoxService.FirstFree([0, 1, 3]));
+            Check.Equal<short?>(null, GiftBoxService.FirstFree(Enumerable.Range(0, GiftBoxService.BagSlots).Select(i => (short)i).ToArray()));
+            Check.True(GiftBoxService.BagOf(["equipment"]) == 0 && GiftBoxService.BagOf(["quest", "cash"]) == 2, "bag rule");
+        });
+
+        yield return ("starter bundle waits in the Gift Box of characters created in game", async () =>
+        {
+            ItemBundle starter = (await h.Items.BundlesAsync()).Single(b => b.Name == "Starter");
+            ItemBundle gm = await h.Items.CreateBundleAsync("GM kit", null, [new(11610, 1), new(20332, 1)], Harness.Op("gm kit"));
+            await Check.Fails(GameDataError.Forbidden, () => h.Items.SetStarterBundleAsync(gm.Id, false, Harness.Op("gm starter")));
+            await Check.Fails(GameDataError.NotFound, () => h.Items.SetStarterBundleAsync(999_999, true, Harness.Op()));
+            Check.Equal(starter.Id, (await h.Items.SetStarterBundleAsync(starter.Id, false, Harness.Op("starter")))!.Id);
+            Account account = await h.Accounts.CreateAsync("newbie", "password-9", Harness.Op());
+            Character fresh = await h.Characters.CreateAsync(account.Id, 0, 1, "Newbie", Appearance);
+            await h.Characters.CreateAsync(account.Id, 0, 1, "Newbie", Appearance); // retried create queues nothing twice
+            GiftBoxService box = h.Services.GetRequiredService<GiftBoxService>();
+            IReadOnlyList<GiftView> gifts = await box.ListAsync(fresh.Id);
+            Check.True(gifts.Count == 1 && gifts[0] is { ItemId: 9603, Quantity: 2, Message: "Starter items", Target: DeliveryTarget.Character },
+                "starter bundle lines in the new character's Gift Box");
+
+            Check.Equal(gm.Id, (await h.Items.SetStarterBundleAsync(gm.Id, true, Harness.Op("owner starter")))!.Id);
+            Check.True((await h.Items.BundlesAsync()).Count(b => b.Starter) == 1, "one starter bundle");
+            Character second = await h.Characters.CreateAsync(account.Id, 1, 9, "Newbie2", Appearance);
+            Check.True((await box.ListAsync(second.Id)).Select(g => g.ItemId).SequenceEqual([20332]), "GM items are never queued automatically");
+
+            Check.Equal<ItemBundle?>(null, await h.Items.SetStarterBundleAsync(null, false, Harness.Op("no starter")));
+            Character third = await h.Characters.CreateAsync(account.Id, 2, 17, "Newbie3", Appearance);
+            Check.Equal(0, (await box.ListAsync(third.Id)).Count);
+            uint version = (await h.Items.BundlesAsync()).Single(b => b.Id == gm.Id).Version; // the starter flag changed the row
+            await h.Items.UpdateBundleAsync(gm.Id, version, "GM kit", null, false, [new(20332, 1)], Harness.Op("disable"));
+            await Check.Fails(GameDataError.Invalid, () => h.Items.SetStarterBundleAsync(gm.Id, true, Harness.Op()));
+            await using GameDbContext db = h.Db();
+            Check.True(await db.AuditLog.AnyAsync(a => a.Action == "items.starter_send" && a.TargetId == fresh.Id.ToString()), "starter send audited");
+        });
+
+        yield return ("migrations apply on filled tables of the previous release (catalog, items)", async () =>
+        {
+            // The live catalog had 45,996 rows when ItemCatalogProperties first failed (23502): start from data, not empty tables.
+            string admin = h.AdminConnection ?? throw new InvalidOperationException("admin connection");
+            string database = "c9_validation_" + Guid.NewGuid().ToString("N")[..12];
+            await using (NpgsqlConnection connection = new(admin))
+            {
+                await connection.OpenAsync();
+                await using NpgsqlCommand create = new($"CREATE DATABASE {database}", connection);
+                await create.ExecuteNonQueryAsync();
+            }
+            try
+            {
+                await using (ServiceProvider services = new ServiceCollection()
+                    .AddC9GameData(new NpgsqlConnectionStringBuilder(admin) { Database = database }.ConnectionString)
+                    .BuildServiceProvider())
+                {
+                    IDbContextFactory<GameDbContext> factory = services.GetRequiredService<IDbContextFactory<GameDbContext>>();
+                    await using (GameDbContext db = await factory.CreateDbContextAsync())
+                        await db.GetService<IMigrator>().MigrateAsync("20261120131238_StatClassGrowth");
+                    Account account = await services.GetRequiredService<AccountService>().CreateAsync("olddata", "password-9", Harness.Op());
+                    Character owner;
+                    await using (GameDbContext db = await factory.CreateDbContextAsync())
+                    {
+                        // Raw SQL: today's CharacterService also reads tables that this old schema does not have yet.
+                        await db.Database.ExecuteSqlAsync($"""
+                            INSERT INTO game.characters (account_id, slot, name, job, appearance, exp, gold, play_seconds)
+                            VALUES ({account.Id}, 0, 'OldOwner', 1, {Appearance}, 0, 0, 0)
+                            """);
+                        owner = await db.Characters.AsNoTracking().SingleAsync(c => c.Name == "OldOwner");
+                        await db.Database.ExecuteSqlAsync($$"""
+                            INSERT INTO game.item_catalog (item_id, name_en, category, raw)
+                            SELECT g, 'Item ' || g, 'material', '{}'::jsonb FROM generate_series(1, 500) g
+                            """);
+                        await db.Database.ExecuteSqlAsync($$"""
+                            INSERT INTO game.character_items (serial, character_id, location, slot, item_id, quantity, enchant, options, bound)
+                            SELECT gen_random_uuid(), {{owner.Id}}, 'Inventory', g, g, 1, 0, '{}'::jsonb, false FROM generate_series(0, 2) g
+                            """);
+                        await db.Database.MigrateAsync();
+                        Check.Equal(0, (await db.Database.GetPendingMigrationsAsync()).Count());
+                        Check.Equal(500, await db.ItemCatalog.CountAsync(i => i.Tags.Count == 0 && !i.AdminOnly && i.UseLevel == null));
+                        List<CharacterItem> items = await db.CharacterItems.OrderBy(i => i.Slot).ToListAsync();
+                        Check.True(items.Count == 3 && items.All(i => i.Bag == 0 && i.GameSerial > 0) && items.Select(i => i.GameSerial).Distinct().Count() == 3,
+                            "existing stacks get distinct game serials and bag 0");
+                    }
+                    GiftClaim claim;
+                    await services.GetRequiredService<ItemService>().SendAsync(
+                        new(DeliveryTarget.Character, ["OldOwner"], false, null, [new(42, 2)], null), Harness.Op("after upgrade"));
+                    GiftBoxService box = services.GetRequiredService<GiftBoxService>();
+                    claim = await box.ClaimAsync(owner.Id, (await box.ListAsync(owner.Id)).Single().Id);
+                    Check.True(claim.Item is { Slot: 3, Bag: 0 } && claim.Item.GameSerial > 3, "new stack after the old ones");
+                }
+            }
+            finally
+            {
+                NpgsqlConnection.ClearAllPools();
+                await using NpgsqlConnection connection = new(admin);
+                await connection.OpenAsync();
+                await using NpgsqlCommand drop = new($"DROP DATABASE IF EXISTS {database} WITH (FORCE)", connection);
+                await drop.ExecuteNonQueryAsync();
+            }
         });
     }
 }

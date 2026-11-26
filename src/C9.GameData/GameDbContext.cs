@@ -48,6 +48,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
     protected override void OnModelCreating(ModelBuilder model)
     {
         model.HasPostgresExtension("citext");
+        model.HasSequence<long>("item_serial_seq", GameSchema);
 
         model.Entity<Account>(e =>
         {
@@ -112,7 +113,10 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.ToTable("character_items", GameSchema, t => t.HasCheckConstraint("ck_character_items_quantity", "quantity > 0"));
             e.HasKey(i => i.Serial);
             e.HasOne<Character>().WithMany(c => c.Items).HasForeignKey(i => i.CharacterId).OnDelete(DeleteBehavior.Restrict);
-            e.HasIndex(i => new { i.CharacterId, i.Location, i.Slot }).IsUnique();
+            // Existing rows get distinct serials from the sequence when the column is added.
+            e.Property(i => i.GameSerial).HasDefaultValueSql("nextval('game.item_serial_seq')").ValueGeneratedOnAdd();
+            e.HasIndex(i => i.GameSerial).IsUnique();
+            e.HasIndex(i => new { i.CharacterId, i.Location, i.Bag, i.Slot }).IsUnique();
             e.HasIndex(i => i.ItemId);
             e.Property(i => i.Options).HasColumnType("jsonb");
             Xmin(e);
@@ -299,6 +303,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             e.Property(b => b.CreatedBy).HasMaxLength(64);
             e.Property(b => b.CreatedAt).HasDefaultValueSql("now()");
             e.HasIndex(b => b.Name).IsUnique();
+            e.HasIndex(b => b.Starter).IsUnique().HasFilter("starter");
             Xmin(e);
         });
 
@@ -319,6 +324,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
             });
             e.HasOne<Account>().WithMany().HasForeignKey(d => d.AccountId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<Character>().WithMany().HasForeignKey(d => d.CharacterId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<Character>().WithMany().HasForeignKey(d => d.ClaimedCharacterId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<CatalogItem>().WithMany().HasForeignKey(d => d.ItemId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<ItemBundle>().WithMany().HasForeignKey(d => d.BundleId).OnDelete(DeleteBehavior.Restrict);
             e.Property(d => d.Message).HasMaxLength(200);

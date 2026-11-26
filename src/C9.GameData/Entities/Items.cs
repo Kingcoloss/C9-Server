@@ -2,7 +2,10 @@ namespace C9.GameData.Entities;
 
 public enum DeliveryTarget { Character, Account }
 
-/// <summary>Pending = queued for the in-game Gift Box (not visible in game yet); Delivered = handed to the game; Cancelled by an operator.</summary>
+/// <summary>
+/// Pending = waiting in the in-game Gift Box (Mailbox "Gift Chest" tab); Delivered = the player took it into the inventory;
+/// Cancelled by an operator, or deleted by the player in game (<see cref="ItemDelivery.CancelledBy"/> "game:&lt;character id&gt;").
+/// </summary>
 public enum DeliveryStatus { Pending, Delivered, Cancelled }
 
 /// <summary>A named set of items an operator sends in one go (for example a starter pack or an event reward).</summary>
@@ -12,6 +15,8 @@ public sealed class ItemBundle
     public required string Name { get; set; }
     public string? Description { get; set; }
     public bool Enabled { get; set; } = true;
+    /// <summary>The one bundle every character created in game gets in its Gift Box (at most one bundle has this).</summary>
+    public bool Starter { get; set; }
     public required string CreatedBy { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
@@ -47,6 +52,12 @@ public sealed class ItemDelivery
     public required string Reason { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? DeliveredAt { get; set; }
+    /// <summary>First time the player opened the gift's message in game.</summary>
+    public DateTimeOffset? OpenedAt { get; set; }
+    /// <summary>Character that took the item (for an account gift: whichever of its characters took it first).</summary>
+    public long? ClaimedCharacterId { get; set; }
+    /// <summary>The <see cref="CharacterItem.Serial"/> created when the item was taken.</summary>
+    public Guid? ItemSerial { get; set; }
     public DateTimeOffset? CancelledAt { get; set; }
     public string? CancelledBy { get; set; }
     public uint Version { get; set; }

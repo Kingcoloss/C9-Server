@@ -28,7 +28,11 @@ internal static partial class Validation
         Check.Equal((byte)1, points.Flag);
         Check.Bytes(new byte[13], points.Payload.Span);
 
-        Packet mail = WorldSessionPackets.Reply(new Packet(0x0EB1), bangkok)!;
+        // 0EB1 moved to GiftBoxPackets (real count); without a store the contract is unchanged: one 0EB2 with count 0.
+        Check.True(WorldSessionPackets.Reply(new Packet(0x0EB1), bangkok) is null);
+        IReadOnlyList<Packet> mails = GiftBoxPackets.ReplyAsync(null, new Packet(0x0EB1), 1, default).AsTask().GetAwaiter().GetResult()!;
+        Check.Equal(1, mails.Count);
+        Packet mail = mails[0];
         Check.Equal((ushort)0x0EB2, mail.Type);
         Check.Equal((byte)1, mail.Flag);
         Check.Bytes(new byte[4], mail.Payload.Span);

@@ -39,8 +39,13 @@ public sealed class CharacterItem
 {
     /// <summary>Per-instance serial; a duplicated serial indicates an item dupe.</summary>
     public Guid Serial { get; set; }
+    /// <summary>The 64-bit item serial the game client uses (PSDBItemBase m_ddwSerialNo); from the sequence game.item_serial_seq.</summary>
+    public long GameSerial { get; set; }
     public long CharacterId { get; set; }
     public ItemLocation Location { get; set; }
+    /// <summary>Tab inside the location; for the inventory the Client's PSInventoryTab: 0 main, 1 charge (cash), 2 quest.</summary>
+    public short Bag { get; set; }
+    /// <summary>Position inside the bag (0-based).</summary>
     public short Slot { get; set; }
     public int ItemId { get; set; }
     public int Quantity { get; set; }

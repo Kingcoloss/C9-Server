@@ -15,8 +15,9 @@
         </div>
     </header>
     <div class="alert warn small">
-        ของที่ส่งจะเข้า Gift Box (กระเป๋ารับของจาก Shop) ของผู้รับ ตอนนี้ระบบ Gift Box ในเกมยังไม่เสร็จ รายการจึงอยู่สถานะ "รอส่งเข้าเกม" และยกเลิกได้
-        · ส่งให้บัญชี = ตัวละครใดของบัญชีนั้นรับก่อนก็ได้ (รับได้ครั้งเดียว)
+        ของที่ส่งจะเข้า Gift Box ในเกม (ไอคอนกระเป๋า → หน้าต่าง Mailbox แท็บ Gift Chest) ผู้เล่นเปิดแล้วกด Retrieve เพื่อรับเข้ากระเป๋า
+        · รายการที่ยัง "อยู่ใน Gift Box" ยกเลิกได้ · ส่งให้บัญชี = ตัวละครใดของบัญชีนั้นรับก่อนก็ได้ (รับได้ครั้งเดียว)
+        · Bundle ที่ตั้งเป็น "ชุดเริ่มเล่น" จะเข้า Gift Box ของทุกตัวละครที่สร้างใหม่ในเกม
     </div>
 
     <AuthorizeView Policy="@PortalPolicies.AccountsWrite">
@@ -108,8 +109,17 @@
                         <tr>
                             <td>@b.Name<div class="muted small">@b.Description</div></td>
                             <td class="small">@string.Join(", ", b.Entries.OrderBy(e => e.Line).Select(e => $"{Name(e.ItemId)} ×{e.Quantity}"))</td>
-                            <td><span class="badge @(b.Enabled ? "ok" : "bad")">@(b.Enabled ? "ใช้งาน" : "ปิด")</span></td>
-                            <td><AuthorizeView Policy="@PortalPolicies.WorldWrite" Context="auth"><button @onclick="() => Edit(b)">แก้</button></AuthorizeView></td>
+                            <td>
+                                <span class="badge @(b.Enabled ? "ok" : "bad")">@(b.Enabled ? "ใช้งาน" : "ปิด")</span>
+                                @if (b.Starter) { <span class="badge ok" title="ตัวละครที่สร้างใหม่ในเกมได้ของชุดนี้ใน Gift Box">ชุดเริ่มเล่น</span> }
+                            </td>
+                            <td>
+                                <AuthorizeView Policy="@PortalPolicies.WorldWrite" Context="auth">
+                                    <button @onclick="() => Edit(b)">แก้</button>
+                                    @if (b.Starter) { <button title="ใช้เหตุผลในช่องด้านล่าง" @onclick="() => StarterAsync(null)">เลิกใช้เป็นชุดเริ่มเล่น</button> }
+                                    else if (b.Enabled) { <button title="ใช้เหตุผลในช่องด้านล่าง" @onclick="() => StarterAsync(b.Id)">ตั้งเป็นชุดเริ่มเล่น</button> }
+                                </AuthorizeView>
+                            </td>
                         </tr>
                     }
                     @if (bundles.Count == 0) { <tr><td colspan="4" class="muted small">ยังไม่มี bundle</td></tr> }
@@ -142,8 +152,8 @@
             <label class="field">สถานะ
                 <select @bind="statusFilter" @bind:after="LoadDeliveriesAsync">
                     <option value="">ทั้งหมด</option>
-                    <option value="@DeliveryStatus.Pending">รอส่งเข้าเกม</option>
-                    <option value="@DeliveryStatus.Delivered">ส่งแล้ว</option>
+                    <option value="@DeliveryStatus.Pending">อยู่ใน Gift Box</option>
+                    <option value="@DeliveryStatus.Delivered">รับเข้ากระเป๋าแล้ว</option>
                     <option value="@DeliveryStatus.Cancelled">ยกเลิก</option>
                 </select>
             </label>
@@ -161,7 +171,7 @@
                             <td>@(d.ItemName ?? "—") <span class="muted small">#@d.ItemId</span></td>
                             <td>@d.Quantity</td>
                             <td>@(d.Target == DeliveryTarget.Character ? $"ตัวละคร {d.CharacterName}" : $"บัญชี {d.AccountLogin}")</td>
-                            <td><span class="badge @(d.Status switch { DeliveryStatus.Delivered => "ok", DeliveryStatus.Cancelled => "bad", _ => "busy" })">@StatusText(d.Status)</span></td>
+                            <td><span class="badge @(d.Status switch { DeliveryStatus.Delivered => "ok", DeliveryStatus.Cancelled => "bad", _ => "busy" })">@StatusText(d.Status)</span><div class="muted small">@StatusDetail(d)</div></td>
                             <td class="small">@d.CreatedBy<div class="muted">@d.Reason</div></td>
                             <td class="small">@d.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                             <td>
@@ -249,9 +259,18 @@
 
     private static string StatusText(DeliveryStatus status) => status switch
     {
-        DeliveryStatus.Pending => "รอส่งเข้าเกม",
-        DeliveryStatus.Delivered => "ส่งแล้ว",
+        DeliveryStatus.Pending => "อยู่ใน Gift Box",
+        DeliveryStatus.Delivered => "รับเข้ากระเป๋าแล้ว",
         _ => "ยกเลิก",
+    };
+
+    // Who/when for the status column: the character that took it, or that the player deleted it in game.
+    private static string StatusDetail(DeliveryView d) => d.Status switch
+    {
+        DeliveryStatus.Delivered => $"{d.ClaimedBy} · {d.DeliveredAt?.ToLocalTime():yyyy-MM-dd HH:mm}",
+        DeliveryStatus.Cancelled when d.CancelledBy?.StartsWith("game:") == true => "ผู้เล่นลบในเกม",
+        DeliveryStatus.Cancelled => d.CancelledBy ?? "",
+        _ => d.OpenedAt is null ? "ยังไม่เปิดอ่าน" : "เปิดอ่านแล้ว",
     };
 
     private async Task SendAsync()
@@ -287,6 +306,15 @@
     {
         editing = null;
         (bundleName, bundleDescription, bundleLines, bundleEnabled) = (null, null, null, true);
+    }
+
+    // Item สนับสนุนตอนเริ่มเล่น: one bundle goes to the Gift Box of every character created in game.
+    private async Task StarterAsync(long? id)
+    {
+        bool owner = (await Actions.UserAsync()).IsInRole(PortalRoles.Owner);
+        bool? done = await Actions.RunAsync("items.starter", $"item_bundle:{id?.ToString() ?? "none"}", bundleReason,
+            async op => { await Items.SetStarterBundleAsync(id, owner, op); return true; }, id is null ? "เลิกใช้ชุดเริ่มเล่นแล้ว" : "ตั้งชุดเริ่มเล่นแล้ว");
+        if (done == true) { bundleReason = null; await LoadAsync(); }
     }
 
     private async Task SaveBundleAsync()

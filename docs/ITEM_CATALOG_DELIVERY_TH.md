@@ -1,6 +1,6 @@
 # Item Catalog, ส่ง item ผ่าน Mail/คลัง และ Starter items — ผลค้นคว้า (อ่านอย่างเดียว) และแผน
 
-อัปเดต: 20 พฤศจิกายน 2026 ~09:45 น. (Asia/Bangkok) — **ค้นคว้าเสร็จ เริ่มเขียนโค้ดขั้น A–B** (branch รวมงาน 2nd password แล้วที่ `7eacd4c`)
+อัปเดต: 26 พฤศจิกายน 2026 ~10:45 น. (Asia/Bangkok) — **Gift Box ในเกม + inventory ขั้นต่ำ + ชุดเริ่มเล่น เขียนเสร็จ (ข้อ 7) รอ deploy/ทดสอบในเกม**
 มาตรฐานอ้างอิง: ISO/IEC 29110 (บันทึกงาน/ส่งต่อ), ISO 9001 (หลักฐานตรวจย้อน), ISO/IEC 27001 (audit การให้ของ)
 เกี่ยวข้อง: [CHARACTER_STATS_TH.md](CHARACTER_STATS_TH.md), [LEGACY_PATCH65_REFERENCE_TH.md](LEGACY_PATCH65_REFERENCE_TH.md), [GAME_DATA_TH.md](GAME_DATA_TH.md)
 
@@ -114,3 +114,57 @@
   `/items/manage` มีช่องค้นหาตัวละคร (แสดง "ตัวละคร X (Lv) · บัญชี Y") และบัญชี; API `GET /api/v1/items/recipients?q=`
 - ต้องกด "นำเข้า catalog" อีกครั้งหลัง deploy เพื่อเติมหมวด/grade/level (export ไฟล์ใหม่ลง `artifacts/docker-state/item-catalog` แล้ว 21 พ.ย.)
 - ทดสอบ: GameData 22/22 (208 assertions), Portal 12/12 (137), C9.Validation 78/78, Python 15/15
+
+## 7. Gift Box ในเกม + inventory ขั้นต่ำ + ชุดเริ่มเล่น (26 พ.ย. 2026 ~10:45 น., ยังไม่ deploy)
+
+ผู้ตกลง (21 พ.ย., option B): thread status/items ทำ Gift Box (MailEx) ครบชุด + inventory ขั้นต่ำ (`game.character_items`, `0x0CFB`, `0x0BC1`);
+thread ระบบ (Sprint 1) ขยายต่อใน S03 (ย้าย/สวม/ใช้, item block ใน `0BC0`) และถือ S17 จดหมายผู้เล่นปกติ (`0E8F–0E96`, `0E98`)
+
+### 7.1 สิ่งที่ถอดจาก Client (อ่านจาก minidump `artifacts/claude-sync/C9.DMP` ด้วย `dbgeng.dll` ของ Windows แบบอ่านอย่างเดียว)
+
+| สิ่งที่พบ | ที่อยู่ใน Client 2026-11 | ผลต่อ server |
+|---|---|---|
+| mail dispatcher ตาราง 0E8E–0EB4 | `009131BB` | ตอบเฉพาะ id ที่มี case: `0EA0` list, `0E9E` content, `0E9A` delete, `0EB2` count, `0EB3` open fail (`0E9C` ไม่อยู่ใน dispatcher นี้ แต่มีผู้รับแบบ listener `0078F190`) |
+| `0EA0` ใส่ทุกรายการลง `Inboxes[1]` (ไม่ดู type) | `00913809`, ข้าม mail no ซ้ำ, อ่านแค่ `m_Count` รายการ (stride 0x6A) | หน้าต่าง Mailbox โหมด buy-list (`00AC1610` tab 1) แสดง `Inboxes[1]` = แท็บ **Gift Chest** |
+| ขอรายการ `0E97 {u8 type=0, bool all=1}` | `00914080` (เรียกตอนเปิดหน้าต่างและหลังลบจดหมาย) | ตอบ `0EA0` ครบทุกชิ้น (15 ต่อ packet) |
+| เปิด/อ่าน/ลบ: type ≠ 2 ใช้ `0E9B`/`0E9D`/`0E99` | `00913EC0`, `00913FA0`, `009141A0` | Gift Box ใช้ type 1 (`EV_MT_BILLING`) |
+| ก่อนส่ง `0E9B` client นับช่องว่างในกระเป๋าเอง (main/cash) | `00AC0080` → `0081A970` | ถ้ากระเป๋าเต็ม client ไม่ส่งคำขอ |
+| `0EB2 {i32}` → UI event 0x19 = ไอคอนกระเป๋า (กรอบเหลืองในภาพของผู้ใช้) | `00913A9D` | นับจริงจาก DB |
+| `0BC1` stride 0x70 (PSDBItemBase **104** ไบต์ + tab), seq 0 ล้าง tab | `009336FC`, `009350F0` | PDB (ส.ค.) บอก 96 ไบต์ → Client พ.ย. ใหญ่ขึ้น 8 |
+| `0CFB` property **296** ไบต์ (PDB 264), `m_nAddStackCount` ที่ packet +0x142, ข้าม serial 0, เช็ก character id | `00935490` | serial 64 บิตจาก sequence `game.item_serial_seq` (เริ่ม 1) |
+| วันที่ในรายการ = `_localtime64_s(DateReg)` | `00AC1B08` | ส่งเวลา unix วินาที |
+
+### 7.2 ลำดับ packet ที่ server ส่ง
+
+| Client ขอ | Server ตอบ |
+|---|---|
+| `0BBF` เลือกตัวละคร | `0BC0` → **`0BC1`** (เฉพาะ bag ที่มีของ, 48 ชิ้น/packet) → `0BC3` |
+| `0EB1` (ทุกครั้งที่เข้าโลก) | `0EB2 {จำนวน}` และถ้ามีของ ตาม `0EA0` รายการ (Ref Server ก็ส่งทั้งสองอย่าง) |
+| `0E97` | `0EA0` (อย่างน้อย 1 packet) |
+| `0E9D {mail no}` อ่าน | `0E9E {mail no, ข้อความ 80 ตัว, key 0, type 1}` + บันทึก `opened_at`; ไม่พบ → `0EB3` |
+| `0E9B {mail no}` รับของ | `0CFB` (reason 31 = `PS_ICR_ADD_MAIL_EX`) → `0E9C` → `0E9A` ; ไม่พบ/รับไปแล้ว/กระเป๋าเต็ม → `0EB3` |
+| `0E99 {mail no}` ลบ | ยกเลิกรายการ (`cancelled_by = game:<character id>`) แล้วตอบ `0E9A` เสมอ |
+
+- ผู้ส่งแสดง "GM", หัวเรื่อง = ข้อความ 12 ตัวแรก (ช่องในเกมสั้น) หรือ "Gift", วันหมดอายุที่แสดง = วันส่ง + 365 วัน (server ไม่บังคับ)
+- ถ้า DB มีปัญหา ผู้เล่นไม่หลุด: Gift Box ดูว่าง (event `gift_box_error`), ย้ายการตอบ `0EB1` จาก `WorldSessionPackets` มาไว้ที่ `GiftBoxPackets` ที่เดียว (ไม่มี handler ซ้ำ)
+- bag ของ item: tag `quest` → 2, `cash` → 1, อื่น ๆ → 0 (`PSInventoryTab`); ช่อง = ช่องว่างแรกของ bag (สูงสุด 256)
+- **ยังไม่ทำ (ส่งต่อ S03):** ความทนทาน (durability) ของอุปกรณ์ส่งเป็น 0 เพราะยังไม่ถอดค่าสูงสุดจากข้อมูล item, ยังไม่ส่ง `0CFA` (ตำแหน่งช่อง) → client จัดช่องเอง,
+  stack ของชนิดเดียวกันไม่รวมกัน, ไม่มีวันหมดอายุ/option/enchant
+
+### 7.3 DB และ Portal
+
+- migration `GiftBoxInventory`: `character_items` + `bag`, `game_serial` (default `nextval`, unique, แถวเดิมได้เลขไม่ซ้ำ), unique index (character, location, bag, slot);
+  `item_deliveries` + `opened_at`, `claimed_character_id` (FK), `item_serial`; `item_bundles.starter` (unique เฉพาะค่า true)
+- `GiftBoxService`: `ListAsync` (ของตัวละคร + ของบัญชี, เก่าสุดก่อน, สูงสุด 150), `ReadAsync`, `ClaimAsync` (advisory lock ต่อตัวละคร + xmin: ของบัญชีรับได้ครั้งเดียว),
+  `DismissAsync`, `InventoryAsync`; audit `gift.claim` / `gift.dismiss` โดย operator `game:<character id>`
+- **ข้อ 4 Item สนับสนุนตอนเริ่มเล่น:** Portal `/items/manage` ปุ่ม "ตั้งเป็นชุดเริ่มเล่น" (ต้องใส่เหตุผล, bundle ต้องเปิดใช้, ของ GM ต้องเป็น Owner) → ทุกตัวละครที่**สร้างใหม่ในเกม**
+  ได้ของชุดนั้นใน Gift Box ทันที (ใน transaction เดียวกับการสร้าง, audit `items.starter_send`; ของ GM ถูกข้ามเสมอ) ตัวละครเดิมไม่ได้ย้อนหลัง; API `PUT /api/v1/items/bundles/starter`
+- หน้า "ประวัติการส่ง": สถานะ "อยู่ใน Gift Box" (ยังไม่เปิด/เปิดอ่านแล้ว), "รับเข้ากระเป๋าแล้ว" (ตัวละคร + เวลา), "ยกเลิก" (หรือ "ผู้เล่นลบในเกม")
+- test: C9.Validation 80/80 (layout ทุก packet + memory session เต็มขั้น), GameData 25/25 (Gift Box, ชุดเริ่มเล่น, **migration จากตารางที่มีข้อมูลของรุ่นก่อน**), Portal 12/12
+
+### 7.4 วิธีทดสอบในเกมหลัง deploy
+
+1. Portal `/items/manage` ส่ง item ให้ตัวละครที่จะเล่น (เช่น ยา 1 ชิ้น + ของสวมใส่ 1 ชิ้น)
+2. เข้าเกม → ไอคอนกระเป๋าควรขึ้น (ตำแหน่งกรอบเหลือง) → กดเปิด → แท็บ Gift Chest → ดับเบิลคลิกรายการ → Retrieve
+3. ของควรเข้ากระเป๋า และสถานะใน Portal เป็น "รับเข้ากระเป๋าแล้ว"; ออกแล้วเข้าใหม่ ของต้องยังอยู่ (มาจาก `0BC1`)
+4. ถ้าไม่เป็นตามนี้ ส่ง log event `gift_box` / `inventory_sent` (Portal หน้า events) + ภาพหน้าจอ

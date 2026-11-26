@@ -61,8 +61,12 @@ public sealed class CharacterService(IDbContextFactory<GameDbContext> factory, T
         {
             AccountId = accountId, Slot = slot, Job = job, Name = name, Appearance = appearance, CreatedAt = clock.GetUtcNow()
         };
+        await using var transaction = await db.Database.BeginTransactionAsync(token);
         db.Characters.Add(character);
         await Audited.SaveAsync(db, token);
+        // The starter bundle (Items management) waits in the new character's Gift Box.
+        await ItemService.QueueStarterAsync(db, character, clock, token);
+        await transaction.CommitAsync(token);
         return character;
     }
 

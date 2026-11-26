@@ -25,6 +25,8 @@ namespace C9.GameData.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence("item_serial_seq", "game");
+
             modelBuilder.Entity("C9.GameData.Entities.Account", b =>
                 {
                     b.Property<long>("Id")
@@ -645,6 +647,10 @@ namespace C9.GameData.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("serial");
 
+                    b.Property<short>("Bag")
+                        .HasColumnType("smallint")
+                        .HasColumnName("bag");
+
                     b.Property<bool>("Bound")
                         .HasColumnType("boolean")
                         .HasColumnName("bound");
@@ -660,6 +666,12 @@ namespace C9.GameData.Migrations
                     b.Property<DateTimeOffset?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at");
+
+                    b.Property<long>("GameSerial")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("game_serial")
+                        .HasDefaultValueSql("nextval('game.item_serial_seq')");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("integer")
@@ -693,12 +705,16 @@ namespace C9.GameData.Migrations
                     b.HasKey("Serial")
                         .HasName("pk_character_items");
 
+                    b.HasIndex("GameSerial")
+                        .IsUnique()
+                        .HasDatabaseName("ix_character_items_game_serial");
+
                     b.HasIndex("ItemId")
                         .HasDatabaseName("ix_character_items_item_id");
 
-                    b.HasIndex("CharacterId", "Location", "Slot")
+                    b.HasIndex("CharacterId", "Location", "Bag", "Slot")
                         .IsUnique()
-                        .HasDatabaseName("ix_character_items_character_id_location_slot");
+                        .HasDatabaseName("ix_character_items_character_id_location_bag_slot");
 
                     b.ToTable("character_items", "game", t =>
                         {
@@ -1996,6 +2012,10 @@ namespace C9.GameData.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
+                    b.Property<bool>("Starter")
+                        .HasColumnType("boolean")
+                        .HasColumnName("starter");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -2012,6 +2032,11 @@ namespace C9.GameData.Migrations
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasDatabaseName("ix_item_bundles_name");
+
+                    b.HasIndex("Starter")
+                        .IsUnique()
+                        .HasDatabaseName("ix_item_bundles_starter")
+                        .HasFilter("starter");
 
                     b.ToTable("item_bundles", "game");
                 });
@@ -2080,6 +2105,10 @@ namespace C9.GameData.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("character_id");
 
+                    b.Property<long?>("ClaimedCharacterId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("claimed_character_id");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -2100,10 +2129,18 @@ namespace C9.GameData.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("item_id");
 
+                    b.Property<Guid?>("ItemSerial")
+                        .HasColumnType("uuid")
+                        .HasColumnName("item_serial");
+
                     b.Property<string>("Message")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("message");
+
+                    b.Property<DateTimeOffset?>("OpenedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("opened_at");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
@@ -2141,6 +2178,9 @@ namespace C9.GameData.Migrations
 
                     b.HasIndex("BundleId")
                         .HasDatabaseName("ix_item_deliveries_bundle_id");
+
+                    b.HasIndex("ClaimedCharacterId")
+                        .HasDatabaseName("ix_item_deliveries_claimed_character_id");
 
                     b.HasIndex("CreatedAt")
                         .HasDatabaseName("ix_item_deliveries_created_at");
@@ -3402,6 +3442,12 @@ namespace C9.GameData.Migrations
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_item_deliveries_characters_character_id");
+
+                    b.HasOne("C9.GameData.Entities.Character", null)
+                        .WithMany()
+                        .HasForeignKey("ClaimedCharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_item_deliveries_characters_claimed_character_id");
 
                     b.HasOne("C9.GameData.Entities.CatalogItem", null)
                         .WithMany()

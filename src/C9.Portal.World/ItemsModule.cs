@@ -93,6 +93,8 @@ public static partial class ItemLines
 }
 
 public sealed record ImportRequest(string? Reason) : IWriteRequest;
+/// <summary>Bundle new characters get in their Gift Box; null clears it.</summary>
+public sealed record StarterRequest(long? BundleId, string? Reason) : IWriteRequest;
 public sealed record BundleRequest(uint Version, string? Name, string? Description, bool Enabled, IReadOnlyList<ItemLine>? Items, string? Reason) : IWriteRequest;
 public sealed record SendRequest(DeliveryTarget Target, IReadOnlyList<string>? Recipients, bool AllAccounts, long? BundleId,
     IReadOnlyList<ItemLine>? Items, string? Message, string? Reason) : IWriteRequest
@@ -196,6 +198,14 @@ public sealed class ItemsModule : IPortalModule
                     body.Items ?? [], op, http.RequestAborted), BundleDto);
         });
 
+        content.MapPut("/bundles/starter", async (HttpContext http) =>
+        {
+            StarterRequest? body = await Body<StarterRequest>(http);
+            bool owner = http.User.IsInRole(PortalRoles.Owner);
+            return await Write(http, "items.starter", $"item_bundle:{body?.BundleId?.ToString() ?? "none"}", body,
+                async (op, s) => new { starter = (await s.GetRequiredService<ItemService>().SetStarterBundleAsync(body!.BundleId, owner, op, http.RequestAborted))?.Id });
+        });
+
         deliveriesRead.MapGet("/deliveries", async (HttpContext http, string? status, Guid? batch, string? recipient, int? skip, int? take) =>
         {
             if (!Configured(http.RequestServices)) return NotConfigured();
@@ -225,7 +235,7 @@ public sealed class ItemsModule : IPortalModule
 
     public static object BundleDto(ItemBundle b) => new
     {
-        b.Id, b.Name, b.Description, b.Enabled, b.CreatedBy, b.CreatedAt, b.UpdatedAt, b.Version,
+        b.Id, b.Name, b.Description, b.Enabled, b.Starter, b.CreatedBy, b.CreatedAt, b.UpdatedAt, b.Version,
         Items = b.Entries.OrderBy(e => e.Line).Select(e => new ItemLine(e.ItemId, e.Quantity)).ToArray()
     };
 

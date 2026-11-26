@@ -8,7 +8,8 @@ using C9.Protocol;
 namespace C9.Server;
 
 // The same session runtime is used by TCP and socket-free validation.
-public sealed class SessionProcessor(ServerOptions options, IServerEvents events, ILauncherAuthority? authority = null)
+public sealed class SessionProcessor(ServerOptions options, IServerEvents events, ILauncherAuthority? authority = null,
+    IGiftBoxStore? giftBox = null)
 {
     private static readonly Meter Metrics = new("C9.Server", "0.1.0");
     private static readonly Counter<long> Received = Metrics.CreateCounter<long>("c9.packets.received");
@@ -20,6 +21,8 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
     private readonly ISecondPasswordStore? secondPasswords = options.Profile == "character_lobby" ? SecondPasswordStores.Open(options) : null;
 
     private readonly NpcSpawnCatalog npcSpawns = options.Profile == "character_lobby" ? NpcSpawnCatalog.Load(options.NpcSpawnFile) : NpcSpawnCatalog.Empty;
+    // Gift Box (MailEx) and inventory in the game database; without one the Gift Box is empty.
+    private readonly IGiftBoxStore? giftBoxes = giftBox ?? (options.Profile == "character_lobby" ? GiftBoxStores.Open(options) : null);
 
     public Task RunAsync(long id, PipeReader reader, PipeWriter writer, CancellationToken cancellationToken = default) =>
         RunAsync(SessionContext.Legacy(id), reader, writer, cancellationToken);
@@ -60,6 +63,16 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
             if (position is not { } last) return;
             position = null;
             await last.TrySaveAsync(events, Event("position_saved") with { State = state }, token);
+        }
+        // A game database hiccup must not drop the player: the Gift Box/inventory look empty until the next request.
+        async Task<T> GiftBoxAsync<T>(Func<Task<T>> action, T fallback)
+        {
+            try { return await action(); }
+            catch (Exception error) when (error is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+            {
+                events.Emit(Event("gift_box_error") with { State = state, Reason = error.GetType().Name + ": " + error.Message });
+                return fallback;
+            }
         }
 
         session.InitState(state);
@@ -165,6 +178,14 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         await SendAsync(await lobby.SelectAsync(packet.Payload.Span, secondPasswordStatus, secondPassword?.Certified == true,
                             cancellationToken));
                         selectedCharacterId = BinaryPrimitives.ReadUInt64LittleEndian(packet.Payload.Span);
+                        // Inventory stacks (0x0BC1, only for bags that have items) right after the character data.
+                        if (giftBoxes is not null)
+                        {
+                            IReadOnlyList<InventoryItem> inventory = await GiftBoxAsync<IReadOnlyList<InventoryItem>>(
+                                () => giftBoxes.InventoryAsync(selectedCharacterId, cancellationToken).AsTask(), []);
+                            foreach (Packet stacks in GiftBoxPackets.Inventory(inventory)) await SendAsync(stacks);
+                            if (inventory.Count > 0) events.Emit(Event("inventory_sent") with { State = state, Reason = $"{inventory.Count} stacks" });
+                        }
                         if (options.WorldVitals == WorldVitalsLayout.Legacy)
                         {
                             await SendAsync(lobby.InitialAttributes());
@@ -236,7 +257,17 @@ public sealed class SessionProcessor(ServerOptions options, IServerEvents events
                         // while connected. It is not a leave request, so it gets no 0x2EEB.
                         if (position?.Observe(packet) == true)
                             await position.TrySaveAsync(events, Event("position_saved") with { State = state }, cancellationToken);
-                        if (WorldSessionPackets.Reply(packet, DateTimeOffset.Now) is { } worldReply)
+                        if (GiftBoxPackets.Handles(packet.Type))
+                        {
+                            // 0EB1 count (sent at every world entry) and the Gift Box window: list, read, take, delete.
+                            IReadOnlyList<Packet>? replies = await GiftBoxAsync<IReadOnlyList<Packet>?>(
+                                () => GiftBoxPackets.ReplyAsync(giftBoxes, packet, selectedCharacterId, cancellationToken).AsTask(),
+                                packet.Type == 0x0EB1 && packet.Payload.IsEmpty ? [GiftBoxPackets.Count(0)] : null);
+                            foreach (Packet reply in replies ?? []) await SendAsync(reply);
+                            if (replies is not null && packet.Type != 0x0EB1)
+                                events.Emit(Event("gift_box") with { State = state, Type = packet.Type, Reason = string.Join(",", replies.Select(r => $"{r.Type:X4}")) });
+                        }
+                        else if (WorldSessionPackets.Reply(packet, DateTimeOffset.Now) is { } worldReply)
                             await SendAsync(worldReply);
                     }
                     else if (state != "character_lobby" || (packet.Type, packet.Payload.Length) is not ((9999, 8) or (9901, 24) or (12005, 0) or (0x0EC4, 0)))

@@ -30,7 +30,8 @@ public sealed record RecipientView(DeliveryTarget Kind, string Name, long Accoun
 /// <summary>A delivery row with the names an operator needs to read it.</summary>
 public sealed record DeliveryView(long Id, Guid BatchId, DeliveryTarget Target, long AccountId, string AccountLogin,
     long? CharacterId, string? CharacterName, int ItemId, string? ItemName, string? Icon, int Quantity, long? BundleId,
-    string? Message, DeliveryStatus Status, string CreatedBy, string Reason, DateTimeOffset CreatedAt, DateTimeOffset? CancelledAt);
+    string? Message, DeliveryStatus Status, string CreatedBy, string Reason, DateTimeOffset CreatedAt, DateTimeOffset? CancelledAt,
+    string? CancelledBy = null, DateTimeOffset? DeliveredAt = null, string? ClaimedBy = null, DateTimeOffset? OpenedAt = null);
 
 /// <summary>Item catalog (from the Client), item bundles and the item delivery queue (Admin Portal "Items").</summary>
 public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimeProvider clock)
@@ -180,6 +181,68 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
     }
 
     /// <summary>
+    /// Chooses the bundle every character created in game gets in its Gift Box (null = none). The bundle must be enabled;
+    /// GM/test items in it need an Owner, as when sending.
+    /// </summary>
+    public async Task<ItemBundle?> SetStarterBundleAsync(long? bundleId, bool allowAdminItems, OperatorContext context, CancellationToken token = default)
+    {
+        context.Validate();
+        await using GameDbContext db = await factory.CreateDbContextAsync(token);
+        if (await Audited.AlreadyAppliedAsync(db, context, token))
+            return await db.ItemBundles.AsNoTracking().FirstOrDefaultAsync(b => b.Starter, token);
+        await using var transaction = await db.Database.BeginTransactionAsync(token);
+        ItemBundle? chosen = null;
+        if (bundleId is { } id)
+        {
+            chosen = await db.ItemBundles.Include(b => b.Entries).FirstOrDefaultAsync(b => b.Id == id, token)
+                ?? throw new GameDataException(GameDataError.NotFound, "Bundle not found");
+            if (!chosen.Enabled) throw new GameDataException(GameDataError.Invalid, "Enable the bundle before using it for new characters");
+            int[] items = chosen.Entries.Select(e => e.ItemId).ToArray();
+            if (!allowAdminItems && await db.ItemCatalog.AnyAsync(i => items.Contains(i.ItemId) && i.AdminOnly, token))
+                throw new GameDataException(GameDataError.Forbidden, "GM/test items can only be given by an Owner");
+        }
+        List<ItemBundle> previous = await db.ItemBundles.Where(b => b.Starter && b.Id != bundleId).ToListAsync(token);
+        foreach (ItemBundle bundle in previous) bundle.Starter = false;
+        await Audited.SaveAsync(db, token); // clear first: at most one starter bundle (unique index)
+        if (chosen is not null) chosen.Starter = true;
+        Audited.Record(db, context, "items.starter", "item_bundle", bundleId?.ToString() ?? "none",
+            new { Starter = previous.Select(b => b.Id).ToArray() }, new { Starter = bundleId }, clock);
+        await Audited.SaveAsync(db, token);
+        await transaction.CommitAsync(token);
+        return chosen;
+    }
+
+    internal const string StarterOperator = "starter";
+    internal const string StarterMessage = "Starter items";
+
+    /// <summary>
+    /// Queues the starter bundle for a character just created in game, in the caller's transaction (the character row is
+    /// saved). GM/test items are skipped here too, in case the bundle was edited after it was chosen.
+    /// </summary>
+    internal static async Task<int> QueueStarterAsync(GameDbContext db, Character character, TimeProvider clock, CancellationToken token)
+    {
+        ItemBundle? starter = await db.ItemBundles.AsNoTracking().Include(b => b.Entries)
+            .FirstOrDefaultAsync(b => b.Starter && b.Enabled, token);
+        if (starter is null) return 0;
+        HashSet<int> admin = (await db.ItemCatalog.Where(i => i.AdminOnly).Select(i => i.ItemId).ToListAsync(token)).ToHashSet();
+        ItemBundleEntry[] entries = starter.Entries.Where(e => !admin.Contains(e.ItemId)).OrderBy(e => e.Line).ToArray();
+        if (entries.Length == 0) return 0;
+        OperatorContext context = new(StarterOperator, $"Starter bundle \"{starter.Name}\" for a new character", Guid.NewGuid());
+        DateTimeOffset now = clock.GetUtcNow();
+        foreach (ItemBundleEntry entry in entries)
+            db.ItemDeliveries.Add(new ItemDelivery
+            {
+                BatchId = context.RequestId, Target = DeliveryTarget.Character, AccountId = character.AccountId, CharacterId = character.Id,
+                ItemId = entry.ItemId, Quantity = entry.Quantity, BundleId = starter.Id, Message = StarterMessage,
+                CreatedBy = StarterOperator, Reason = context.Reason, CreatedAt = now
+            });
+        Audited.Record(db, context, "items.starter_send", "character", character.Id.ToString(), null,
+            new { Bundle = starter.Id, Rows = entries.Length }, clock);
+        await Audited.SaveAsync(db, token);
+        return entries.Length;
+    }
+
+    /// <summary>
     /// Queues one row per recipient and item stack (bundle lines first, then extra lines). All recipients must exist, or
     /// nothing is queued. The request id becomes the batch id, so a retried request queues nothing twice.
     /// </summary>
@@ -288,8 +351,10 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
                    join a in db.Accounts on d.AccountId equals a.Id
                    join c in db.Characters on d.CharacterId equals c.Id into chars
                    from c in chars.DefaultIfEmpty()
+                   join k in db.Characters on d.ClaimedCharacterId equals k.Id into claimers
+                   from k in claimers.DefaultIfEmpty()
                    join i in db.ItemCatalog on d.ItemId equals i.ItemId
-                   select new { d, a.LoginName, CharacterName = c == null ? null : c.Name, i.NameEn, i.NameKo, i.Icon };
+                   select new { d, a.LoginName, CharacterName = c == null ? null : c.Name, ClaimedBy = k == null ? null : k.Name, i.NameEn, i.NameKo, i.Icon };
         if (status is { } s) rows = rows.Where(r => r.d.Status == s);
         if (batchId is { } b) rows = rows.Where(r => r.d.BatchId == b);
         if (!string.IsNullOrWhiteSpace(recipient))
@@ -302,7 +367,7 @@ public sealed class ItemService(IDbContextFactory<GameDbContext> factory, TimePr
         var page = await rows.OrderByDescending(r => r.d.Id).Skip(skip).Take(take).ToListAsync(token);
         return new(page.Select(r => new DeliveryView(r.d.Id, r.d.BatchId, r.d.Target, r.d.AccountId, r.LoginName, r.d.CharacterId,
             r.CharacterName, r.d.ItemId, r.NameEn ?? r.NameKo, r.Icon, r.d.Quantity, r.d.BundleId, r.d.Message, r.d.Status,
-            r.d.CreatedBy, r.d.Reason, r.d.CreatedAt, r.d.CancelledAt)).ToArray(), await rows.CountAsync(token), skip, take);
+            r.d.CreatedBy, r.d.Reason, r.d.CreatedAt, r.d.CancelledAt, r.d.CancelledBy, r.d.DeliveredAt, r.ClaimedBy, r.d.OpenedAt)).ToArray(), await rows.CountAsync(token), skip, take);
     }
 
     /// <summary>Cancels the rows of a batch that are still pending (not yet handed to the game).</summary>

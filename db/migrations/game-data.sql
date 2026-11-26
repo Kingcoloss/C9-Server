@@ -2740,7 +2740,7 @@ END $EF$;
 DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
-    ALTER TABLE game.item_catalog ADD tags text[] NOT NULL;
+    ALTER TABLE game.item_catalog ADD tags text[] NOT NULL DEFAULT ('{}'::text[]);
     END IF;
 END $EF$;
 
@@ -2770,6 +2770,108 @@ BEGIN
     IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261120180109_ItemCatalogProperties') THEN
     INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
     VALUES ('20261120180109_ItemCatalogProperties', '10.0.15');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    DROP INDEX game.ix_character_items_character_id_location_slot;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    CREATE SEQUENCE game.item_serial_seq START WITH 1 INCREMENT BY 1 NO CYCLE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.item_deliveries ADD claimed_character_id bigint;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.item_deliveries ADD item_serial uuid;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.item_deliveries ADD opened_at timestamp with time zone;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.item_bundles ADD starter boolean NOT NULL DEFAULT FALSE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.character_items ADD bag smallint NOT NULL DEFAULT 0;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.character_items ADD game_serial bigint NOT NULL DEFAULT (nextval('game.item_serial_seq'));
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    CREATE INDEX ix_item_deliveries_claimed_character_id ON game.item_deliveries (claimed_character_id);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    CREATE UNIQUE INDEX ix_item_bundles_starter ON game.item_bundles (starter) WHERE starter;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    CREATE UNIQUE INDEX ix_character_items_character_id_location_bag_slot ON game.character_items (character_id, location, bag, slot);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    CREATE UNIQUE INDEX ix_character_items_game_serial ON game.character_items (game_serial);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    ALTER TABLE game.item_deliveries ADD CONSTRAINT fk_item_deliveries_characters_claimed_character_id FOREIGN KEY (claimed_character_id) REFERENCES game.characters (id) ON DELETE RESTRICT;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM ops.__ef_migrations_history WHERE "MigrationId" = '20261126033214_GiftBoxInventory') THEN
+    INSERT INTO ops.__ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20261126033214_GiftBoxInventory', '10.0.15');
     END IF;
 END $EF$;
 COMMIT;

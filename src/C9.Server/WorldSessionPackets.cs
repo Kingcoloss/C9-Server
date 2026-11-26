@@ -18,7 +18,7 @@ public static class WorldSessionPackets
             (0x0EFD, 0) => ServerTime(now),
             (0xED1D, 4) => EmptyKeyedList(BinaryPrimitives.ReadUInt32LittleEndian(payload)),
             (0x11A1, 0) => new Packet(0x11A2, new byte[13]),
-            (0x0EB1, 0) => new Packet(0x0EB2, new byte[4]),
+            // 0x0EB1 (Gift Box count) is answered by GiftBoxPackets with the character's real count.
             (0x0E4B, 5) => EmptyMapRoster(BinaryPrimitives.ReadUInt32LittleEndian(payload), payload[4]),
             (0xF74F, 0) => new Packet(0xF750, new byte[1]),
             _ => null,

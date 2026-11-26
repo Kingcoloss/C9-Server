@@ -121,6 +121,8 @@ internal static partial class Validation
             ("Memory world-entry replies follow the client trace order", MemoryWorldSessionReplies),
             ("Player position in 0x0BCE / 0x0BCC (client trace)", Sync(WorldPositionPacketLayout)),
             ("Memory lobby saves the position on leave and enters there next time", MemoryWorldPositionPersistence),
+            ("Gift Box and inventory packet layouts (0EB2/0EA0/0E9E/0EB3/0CFB/0BC1)", Sync(GiftBoxPacketLayouts)),
+            ("Memory Gift Box: inventory at entry, count, read, take once, delete, database failure", MemoryGiftBoxSession),
             ("Memory official-build plain login experiment", MemoryOfficialLoginFixture),
             ("Memory official-build fixture rejects wrong size and state", MemoryOfficialLoginInvalid),
             ("Stream pipe adapters encrypted fixture", StreamAdapterFixture),

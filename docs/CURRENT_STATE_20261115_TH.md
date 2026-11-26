@@ -181,3 +181,6 @@ Docs: `docs/`) และควรอัปเดตเอกสารนี้�
 - ผู้ใช้ยืนยัน: "กระเป๋ากลาง" = กระเป๋ารับของจาก Shop (Gift Box = ระบบ MailEx ใน Post) และขอเมนู Items Catalog (มีรูป) + Items management (bundle, ส่งให้ตัวละคร/บัญชี แบบเดี่ยวและ batch)
 - **เขียนเสร็จ ทดสอบผ่าน commit แล้ว ยังไม่ deploy** บน branch `claude/project-thread-wk3q2i`: export catalog จาก Client (45,996 item, รูป PNG 10,584 ไฟล์ นอก git), migration `ItemCatalogDelivery`, `ItemService`, หน้า `/items` และ `/items/manage`
 - ของที่ส่งยังไม่เข้าเกม (รอ RE inventory + Gift Box) รายการค้างสถานะ "รอส่งเข้าเกม" ยกเลิกได้; รายละเอียด: [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md)
+- **26 พ.ย. 2026 ~10:45 น. (เขียนเสร็จ ทดสอบผ่าน ยังไม่ deploy):** Gift Box ในเกม (`0EB1→0EB2` นับจริง, `0E97→0EA0`, `0E9D→0E9E`, `0E9B→0CFB+0E9C+0E9A`, `0E99→0E9A`),
+  กระเป๋า `0BC1` ตอนเลือกตัวละคร, migration `GiftBoxInventory`, `GiftBoxService`, ชุดเริ่มเล่น (bundle → Gift Box ของตัวละครใหม่);
+  Validation 80/80, GameData 25/25, Portal 12/12 — ดู [ITEM_CATALOG_DELIVERY_TH.md](ITEM_CATALOG_DELIVERY_TH.md) ข้อ 7
